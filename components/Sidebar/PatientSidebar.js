@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaFileAlt, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft } from 'react-icons/fa';
+import { FaFileAlt, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft, FaUserMd } from 'react-icons/fa';
 
 export default function PatientSidebar({ children }) {
   const router = useRouter();
@@ -23,8 +23,13 @@ export default function PatientSidebar({ children }) {
         icon: <FaBell size={28}/>,
       },
     {
+      href: '/patient/find-doctors',
+      title: 'Find Doctors',
+      icon: <FaUserMd size={28}/>,
+    },
+    {
       href: '/patient/reports',
-      title: 'Your Repots',
+      title: 'Your Reports',
       icon: <FaFileAlt size={28}/>,
     },
   ];

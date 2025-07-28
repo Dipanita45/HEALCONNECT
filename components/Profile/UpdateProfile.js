@@ -12,10 +12,10 @@ export default function UpdateProfile(){
   const router = useRouter();
   const { currentUser, user } = useContext(UserContext);
   const [name, setName] = useState('')
-  const [speciality, setSpeciality] = useState('') 
+  const [speciality, setSpeciality] = useState('')
   const [address, setAddress] = useState('')
   const [number, setNumber] = useState('')
-  const [err, setErrer] = useState(null)
+  const [err, setError] = useState(null)
   const [isAdding, setIsAdding] = useState(false)
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -37,26 +37,20 @@ export default function UpdateProfile(){
       setFile(Array.from(e.target.files)[0])
     }
 }
-  // Creates a Firebase Upload Task
   const uploadFile = async (e) => {
 
-    // Get the file
     const extension = file.type.split('/')[1];
 
-    // Makes reference to the storage bucket location
     const fileRef = ref(storage, `profiles/${auth.currentUser.uid}/${Date.now()}.${extension}`);
     setUploading(true);
 
-    // Starts the upload
     const task = uploadBytesResumable(fileRef, file)
 
-    // Listen to updates to upload task
     task.on(STATE_CHANGED, (snapshot) => {
       const pct = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
       setProgress(pct);
     });
 
-    // Get downloadURL AFTER task resolves (Note: this is not a native Promise)
     task
       .then((d) => getDownloadURL(fileRef))
       .then((url) => {
@@ -72,17 +66,17 @@ export default function UpdateProfile(){
 
   async function addHandler(){
     if(!number || !address || !name || !speciality){
-      setErrer('All Input fileds are required!');
-      toast.error('All Input fileds are required!')
+      setError('All Input fields are required!');
+      toast.error('All Input fields are required!')
       return
     }if (!downloadURL) {
-      setErrer('Upload your profile image!');
+      setError('Upload your profile image!');
       toast.error('Profile image required!')
       return
     } 
     setIsAdding(true)
     await writeDoctor();
-    toast.success('Profile updated successfuly!');
+    toast.success('Profile updated successfully!');
     clearValues();
     router.push('/login')
   }
