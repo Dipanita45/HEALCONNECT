@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  basePath: "/HEALCONNECT",
   images: {
     remotePatterns: [
       {
@@ -12,5 +13,4 @@ const nextConfig = {
   },
 }
 
-base:"/HEALCONNECT/",
 module.exports = nextConfig
