@@ -75,9 +75,10 @@ hiddenElements.forEach((el) => observer.observe(el));
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
               {"It's "}not posible to get<span className="text-blue-500 font-display animate-pulse"> patients history. </span>for further handling of treatment as soon as possible.</p>
             <span className=" animation">
-              <a className="animate-bounce no-underline block mt-12 md:text-xl text-base" href="">
-                how can get? 🤔
-              </a>
+            <a className="btn-global animate-bounce block mt-12" href="">
+              How you get monitored? 🧐
+           </a>
+
             </span>
           </section>
         </div>
@@ -92,9 +93,10 @@ hiddenElements.forEach((el) => observer.observe(el));
               <span className="text-yellow-600 font-display animate-pulse"> health parameters </span>and make this data is available and accessible to doctors remotely<span className="text-orange-600 font-display animate-pulse"> anytime anywhere</span>.</p>
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
             This system will let the organization manage their<span className="text-blue-500 font-display animate-pulse"> doctors and patients </span>data and maintains security end to end.</p>
-            <a className="animate-bounce no-underline block mt-12 md:text-xl text-base" href="">
+            <a className="btn-global animate-bounce block mt-12" href="">
               How you get monitored? 🧐
             </a>
+
           </section>
         </div>
         
@@ -108,9 +110,10 @@ hiddenElements.forEach((el) => observer.observe(el));
               <span className="text-blue-600 font-display animate-pulse"> body temperature, heart rate and pulse rate </span>in a single device.</p>
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
             The parameter measured using the kit is shown to appropriate doctor through the website. The<span className="text-green-600 font-display animate-pulse"> doctor as well as patient </span>can monitor the information by visiting to the website.</p>
-            <a className="animate-bounce no-underline block mt-12 md:text-xl text-base" href="">
-              How you get monitored? 🧐
-            </a>
+           <a className="btn-global animate-bounce block mt-12" href="">
+           How you get monitored? 🧐
+           </a>
+
           </section>
         </div>
         {/* Footer Section */}
