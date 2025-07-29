@@ -4,9 +4,9 @@ import { FaGithubAlt } from 'react-icons/fa';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 pt-14 pb-10 px-4 md:px-20 mt-20">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-gray-700 pb-12">
-
+    <footer className="bg-blue-900 text-blue-300 pt-14 pb-10 px-4 md:px-20 mt-20">
+    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-blue-700 pb-12">
+  
         {/* Logo & Mission */}
         <div>
           <h2 className="text-2xl font-bold text-white">HealConnect</h2>

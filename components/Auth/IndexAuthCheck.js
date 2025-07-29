@@ -1,6 +1,9 @@
 import { useRouter } from "next/router";
 import { signOut } from "firebase/auth";
-import { auth } from "@lib/firebase";
+import { auth } from "@lib/firebase"; 
+
+
+
 import Link from 'next/link';
 import { useContext } from "react";
 import { UserContext } from "@lib/context";
