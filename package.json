@@ -15,19 +15,17 @@
     "@arction/lcjs": "^4.0.2",
     "@arction/xydata": "^1.4.0",
     "@headlessui/react": "^1.7.13",
+    "@heroicons/react": "^2.2.0",
     "apexcharts": "^3.37.2",
     "chart.js": "^4.2.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
-
-    "firebase": "^9.23.0",
+    "firebase": "^12.0.0",
     "framer-motion": "^12.23.9",
-
-    
     "gh-pages": "^6.3.0",
     "install": "^0.13.0",
     "moment": "^2.29.4",
-    "next": "^13.0.5",
+    "next": "^15.4.5",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-apexcharts": "^1.4.0",
@@ -36,11 +34,10 @@
     "react-hook-form": "^7.39.5",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.8.0",
-    "react-simple-typewriter": "^5.0.1",
     "react-router-dom": "^7.7.1",
-   "sass": "^1.89.2",
-  "typewriter-effect": "^2.22.0"
-
+    "react-simple-typewriter": "^5.0.1",
+    "sass": "^1.89.2",
+    "typewriter-effect": "^2.22.0"
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.8",
