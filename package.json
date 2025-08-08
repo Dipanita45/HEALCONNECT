@@ -1,6 +1,6 @@
 {
   "homepage": "https://Dipanita45/github.io/HEALCONNECT",
-  "name": "HEALCONNECT",
+  "name": "healconnect",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -20,7 +20,11 @@
     "chart.js": "^4.2.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+ dark_mode
     "firebase": "^12.0.0",
+
+    "firebase": "^9.23.0",
+ main
     "framer-motion": "^12.23.9",
     "gh-pages": "^6.3.0",
     "install": "^0.13.0",
@@ -44,5 +48,12 @@
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17"
-  }
+  },
+  "description": "---",
+  "main": "next.config.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "author": "",
+  "license": "ISC"
 }
