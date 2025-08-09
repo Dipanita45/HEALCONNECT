@@ -9,6 +9,9 @@ export default function DoctorCard({name, speciality, email, uid, userRole}) {
         <div className="flex items-center text-sm">
           <div className="flex justify-center items-center w-10 h-10 mr-4 bg-gray-100 rounded-full transition-all duration-300 transform group-hover:rotate-12">
             <FaUser className="text-blue-500" size={26}/>
+            <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-4">
+  {/* content */}
+</div>
           </div>
           <div>
             <p className="font-semibold">{name}</p>
