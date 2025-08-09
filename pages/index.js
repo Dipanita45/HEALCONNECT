@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useEffect } from "react";
 import Footer from "./footer";
-
+import Faq from "../components/Faq";
 
 export default function Home() {
 
@@ -113,6 +113,7 @@ hiddenElements.forEach((el) => observer.observe(el));
             </a>
           </section>
         </div>
+        <Faq />
         {/* Footer Section */}
         <Footer />
       </main>
