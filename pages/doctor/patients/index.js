@@ -58,7 +58,7 @@ export default function Patients(prose) {
                       <th className="px-4 py-3">Patients</th>
                       <th className="pr-4 py-3">Location</th>
                       <th className="px-4 py-3">ID</th>
-                      <th className="px-4 py-3">Identy</th>
+                      <th className="px-4 py-3">Identity</th>
                       <th className="px-4 py-3">Edit</th>
                     </tr>
                   </thead>
