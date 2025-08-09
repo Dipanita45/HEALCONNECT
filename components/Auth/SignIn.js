@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { auth, RecaptchaVerifier, signInWithPhoneNumber } from '@lib/firebase';
 
 export default function SignIn() {
   const [phone, setPhone] = useState('');

@@ -1,6 +1,3 @@
-import { auth, db } from '@lib/firebase';
-import { PhoneAuthProvider, RecaptchaVerifier, signInWithCredential } from 'firebase/auth';
-import { collection, doc, getDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaSpinner } from 'react-icons/fa';
