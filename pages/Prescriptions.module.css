@@ -2,15 +2,15 @@
     max-width: 500px;
     margin: 20px auto;
     padding: 20px;
-    background:  #f0f8ff;
+    background: #f0f8ff;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   
   .title {
     text-align: center;
     margin-bottom: 20px;
-    color: #333;
+    color: #2c3e50;
     font-size: 20px;
     font-weight: bolder;
   }
@@ -22,7 +22,8 @@
   
   .formLabel {
     margin: 10px 0 5px;
-    font-weight: bold;
+    font-weight: 600;
+    color: #34495e;
   }
   
   .input {
@@ -31,39 +32,26 @@
     border-radius: 6px;
     font-size: 14px;
     outline: none;
+    transition: border-color 0.3s ease;
   }
   
   .input:focus {
-    border-color: #007bff;
-  }
-  
-  .textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    min-height: 80px;
-    resize: vertical;
-    outline: none;
-  }
-  
-  .textarea:focus {
-    border-color: #007bff;
+    border-color: #3498db;
   }
   
   .button {
     margin-top: 15px;
-    padding: 10px 20px;
-    background-color: #007bff;
+    padding: 10px;
+    background-color: #3498db;
     color: white;
+    font-weight: bold;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 16px;
     transition: background-color 0.3s ease;
   }
   
   .button:hover {
-    background-color: #0056b3;
+    background-color: #2980b9;
   }
   
