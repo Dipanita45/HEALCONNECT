@@ -1,5 +1,4 @@
-import { db } from "@lib/firebase";
-import { collection, doc, setDoc } from "firebase/firestore";
+
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";

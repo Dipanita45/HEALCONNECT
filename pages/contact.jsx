@@ -113,23 +113,7 @@ export default function Contact() {
               )}
             </motion.section>
 
-            <motion.section
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="transition-transform duration-300 ease-in-out cursor-default"
-            >
-              <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center md:text-left text-green-700">
-                How to Contribute
-              </h2>
-              <ul className="list-disc pl-6 text-lg">
-                <li>Visit our <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="text-blue-600">GitHub repository</a></li>
-                <li>Read the <a href="/contributing.md" target="_blank" className="text-blue-600">contribution guidelines</a></li>
-                
-                <li>Join discussions and help others</li>
-              </ul>
-            </motion.section>
+            
           </div>
         </div>
       </main>

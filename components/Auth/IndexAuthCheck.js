@@ -1,40 +1,29 @@
 import { useRouter } from "next/router";
-import { signOut } from "firebase/auth";
-import { auth } from "@lib/firebase"; 
+import React from "react";
 
+export default function IndexAuthCheck({ children } = {}) {
+  const router = useRouter();
 
+  const SignOutNow = () => {
+    localStorage.removeItem("userType");
+    localStorage.removeItem("username");
+    router.push("/login");
+  };
 
-import Link from 'next/link';
-import { useContext } from "react";
-import { UserContext } from "@lib/context";
+  const userType = typeof window !== 'undefined' ? localStorage.getItem("userType") : null;
 
-export default function IndexAuthCheck(){
-    const { userRole } = useContext(UserContext);
-    const router = useRouter();
-    const SignOutNow = () => {
-      signOut(auth);
-      router.push('/login');
-    }
-
+  if (!userType) {
     return (
-        <div className=" h-screen bg-gray-100 dark:bg-gray-900">
-        <div className='container prose dark:prose-invert md:prose-lg lg:prose-xl sm:prose-sm'>
-        <header className="text-center pt-20 ">
-         <article>
-         <h1>You Don{"'"}t Have <span className='gradient-text'>Access!</span></h1>
-          <p>{`${userRole} dashboard can only accessed by Legitimate User.`}</p>
-          <h2>Go to Dashboard</h2>
-          { userRole === 'admin' ? <Link href="/admin/dashboard" className="btn btn-green btn-glow">Your Dashboard!</Link> : null}
-
-          { userRole === 'doctor' ? <Link href="/doctor/dashboard" className="btn btn-green btn-glow">Your Dashboard!</Link> : null}
-
-          { userRole === 'patient' ? <Link href="/patient" className="btn btn-green btn-glow">Your Dashboard!</Link> : null}
-
-          <a className='px-4'>Or</a>
-          <button className='btn btn-red' onClick={SignOutNow}>Sign Out</button>
-         </article>
-        </header>
-        </div>
+      <div style={{ padding: "2rem", textAlign: "center" }}>
+        <h2>You Don't Have Access!</h2>
+        <p>Dashboard can only be accessed by Legitimate User.</p>
+        <button onClick={() => router.push("/login")} style={{ marginRight: "1rem" }}>
+          Go to Dashboard
+        </button>
+        <button onClick={SignOutNow}>Sign Out</button>
       </div>
-    )
+    );
+  }
+
+  return <>{children}</>;
 }
