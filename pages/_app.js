@@ -1,18 +1,12 @@
-import '@styles/app.scss'
-import { UserContext } from '@lib/context';
-import Layout from './layout';
-import { useUserData } from '@lib/userInfo';
+import { ThemeProvider } from '@/context/ThemeContext'
+import Navbar from '@/components/navbar' // Import your Navbar
+import '@/styles/globals.css'
 
-function MyApp({ Component, pageProps }) {
-  const userData = useUserData();
-
+export default function App({ Component, pageProps }) {
   return (
-  <UserContext.Provider value={userData}>
-  <Layout>
-  <Component {...pageProps} />
-  </Layout>
-  </UserContext.Provider> 
-  );
+    <ThemeProvider>
+      <Navbar /> {/* Add Navbar here */}
+      <Component {...pageProps} />
+    </ThemeProvider>
+  )
 }
-
-export default MyApp

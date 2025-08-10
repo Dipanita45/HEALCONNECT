@@ -27,6 +27,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -34,3 +35,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Firebase local config & emulator data
+.firebase/
+firebase-debug.log
+.firebaserc
+
+# Firebase service account key (if any)
+serviceAccountKey.json
