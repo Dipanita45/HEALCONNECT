@@ -1,0 +1,11 @@
+<svg id="Logo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1200" height="850" viewBox="0 0 1200 850">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.259" y1="1" x2="0.864" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#eb7d4f"/>
+      <stop offset="0.341" stop-color="#ec6353"/>
+      <stop offset="1" stop-color="#ee4758"/>
+    </linearGradient>
+  </defs>
+  <path id="Icon_awesome-cloud" data-name="Icon awesome-cloud" d="M1008,371.469a185.338,185.338,0,0,0,12-65.647c0-100.558-80.625-182.143-180-182.143a177.6,177.6,0,0,0-99.937,30.737C688.125,63.344,591.187,2.25,480,2.25,314.25,2.25,180,138.1,180,305.821c0,5.123.188,10.246.375,15.368C75.375,358.567,0,459.884,0,579.036,0,729.873,120.937,852.25,270,852.25H960c132.562,0,240-108.717,240-242.857C1200,491.949,1117.5,393.857,1008,371.469Z" transform="translate(0 -2.25)" fill="url(#linear-gradient)"/>
+  <path id="Path_20" data-name="Path 20" d="M0-9.432H281.561l100.217-97.141s14.1-20.365,26.248-20.365,29.056,20.365,29.056,20.365l136.082,185.3s15.8,16.106,29.161,16.106,24.3-16.106,24.3-16.106L762.706-82.335s7.29-18.226,29.16,0,58.32,72.9,58.32,72.9H1200" transform="translate(0 562.242)" fill="none" stroke="#fff" stroke-width="40"/>
+</svg>
