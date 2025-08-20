@@ -2,8 +2,9 @@ import AuthCheck from "@components/Auth/AuthCheck";
 import PatientSidebar from "@components/Sidebar/PatientSidebar";
 import { UserContext } from "@lib/context";
 import Image from "next/image";
+import Link from "next/link";
 import { useContext } from "react";
-import { FaEdit, FaSpinner } from "react-icons/fa";
+import { FaEdit, FaSpinner, FaUserMd, FaSearch } from "react-icons/fa";
 
 
 export default function Dashboard(params) {
@@ -83,6 +84,50 @@ export default function Dashboard(params) {
                         </div>
                     </div>
 
+
+            {/* Quick Access Section */}
+            <div className="mx-2 md:mx-0 my-6">
+              <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 dark:text-gray1">
+                Quick Access
+              </h1>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Link href="/patient/find-doctors">
+                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                    <div className="flex items-center">
+                      <FaUserMd size={32} className="mr-4" />
+                      <div>
+                        <h3 className="text-xl font-bold">Find Doctors</h3>
+                        <p className="text-blue-100">Search for doctors in your area</p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link href="/patient/reports">
+                  <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                    <div className="flex items-center">
+                      <FaEdit size={32} className="mr-4" />
+                      <div>
+                        <h3 className="text-xl font-bold">View Reports</h3>
+                        <p className="text-green-100">Access your medical reports</p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+
+                <Link href="/patient/notifications">
+                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                    <div className="flex items-center">
+                      <FaSpinner size={32} className="mr-4" />
+                      <div>
+                        <h3 className="text-xl font-bold">Notifications</h3>
+                        <p className="text-purple-100">Check your notifications</p>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
 
             <div className="mx-2 md:mx-0">
               <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 dark:text-gray1">

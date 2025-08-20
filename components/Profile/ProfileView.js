@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import Link from 'next/link';
-import { auth } from '@lib/firebase';
 import { UserContext } from '@lib/context';
 import Loader from '@components/Loader';
 import Footer from 'pages/footer';

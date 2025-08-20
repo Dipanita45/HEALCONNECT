@@ -1,0 +1,47 @@
+{
+  "homepage": "https://Dipanita45/github.io/HEALCONNECT",
+  "name": "HEALCONNECT",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@arction/lcjs": "^4.0.2",
+    "@arction/xydata": "^1.4.0",
+    "@headlessui/react": "^1.7.13",
+    "apexcharts": "^5.3.3",
+    "chart.js": "^4.2.1",
+    "eslint": "8.28.0",
+    "eslint-config-next": "13.0.5",
+    "firebase": "^9.23.0",
+    "framer-motion": "^12.23.9",
+    "gh-pages": "^6.3.0",
+    "install": "^0.13.0",
+    "moment": "^2.29.4",
+    "next": "^13.0.5",
+    "prop-types": "^15.8.1",
+    "react": "18.2.0",
+    "react-apexcharts": "^1.4.0",
+    "react-dom": "18.2.0",
+    "react-firebase-hooks": "^5.1.1",
+    "react-hook-form": "^7.39.5",
+    "react-hot-toast": "^2.4.0",
+    "react-icons": "^4.8.0",
+    "react-router-dom": "^7.7.1",
+    "react-simple-typewriter": "^5.0.1",
+    "sass": "^1.89.2",
+    "typewriter-effect": "^2.22.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.8",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17"
+  }
+}

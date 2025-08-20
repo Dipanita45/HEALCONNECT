@@ -1,7 +1,7 @@
  #include <Wire.h>
  #include <Ticker.h> 
  #include "Network.h"
- #include "MAX30105.h" //sparkfun MAX3010X library 
+ #include "MAX30105.h"  
  #include "Protocentral_MAX30205.h" 
  #include "heartRate.h" 
  #include "SH1106Wire.h" 
@@ -12,16 +12,16 @@
  #endif
  
  Network *network;
- SH1106Wire display(0x3c, SDA, SCL);     // ADDRESS, SDA, SCL 
+ SH1106Wire display(0x3c, SDA, SCL);     
  #define DEMO_DURATION 3000 
   
  MAX30105 particleSensor; 
  MAX30205 tempSensor; 
  int progress; 
  int counter = 1; 
- int switchPin = 5;              // switch is connected to pin 2 
- int val;                        // variable for reading the pin status 
- int buttonState;                // variable to hold the button state 
+ int switchPin = 5;              
+ int val;                     
+ int buttonState;              
  int buttonPresses = 0; 
  float temp; 
  int period = 2000; 
@@ -31,34 +31,32 @@
  double sumirrms = 0; 
  double sumredrms = 0; 
  int i = 0; 
- int Num = 100; //calculate SpO2 by this sampling interval 
+ int Num = 100;
  long irValue; 
  int oxygen; 
- double ESpO2 = 95.0;    //initial value of estimated SpO2 
- double FSpO2 = 0.7;     //filter factor for estimated SpO2 
- double frate = 0.95;    //low pass filter for IR/red LED value to eliminate AC component 
- #define TIMETOBOOT 3000 // wait for this time(msec) to output SpO2 
- #define SCALE 88.0      //adjust to display heart beat and SpO2 in the same scale 
- #define SAMPLING 5      //if you want to see heart beat more precisely , set SAMPLING to 1 
- #define FINGER_ON 3000  // if red signal is lower than this , it indicates your finger is not on the sensor 
- #define MINIMUM_SPO2 0.0 
+ double ESpO2 = 95.0;    
+ double FSpO2 = 0.7;     
+ double frate = 0.95;     
+ #define TIMETOBOOT 3000 
+ #define SCALE 88.0    
+ #define SAMPLING 5       
+ #define FINGER_ON 3000  
  #define BPM_Logo_width 60 
  #define BPM_Logo_height 36 
- const byte RATE_SIZE = 4; //Increase this for more averaging. 4 is good. 
- byte rates[RATE_SIZE];    //Array of heart rates 
+ const byte RATE_SIZE = 4; 
+ byte rates[RATE_SIZE];   
  byte rateSpot = 0; 
- long lastBeat = 0; //Time at which the last beat occurred 
+ long lastBeat = 0; 
  float beatsPerMinute; 
  int beatAvg; 
  float fahrenheit; 
  bool finger = false;
   
- #define SCREEN_WIDTH 128 // OLED display width, in pixels 
- #define SCREEN_HEIGHT 64 // OLED display height, in pixels 
- #define OLED_RESET 4    // Reset pin # (or -1 if sharing Arduino reset pin) 
+ #define SCREEN_WIDTH 128 
+ #define SCREEN_HEIGHT 64 
+ #define OLED_RESET 4   
  #define USEFIFO 
 
-/** Task handle for the light value read task */
 TaskHandle_t dataTaskHandle = NULL;
 /** Ticker for temperature reading */
 Ticker dataTicker;
@@ -353,7 +351,7 @@ void networkEvent(Network_State_t event){
      case 3: 
        display.clear();                             //Clear the display 
        display.setFont(ArialMT_Plain_10); 
-       display.drawString(60, 0, "-----Heath Monitoring-----"); 
+       display.drawString(60, 0, "-----Health Monitoring-----"); 
        display.drawString(20, 30, "Temp :"); 
        display.drawString(75, 30, String(temp) + "'C"); 
        display.drawString(20, 45, "Temp :"); 
