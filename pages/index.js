@@ -304,223 +304,69 @@ const simulateOxygen = () => {
   </section>
 </div>
 
-{/* Solution Section */}
-<div id="solution" className={styles.sectionWrapper}>
-  <section className={`${styles.solutionSection} ${styles.animation}`}>
-    <div className={styles.sectionBackground}></div>
-    <div className={styles.sectionContainer}>
-      <h2 className={`${styles.sectionBadge} ${styles.solutionBadge}`}>
-        Our Innovative Solution
-      </h2>
-      
-      <div className={styles.solutionIntro}>
-        <div className={styles.contentCard}>
-          <p className={styles.sectionText}>
-            HEALCONNECT bridges these gaps by providing a comprehensive platform that enables{' '}
-            <span className={styles.highlightYellow}>real-time health monitoring</span> and{' '}
-            <span className={styles.highlightOrange}>secure data access anytime, anywhere</span>.
-          </p>
-        </div>
-      </div>
-      
-      <div className={styles.solutionVisualization}>
-        <div className={styles.dataFlowAnimation}>
-          <div className={styles.patientNode}>
-            <div className={styles.nodeIcon}>👤</div>
-            <div className={styles.nodeLabel}>Patient</div>
-          </div>
-          
-          <div className={styles.connectionPath}>
-            <div className={styles.dataStream}></div>
-            <div className={styles.dataParticle}></div>
-            <div className={styles.dataParticle}></div>
-            <div className={styles.dataParticle}></div>
-          </div>
-          
-          <div className={styles.platformNode}>
-            <div className={styles.nodeIcon}>🌐</div>
-            <div className={styles.nodeLabel}>HEALCONNECT</div>
-          </div>
-          
-          <div className={styles.connectionPath}>
-            <div className={styles.dataStream}></div>
-            <div className={styles.dataParticle}></div>
-            <div className={styles.dataParticle}></div>
-            <div className={styles.dataParticle}></div>
-          </div>
-          
-          <div className={styles.doctorNode}>
-            <div className={styles.nodeIcon}>👨‍⚕️</div>
-            <div className={styles.nodeLabel}>Doctor</div>
-          </div>
-        </div>
-      </div>
-      
-      <div className={styles.featureShowcase}>
-        <div className={styles.featureGrid}>
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>📊</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }} >Real-time Monitoring</h3>
-            <p>Continuous tracking of health parameters with instant alerts</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-          
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>🔒</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }}>Secure Data</h3>
-            <p>End-to-end encryption with blockchain-based security</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-          
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>🌐</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }}>Remote Access</h3>
-            <p>Access patient data from any device, anywhere in the world</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-          
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>📈</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }}>Historical Analysis</h3>
-            <p>Comprehensive patient history with trend analysis</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-          
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>🤖</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }}>AI Insights</h3>
-            <p>Predictive analytics and early warning systems</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-          
-          <div className={styles.featureItem}>
-            <div className={styles.featureIconContainer}>
-              <div className={styles.featureIcon}>📱</div>
-              <div className={styles.featureGlow}></div>
-            </div>
-            <h3 style={{ color: '#111184' }}>Mobile Integration</h3>
-            <p>Seamless connectivity with mobile health devices</p>
-            <div className={styles.featureHighlight}></div>
-          </div>
-        </div>
-      </div>
-      
-      <div className={styles.benefitsSection}>
-        <h3 style={{ color: '#111184' }}>Key Benefits</h3>
-        <div className={styles.benefitsGrid}>
-          <div className={styles.benefitCard}>
-            <div className={styles.benefitProgress}></div>
-            <h4>60% Faster</h4>
-            <p>Reduction in emergency response time</p>
-          </div>
-          
-          <div className={styles.benefitCard}>
-            <div className={styles.benefitProgress}></div>
-            <h4>45% Improvement</h4>
-            <p>In treatment decision accuracy</p>
-          </div>
-          
-          <div className={styles.benefitCard}>
-            <div className={styles.benefitProgress}></div>
-            <h4>24/7</h4>
-            <p>Continuous monitoring and support</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-        {/* Doctors Section */}
-        <div id="doctors" className={styles.sectionWrapper}>
-          <section className={`${styles.doctorsSection} ${styles.animation}`}>
-            <div className={styles.sectionBackground}></div>
-            <div className={styles.sectionContainer}>
-              <h2 className={`${styles.sectionBadge} ${styles.doctorsBadge}`}>
-                Our Medical Experts
-              </h2>
-              <p className={styles.sectionSubtitle}>
-                Meet our team of dedicated healthcare professionals using HEALCONNECT to provide better care.
-              </p>
-              
-              <div className={styles.doctorsGrid}>
-                {doctors.map((doctor) => (
-                  <div key={doctor.id} className={styles.doctorCard}>
-                    <div className={styles.doctorImageContainer}>
-                      <Image
-                        src={doctor.image}
-                        alt={doctor.name}
-                        width={200}
-                        height={200}
-                        className={styles.doctorImage}
-                      />
-                      <div className={styles.doctorOverlay}></div>
-                    </div>
-                    <div className={styles.doctorInfo}>
-                      <h3 className={styles.doctorName}>{doctor.name}</h3>
-                      <p className={styles.doctorSpecialty}>{doctor.specialty}</p>
-                      <p className={styles.doctorExperience}>{doctor.experience} of experience</p>
-                      <p className={styles.doctorDescription}>{doctor.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Solution Section */}
+        <div className="h-screen flex flex-col justify-center bg-gray-100 dark:bg-gray-900">
+          <section className="animation container md:w-1/2 text-center place-content-center prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm">
+            <h1 className="animation bg-gradient-to-r from-yellow-600 to-yellow-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-12">
+              Solution
+            </h1>
+            <p className="animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 text-center w-3/4 mx-auto">
+              This system will let the organization meet their requirement of
+              measuring patient
+              <span className="text-yellow-600 font-display animate-pulse">
+                health parameters
+              </span>{" "}
+              and make this data available and accessible to doctors remotely
+              <span className="text-orange-600 font-display animate-pulse">
+                anytime anywhere
+              </span>
+              .
+            </p>
+            <p className="animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
+              This system will let the organization manage their
+              <span className="text-blue-500 font-display animate-pulse">
+                doctors and patients
+              </span>{" "}
+              data and maintains security end to end.
+            </p>
+            <a
+              className="animate-bounce no-underline block mt-12 md:text-xl text-base"
+              href=""
+            >
+              How you get monitored? 🧐
+            </a>
           </section>
         </div>
 
-<div id="kit" className={styles.sectionWrapper}>
-  <section className={`${styles.kitSection} ${styles.animation}`}>
-    <div className={styles.sectionBackground}></div>
-    <div className={styles.sectionContainer}>
-      <h2 className={`${styles.sectionBadge} ${styles.kitBadge}`}>
-        Our Smart Monitoring Kit
-      </h2>
-      
-      <div className={styles.kitContent}>
-        <div className={styles.kitDescription}>
-          <div className={styles.contentCard}>
-            <p className={styles.sectionText}>
-              Our advanced health monitoring kit enables doctors to measure{' '}
-              <span className={styles.highlightBlue}>body temperature, heart rate, oxygen levels, and pulse rate</span>{' '}
-              with medical-grade precision in a single, intuitive device.
+        {/* Kit Section */}
+        <div className="h-screen flex flex-col justify-center bg-gray-100 dark:bg-gray-900">
+          <section className="animation container md:w-1/2 text-center place-content-center prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm">
+            <h1 className="animation bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-12">
+              Our Kit :
+            </h1>
+            <p className="animation py-2 text-md:text-2xl text-gray5 dark:text-gray3 text-center w-3/4 mx-auto">
+              This system is established with a health monitoring Kit which enables
+              the doctors to measure
+              <span className="text-blue-600 font-display animate-pulse">
+                body temperature, heart rate and pulse rate
+              </span>{" "}
+              in a single device.
             </p>
-            <p className={styles.sectionText}>
-              All parameters are transmitted securely to both doctors and patients through our platform, enabling{' '}
-              <span className={styles.highlightGreen}>real-time monitoring and immediate response</span>{' '}
-              to any concerning health trends.
+            <p className="animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
+              The parameter measured using the kit is shown to appropriate doctor
+              through the website. The
+              <span className="text-green-600 font-display animate-pulse">
+                doctor as well as patient
+              </span>{" "}
+              can monitor the information by visiting to the website.
             </p>
-          </div>
-          
-          <div className={styles.kitFeatures}>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>📱</div>
-              <div className={styles.featureText}>Syncs with mobile app</div>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🔋</div>
-              <div className={styles.featureText}>72-hour battery life</div>
-            </div>
-            <div className={styles.feature}>
-              <div className={styles.featureIcon}>🌐</div>
-              <div className={styles.featureText}>Cloud connectivity</div>
-            </div>
-          </div>
+            <a
+              className="animate-bounce no-underline block mt-12 md:text-xl text-base"
+              href=""
+            >
+              How you get monitored? 🧐
+            </a>
+          </section>
         </div>
         
         <div className={styles.kitVisualization}>
