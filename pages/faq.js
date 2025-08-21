@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head';
+import { motion, AnimatePresence } from 'framer-motion';
+import styles from './FAQ.module.css';
 
 const FAQ = () => {
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  const toggleFAQ = (index) => {
+    setActiveIndex(activeIndex === index ? null : index);
+  };
+
   const faqs = [
     {
       question: "What is HEALCONNECT?",
@@ -38,46 +46,131 @@ const FAQ = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className={styles.container}>
       <Head>
         <title>HEALCONNECT - FAQs</title>
         <meta name="description" content="Frequently asked questions about HEALCONNECT" />
       </Head>
 
-      <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-gray-900 mb-4">Frequently Asked Questions</h1>
-          <p className="text-xl text-gray-600">Find answers to common questions about our platform</p>
-        </div>
-
-        <div className="space-y-6">
-          {faqs.map((faq, index) => (
-            <div 
-              key={index} 
-              className="bg-white p-6 rounded-lg shadow-md transition-all hover:shadow-lg"
-            >
-              <h3 className="text-2xl font-semibold text-blue-800 mb-3 flex items-center">
-                <span className="mr-3 text-blue-600">Q{index + 1}.</span>
-                {faq.question}
-              </h3>
-              <p className="text-gray-700 pl-10 border-l-4 border-blue-200">
-                {faq.answer}
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-12 bg-blue-50 p-6 rounded-lg text-center">
-          <h3 className="text-xl font-medium text-gray-900 mb-3">Still have questions?</h3>
-          <p className="mb-4 text-gray-700">Contact our support team for personalized assistance</p>
-          <button 
-            onClick={() => window.location.href = '/contact'}
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Contact Support
-          </button>
-        </div>
+      {/* Animated background elements */}
+      <div className={styles.backgroundElements}>
+        <div className={styles.circleElement}></div>
+        <div className={styles.circleElement}></div>
+        <div className={styles.circleElement}></div>
       </div>
+
+      {/* Navbar spacer */}
+      <div className={styles.navbarSpacer}></div>
+
+      <motion.div 
+        className={styles.content}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        <motion.header 
+          className={styles.header}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <h1 className={styles.title}>
+            Frequently Asked <span className={styles.titleAccent}>Questions</span>
+          </h1>
+          <p className={styles.subtitle}>
+            Find answers to common questions about our platform
+          </p>
+          <div className={styles.titleUnderline}></div>
+        </motion.header>
+
+        <motion.div 
+          className={styles.faqContainer}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          {faqs.map((faq, index) => (
+            <motion.div 
+              key={index}
+              className={styles.faqItem}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: index * 0.1 }}
+              whileHover={{ y: -3 }}
+            >
+              <button 
+                className={styles.faqQuestion}
+                onClick={() => toggleFAQ(index)}
+                aria-expanded={activeIndex === index}
+              >
+                <span className={styles.questionText}>
+                  <span className={styles.questionNumber}>Q{index + 1}.</span>
+                  {faq.question}
+                </span>
+                <motion.span 
+                  className={styles.chevron}
+                  animate={{ rotate: activeIndex === index ? 180 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.span>
+              </button>
+              
+              <AnimatePresence>
+                {activeIndex === index && (
+                  <motion.div 
+                    className={styles.faqAnswer}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className={styles.answerContent}>
+                      <span className={styles.answerIcon}>
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </span>
+                      <p>{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          ))}
+        </motion.div>
+
+        <motion.div 
+          className={styles.helpSection}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <div className={styles.helpContent}>
+            <div className={styles.helpIcon}>
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M12 12H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h3 className={styles.helpTitle}>Still have questions?</h3>
+            <p className={styles.helpText}>Contact our support team for personalized assistance</p>
+            <motion.button 
+              className={styles.helpButton}
+              onClick={() => window.location.href = '/contact'}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contact Support
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </motion.button>
+          </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

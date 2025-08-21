@@ -1,30 +1,348 @@
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+  padding: 0.8rem 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.navbar.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  padding: 0.6rem 0;
+}
+
+.container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #203394;
-  padding: 1rem 2rem;
-  color: white;
-  font-weight: bold;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Logo styles */
+.logoContainer {
+  display: flex;
+  align-items: center;
 }
 
 .logo {
-  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: transform 0.3s ease;
 }
 
-.navLinks a {
-  color: white;
+.logo:hover {
+  transform: scale(1.03);
+}
+
+.logoIcon {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.logoIcon::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3), transparent 60%);
+  animation: shine 3s infinite linear;
+}
+
+@keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.crossSymbol {
+  position: relative;
+  width: 20px;
+  height: 20px;
+}
+
+.crossLine1, .crossLine2 {
+  position: absolute;
+  background-color: white;
+  border-radius: 2px;
+}
+
+.crossLine1 {
+  width: 20px;
+  height: 4px;
+  top: 8px;
+  left: 0;
+  transform: rotate(0);
+  animation: pulse 2s infinite;
+}
+
+.crossLine2 {
+  width: 4px;
+  height: 20px;
+  left: 8px;
+  top: 0;
+  transform: rotate(0);
+  animation: pulse 2s infinite 0.5s;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.logoText {
+  font-weight: 700;
+  font-size: 1.4rem;
+  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Navigation links */
+.navLinks {
+  display: flex;
+  gap: 1.8rem;
+  align-items: center;
+}
+
+.navLink {
+  position: relative;
   text-decoration: none;
-  margin-left: 1.5rem;
-  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  padding: 0.5rem 0;
+  overflow: hidden;
   transition: color 0.3s ease;
 }
 
-.navLinks a:hover {
-  color: #ffcc00;
+.navLink:hover {
+  color: #2563eb;
 }
 
-.active {
-  color: #ffcc00;
-  border-bottom: 2px solid #ffcc00;
+.linkText {
+  position: relative;
+  z-index: 1;
+}
+
+.linkHoverEffect {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #2563eb, #10b981);
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+.navLink:hover .linkHoverEffect {
+  transform: translateX(0);
+}
+
+/* Right section */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.loginButton {
+  position: relative;
+  padding: 0.5rem 1.2rem;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: white;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 500;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.loginButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
+}
+
+.buttonPulse {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  border-radius: 50px;
+  opacity: 0;
+  animation: pulseEffect 2s infinite;
+}
+
+@keyframes pulseEffect {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
+    opacity: 0.7;
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+    opacity: 0;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+    opacity: 0;
+  }
+}
+
+/* Mobile menu button */
+.menuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.menuButton span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #374151;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.menuButton.menuOpen span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+  background: #2563eb;
+}
+
+.menuButton.menuOpen span:nth-child(2) {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.menuButton.menuOpen span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+  background: #2563eb;
+}
+
+/* Overlay for mobile */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 998;
+}
+
+/* Dark mode styles */
+:global(.dark) .navbar {
+  background: rgba(17, 24, 39, 0.95);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+}
+
+:global(.dark) .navbar.scrolled {
+  background: rgba(17, 24, 39, 0.98);
+}
+
+:global(.dark) .navLink {
+  color: #e5e7eb;
+}
+
+:global(.dark) .navLink:hover {
+  color: #60a5fa;
+}
+
+:global(.dark) .menuButton span {
+  background: #e5e7eb;
+}
+
+/* Responsive styles */
+@media (max-width: 968px) {
+  .navLinks {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    height: 100vh;
+    width: 70%;
+    max-width: 300px;
+    background: white;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    transition: right 0.4s ease;
+    z-index: 999;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  :global(.dark) .navLinks {
+    background: #1f2937;
+  }
+
+  .navLinks.navOpen {
+    right: 0;
+  }
+
+  .menuButton {
+    display: flex;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .logoText {
+    font-size: 1.2rem;
+  }
+  
+  .loginButton span {
+    display: none;
+  }
+  
+  .loginButton {
+    padding: 0.6rem;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loginButton::before {
+    content: "→";
+    font-size: 1.2rem;
+  }
 }

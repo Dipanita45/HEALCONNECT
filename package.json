@@ -17,15 +17,11 @@
     "@arction/xydata": "^1.4.0",
     "@headlessui/react": "^1.7.13",
     "@heroicons/react": "^2.2.0",
-    "apexcharts": "^3.37.2",
+    "apexcharts": "^4.7.0",
     "chart.js": "^4.2.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
- dark_mode
     "firebase": "^12.0.0",
-
-    "firebase": "^9.23.0",
- main
     "framer-motion": "^12.23.9",
     "gh-pages": "^6.3.0",
     "install": "^0.13.0",
@@ -33,7 +29,7 @@
     "next": "^15.4.5",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
-    "react-apexcharts": "^1.4.0",
+    "react-apexcharts": "^1.7.0",
     "react-dom": "18.2.0",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.39.5",
