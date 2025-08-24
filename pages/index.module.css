@@ -174,38 +174,7 @@
   flex-wrap: wrap;
 }
 
-.ctaButton {
-  background: linear-gradient(135deg, #3b82f6 0%, #10b981 100%);
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
-}
 
-.ctaButton:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(59, 130, 246, 0.3);
-}
-
-.secondaryButton {
-  background: transparent;
-  color: #3b82f6;
-  border: 2px solid #3b82f6;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.secondaryButton:hover {
-  background-color: rgba(59, 130, 246, 0.1);
-  transform: translateY(-2px);
-}
 
 .heroImage {
   flex: 1;
@@ -962,21 +931,6 @@
   flex-wrap: wrap;
 }
 
-.demoButton {
-  padding: 0.8rem 1.5rem;
-  background: linear-gradient(45deg, #3498db, #2980b9);
-  color: white;
-  border: none;
-  border-radius: 50px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.demoButton:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
-}
 
 .demoNote {
   font-size: 0.8rem;
@@ -1020,10 +974,7 @@
     align-items: center;
   }
   
-  .demoButton {
-    width: 100%;
-    max-width: 250px;
-  }
+
 }
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -1067,9 +1018,6 @@
     font-size: 1rem;
   }
   
-  .ctaButton, .secondaryButton {
-    width: 100%;
-  }
   
   .contentCard {
     padding: 24px;

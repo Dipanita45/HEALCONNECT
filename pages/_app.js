@@ -1,25 +1,28 @@
- fix/button-style-consistency
+// ✅ All imports at the top
+import '@/styles/globals.css'
 import '@styles/app.scss'
-import { UserContext } from '@lib/context';
-import Layout from './layout';
-import { useUserData } from '@lib/userInfo';
-import '../styles/app.scss';
-
-
-
-function MyApp({ Component, pageProps }) {
-  const userData = useUserData();
+import '../styles/app.scss'
 
 import { ThemeProvider } from '@/context/ThemeContext'
-import Navbar from '@/components/navbar' // Import your Navbar
-import '@/styles/globals.css'
- main
+import Navbar from '@/components/navbar'
+import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/userInfo'
+import Layout from './layout'
 
-export default function App({ Component, pageProps }) {
+// ✅ Single App component
+function MyApp({ Component, pageProps }) {
+  const userData = useUserData()
+
   return (
     <ThemeProvider>
-      <Navbar /> {/* Add Navbar here */}
-      <Component {...pageProps} />
+      <UserContext.Provider value={userData}>
+        <Navbar />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </UserContext.Provider>
     </ThemeProvider>
   )
 }
+
+export default MyApp

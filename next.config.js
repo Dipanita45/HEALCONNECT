@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
-  output: 'export', // Enables static export
+  //output: 'export', // Enables static export
   trailingSlash: true, // Ensures proper routing on GitHub Pages
   //basePath: '/HEALCONNECT',
   //assetPrefix: '/HEALCONNECT/',
