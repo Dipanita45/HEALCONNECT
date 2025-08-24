@@ -1,4 +1,6 @@
 // Example in _app.jsx or layout.js
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 useEffect(() => {
   const userType = getUserType();
   if (!userType) {
