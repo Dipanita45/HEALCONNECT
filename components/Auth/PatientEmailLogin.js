@@ -1,4 +1,4 @@
-import { auth, db } from '@lib/firebase';
+// import { auth, db } from '@lib/firebase';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
