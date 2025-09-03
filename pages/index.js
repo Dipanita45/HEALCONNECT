@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Footer from "./footer";
 import Image from 'next/image';
 import styles from './index.module.css';
-
+import Button from "@/components/ui/Button"
 export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
@@ -186,14 +186,14 @@ const simulateOxygen = () => {
                   This system is a <span className={styles.highlightYellow}>virtual</span> platform to{' '}
                   <span className={styles.highlightPink}>monitor</span> health anytime and anywhere.
                 </p>
-                <div className={styles.heroButtons}>
-                  <button className={styles.ctaButton} onClick={() => scrollToSection('problem')}>
-                    Explore Features
-                  </button>
-                  <button className={styles.secondaryButton} onClick={() => scrollToSection('doctors')}>
-                    Meet Our Doctors
-                  </button>
-                </div>
+                <div className="flex gap-4">
+  <Button variant="primary" onClick={() => scrollToSection('problem')}>
+    Explore Features
+  </Button>
+  <Button variant="secondary" onClick={() => scrollToSection('doctors')}>
+    Meet Our Doctors
+  </Button>
+</div>
               </div>
               <div className={styles.heroImage}>
                 <div className={styles.imageContainer}>
@@ -465,31 +465,33 @@ const simulateOxygen = () => {
             </div>
           </div>
         </div>
-      </div>
       
-      <div className={styles.kitInteractive}>
+      
+            <div className={styles.kitInteractive}>
         <h3>Try Our Virtual Demo</h3>
-        <div className={styles.demoControls}>
-          <button className={styles.demoButton} onClick={simulateHeartRate}>
+        <div className="flex flex-wrap gap-4 justify-center">
+          <Button variant="outline" onClick={simulateHeartRate}>
             Simulate Heart Rate
-          </button>
-          <button className={styles.demoButton} onClick={simulateTemperature}>
+          </Button>
+          <Button variant="outline" onClick={simulateTemperature}>
             Simulate Temperature
-          </button>
-          <button className={styles.demoButton} onClick={simulateOxygen}>
+          </Button>
+          <Button variant="outline" onClick={simulateOxygen}>
             Simulate Oxygen Levels
-          </button>
+          </Button>
         </div>
+
         <div className={styles.demoNote}>
-          <p>Note: This is a simulation. Actual device requires physical contact for accurate readings.</p>
+          <p>
+            Note: This is a simulation. Actual device requires physical contact
+            for accurate readings.
+          </p>
         </div>
       </div>
-    </div>
-  </section>
+
+  {/* Footer Section */}
+  < Footer />
+</main>
 </div>
-        {/* Footer Section */}
-        <Footer />
-      </main>
-    </div>
-  );
+);
 }

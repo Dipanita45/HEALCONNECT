@@ -1,8 +1,8 @@
+@use './button' as *;
+@use './special-effects' as *;
+@use './ui' as *;
+
 @import url('https://use.typekit.net/rcr1opg.css');
-@import './button.scss';
-@import './special-effects.scss';
-@import './ui.scss';
-@import './button';
 
 @tailwind base;
 @tailwind components;

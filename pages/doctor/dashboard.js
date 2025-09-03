@@ -1,18 +1,37 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { FaFileAlt, FaBell, FaUsers, FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import { FaFileAlt, FaBell, FaUsers } from "react-icons/fa";
 import Image from "next/image";
 import dynamic from "next/dynamic";
-
-import FetchPatients from "../../lib/fetchPatients"; // Adjust path if necessary
 
 const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), { ssr: false });
 const DoctorSidebar = dynamic(() => import("@components/Sidebar/DoctorSidebar"), { ssr: false });
 
+// FetchPatients can stay, but we will override its behavior for offline caching
+import FetchPatients from "../../lib/fetchPatients";
+
 export default function DoctorDashboard() {
   const router = useRouter();
+  const [patients, setPatients] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
 
-  // Role protection: redirect if not doctor, with SSR guard
+  // Network status listener
+  useEffect(() => {
+    const handleOnline = () => setIsOffline(false);
+    const handleOffline = () => setIsOffline(true);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  // Role protection
   useEffect(() => {
     if (typeof window !== "undefined") {
       const role = localStorage.getItem("userType");
@@ -24,21 +43,49 @@ export default function DoctorDashboard() {
     }
   }, [router]);
 
-  // Use the FetchPatients hook
-  const { loading, error, patients } = FetchPatients();
+  // Fetch patients with offline support
+  useEffect(() => {
+    async function fetchPatients() {
+      if (navigator.onLine) {
+        try {
+          const { loading, error, patients } = await FetchPatients(); // make sure FetchPatients returns a promise
+          setLoading(loading);
+          setError(error);
+          setPatients(patients || []);
+          localStorage.setItem("patientsData", JSON.stringify(patients || []));
+        } catch (err) {
+          setError("Failed to fetch patients.");
+          const cached = localStorage.getItem("patientsData");
+          if (cached) setPatients(JSON.parse(cached));
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        // Offline: read from cache
+        const cached = localStorage.getItem("patientsData");
+        if (cached) {
+          setPatients(JSON.parse(cached));
+          setLoading(false);
+        } else {
+          setError("No cached data available.");
+          setLoading(false);
+        }
+      }
+    }
 
-  // Summary stats with current patients count
+    fetchPatients();
+  }, []);
+
   const summaryStats = [
     {
       icon: <FaUsers size={36} className="text-blue-500 dark:text-gray-100" />,
       label: "Total Patients",
       value: patients.length.toString(),
     },
-    { icon: <FaFileAlt size={36} className="text-blue-500 dark:text-gray-100" />, label: "Total Reports", value: "02" }, // Adjust accordingly
-    { icon: <FaBell size={36} className="text-blue-500 dark:text-gray-100" />, label: "Appointments", value: "00" }, // Adjust accordingly
+    { icon: <FaFileAlt size={36} className="text-blue-500 dark:text-gray-100" />, label: "Total Reports", value: "02" },
+    { icon: <FaBell size={36} className="text-blue-500 dark:text-gray-100" />, label: "Appointments", value: "00" },
   ];
 
-  // Helper to map patient status to styled classes
   const getStatusClasses = (status) => {
     const statusMap = {
       "Viral Fever": "text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100",
@@ -52,6 +99,12 @@ export default function DoctorDashboard() {
   return (
     <AuthCheck>
       <DoctorSidebar>
+        {isOffline && (
+          <div style={{ background: "#ff9800", color: "white", textAlign: "center", padding: "0.5rem" }}>
+            You are offline – showing last cached data.
+          </div>
+        )}
+
         <h1 className="prose lg:prose-xl font-bold md:ml-4 dark:text-gray-100">Doctor Dashboard</h1>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-4 md:px-4 gap-4">
@@ -121,10 +174,6 @@ export default function DoctorDashboard() {
                 </table>
               )}
             </div>
-
-            {/* Pagination UI remains unchanged */}
-            {/* You can add your pagination controls here */}
-
           </div>
         </div>
       </DoctorSidebar>
