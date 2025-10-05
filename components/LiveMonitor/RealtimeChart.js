@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Line } from 'react-chartjs-2';
 
 const RealtimeChart = () => {
@@ -24,30 +24,26 @@ const RealtimeChart = () => {
     ],
   });
 
-  const addData = (value) => {
-    const newChartData = {
-      ...chartData,
-      labels: [...chartData.labels, new Date().toLocaleTimeString()],
-      datasets: chartData.datasets.map((dataset) => ({
+  // Memoized addData function to prevent warning
+  const addData = useCallback((value) => {
+    setChartData((prevChartData) => ({
+      ...prevChartData,
+      labels: [...prevChartData.labels, new Date().toLocaleTimeString()],
+      datasets: prevChartData.datasets.map((dataset) => ({
         ...dataset,
         data: [...dataset.data, value],
       })),
-    };
-    setChartData(newChartData);
-  };
+    }));
+  }, []);
 
   useEffect(() => {
-    // Connect to the analog data source and listen for new data
     const intervalId = setInterval(() => {
-      const value = Math.random() * 100; // Replace this with your own analog data source
+      const value = Math.random() * 100;
       addData(value);
     }, 1000);
 
-    // Disconnect from the analog data source when the component unmounts
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+    return () => clearInterval(intervalId);
+  }, [addData]); // This is now stable and will not cause warning
 
   return (
     <div>

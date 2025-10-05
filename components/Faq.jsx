@@ -50,7 +50,7 @@ export default function FAQ() {
           Frequently Asked Questions
         </h2>
         <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-          Everything you need to know about HealConnect's remote health monitoring solution
+        Everything you need to know about HealConnect&apos;s remote health monitoring solution
         </p>
       </div>
 

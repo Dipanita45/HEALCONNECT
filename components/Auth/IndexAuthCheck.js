@@ -15,7 +15,7 @@ export default function IndexAuthCheck({ children } = {}) {
   if (!userType) {
     return (
       <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h2>You Don't Have Access!</h2>
+       <h2>You Don&apos;t Have Access!</h2>
         <p>Dashboard can only be accessed by Legitimate User.</p>
         <button onClick={() => router.push("/login")} style={{ marginRight: "1rem" }}>
           Go to Dashboard
