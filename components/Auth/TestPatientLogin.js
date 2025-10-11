@@ -4,6 +4,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaSpinner } from 'react-icons/fa';
+import Link from 'next/link';
 
 export default function TestPatientLogin() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -122,17 +123,17 @@ export default function TestPatientLogin() {
         </button>
       </form>
 
-      <div className="mt-4 space-y-2">
-        <div className="text-center">
-          <a 
-            href="/test-setup" 
-            className="text-blue-500 hover:text-blue-700 underline text-sm"
-          >
-            📝 Create Test Account First
-          </a>
-        </div>
-        
-        <div className="text-center">
+   <div className="mt-4 space-y-2">
+  <div className="text-center">
+    <Link
+      href="/test-setup"
+      className="text-blue-500 hover:text-blue-700 underline text-sm"
+    >
+      📝 Create Test Account First
+    </Link>
+  </div>
+  
+  <div className="text-center">
           <button
             type="button"
             onClick={() => window.location.href = '/login'}

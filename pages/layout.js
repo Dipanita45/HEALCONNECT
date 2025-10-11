@@ -53,7 +53,7 @@ export default function Layout({ children }) {
       if (userType === "doctor") router.replace("/doctor/dashboard");
       if (userType === "patient") router.replace("/patient/dashboard");
     }
-  }, [mounted, router.pathname]);
+  }, [mounted, router]);
 
   if (!mounted) return null; // Prevent server/client mismatch
 

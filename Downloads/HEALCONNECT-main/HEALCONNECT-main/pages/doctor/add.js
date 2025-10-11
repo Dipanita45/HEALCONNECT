@@ -163,7 +163,7 @@ export default function Add(props) {
 
 const Divider = () => <hr className=" mb-6 my-2 bg-gray-200 dark:bg-gray-800 border border-blue-400 dark:border-blue-400 rounded-full " />;
 
-export const FormInput = (props) => {
+ const FormInput = (props) => {
   const { label, ref, type, onChange, id, className, placeholder, pattern, required} = props;
   return (
     <div>
@@ -175,7 +175,7 @@ export const FormInput = (props) => {
   );
 }
 
-export const FormDropdown = (props) =>{
+const FormDropdown = (props) =>{
   const { label, options, onSelect} = props;
   return (
       <div>
@@ -195,7 +195,7 @@ export const FormDropdown = (props) =>{
   );
 }
 
-export const FormInstructions = (props) => {
+ const FormInstructions = (props) => {
   return (
     <div className=" w-full md:w-1/4 md:my-0 my-4 overflow-hidden rounded-lg shadow-xs bg-blue-200">
     <div className="w-full flex flex-col overflow-x-auto p-2 md:p-4">
