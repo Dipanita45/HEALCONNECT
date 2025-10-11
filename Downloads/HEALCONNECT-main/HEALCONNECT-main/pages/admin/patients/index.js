@@ -4,6 +4,9 @@ import PatientCard from "@components/PatientComponents/PatientCard";
 import FetchPatients from "@lib/fetchPatients";
 import { useRouter } from "next/router";
 import { FaAngleRight, FaSpinner, FaSearch } from 'react-icons/fa';
+export default function DoctorsHome() {
+  return <div>Admin page test</div>
+}
 
 export default function Patients(prose) {
   const router = useRouter();

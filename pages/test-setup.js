@@ -1,6 +1,8 @@
 import TestPatientCreator from '@components/TestPatientCreator';
 import { Toaster } from 'react-hot-toast';
 
+import Link from 'next/link';
+
 export default function TestSetup() {
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 py-8">
@@ -109,21 +111,21 @@ export default function TestSetup() {
           </div>
         </div>
 
-        {/* Quick Access Links */}
-        <div className="mt-8 text-center">
-          <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Access</h3>
-          <div className="flex justify-center space-x-4">
-            <a href="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
-              Login Page
-            </a>
-            <a href="/admin/add" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
-              Add Patient (Admin)
-            </a>
-            <a href="/" className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
-              Home Page
-            </a>
-          </div>
-        </div>
+{/* Quick Access Links */}
+<div className="mt-8 text-center">
+  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Quick Access</h3>
+  <div className="flex justify-center space-x-4">
+    <Link href="/login" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+      Login Page
+    </Link>
+    <Link href="/admin/add" className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md">
+      Add Patient (Admin)
+    </Link>
+    <Link href="/" className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md">
+      Home Page
+</Link>
+  </div>
+</div>
       </div>
     </div>
   );
