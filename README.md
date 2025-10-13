@@ -146,6 +146,37 @@ HEALCONNECT/
 
 ---
 
+
+
+Screenshots
+
+### Homepage Preview
+<img width="1885" height="878" alt="Screenshot 2025-08-12 204702" src="https://github.com/user-attachments/assets/eec7755b-0074-4b92-ba36-b97ef77baa55" />
+
+
+### Prescription 
+<img width="1882" height="562" alt="Screenshot 2025-08-12 204741" src="https://github.com/user-attachments/assets/ba062cfc-81e5-4aa5-8277-4332913ad21b" />
+
+### Appointments
+<img width="1890" height="577" alt="Screenshot 2025-08-12 204752" src="https://github.com/user-attachments/assets/25b665c5-7fe3-4d70-8d48-d12c7d04ba8e" />
+
+
+### Monitoring
+<img width="1878" height="558" alt="Screenshot 2025-08-12 204802" src="https://github.com/user-attachments/assets/87e82497-2daa-4515-bac0-04038633f261" />
+
+
+### FAQ Section
+<img width="1239" height="867" alt="Screenshot 2025-08-12 204828" src="https://github.com/user-attachments/assets/3f90d130-bb49-43f0-b648-d0756ff47040" />
+
+
+### Contact Page
+<img width="1910" height="340" alt="Screenshot 2025-08-12 204840" src="https://github.com/user-attachments/assets/018d9d69-c48b-444a-9e82-87799ba497d7" />
+
+
+### Dark Mode
+<img width="1845" height="834" alt="Screenshot 2025-08-12 204852" src="https://github.com/user-attachments/assets/b7361658-739c-4296-858e-de966e6cae55" />
+
+
 ### 🤝 Contributing
 
 We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
@@ -158,25 +189,3 @@ We welcome contributions from everyone! Please read our [Contributing Guidelines
 <p align="center"><a href="#top" style="font-size: 18px; padding: 10px 20px; background: #e0f7fa; border-radius: 8px; text-decoration: none;">
 ⬆️ Back to Top</a></p>
 
-Website Preview
-
-### Homepage Preview
-<img width="1885" height="878" alt="Screenshot 2025-08-12 204702" src="https://github.com/user-attachments/assets/eec7755b-0074-4b92-ba36-b97ef77baa55" />
-
-### Prescription 
-<img width="1882" height="562" alt="Screenshot 2025-08-12 204741" src="https://github.com/user-attachments/assets/ba062cfc-81e5-4aa5-8277-4332913ad21b" />
-
-### Appointments
-<img width="1890" height="577" alt="Screenshot 2025-08-12 204752" src="https://github.com/user-attachments/assets/25b665c5-7fe3-4d70-8d48-d12c7d04ba8e" />
-
-### Monitoring
-<img width="1878" height="558" alt="Screenshot 2025-08-12 204802" src="https://github.com/user-attachments/assets/87e82497-2daa-4515-bac0-04038633f261" />
-
-### FAQ Section
-<img width="1239" height="867" alt="Screenshot 2025-08-12 204828" src="https://github.com/user-attachments/assets/3f90d130-bb49-43f0-b648-d0756ff47040" />
-
-### Contact Page
-<img width="1910" height="340" alt="Screenshot 2025-08-12 204840" src="https://github.com/user-attachments/assets/018d9d69-c48b-444a-9e82-87799ba497d7" />
-
-### Dark Mode
-<img width="1845" height="834" alt="Screenshot 2025-08-12 204852" src="https://github.com/user-attachments/assets/b7361658-739c-4296-858e-de966e6cae55" />
