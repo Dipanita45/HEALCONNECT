@@ -1,0 +1,49 @@
+import Image from 'next/image';
+import { doctors } from '@/data/doctors';
+
+export default function Doctors() {
+    return (
+        <div id="doctors" className="py-20 px-5 bg-slate-50 relative">
+            <section className="max-w-7xl mx-auto">
+                <div className="text-center mb-16">
+                    <span className="inline-block bg-gradient-to-br from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                        Our Medical Team
+                    </span>
+                    <h2 className="text-4xl font-bold text-slate-800 mb-4">Meet Our Specialists</h2>
+                    <p className="text-slate-500 max-w-2xl mx-auto">
+                        Our platform connects you with leading medical professionals from around the world,
+                        ready to provide expert care and monitoring.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    {doctors.map((doctor) => (
+                        <div
+                            key={doctor.id}
+                            className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                        >
+                            <div className="relative h-64 overflow-hidden">
+                                <Image
+                                    src={doctor.image}
+                                    alt={doctor.name}
+                                    fill
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            </div>
+
+                            <div className="p-6">
+                                <h3 className="text-xl font-bold text-slate-800 mb-1">{doctor.name}</h3>
+                                <p className="text-blue-500 font-medium mb-3">{doctor.specialty}</p>
+                                <div className="text-sm text-slate-400 mb-4">{doctor.experience} experience</div>
+                                <p className="text-slate-500 text-sm leading-relaxed">
+                                    {doctor.description}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </section>
+        </div>
+    );
+}

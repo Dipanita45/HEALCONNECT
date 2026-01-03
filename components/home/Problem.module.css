@@ -1,0 +1,137 @@
+/* Custom illustration styles that are too complex for utility classes */
+
+.problemVisualization {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  
+  .patientSilhouette {
+    position: relative;
+    width: 200px;
+    height: 350px;
+  }
+  
+  .silhouetteBody {
+    width: 100%;
+    height: 100%;
+    background: #e2e8f0;
+    border-radius: 100px 100px 0 0;
+    position: relative;
+    opacity: 0.8;
+  }
+  
+  .vitalMonitor {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 80px;
+    background: #1e293b;
+    border-radius: 12px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .monitorScreen {
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .heartbeatLine {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #ef4444;
+    box-shadow: 0 0 4px #ef4444;
+    transform: translateY(-50%);
+  }
+  
+  .problemPoint {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #475569;
+    white-space: nowrap;
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .pointPulse {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  
+  .point1 {
+    top: 40px;
+    right: -60px;
+    animation-delay: 0s;
+  }
+  .point1 .pointPulse { background: #ef4444; }
+  
+  .point2 {
+    top: 160px;
+    left: -80px;
+    animation-delay: 1s;
+  }
+  .point2 .pointPulse { background: #f59e0b; }
+  
+  .point3 {
+    bottom: 80px;
+    right: -40px;
+    animation-delay: 2s;
+  }
+  .point3 .pointPulse { background: #3b82f6; }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  .thoughtBubble {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    padding: 16px 24px;
+    max-width: 300px;
+    margin-left: auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .thoughtBubble:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .thoughtBubble::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    right: 30px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+  }
