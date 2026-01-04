@@ -146,6 +146,40 @@ HEALCONNECT/
 
 ---
 
+## Backend Setup & Configuration
+
+Although this project uses a unified Next.js structure, backend services
+(API routes, database connections, and authentication) require proper
+environment configuration.
+
+### Prerequisites
+- Node.js (v16+)
+- npm or yarn
+- Database (MongoDB / PostgreSQL as applicable)
+
+### Environment Setup
+1. Create a `.env` file in the root directory
+2. Copy variables from `.env.example`
+3. Fill in required values
+
+### Install Dependencies
+```bash
+npm install
+```
+
+### Run the Application
+```bash
+npm run dev
+```
+
+### Backend/API
+
+API routes are located inside the `pages/api` directory
+
+Ensure database connection variables are correctly set
+
+---
+
 ### 🤝 Contributing
 
 We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
