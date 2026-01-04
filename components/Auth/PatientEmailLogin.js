@@ -63,6 +63,12 @@ export default function PatientEmailLogin() {
       setError('Password must be at least 6 characters');
       return;
     }
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  
+    if (!passwordRegex.test(password)) {
+      setError('Password must be at least 8 characters, include an uppercase letter, a number, and a special character.');
+      return;
+    }
 
     setIsLoading(true);
     setError(null);
