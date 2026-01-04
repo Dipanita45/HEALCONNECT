@@ -8,24 +8,24 @@ export default function Solution() {
                 <p className="py-2 text-lg md:text-2xl text-gray-700 dark:text-gray-300 text-center w-3/4 mx-auto leading-relaxed">
                     This system will let the organization meet their requirement of
                     measuring patient{' '}
-                    <span className="text-yellow-600 font-display animate-pulse font-bold">
+                    <span className="text-yellow-600 dark:text-yellow-400 font-display animate-pulse font-bold">
                         health parameters
                     </span>{' '}
                     and make this data available and accessible to doctors remotely{' '}
-                    <span className="text-orange-600 font-display animate-pulse font-bold">
+                    <span className="text-orange-600 dark:text-orange-400 font-display animate-pulse font-bold">
                         anytime anywhere
                     </span>
                     .
                 </p>
                 <p className="py-2 text-lg md:text-2xl text-gray-700 dark:text-gray-300 w-3/4 mx-auto leading-relaxed">
                     This system will let the organization manage their{' '}
-                    <span className="text-blue-500 font-display animate-pulse font-bold">
+                    <span className="text-blue-500 dark:text-blue-400 font-display animate-pulse font-bold">
                         doctors and patients
                     </span>{' '}
                     data and maintains security end to end.
                 </p>
                 <a
-                    className="animate-bounce no-underline block mt-12 md:text-xl text-base text-blue-600 hover:text-blue-800 transition-colors"
+                    className="animate-bounce no-underline block mt-12 md:text-xl text-base text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                     href="#kit"
                 >
                     How you get monitored? 🧐

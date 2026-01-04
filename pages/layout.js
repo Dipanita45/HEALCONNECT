@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 
 function getUserType() {
   if (typeof window !== "undefined") {
@@ -10,6 +12,7 @@ function getUserType() {
 
 export default function Layout({ children }) {
   const router = useRouter();
+  const pathname = usePathname(); // Use usePathname instead of router.pathname
   const [isOffline, setIsOffline] = useState(false);
   const [mounted, setMounted] = useState(false); // Track client mounting
 
@@ -35,46 +38,40 @@ export default function Layout({ children }) {
     const userType = getUserType();
     const publicPages = ["/", "/login"];
 
+    // Convert pathname to string for comparison
+    const currentPath = pathname || "";
+
     // Redirect if not logged in and trying to access protected pages
-    if (!userType && !publicPages.includes(router.pathname)) {
+    if (!userType && !publicPages.includes(currentPath)) {
       router.replace("/login");
       return;
     }
 
     // Redirect logged-in users from login page
-    if (userType && router.pathname === "/login") {
+    if (userType && currentPath === "/login") {
       if (userType === "doctor") router.replace("/doctor/dashboard");
       if (userType === "patient") router.replace("/patient/dashboard");
       return;
     }
 
     // Redirect from root if logged in
-    if (userType && router.pathname === "/") {
+    if (userType && currentPath === "/") {
       if (userType === "doctor") router.replace("/doctor/dashboard");
       if (userType === "patient") router.replace("/patient/dashboard");
     }
-  }, [mounted, router]);
+  }, [mounted, router, pathname]); // Add pathname to dependencies
 
   if (!mounted) return null; // Prevent server/client mismatch
 
   return (
     <>
       {isOffline && (
-        <div style={{
-          position: "fixed",
-          top: 0,
-          width: "100%",
-          background: "#ff9800",
-          color: "white",
-          textAlign: "center",
-          padding: "0.5rem",
-          zIndex: 1000,
-        }}>
+        <div className="fixed top-0 left-0 right-0 bg-orange-500 text-white text-center py-2 px-4 z-50">
           You are offline – showing last cached data.
         </div>
       )}
       {/* Wrap children in a provider or pass offline data if needed */}
-      <div>{children}</div>
+      <div className="min-h-screen">{children}</div>
     </>
   );
 }
