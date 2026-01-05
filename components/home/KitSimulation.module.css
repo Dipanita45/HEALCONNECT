@@ -64,11 +64,18 @@
 .vitalLabel {
     flex: 1;
     font-size: 0.8rem;
+    color: #fff;
 }
 
 .vitalValue {
     font-weight: bold;
     font-size: 1.1rem;
+    color: #fff;
+}
+
+.vitalValue small {
+    color: #ccc;
+    font-size: 0.8rem;
 }
 
 .animatedHeart {
@@ -359,11 +366,13 @@
 .metricValue {
     font-size: 1rem;
     font-weight: bold;
+    color: #fff;
 }
 
 .metricLabel {
     font-size: 0.5rem;
     opacity: 0.7;
+    color: #ccc;
 }
 
 .trendIndicator {
