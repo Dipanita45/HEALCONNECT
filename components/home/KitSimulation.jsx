@@ -38,7 +38,7 @@ export default function KitSimulation() {
                     <p className="py-2 text-md md:text-2xl text-gray-700 dark:text-gray-300 text-center w-3/4 mx-auto leading-relaxed">
                         This system is established with a health monitoring Kit which enables
                         the doctors to measure{' '}
-                        <span className="text-blue-600 font-display animate-pulse font-bold">
+                        <span className="text-blue-600 dark:text-blue-400 font-display animate-pulse font-bold">
                             body temperature, heart rate and pulse rate
                         </span>{' '}
                         in a single device.
@@ -46,7 +46,7 @@ export default function KitSimulation() {
                     <p className="py-2 text-lg md:text-2xl text-gray-700 dark:text-gray-300 w-3/4 mx-auto leading-relaxed">
                         The parameter measured using the kit is shown to appropriate doctor
                         through the website. The{' '}
-                        <span className="text-green-600 font-display animate-pulse font-bold">
+                        <span className="text-green-600 dark:text-green-400 font-display animate-pulse font-bold">
                             doctor as well as patient
                         </span>{' '}
                         can monitor the information by visiting to the website.
@@ -151,7 +151,9 @@ export default function KitSimulation() {
                 </div>
 
                 <div className="mt-12 text-center">
-                    <h3 className="text-xl font-semibold mb-6">Try Our Virtual Demo</h3>
+                    <h3 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                        Try Our Virtual Demo
+                    </h3>
                     <div className="flex flex-wrap gap-4 justify-center">
                         <Button variant="outline" onClick={simulateHeartRate}>
                             Simulate Heart Rate
@@ -164,7 +166,7 @@ export default function KitSimulation() {
                         </Button>
                     </div>
 
-                    <div className="mt-4 text-sm text-gray-500 max-w-lg mx-auto">
+                    <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
                         <p>
                             Note: This is a simulation. Actual device requires physical contact
                             for accurate readings.
