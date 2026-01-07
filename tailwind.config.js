@@ -9,11 +9,11 @@ module.exports = {
   darkMode: 'class',
   theme: {
     screens: {
-      'xs': '350px',
-      'sm': '512px',
-      'md': '768px',
-      'lg': '1024px',
-      'xl': '1280px',
+      xs: '350px',
+      sm: '512px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
       '2xl': '1536px',
     },
     fontFamily: {
@@ -32,7 +32,7 @@ module.exports = {
       gray5: '#454e56',
       gray6: '#2a2e35',
       gray7: '#12181b',
-      link: '#0000ee',
+      link: '#2563eb',        // improved link contrast
       blue: colors.blue,
       green: colors.green,
       pink: colors.pink,
@@ -42,42 +42,37 @@ module.exports = {
       yellow: colors.yellow,
     },
     extend: {
-      colors:{
+      colors: {
+        /* WCAG-friendly gray scale for dark mode */
         gray: {
-          900: '#202225',
-          800: '#2f3136',
-          700: '#36393f',
-          600: '#4f545c',
-          500: '#6B7280',
-          400: '#d4d7dc',
-          300: '#e3e5e8',
-          200: '#ebedef',
-          100: '#f2f3f5',
+          900: '#0f172a',   // slate-900
+          800: '#1e293b',   // slate-800
+          700: '#334155',   // slate-700
+          600: '#475569',   // slate-600
+          500: '#94a3b8',   // slate-400 (body text)
+          400: '#cbd5e1',   // slate-300
+          300: '#e2e8f0',   // slate-200
+          200: '#f1f5f9',   // slate-100
+          100: '#f8fafc',   // near white
         },
       },
       typography: {
         DEFAULT: {
-          scss: {
-            h1: {
-              'font-weight': 'normal',
-              'font-size': '1.75rem',
-            },
-            h2: {
-              'font-weight': 'normal',
-              'font-size': '1.50rem',
-            },
-            h3: {
-              'font-weight': 'normal',
-              'font-size': '1.25rem',
-            },
-            h4: {
-              'font-weight': 'normal',
-              'font-size': '1rem',
-            },
-            h5: {
-              'font-weight': 'normal',
-              'font-size': '0.75rem',
-            }
+          css: {
+            color: '#111827', // gray-900
+            h1: { color: '#111827' },
+            h2: { color: '#111827' },
+            h3: { color: '#111827' },
+            p: { color: '#374151' }, // gray-700
+          },
+        },
+        dark: {
+          css: {
+            color: '#e5e7eb', // gray-200
+            h1: { color: '#f9fafb' },
+            h2: { color: '#f3f4f6' },
+            h3: { color: '#e5e7eb' },
+            p: { color: '#d1d5db' }, // gray-300
           },
         },
       },
