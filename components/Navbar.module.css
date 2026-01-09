@@ -61,17 +61,18 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  background: linear-gradient(45deg, transparent 40%, rgba(255, 255, 255, 0.3), transparent 60%);
+  background: linear-gradient(
+    45deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.25),
+    transparent 60%
+  );
   animation: shine 3s infinite linear;
 }
 
 @keyframes shine {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
 .crossSymbol {
@@ -80,9 +81,10 @@
   height: 20px;
 }
 
-.crossLine1, .crossLine2 {
+.crossLine1,
+.crossLine2 {
   position: absolute;
-  background-color: white;
+  background-color: #f9fafb; /* softer white */
   border-radius: 2px;
 }
 
@@ -91,7 +93,6 @@
   height: 4px;
   top: 8px;
   left: 0;
-  transform: rotate(0);
   animation: pulse 2s infinite;
 }
 
@@ -100,17 +101,12 @@
   height: 20px;
   left: 8px;
   top: 0;
-  transform: rotate(0);
   animation: pulse 2s infinite 0.5s;
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.75; }
 }
 
 .logoText {
@@ -174,7 +170,7 @@
   position: relative;
   padding: 0.5rem 1.2rem;
   background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-  color: white;
+  color: #f9fafb;
   border-radius: 50px;
   text-decoration: none;
   font-weight: 500;
@@ -184,165 +180,54 @@
 
 .loginButton:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.3);
-}
-
-.buttonPulse {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: transparent;
-  border-radius: 50px;
-  opacity: 0;
-  animation: pulseEffect 2s infinite;
-}
-
-@keyframes pulseEffect {
-  0% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.7);
-    opacity: 0.7;
-  }
-  70% {
-    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
-    opacity: 0;
-  }
-  100% {
-    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
-    opacity: 0;
-  }
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.35);
 }
 
 /* Mobile menu button */
-.menuButton {
-  display: none;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 21px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  z-index: 1001;
-}
-
 .menuButton span {
-  display: block;
-  height: 3px;
-  width: 100%;
   background: #374151;
-  border-radius: 3px;
-  transition: all 0.3s ease;
-  transform-origin: center;
 }
 
-.menuButton.menuOpen span:nth-child(1) {
-  transform: translateY(9px) rotate(45deg);
-  background: #2563eb;
-}
-
-.menuButton.menuOpen span:nth-child(2) {
-  opacity: 0;
-  transform: translateX(-10px);
-}
-
-.menuButton.menuOpen span:nth-child(3) {
-  transform: translateY(-9px) rotate(-45deg);
-  background: #2563eb;
-}
-
-/* Overlay for mobile */
+/* Overlay */
 .overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 998;
+  background: rgba(0, 0, 0, 0.55);
 }
 
-/* Dark mode styles */
+/* =========================
+   Dark Mode Improvements
+========================= */
+
 :global(.dark) .navbar {
-  background: rgba(17, 24, 39, 0.95);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+  background: rgba(17, 24, 39, 0.97);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.45);
 }
 
 :global(.dark) .navbar.scrolled {
-  background: rgba(17, 24, 39, 0.98);
+  background: rgba(15, 23, 42, 0.98);
 }
 
 :global(.dark) .navLink {
-  color: #e5e7eb;
+  color: #e5e7eb; /* gray-200 */
 }
 
 :global(.dark) .navLink:hover {
-  color: #60a5fa;
+  color: #93c5fd; /* blue-300 */
 }
 
 :global(.dark) .menuButton span {
   background: #e5e7eb;
 }
 
-/* Responsive styles */
+/* Mobile dark menu */
 @media (max-width: 968px) {
-  .navLinks {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    height: 100vh;
-    width: 70%;
-    max-width: 300px;
-    background: white;
-    flex-direction: column;
-    justify-content: center;
-    gap: 2rem;
-    transition: right 0.4s ease;
-    z-index: 999;
-    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-    padding: 2rem;
-  }
-
   :global(.dark) .navLinks {
-    background: #1f2937;
-  }
-
-  .navLinks.navOpen {
-    right: 0;
-  }
-
-  .menuButton {
-    display: flex;
+    background: #020617; /* near-black */
   }
 }
 
+/* Responsive tweaks */
 @media (max-width: 640px) {
-  .container {
-    padding: 0 1rem;
-  }
-  
   .logoText {
-    font-size: 1.2rem;
-  }
-  
-  .loginButton span {
-    display: none;
-  }
-  
-  .loginButton {
-    padding: 0.6rem;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .loginButton::before {
-    content: "→";
     font-size: 1.2rem;
   }
 }
