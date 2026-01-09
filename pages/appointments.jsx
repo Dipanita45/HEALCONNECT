@@ -1,3 +1,13 @@
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  Timestamp
+} from "firebase/firestore";
+
+import { db } from "../lib/firebase";
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Appointments.module.css';
@@ -148,38 +158,68 @@ export default function Appointments() {
     setFormErrors({});
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    setIsSubmitting(true);
-    
-    // Show success animation
-    const successElement = document.getElementById('booking-success');
-    successElement.style.display = 'flex';
-    
-    setTimeout(() => {
-      successElement.style.display = 'none';
-      alert('Appointment booked successfully!');
-      console.log(formData);
-      
-      // Reset form
-      setFormData({
-        name: '',
-        date: '',
-        time: '',
-        doctor: '',
-        reason: ''
-      });
-      setStep(1);
-      setSelectedDoctor(null);
-      setFormErrors({});
-      setIsSubmitting(false);
-    }, 2500);
-  };
+const checkAppointmentConflict = async (doctorId, date, time) => {
+  const q = query(
+    collection(db, "appointments"),
+    where("doctorId", "==", doctorId),
+    where("date", "==", date),
+    where("time", "==", time)
+  );
 
-  const availableTimes = [
+  const snapshot = await getDocs(q);
+  return !snapshot.empty;
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+
+  setIsSubmitting(true);
+
+  try {
+    const conflict = await checkAppointmentConflict(
+      selectedDoctor.id,
+      formData.date,
+      formData.time
+    );
+
+    if (conflict) {
+      alert("This time slot is already booked. Please choose another.");
+      setIsSubmitting(false);
+      return;
+    }
+
+    await addDoc(collection(db, "appointments"), {
+      patientName: formData.name,
+      doctorId: selectedDoctor.id,
+      doctorName: selectedDoctor.name,
+      date: formData.date,
+      time: formData.time,
+      reason: formData.reason,
+      createdAt: Timestamp.now()
+    });
+
+    alert("Appointment booked successfully!");
+
+    setFormData({
+      name: '',
+      date: '',
+      time: '',
+      doctor: '',
+      reason: ''
+    });
+    setStep(1);
+    setSelectedDoctor(null);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to book appointment.");
+  }
+
+  setIsSubmitting(false);
+};
+
+   const availableTimes = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
     "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", 
     "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", 
