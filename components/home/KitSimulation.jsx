@@ -99,6 +99,7 @@ export default function KitSimulation() {
                                         <div className={styles.patientAvatar}></div>
                                         <div className={styles.patientName}>John Doe</div>
                                     </div>
+                                    {/* healthchart */}
                                     <div className={styles.healthChart}>
                                         <div className={styles.chartLine}></div>
                                         <div className={styles.chartLine}></div>
