@@ -5,7 +5,7 @@ export default function ScrollToTop() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      setVisible(window.scrollY > 200)
+      setVisible(window.scrollY > 300)
     }
 
     window.addEventListener("scroll", toggleVisibility)
@@ -23,15 +23,31 @@ export default function ScrollToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className={`fixed bottom-6 right-6 z-[9999] rounded-full p-3
-        bg-blue-600 text-white shadow-lg
-        hover:bg-blue-700
-        dark:bg-blue-500 dark:hover:bg-blue-400
-        transition-all duration-300
-        ${visible ? "opacity-100 scale-100" : "opacity-0 scale-90 pointer-events-none"}
+      className={`fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full shadow-xl
+        bg-gradient-to-r from-blue-600 to-purple-600 
+        hover:from-blue-700 hover:to-purple-700
+        dark:from-blue-500 dark:to-purple-500 
+        dark:hover:from-blue-400 dark:hover:to-purple-400
+        transition-all duration-500 ease-out transform-gpu
+        ${visible 
+          ? "opacity-60 translate-y-0 scale-100 hover:scale-105" 
+          : "opacity-0 translate-y-16 scale-75 pointer-events-none"
+        }
       `}
     >
-      ↑
+      <div className="flex items-center justify-center h-full">
+        <svg 
+          className="w-5 h-5 text-white drop-shadow-sm"
+          fill="none" 
+          stroke="currentColor" 
+          strokeWidth="3" 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          viewBox="0 0 24 24"
+        >
+          <path d="M7 14l5-5 5 5-5M12 19V5" />
+        </svg>
+      </div>
     </button>
   )
 }
