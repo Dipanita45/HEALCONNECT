@@ -17,10 +17,10 @@ module.exports = {
       '2xl': '1536px',
     },
     fontFamily: {
-      sans: ['sofia-pro', 'sans-serif'],
-      display: ['cubano', 'sans-serif'],
-      body: ['sofia-pro', 'sans-serif'],
-      code: ['attribute-mono', 'sans-serif'],
+      sans: ['Inter', 'system-ui', 'sans-serif'],
+      display: ['Space Grotesk', 'system-ui', 'sans-serif'],
+      body: ['Inter', 'system-ui', 'sans-serif'],
+      code: ['JetBrains Mono', 'Consolas', 'monospace'],
     },
     colors: {
       white: '#ffffff',
