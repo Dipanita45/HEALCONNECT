@@ -7,7 +7,6 @@ export default function Problem({ scrollToSection }) {
   return (
     <div id="problem" className="py-20 px-5 relative overflow-hidden bg-white dark:bg-gray-900">
       <section className="max-w-7xl mx-auto relative flex flex-col md:flex-row items-center gap-10 min-h-[60vh]">
-        {/* Background Pattern */}
         <div className="absolute inset-0 -z-10 opacity-[0.03] dark:opacity-[0.05]"
           style={{ backgroundImage: bgImage }} >
         </div>
@@ -43,12 +42,12 @@ export default function Problem({ scrollToSection }) {
             The Healthcare Challenge
           </span>
 
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-10 w-full max-w-2xl border border-gray-100 dark:border-gray-700">
+          <div className="bg-white text-black  dark:bg-gray-800 rounded-2xl p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-10 w-full max-w-2xl border border-gray-100 dark:border-gray-700">
 
-            <div className="flex gap-4 mb-6 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="flex gap-4 mb-6 p-4 rounded-xl  text text-black hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="text-2xl">⏱️</div>
               <div>
-                <h3 className="text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Time-Critical Decisions</h3>
+                <h3 className=" text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Time-Critical Decisions</h3>
                 <p className="text-slate-500 dark:text-gray-400 leading-relaxed">
                   Getting <span className="bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 px-1 rounded">real-time health parameters</span>{' '}
                   immediately is crucial for timely treatment and better outcomes.
@@ -67,6 +66,7 @@ export default function Problem({ scrollToSection }) {
                 </p>
               </div>
             </div>
+            {/* // new clasese added here */}
 
             <div className="flex gap-4 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
               <div className="text-2xl">🔍</div>
@@ -84,7 +84,7 @@ export default function Problem({ scrollToSection }) {
             className={`${styles.thoughtBubble} bg-white dark:bg-gray-800`} 
             onClick={() => scrollToSection('solution')}
           >
-            <span className="font-medium text-slate-700 dark:text-gray-300">How can we solve these challenges?</span>
+            <span className=" text-black font-medium text-slate-700 dark:text-gray-300">How can we solve these challenges?</span>
           </div>
         </div>
       </section>
