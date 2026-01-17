@@ -20,15 +20,21 @@ export default function App({ Component, pageProps }) {
 // src/App.jsx
 // pages/_app.js
 // pages/_app.js
-import '../styles/globals.css';  // global styles
-import Navbar from '../components/navbar';
+import '../styles/globals.css'
+import Navbar from '../components/navbar'
 import '../components/Navbar.module.css'
+import ScrollToTop from "../components/ScrollToTop"
+
 export default function MyApp({ Component, pageProps }) {
   return (
     <>
       <Navbar />
       <Component {...pageProps} />
+
+      {/* Scroll To Top Button */}
+      <ScrollToTop />
     </>
-  );
+  )
 }
+
 

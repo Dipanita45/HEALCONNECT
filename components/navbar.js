@@ -1,12 +1,16 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { UserContext } from '@lib/context'
+import { useRouter } from 'next/router'
 import styles from './navbar.module.css'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { user, currentUser, userRole } = useContext(UserContext)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +21,33 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.removeItem('userType')
+    localStorage.removeItem('username')
+    
+    // Clear any Firebase auth state if available
+    if (typeof window !== 'undefined' && window.firebaseAuth) {
+      window.firebaseAuth.signOut()
+    }
+    
+    // Redirect to login
+    router.push('/login')
+    setIsMenuOpen(false)
+  }
+
+  const handleLoginRedirect = () => {
+    router.push('/login')
+    setIsMenuOpen(false)
+  }
+
+  const handleDashboardRedirect = () => {
+    if (userRole) {
+      router.push(`/${userRole}/dashboard`)
+      setIsMenuOpen(false)
+    }
+  }
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
@@ -86,16 +117,32 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Right side - Login + Theme Toggle */}
+        {/* Right side - Auth buttons + Theme Toggle */}
         <div className={styles.rightSection}>
-          <Link 
-            href="/login" 
-            className={styles.loginButton}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span>Login</span>
-            <div className={styles.buttonPulse}></div>
-          </Link>
+          {user || currentUser ? (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleDashboardRedirect}
+                className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+              >
+                <span>Dashboard</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
+              >
+                <span>Logout</span>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className={styles.loginButton}
+            >
+              <span>Login</span>
+              <div className={styles.buttonPulse}></div>
+            </button>
+          )}
           <ThemeToggle />
 
           {/* Mobile menu button */}
