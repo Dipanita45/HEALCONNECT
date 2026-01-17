@@ -1,50 +1,41 @@
-## 🚀 Description
+## 📝 Description
 
-Please provide a clear and concise description of the changes made in this PR. Mention the related issue number if applicable (e.g., `Fixes #123`).  
-Explain **why** this change is necessary and **what** it improves or fixes.
+**Linked Issue:** ---
 
----
-
-## 🧪 Type of Change
-
-Please delete options that are not relevant.
-
-- 🐛 Bug fix  
-- ✨ New feature  
-- 📝 Documentation update  
-- 🔧 Refactor  
-- 🚀 Performance improvement  
-- ✅ Test addition  
-- 🔄 Code cleanup  
-- 🔗 Dependency update  
-- 🧰 Other (please describe):
+## 🏗️ Type of Change
+Select the relevant option:
+- [ ] 🚀 **New Feature** (Addition of a new functionality)
+- [ ] 🐛 **Bug Fix** (Logic or functional error)
+- [ ] 🎨 **UI/UX Update** (Changes to the interface/accessibility)
+- [ ] 📝 **Documentation** (README or Wiki updates)
+- [ ] 🔧 **Refactor/Cleanup** (No functional changes)
 
 ---
 
-## 📋 Checklist
-
-Before submitting, please make sure your PR meets the following requirements:
-
-- [ ] I have read the [Contributing Guidelines](CONTRIBUTING.md)
-- [ ] I have followed the project's coding style and naming conventions
-- [ ] I have performed a self-review of my code
-- [ ] I have added comments where necessary for clarity
-- [ ] I have updated relevant documentation (README, Wiki, etc.)
-- [ ] My changes do not introduce new warnings or errors
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] I have linked related issues (if applicable)
-- [ ] I am willing to help maintain this feature if needed
+## ⚙️ Technical Checklist
+- [ ] I have read the [Contributing Guidelines](CONTRIBUTING.md).
+- [ ] My code follows the project's style guidelines and PEP 8.
+- [ ] **Firebase/Auth:** If I modified backend logic, I have verified it works.
+- [ ] I have performed a self-review and added comments to complex code.
+- [ ] My changes generate no new warnings or errors.
 
 ---
 
-## 🧠 Additional Context
-
-Add any other context, screenshots, or references here that help reviewers understand your changes better.
+## 🧪 Testing & Evidence
+- **Test Environment:** (e.g., Windows 11, Python 3.12)
+- **Results:** (Describe what happened when you ran the code)
 
 ---
 
-## 🙌 Contribution Acknowledgement
+## 📸 Screenshots / Media
+> [!IMPORTANT]
+> **Mandatory for UI/UX updates.** Please drag and drop images or GIFs below to show the before/after or new design.
 
-- [ ] I am participating in **GSSoC / Hacktoberfest / another open source program**
-- [ ] This is my first contribution to this project
-- [ ] I would like to be assigned future issues related to this feature/fix
+---
+
+## ❄️ SWOC '26 Status
+- [ ] I am a contributor for **Social Winter of Code 2026**.
+- [ ] This is my first contribution to this project.
+
+---
+*By submitting this PR, I agree to maintain the standards of Chameleon. 🦎*
