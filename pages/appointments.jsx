@@ -265,18 +265,35 @@ const handleSubmit = async (e) => {
               exit="hidden"
               variants={staggerChildren}
             >
-              <motion.h2 
-                className={styles.sectionTitle}
+              <motion.div 
+                className={styles.titleContainer}
                 variants={fadeInUp}
               >
-                Our Specialist Doctors
-              </motion.h2>
-              <motion.p 
-                className={styles.sectionSubtitle}
-                variants={fadeInUp}
-              >
-                Select a doctor to book an appointment
-              </motion.p>
+                <motion.h2 
+                  className={styles.sectionTitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <span className={styles.titlePrefix}>Meet</span>
+                  <span className={styles.titleMain}>Our Specialist Doctors</span>
+                </motion.h2>
+                <motion.div 
+                  className={styles.titleUnderline}
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                ></motion.div>
+                <motion.p 
+                  className={styles.sectionSubtitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.2 }}
+                >
+                  Choose from our team of board-certified healthcare professionals
+                </motion.p>
+              </motion.div>
               
               <div className={styles.doctorsGrid}>
                 {doctors.map((doctor) => (
