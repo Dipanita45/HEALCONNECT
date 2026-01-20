@@ -160,8 +160,9 @@ Contributions are what make the open-source community an amazing place to learn 
 
 ---
 
-<p align="center"><strong>Made with ❤️ by the HEALCONNECT Team</strong>
-
-Empowering healthcare, one heartbeat at a time.</p>
+<p align="center">
+   <strong>Made with ❤️ by the HEALCONNECT Team</strong>
+    <strong>Empowering healthcare, one heartbeat at a time.</strong>
+</p>
 
 <p align="center"><a href="#top">⬆️ Back to Top</a></p>
