@@ -6,6 +6,7 @@ import '../styles/app.scss'
 import { ThemeProvider } from '@/context/ThemeContext'
 import Navbar from '@/components/navbar'
 import ScrollToTop from '@/components/ScrollToTop'
+import Footer from './footer'
 import { UserContext } from '@lib/context'
 import { useUserData } from '@lib/userInfo'
 import Layout from './layout'
@@ -22,6 +23,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </Layout>
         <ScrollToTop />
+        <Footer />
       </UserContext.Provider>
     </ThemeProvider>
   )
