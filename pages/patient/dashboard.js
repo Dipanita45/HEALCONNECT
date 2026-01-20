@@ -92,7 +92,7 @@ export default function Dashboard(params) {
               </h1>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <Link href="/patient/find-doctors">
-                  <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                  <div className="h-40 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
                     <div className="flex items-center">
                       <FaUserMd size={32} className="mr-4" />
                       <div>
@@ -104,7 +104,7 @@ export default function Dashboard(params) {
                 </Link>
 
                 <Link href="/patient/reports">
-                  <div className="bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                  <div className="h-40 bg-gradient-to-r from-green-500 to-green-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
                     <div className="flex items-center">
                       <FaEdit size={32} className="mr-4" />
                       <div>
@@ -116,7 +116,7 @@ export default function Dashboard(params) {
                 </Link>
 
                 <Link href="/patient/notifications">
-                  <div className="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                  <div className="h-40 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
                     <div className="flex items-center">
                       <FaSpinner size={32} className="mr-4" />
                       <div>
