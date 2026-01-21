@@ -1,0 +1,278 @@
+/* Custom illustration styles that are too complex for utility classes */
+
+.problemVisualization {
+  position: relative;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.patientSilhouette {
+  position: relative;
+  width: 200px;
+  height: 350px;
+}
+
+.silhouetteBody {
+  width: 100%;
+  height: 100%;
+  background: #e2e8f0;
+  border-radius: 100px 100px 0 0;
+  position: relative;
+  opacity: 0.8;
+}
+
+.dark .silhouetteBody {
+  background: #374151;
+  opacity: 0.9;
+}
+
+.vitalMonitor {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 80px;
+  background: #1e293b;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark .vitalMonitor {
+  background: #111827;
+}
+
+.monitorScreen {
+  width: 100%;
+  height: 100%;
+  background: #0f172a;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .monitorScreen {
+  background: #030712;
+}
+
+.heartbeatLine {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #ef4444;
+  box-shadow: 0 0 4px #ef4444;
+  transform: translateY(-50%);
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% { 
+    transform: translateY(-50%) scaleX(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: translateY(-50%) scaleX(1.1);
+    opacity: 0.8;
+  }
+}
+
+.problemPoint {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #475569;
+  white-space: nowrap;
+  animation: float 3s ease-in-out infinite;
+  backdrop-filter: blur(4px);
+  z-index: 10;
+}
+
+.dark .problemPoint {
+  background: rgba(55, 65, 81, 0.95);
+  color: #e5e7eb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.pointPulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.point1 {
+  top: 40px;
+  right: -60px;
+  animation-delay: 0s;
+}
+.point1 .pointPulse { 
+  background: #ef4444;
+  animation: pulse 2s infinite;
+}
+
+.point2 {
+  top: 160px;
+  left: -80px;
+  animation-delay: 1s;
+}
+.point2 .pointPulse { 
+  background: #f59e0b;
+  animation: pulse 2s infinite 0.5s;
+}
+
+.point3 {
+  bottom: 80px;
+  right: -40px;
+  animation-delay: 2s;
+}
+.point3 .pointPulse { 
+  background: #3b82f6;
+  animation: pulse 2s infinite 1s;
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% { 
+    transform: scale(1.3);
+    opacity: 0.7;
+  }
+}
+
+@keyframes float {
+  0%, 100% { 
+    transform: translateY(0); 
+  }
+  50% { 
+    transform: translateY(-5px); 
+  }
+}
+
+.thoughtBubble {
+  position: relative;
+  background: white;
+  border-radius: 20px;
+  padding: 16px 24px;
+  max-width: 300px;
+  margin-left: auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #e5e7eb;
+}
+
+.dark .thoughtBubble {
+  border-color: #4b5563;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.thoughtBubble:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark .thoughtBubble:hover {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+.thoughtBubble::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  right: 30px;
+  width: 0;
+  height: 0;
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-top: 10px solid white;
+}
+
+.dark .thoughtBubble::after {
+  border-top-color: #1f2937;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .patientSilhouette {
+    width: 150px;
+    height: 250px;
+  }
+  
+  .vitalMonitor {
+    width: 90px;
+    height: 60px;
+    top: 40px;
+  }
+  
+  .problemPoint {
+    font-size: 0.65rem;
+    padding: 6px 10px;
+  }
+  
+  .point1 {
+    right: -40px;
+  }
+  
+  .point2 {
+    left: -50px;
+  }
+  
+  .point3 {
+    right: -20px;
+    bottom: 60px;
+  }
+  
+  .thoughtBubble {
+    margin: 20px auto 0;
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .patientSilhouette {
+    width: 120px;
+    height: 200px;
+  }
+  
+  .vitalMonitor {
+    width: 70px;
+    height: 50px;
+    top: 30px;
+  }
+  
+  .problemPoint {
+    font-size: 0.55rem;
+    padding: 4px 8px;
+  }
+  
+  .point1 {
+    right: -30px;
+    top: 20px;
+  }
+  
+  .point2 {
+    left: -35px;
+    top: 100px;
+  }
+  
+  .point3 {
+    right: -15px;
+    bottom: 40px;
+  }
+}

@@ -1,0 +1,8 @@
+/* 
+  Most styles have been migrated to Tailwind CSS or component-specific modules.
+  Keeping this file for any global overrides if necessary in the future.
+*/
+.container {
+  min-height: 100vh;
+  overflow-x: hidden;
+}

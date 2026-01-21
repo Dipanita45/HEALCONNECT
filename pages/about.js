@@ -1,63 +1,95 @@
-import Head from "next/head"
+import Head from "next/head";
 import Footer from "./footer";
+import { motion } from "framer-motion";
+import { Typewriter } from "react-simple-typewriter";
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
 
 export default function About() {
   return (
-    // <div>
-    // <header className="text-center mb-8 mt-20 ">
-    //   <h1 className="text-gray6 dark:text-gray1">About</h1>
-    //   <p className="my-2 text-gray4 dark:text-gray3">This is about our system...</p>
-    // </header>
-    // <div className="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-gray5 to-gray4 rounded-full"></div>
+    <>
+      <Head>
+        <title>About | HealConnect</title>
+      </Head>
 
-    //  {/* Content */}
-    // </div>
-    <main>
-    <div className="container p-8 prose dark:prose-invert prose-base md:prose-lg">
-      <header className="text-center mb-8 mt-6">
-        <h1 className=" text-gray6 dark:text-gray1">About</h1>
-        <p className="my-2 text-gray4 dark:text-gray3">
-          This is about our system...
-        </p>
-        <div className="mx-auto w-24 h-1 my-4 bg-gradient-to-r from-green-600 to-green-400 rounded-full"></div>
-      </header>
-      <h2 className="text-center md:text-left">Our Mission</h2>
-      <p>
-        HealConnect is {"pune’s"} growing health monitoring site to let
-        the hospital manage their {"patient's"} health paramaters anywhere, anytime.
-        Our aim is to make {"patient’s"} health parameter accessible to doctors all
-        over the world for the quick treatment. Our product is designed with
-        latest tech in market to enhance the performance ahead and make
-        organizations become advance at treatment in no time.
-      </p>
-      <h2 className="text-center md:text-left">{"what's"} in it for you</h2>
-      <p>
-        The HealConnect {"system's"} Kit will let the doctor or the nurse
-        measure the {"patient's"} Body temperature, heart rate which will
-        automatically update the real-time data from the kit to WeCare Website
-        which will be accessible to the organization as well as doctor remotely.
-      </p>
-      <h2 className="text-center md:text-left">what we do</h2>
-      <p>
-        We let the organization monitor their {"patient's"} health parameter by
-        collecting the data from the WeCare kit provided to the organization.
-      </p>
-      <h2 className="text-center md:text-left">Terms &amp;&amp; Conditions</h2>
-      <p>
-        By accessing this website, you are agreeing to be bound by these website
-        Terms and Conditions of Use, all applicable laws, and regulations, and
-        agree that you are responsible for compliance with any applicable local
-        laws. If you do not agree with any of these terms, you are prohibited
-        from using or accessing this site. The materials contained in this
-        website are protected by applicable copyright and trademark law.
-      </p>
-      <h3 className="text-center md:text-left">Content Copyright Policy</h3>
-      <p>
-        The site design, logo, video content subject to copyright © 2025-present
-        | HealConnect LLC
-      </p>
-    </div>
-    <Footer />
-    </main>
+      <main className="bg-white dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100">
+        <div className="container mx-auto px-6 py-16">
+          <motion.header
+            className="text-center mb-12"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            <h1 className="text-4xl font-bold tracking-tight mb-2">
+              <Typewriter
+                words={["About HealConnect"]}
+                loop={1}
+                cursor
+                cursorStyle="|"
+                typeSpeed={70}
+                deleteSpeed={50}
+                delaySpeed={1000}
+              />
+            </h1>
+            <p className="text-gray-600 dark:text-gray-300 text-lg">
+              Learn more about our mission and how we’re shaping the future of healthcare.
+            </p>
+            <div className="mx-auto w-24 h-1 mt-4 bg-gradient-to-r from-green-600 to-green-400 rounded-full"></div>
+          </motion.header>
+
+          <div className="prose dark:prose-invert prose-lg max-w-4xl mx-auto space-y-16">
+            {[
+              {
+                title: "Our Mission",
+                content: `HealConnect is Pune’s growing health monitoring site to help hospitals manage their patients' health parameters anytime, anywhere. Our goal is to make patients’ health data accessible to doctors worldwide for quicker diagnosis and treatment.`
+              },
+              {
+                title: "What's in it for you",
+                content: `The HealConnect system's kit allows doctors or nurses to measure the patient’s body temperature and heart rate. This real-time data is automatically updated on the WeCare platform, which doctors and hospitals can access remotely.`
+              },
+              {
+                title: "What We Do",
+                content: `We empower organizations to monitor their patients’ health by collecting data from our WeCare Kit. This enables smarter decision-making and more timely medical interventions.`
+              },
+              {
+                title: "Terms & Conditions",
+                content: `By accessing this website, you agree to our terms and conditions, applicable laws, and local regulations. If you do not agree, you are prohibited from using the site. All content is protected by copyright and trademark law.`
+              },
+              {
+                title: "Content Copyright Policy",
+                content: `The site design, logo, and video content are subject to copyright © 2025–present | HealConnect LLC`
+              }
+            ].map((section, index) => (
+              <motion.section
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                viewport={{ once: true }}
+                whileHover={{ scale: 1.02, boxShadow: "0 4px 20px rgba(0, 255, 100, 0.2)" }}
+                className="transition-transform duration-300 ease-in-out cursor-default"
+              >
+                <h2 className="text-2xl md:text-3xl font-semibold mb-2 text-center md:text-left">
+                  {section.title}
+                </h2>
+                <p className="text-lg leading-relaxed">{section.content}</p>
+              </motion.section>
+            ))}
+          </div>
+        </div>
+        <Footer />
+      </main>
+    </>
   );
 }
