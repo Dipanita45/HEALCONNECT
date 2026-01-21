@@ -13,7 +13,8 @@ export default function Dashboard(params) {
         <AuthCheck>
             <PatientSidebar>
                 <div className="p-2 w-full h-full flex flex-col">
-                <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 dark:text-gray1">
+                <div className="h-20"></div>
+                    <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 dark:text-gray1">
                 Patient Dashboard</h1>
                     <div className="flex flex-row w-full h-auto gap-4">
                         <div className=" basis-2/4 flex">

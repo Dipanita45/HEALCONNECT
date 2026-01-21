@@ -1,7 +1,7 @@
 .footer {
   position: relative;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-  color: #cbd5e1;
+  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+  color: rgb(var(--foreground-rgb));
   padding: 3rem 0 1rem;
   margin-top: 4rem;
   overflow: hidden;
@@ -139,7 +139,7 @@
 .logoText {
   font-weight: 700;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #60a5fa 0%, #34d399 100%);
+  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -148,14 +148,14 @@
 .missionText {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: #94a3b8;
+  color: rgb(var(--foreground-muted-rgb));
   max-width: 280px;
 }
 
 .sectionTitle {
   font-size: 1.1rem;
   font-weight: 600;
-  color: white;
+  color: rgb(var(--foreground-rgb));
   margin-bottom: 1.2rem;
   position: relative;
   padding-bottom: 0.5rem;
@@ -168,7 +168,7 @@
   left: 0;
   width: 30px;
   height: 2px;
-  background: linear-gradient(90deg, #2563eb, #10b981);
+  background: linear-gradient(90deg, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
   border-radius: 2px;
 }
 
@@ -185,7 +185,7 @@
 .footerLink {
   display: flex;
   align-items: center;
-  color: #94a3b8;
+  color: rgb(var(--foreground-muted-rgb));
   text-decoration: none;
   font-size: 0.9rem;
   transition: all 0.3s ease;
@@ -194,7 +194,7 @@
 }
 
 .footerLink:hover {
-  color: white;
+  color: rgb(var(--foreground-rgb));
   transform: translateX(5px);
 }
 
@@ -206,7 +206,7 @@
   width: 16px;
   height: 16px;
   font-size: 0.8rem;
-  color: #2563eb;
+  color: rgb(var(--foreground-rgb));
   transition: transform 0.3s ease;
 }
 
@@ -229,7 +229,7 @@
   height: 40px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 50%;
-  color: #cbd5e1;
+  color: rgb(var(--foreground-rgb));
   text-decoration: none;
   transition: all 0.3s ease;
   overflow: hidden;
@@ -242,7 +242,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
   opacity: 0;
   transition: opacity 0.3s ease;
   border-radius: 50%;
@@ -269,8 +269,8 @@
   bottom: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: #1e293b;
-  color: white;
+  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
   padding: 5px 10px;
   border-radius: 4px;
   font-size: 0.7rem;
@@ -288,7 +288,7 @@
 
 .feedbackText {
   font-size: 0.9rem;
-  color: #94a3b8;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 1.5rem;
   line-height: 1.5;
 }
@@ -299,7 +299,7 @@
 
 .subscriptionText {
   font-size: 0.8rem;
-  color: #94a3b8;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 0.5rem;
 }
 
@@ -328,7 +328,7 @@
 }
 
 .subscriptionInput::placeholder {
-  color: #94a3b8;
+  color: rgb(var(--foreground-muted-rgb));
 }
 
 .subscriptionButton {
@@ -337,7 +337,7 @@
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
+  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
   border: none;
   border-radius: 50%;
   color: white;
@@ -357,7 +357,7 @@
   align-items: center;
   padding-top: 1.5rem;
   font-size: 0.8rem;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
 }
 
 .copyright {
@@ -370,7 +370,7 @@
 }
 
 .heartPulse {
-  color: #ef4444;
+  color: rgb(var(--foreground-rgb));
   margin: 0 0.3rem;
   animation: heartbeat 1.5s infinite ease-in-out;
 }

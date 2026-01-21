@@ -1,8 +1,8 @@
 .container {
   position: relative;
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
-  color: #1e293b;
+  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+  color: rgb(var(--foreground-rgb));
   overflow: hidden;
 }
 
@@ -22,7 +22,7 @@
 .circleElement {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(16, 185, 129, 0.25) 100%);
   animation: float 20s infinite ease-in-out;
 }
 
@@ -84,7 +84,7 @@
 
 .subtitle {
   font-size: 1.25rem;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   max-width: 600px;
   margin: 0 auto 1.5rem;
 }
@@ -92,6 +92,7 @@
 .titleUnderline {
   width: 80px;
   height: 4px;
+  background: linear-gradient(90deg, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
   background: linear-gradient(90deg, #2563eb, #10b981);
   border-radius: 2px;
   margin: 0 auto;
@@ -113,7 +114,7 @@
   display: block;
   font-size: 1.2rem;
   font-weight: 500;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -139,14 +140,14 @@
   display: inline-block;
   font-size: 1.3rem;
   font-weight: 600;
-  color: #10b981;
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: rgb(var(--background-end-rgb));
+  background: linear-gradient(135deg, rgb(var(--background-end-rgb)) 0%, rgb(var(--background-start-rgb)) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   padding: 0.2rem 0.8rem;
   border-radius: 20px;
-  border: 2px solid #10b981;
+  border: 2px solid rgb(var(--background-end-rgb));
   opacity: 0;
   animation: fadeInUp 0.6s ease-out 0.3s forwards;
 }
@@ -162,17 +163,18 @@
   }
 }
 
-.sectionTitle {
+.bookingHeader .sectionTitle,
+.doctorsSection .sectionTitle {
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
-  color: #1e293b;
+  color: rgb(var(--foreground-rgb)) !important;
 }
 
 .sectionSubtitle {
   text-align: center;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 2rem;
 }
 
@@ -184,7 +186,7 @@
 }
 
 .doctorCard {
-  background: white;
+  background: rgb(var(--background-start-rgb));
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
@@ -244,11 +246,11 @@
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
-  color: #1e293b;
+  color: rgb(var(--foreground-rgb));
 }
 
 .specialty {
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 1rem;
   font-weight: 500;
 }
@@ -267,18 +269,18 @@
 
 .ratingText {
   font-size: 0.9rem;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
 }
 
 .experience {
   font-size: 0.9rem;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 0.5rem;
 }
 
 .nextAvailable {
   font-size: 0.9rem;
-  color: #2563eb;
+  color: #10b981;
   font-weight: 500;
 }
 
@@ -571,51 +573,49 @@
 }
 
 /* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .container {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #f1f5f9;
-  }
-  
-  .doctorCard,
-  .bookingSection {
-    background: #1e293b;
-    color: #f1f5f9;
-  }
-  
-  .doctorInfo h3 {
-    color: #f1f5f9;
-  }
-  
-  .formInput {
-    color: #f1f5f9;
-    border-bottom-color: #334155;
-  }
-  
-  .selectedDoctorSummary {
-    background: #1e293b;
-  }
-  
-  .summaryInfo h4 {
-    color: #f1f5f9;
-  }
-  
-  .doctorDetails {
-    background: #1e293b;
-  }
-  
-  .doctorDetails h3 {
-    color: #f1f5f9;
-  }
-  
-  .detailLabel {
-    color: #e2e8f0;
-  }
-  
-  .successContent {
-    background: #1e293b;
-    color: #f1f5f9;
-  }
+.dark .container {
+  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .doctorCard,
+.dark .bookingSection {
+  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .doctorInfo h3 {
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .formInput {
+  color: rgb(var(--foreground-rgb));
+  border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
+}
+
+.dark .selectedDoctorSummary {
+  background: rgb(var(--background-start-rgb));
+}
+
+.dark .summaryInfo h4 {
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .doctorDetails {
+  background: rgb(var(--background-start-rgb));
+}
+
+.dark .doctorDetails h3 {
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .detailLabel {
+  color: rgb(var(--foreground-muted-rgb));
+}
+
+.dark .successContent {
+  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
 }
 
 /* Responsive design */
@@ -847,21 +847,19 @@ select.formInput {
 }
 
 /* Dark mode support for form elements */
-@media (prefers-color-scheme: dark) {
-  .formInput {
-    color: #f1f5f9;
-    border-bottom-color: #334155;
-  }
+.dark .formInput {
+  color: rgb(var(--foreground-rgb));
+  border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
+}
   
-  .formLabel {
-    color: #94a3b8;
-  }
+.dark .formLabel {
+  color: rgb(var(--foreground-muted-rgb));
+}
   
-  .formInput:focus ~ .formLabel {
-    color: #60a5fa;
-  }
+.dark .formInput:focus ~ .formLabel {
+  color: #2563eb;
+}
   
-  select.formInput {
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f1f5f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  }
+.dark select.formInput {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(var(--foreground-rgb))' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
