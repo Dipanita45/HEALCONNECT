@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Monitoring.module.css';
+import { isVitalNormal, getVitalStatusMessage } from '../lib/thresholdDefaults';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -24,9 +25,9 @@ const staggerChildren = {
 
 const pulseAnimation = {
   initial: { scale: 1 },
-  animate: { 
+  animate: {
     scale: [1, 1.05, 1],
-    transition: { 
+    transition: {
       duration: 2,
       repeat: Infinity,
       ease: "easeInOut"
@@ -73,14 +74,14 @@ export default function Monitoring() {
   const handleSubmit = e => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       const newRecord = {
         date: new Date().toLocaleString(),
         ...data
       };
-      
+
       setHistory([newRecord, ...history]);
       setData({
         temperature: '',
@@ -89,9 +90,9 @@ export default function Monitoring() {
         oxygen: '',
         glucose: ''
       });
-      
+
       setIsSubmitting(false);
-      
+
       // Show success notification
       const notification = document.getElementById('success-notification');
       notification.style.display = 'block';
@@ -103,7 +104,7 @@ export default function Monitoring() {
 
   const toggleMonitoring = () => {
     setIsMonitoring(!isMonitoring);
-    
+
     if (!isMonitoring) {
       // Start simulated monitoring
       heartRateInterval.current = setInterval(() => {
@@ -112,7 +113,7 @@ export default function Monitoring() {
           return Math.max(60, Math.min(100, prev + variation));
         });
       }, 2000);
-      
+
       oxygenInterval.current = setInterval(() => {
         setCurrentOxygen(prev => {
           const variation = Math.floor(Math.random() * 3) - 1;
@@ -127,37 +128,30 @@ export default function Monitoring() {
   };
 
   const getStatusColor = (type, value) => {
-    if (type === 'heartRate') {
-      if (value < 60) return '#ef4444'; // Danger - too low
-      if (value > 100) return '#ef4444'; // Danger - too high
-      if (value > 90) return '#f59e0b'; // Warning - elevated
-      return '#10b981'; // Normal
+    // Use the threshold system for accurate status colors
+    const result = isVitalNormal(type, value);
+
+    switch (result.severity) {
+      case 'critical':
+        return '#ef4444'; // Red - critical
+      case 'warning':
+        return '#f59e0b'; // Yellow/Orange - warning
+      case 'none':
+        return '#10b981'; // Green - normal
+      default:
+        return '#3b82f6'; // Blue - default
     }
-    
-    if (type === 'oxygen') {
-      if (value < 95) return '#ef4444'; // Danger
-      if (value < 97) return '#f59e0b'; // Warning
-      return '#10b981'; // Normal
-    }
-    
-    if (type === 'temperature') {
-      if (value < 36 || value > 37.5) return '#ef4444'; // Danger
-      if (value > 37.2) return '#f59e0b'; // Warning
-      return '#10b981'; // Normal
-    }
-    
-    return '#3b82f6'; // Default blue
   };
 
   const getBloodPressureStatus = (bp) => {
     if (!bp) return { color: '#3b82f6', status: 'Normal' };
-    
+
     const [systolic, diastolic] = bp.split('/').map(Number);
-    
+
     if (systolic >= 140 || diastolic >= 90) return { color: '#ef4444', status: 'High' };
     if (systolic >= 130 || diastolic >= 85) return { color: '#f59e0b', status: 'Elevated' };
     if (systolic <= 90 || diastolic <= 60) return { color: '#ef4444', status: 'Low' };
-    
+
     return { color: '#10b981', status: 'Normal' };
   };
 
@@ -165,7 +159,7 @@ export default function Monitoring() {
     <div className={styles.container}>
       {/* Navbar spacer */}
       <div className={styles.navbarSpacer}></div>
-      
+
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement}></div>
@@ -177,7 +171,7 @@ export default function Monitoring() {
       <div id="success-notification" className={styles.successNotification}>
         <div className={styles.notificationContent}>
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
           <span>Health data recorded successfully!</span>
         </div>
@@ -202,7 +196,7 @@ export default function Monitoring() {
       <div className={styles.content}>
         <div className={styles.monitoringGrid}>
           {/* Real-time Monitoring Section */}
-          <motion.section 
+          <motion.section
             className={styles.liveMonitoring}
             variants={fadeInUp}
             initial="hidden"
@@ -210,7 +204,7 @@ export default function Monitoring() {
           >
             <div className={styles.sectionHeader}>
               <h2>Live Monitoring</h2>
-              <button 
+              <button
                 className={`${styles.monitorButton} ${isMonitoring ? styles.monitoringActive : ''}`}
                 onClick={toggleMonitoring}
               >
@@ -220,7 +214,7 @@ export default function Monitoring() {
             </div>
 
             <div className={styles.liveDataGrid}>
-              <motion.div 
+              <motion.div
                 className={styles.liveDataCard}
                 variants={pulseAnimation}
                 initial="initial"
@@ -228,11 +222,11 @@ export default function Monitoring() {
               >
                 <div className={styles.liveDataIcon}>
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 12V13C20 17.4183 16.4183 21 12 21C7.58172 21 4 17.4183 4 13V12M12 21C11.5 21 11 20.5 11 20V17C11 16.5 11.5 16 12 16C12.5 16 13 16.5 13 17V20C13 20.5 12.5 21 12 21ZM12 21V9M12 9C13.6569 9 15 7.65685 15 6V5C15 3.34315 13.6569 2 12 2C10.3431 2 9 3.34315 9 5V6C9 7.65685 10.3431 9 12 9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M20 12V13C20 17.4183 16.4183 21 12 21C7.58172 21 4 17.4183 4 13V12M12 21C11.5 21 11 20.5 11 20V17C11 16.5 11.5 16 12 16C12.5 16 13 16.5 13 17V20C13 20.5 12.5 21 12 21ZM12 21V9M12 9C13.6569 9 15 7.65685 15 6V5C15 3.34315 13.6569 2 12 2C10.3431 2 9 3.34315 9 5V6C9 7.65685 10.3431 9 12 9Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3>Heart Rate</h3>
-                <div 
+                <div
                   className={styles.liveDataValue}
                   style={{ color: getStatusColor('heartRate', currentHeartRate) }}
                 >
@@ -241,14 +235,14 @@ export default function Monitoring() {
                 </div>
                 <div className={styles.liveDataStatus}>
                   {isMonitoring ? (
-                    currentHeartRate < 60 ? 'Low' : 
-                    currentHeartRate > 100 ? 'High' : 
-                    currentHeartRate > 90 ? 'Elevated' : 'Normal'
+                    currentHeartRate < 60 ? 'Low' :
+                      currentHeartRate > 100 ? 'High' :
+                        currentHeartRate > 90 ? 'Elevated' : 'Normal'
                   ) : 'Not monitoring'}
                 </div>
               </motion.div>
 
-              <motion.div 
+              <motion.div
                 className={styles.liveDataCard}
                 variants={pulseAnimation}
                 initial="initial"
@@ -257,11 +251,11 @@ export default function Monitoring() {
               >
                 <div className={styles.liveDataIcon}>
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M18 8C18 4.68629 15.3137 2 12 2C8.68629 2 6 4.68629 6 8M6 8C3.79086 8 2 9.79086 2 12C2 14.2091 3.79086 16 6 16M6 8C6 8 7 8 8 8C8 6.89543 8.89543 6 10 6H14C15.1046 6 16 6.89543 16 8C17 8 18 8 18 8M18 8C20.2091 8 22 9.79086 22 12C22 14.2091 20.2091 16 18 16M18 16C18 16 17 16 16 16C16 17.1046 15.1046 18 14 18H10C8.89543 18 8 17.1046 8 16C7 16 6 16 6 16M6 16C6 16 6 16 6 16C6 19.3137 8.68629 22 12 22C15.3137 22 18 19.3137 18 16C18 16 18 16 18 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M18 8C18 4.68629 15.3137 2 12 2C8.68629 2 6 4.68629 6 8M6 8C3.79086 8 2 9.79086 2 12C2 14.2091 3.79086 16 6 16M6 8C6 8 7 8 8 8C8 6.89543 8.89543 6 10 6H14C15.1046 6 16 6.89543 16 8C17 8 18 8 18 8M18 8C20.2091 8 22 9.79086 22 12C22 14.2091 20.2091 16 18 16M18 16C18 16 17 16 16 16C16 17.1046 15.1046 18 14 18H10C8.89543 18 8 17.1046 8 16C7 16 6 16 6 16M6 16C6 16 6 16 6 16C6 19.3137 8.68629 22 12 22C15.3137 22 18 19.3137 18 16C18 16 18 16 18 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
                 <h3>Oxygen Saturation</h3>
-                <div 
+                <div
                   className={styles.liveDataValue}
                   style={{ color: getStatusColor('oxygen', currentOxygen) }}
                 >
@@ -270,8 +264,8 @@ export default function Monitoring() {
                 </div>
                 <div className={styles.liveDataStatus}>
                   {isMonitoring ? (
-                    currentOxygen < 95 ? 'Low' : 
-                    currentOxygen < 97 ? 'Normal' : 'Optimal'
+                    currentOxygen < 95 ? 'Low' :
+                      currentOxygen < 97 ? 'Normal' : 'Optimal'
                   ) : 'Not monitoring'}
                 </div>
               </motion.div>
@@ -279,7 +273,7 @@ export default function Monitoring() {
           </motion.section>
 
           {/* Data Entry Section */}
-          <motion.section 
+          <motion.section
             className={styles.dataEntry}
             variants={staggerChildren}
             initial="hidden"
@@ -290,8 +284,8 @@ export default function Monitoring() {
               <p>Manually enter your health measurements</p>
             </div>
 
-            <motion.form 
-              onSubmit={handleSubmit} 
+            <motion.form
+              onSubmit={handleSubmit}
               className={styles.form}
               variants={fadeInUp}
             >
@@ -312,16 +306,16 @@ export default function Monitoring() {
                   <label className={styles.formLabel}>Temperature (°C)</label>
                   <div className={styles.formUnderline}></div>
                   {data.temperature && (
-                    <div 
+                    <div
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('temperature', parseFloat(data.temperature)) }}
                     >
-                      {data.temperature < 36 ? 'Low' : 
-                       data.temperature > 37.2 ? 'Elevated' : 'Normal'}
+                      {data.temperature < 36 ? 'Low' :
+                        data.temperature > 37.2 ? 'Elevated' : 'Normal'}
                     </div>
                   )}
                 </div>
-                
+
                 <div className={styles.inputGroup}>
                   <input
                     type="number"
@@ -337,17 +331,17 @@ export default function Monitoring() {
                   <label className={styles.formLabel}>Heart Rate (bpm)</label>
                   <div className={styles.formUnderline}></div>
                   {data.heartRate && (
-                    <div 
+                    <div
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('heartRate', parseFloat(data.heartRate)) }}
                     >
-                      {data.heartRate < 60 ? 'Low' : 
-                       data.heartRate > 100 ? 'High' : 
-                       data.heartRate > 90 ? 'Elevated' : 'Normal'}
+                      {data.heartRate < 60 ? 'Low' :
+                        data.heartRate > 100 ? 'High' :
+                          data.heartRate > 90 ? 'Elevated' : 'Normal'}
                     </div>
                   )}
                 </div>
-                
+
                 <div className={styles.inputGroup}>
                   <input
                     type="text"
@@ -362,7 +356,7 @@ export default function Monitoring() {
                   <label className={styles.formLabel}>Blood Pressure (mmHg)</label>
                   <div className={styles.formUnderline}></div>
                   {data.bloodPressure && (
-                    <div 
+                    <div
                       className={styles.valueStatus}
                       style={{ color: getBloodPressureStatus(data.bloodPressure).color }}
                     >
@@ -370,7 +364,7 @@ export default function Monitoring() {
                     </div>
                   )}
                 </div>
-                
+
                 <div className={styles.inputGroup}>
                   <input
                     type="number"
@@ -386,16 +380,16 @@ export default function Monitoring() {
                   <label className={styles.formLabel}>Oxygen Saturation (%)</label>
                   <div className={styles.formUnderline}></div>
                   {data.oxygen && (
-                    <div 
+                    <div
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('oxygen', parseFloat(data.oxygen)) }}
                     >
-                      {data.oxygen < 95 ? 'Low' : 
-                       data.oxygen < 97 ? 'Normal' : 'Optimal'}
+                      {data.oxygen < 95 ? 'Low' :
+                        data.oxygen < 97 ? 'Normal' : 'Optimal'}
                     </div>
                   )}
                 </div>
-                
+
                 <div className={styles.inputGroup}>
                   <input
                     type="number"
@@ -411,19 +405,19 @@ export default function Monitoring() {
                   <label className={styles.formLabel}>Glucose Level (mg/dL)</label>
                   <div className={styles.formUnderline}></div>
                   {data.glucose && (
-                    <div 
+                    <div
                       className={styles.valueStatus}
                       style={{ color: data.glucose < 70 || data.glucose > 140 ? '#ef4444' : '#10b981' }}
                     >
-                      {data.glucose < 70 ? 'Low' : 
-                       data.glucose > 140 ? 'High' : 'Normal'}
+                      {data.glucose < 70 ? 'Low' :
+                        data.glucose > 140 ? 'High' : 'Normal'}
                     </div>
                   )}
                 </div>
               </div>
-              
-              <motion.button 
-                type="submit" 
+
+              <motion.button
+                type="submit"
                 className={styles.submitButton}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -435,11 +429,11 @@ export default function Monitoring() {
                   <>
                     Record Measurements
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M4 8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M16 12H16.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M12 12H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M8 12H8.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M4 8H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M16 12H16.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M12 12H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M8 12H8.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </>
                 )}
@@ -448,7 +442,7 @@ export default function Monitoring() {
           </motion.section>
 
           {/* History Section */}
-          <motion.section 
+          <motion.section
             className={styles.historySection}
             variants={fadeInUp}
             initial="hidden"
@@ -464,7 +458,7 @@ export default function Monitoring() {
               {history.length > 0 ? (
                 <div className={styles.historyList}>
                   {history.map((record, index) => (
-                    <motion.div 
+                    <motion.div
                       key={index}
                       className={styles.historyCard}
                       initial={{ opacity: 0, y: 20 }}
@@ -513,7 +507,7 @@ export default function Monitoring() {
               ) : (
                 <div className={styles.emptyState}>
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <p>No records yet. Start monitoring to see your health data here.</p>
                 </div>
