@@ -17,11 +17,16 @@ export function ThemeProvider({ children }) {
 
   useEffect(() => {
     if (mounted) {
+      const root = document.documentElement
+      
       if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
+        root.classList.add('dark')
       } else {
-        document.documentElement.classList.remove('dark')
+        root.classList.remove('dark')
       }
+      
+      // Force immediate reflow to ensure theme applies
+      root.style.colorScheme = theme
       localStorage.setItem('theme', theme)
     }
   }, [theme, mounted])

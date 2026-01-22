@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Footer from "./footer";
 import Hero from "@/components/home/Hero";
 import Problem from "@/components/home/Problem";
 import Solution from "@/components/home/Solution";
@@ -42,7 +41,6 @@ export default function Home() {
         <Solution />
         <KitSimulation />
         <Doctors />
-        <Footer />
       </main>
     </div>
   );

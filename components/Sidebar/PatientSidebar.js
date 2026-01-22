@@ -52,7 +52,7 @@ export default function PatientSidebar({ children }) {
                </li>
 
               <li key={'Dashboard'}>
-              <div className="mt-4 md:mt-8"></div>
+              <div className="mt-8 md:mt-16"></div>
               <Link href="/patient">
                 <div
                   className={`sidebar-icon group ${router.asPath === "/patient" && "dark:bg-blue-500 bg-blue-500 text-white"}`}
