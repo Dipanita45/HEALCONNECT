@@ -1,0 +1,315 @@
+@import url('https://use.typekit.net/rcr1opg.css');
+@import './button.scss';
+@import './special-effects.scss';
+@import './ui.scss';
+
+@tailwind base;
+@tailwind components;
+
+.chart-container {
+  width: 50%;
+  height: 50%;
+}
+
+*{
+  font-family: 'cubano', sans-serif;
+  font-weight: normal;
+  letter-spacing: normal;
+  font-style: normal;
+}
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
+h1 { 
+     font-family: 'cubano', sans-serif;
+}
+
+h2 { 
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 800;
+ }
+
+h3 { 
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 700;
+}
+
+input{
+
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 600;
+}
+
+textarea{
+
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 600;
+}
+
+a{
+
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 600;
+}
+
+p {
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 500;
+}
+
+p, article, section {
+  line-height: 1.5;
+  font-family: 'sofia-pro', sans-serif;
+  font-weight: 500;
+}
+
+@layer components {
+
+
+  label{
+    @apply text-gray6 dark:text-gray1;
+  }
+
+  .animation{
+    @apply opacity-0 transform transition ease-in-out duration-1000 -translate-x-24
+  }
+
+  .show{
+    @apply opacity-100 -translate-x-0
+  }
+
+  .sidebar-icon {
+    @apply relative flex items-center justify-center 
+    h-12 w-12 md:my-2 mx-auto scale-75 md:scale-100 
+   hover:bg-blue-500 bg-blue-100 dark:bg-gray-700 
+  text-blue-500 hover:text-white hover:dark:bg-blue-500
+    hover:rounded-3xl rounded-xl 
+    transition-all duration-300 ease-linear
+    cursor-pointer shadow-lg ;
+  }
+
+  .sidebar-tooltip {
+    @apply absolute w-auto p-2 m-2 min-w-max left-14 rounded-md shadow-md
+    text-white bg-gray-900 
+    text-xs font-bold 
+    transition-all duration-100 scale-0 origin-left;
+  }
+
+  .sidebar-hr {
+    @apply bg-gray-200 dark:bg-gray-800 
+    border border-blue-400 dark:border-blue-400 rounded-full
+    md:mx-12;
+  }
+
+  .form-input{
+    @apply block py-2.5 px-0 w-full text-sm text-gray-900 border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600;
+  }
+
+  .top-navigation {
+    @apply flex flex-row items-center justify-evenly 
+    bg-gray-300 dark:bg-gray-700 bg-opacity-90 
+    w-full h-16
+    m-0 
+    shadow-lg;
+  }
+
+  .top-navigation-icon {
+    @apply text-gray-500 dark:text-gray-200
+    mr-3 ml-3 scale-75 md:scale-100
+    transition duration-300 ease-in-out 
+    hover:text-blue-500 dark:hover:text-blue-500
+    cursor-pointer;
+  }
+
+  .top-navigation-icon:first {
+    @apply ml-auto mr-4;
+  }
+  
+  .input-field{
+    @apply outline-none duration-300 border-b-4 border-solid border-gray-500 focus:border-green-500 placeholder:text-gray4 bg-gray-300 dark:bg-gray-700 text-gray6 dark:text-gray-300 p-2 w-full;
+  }
+
+  .title-hashtag {
+    @apply text-lg tracking-wider font-semibold text-gray-500 
+    ml-2 my-auto;
+  }
+
+  .title-text {
+    @apply text-xl text-gray-500 tracking-wider font-semibold text-opacity-80 
+    mr-auto ml-2 my-auto 
+    transition duration-300 ease-in-out;
+  }
+
+  .search {
+    @apply w-1/5 flex items-center justify-start 
+    bg-gray-400 dark:bg-gray-600
+    text-gray-500
+    px-2 h-9 ml-0 mr-0 
+    rounded-md shadow-md
+    transition duration-300 ease-in-out;
+  }
+
+  .search-input {
+    @apply w-full font-sans font-semibold
+    bg-transparent outline-none 
+    text-gray-500  placeholder-gray-500
+    pl-1 rounded;
+  }
+
+  .content-container {
+    @apply flex flex-col 
+    bg-gray-300 dark:bg-gray-700
+    m-0 
+    h-full w-full 
+    overflow-hidden;
+  }
+
+  .content-list {
+    @apply flex flex-col items-center 
+    h-full w-full 
+    mt-0 ml-0 mx-auto px-0 pb-12 
+    overflow-y-scroll;
+  }
+
+  .post {
+    @apply w-full
+    flex flex-row items-center justify-evenly
+    py-4 px-8 m-0
+    cursor-pointer;
+  }
+
+  .post-selected {
+    @apply bg-green-400 dark:bg-gray-900
+    shadow-md;
+  }
+
+  .post-content {
+    @apply w-4/5 
+    flex flex-col justify-start 
+    ml-auto;
+  }
+
+  .post-text {
+    @apply text-lg text-left text-gray-800 dark:text-white 
+    mr-auto whitespace-normal;
+  }
+
+  .post-owner {
+    @apply text-left font-semibold text-gray-800 dark:text-white mr-2 cursor-pointer;
+  }
+
+  .avatar-wrapper {
+    @apply flex flex-col items-center
+    w-12 
+    m-0 ml-auto mb-auto;
+  }
+
+  .avatar {
+    @apply flex-none
+    w-12 h-full 
+    rounded-full shadow-md
+    object-cover bg-gray-100 
+    mb-auto mt-0 mx-0 
+    cursor-pointer;
+  }
+
+  .timestamp {
+    @apply text-xs text-left font-semibold text-gray-500 dark:text-gray-600 ml-2;
+  }
+
+  .bottom-bar {
+    @apply flex flex-row items-center justify-between 
+    fixed left-88 right-8 bottom-2 
+    rounded-lg shadow-lg 
+    bg-gray-400 dark:bg-gray-600 px-2
+    h-12;
+  }
+
+  .bottom-bar-input {
+    @apply font-semibold w-full
+    bg-transparent outline-none 
+    ml-0 mr-auto
+    text-gray-500  dark:text-gray-400 placeholder-gray-500
+    cursor-text;
+  }
+
+  .channel-bar {
+    @apply w-80 h-auto m-0 ml-16 bg-gray-200 dark:bg-gray-800
+     overflow-hidden;
+  }
+
+  .channel-container {
+    @apply flex flex-col items-center justify-start 
+    p-1 m-0;
+  }
+
+  .channel-block {
+    @apply flex items-center justify-center 
+    h-16 
+    m-0 p-0;
+  }
+
+  .channel-block-text {
+    @apply text-lg tracking-wider font-bold 
+    text-gray-600 dark:text-gray-400 
+    mr-auto ml-4 my-auto align-middle;
+  }
+
+  .dropdown {
+    @apply m-0 w-full px-2 pb-2
+    transition duration-300 ease-in-out;
+  }
+
+  .dropdown-header {
+    @apply flex flex-row items-center justify-evenly
+    mx-0 text-gray-500
+    cursor-pointer;
+  }
+
+  .dropdown-header-text {
+    @apply text-gray-500  text-opacity-90 
+    text-lg font-semibold
+    cursor-default;
+  }
+
+  .dropdown-header-text-selected {
+    @apply text-blue-500 text-opacity-90 text-lg font-bold;
+  }
+
+  .dropdown-selection {
+    @apply flex flex-row items-center justify-evenly
+    mt-1 mr-auto ml-2
+    transition duration-300 ease-in-out
+    cursor-pointer;
+  }
+
+  .dropdown-selection-text {
+    @apply text-gray-500 font-semibold tracking-wide
+    mr-auto 
+    transition duration-300 ease-in-out 
+    hover:text-pink-500 dark:hover:text-gray-500
+    cursor-pointer;
+  }
+}
+
+@tailwind utilities;
+
+::-webkit-scrollbar {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 dark:bg-green-400;
+}
+
+ .container {
+    @apply max-w-screen-2xl h-auto mx-auto md:px-12;
+ }
+
+
+

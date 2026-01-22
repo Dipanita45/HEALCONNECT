@@ -55,9 +55,7 @@ export default function Add(props) {
       toast.error('Aadhar number already exists!')
     }else{
     setLoading(true)
-    // Create patients document referance
     const docRef = doc(db, "patients", `+91${number}`);
-    // Write data in to patients document
     await setDoc(docRef, {role: 'patient', aadhar: aadhar, pan: pan, name: first+middle+last, firstName: first, middleName: middle, lastName: last, age: age, gender: gender, maritalStatus: marital, address: address, state: state, city: city, pin: pin, number: `+91${number}`, landline: landline, bloodGroup: blood, height: height, weight: weight}
       ).then(() => setLoading(false))
       .catch((error) => toast.error(error.message))
@@ -90,15 +88,15 @@ export default function Add(props) {
                     <FormInput  className="input-field" label="PAN ID" id="grid-last-name" type="number" placeholder="ABC000826D" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required={false} onChange={(e) => setPan(e.target.value)}/>
                     </div>
                   </div>
-                  <p className={`text-red-500 text-xs italic ${aadhar.length != 12 ? "block" : "hidden"}`}>Aadhar number should be 12 intiger long!</p>
-                  <h1 className=" text-blue-400 mt-6">Persnol Information:</h1>
+                  <p className={`text-red-500 text-xs italic ${aadhar.length != 12 ? "block" : "hidden"}`}>Aadhar number should be 12 digits long!</p>
+                  <h1 className=" text-blue-400 mt-6">Personal Information:</h1>
                   <Divider />
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className=" w-full md:w-1/3 px-3 mb-6 md:mb-0">
                       <FormInput label="First Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setFirst(e.target.value)} className=" input-field" id="grid-first-name" type="text" placeholder="Kumar"/>
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Middel Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setMiddle(e.target.value)} className=" input-field" id="grid-middel-name" type="text" placeholder="Raosaheb"/>
+                      <FormInput label="Middle Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setMiddle(e.target.value)} className=" input-field" id="grid-middle-name" type="text" placeholder="Raosaheb"/>
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
                       <FormInput label="Last Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setLast(e.target.value)} className=" input-field" id="grid-last-name" type="text" placeholder="Pandule"/>
@@ -112,7 +110,7 @@ export default function Add(props) {
                       <FormDropdown label="Gender" options={[{value: 'Select'}, {value: 'Male'}, {value: 'Female'}]} onSelect={(e) => setGender(e.target.value)} />
                     </div>
                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormDropdown label="Marital Status" options={[{value: 'Select'}, {value: 'Single'}, {value: 'Marrid'}]} onSelect={(e) => setMarital(e.target.value)}/>
+                      <FormDropdown label="Marital Status" options={[{value: 'Select'}, {value: 'Single'}, {value: 'Married'}]} onSelect={(e) => setMarital(e.target.value)}/>
                     </div>
                     </div>
                   <h1 className=" text-blue-400">Patient{"'"}s Address:</h1>
@@ -155,10 +153,10 @@ export default function Add(props) {
                       <FormInput label="Blood Group" required={false} pattern="(A|B|AB|O)[+-]" onChange={(e) => setBlood(e.target.value)} className="input-field" id="grid-first-name" type="text" placeholder="B+"/>
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Hiegth" required={false} pattern="[0-9]{3}" onChange={(e) => setHeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="185"/>
+                      <FormInput label="Height" required={false} pattern="[0-9]{3}" onChange={(e) => setHeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="185"/>
                       </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Wiegth" required={false} pattern="[0-9]{3}" onChange={(e) => setWeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="90"/>
+                      <FormInput label="Weight" required={false} pattern="[0-9]{3}" onChange={(e) => setWeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="90"/>
                     </div>
                   </div>
                   <button type="submit" className=" px-6 w-full h-10 flex justify-center text-gray1 py-2 duration-300 relative after:absolute after:top-0 after:right-full bg-green-500 after:z-10 after:w-full after:h-full overflow-hidden hover:after:translate-x-full after:duration-300 hover:text-slate-900">

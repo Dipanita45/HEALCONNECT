@@ -1,18 +1,32 @@
+// ✅ All imports at the top
+import '@/styles/globals.css'
 import '@styles/app.scss'
-import { UserContext } from '@lib/context';
-import Layout from './layout';
-import { useUserData } from '@lib/userInfo';
+import '../styles/app.scss'
 
+import { ThemeProvider } from '@/context/ThemeContext'
+import Navbar from '@/components/navbar'
+import ScrollToTop from '@/components/ScrollToTop'
+import Footer from './footer'
+import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/userInfo'
+import Layout from './layout'
+
+// ✅ Single App component
 function MyApp({ Component, pageProps }) {
-  const userData = useUserData();
+  const userData = useUserData()
 
   return (
-  <UserContext.Provider value={userData}>
-  <Layout>
-  <Component {...pageProps} />
-  </Layout>
-  </UserContext.Provider> 
-  );
+    <ThemeProvider>
+      <UserContext.Provider value={userData}>
+        <Navbar />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <ScrollToTop />
+        <Footer />
+      </UserContext.Provider>
+    </ThemeProvider>
+  )
 }
 
 export default MyApp

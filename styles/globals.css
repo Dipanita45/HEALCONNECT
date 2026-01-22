@@ -1,0 +1,64 @@
+/* Tailwind CSS Directives - These are processed by Tailwind, not regular CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   Base Color Variables (Light Mode)
+================================ */
+:root {
+  --foreground-rgb: 17, 24, 39;          /* gray-900 */
+  --foreground-muted-rgb: 75, 85, 99;    /* gray-600 */
+  --background-start-rgb: 249, 250, 251; /* gray-50 */
+  --background-end-rgb: 255, 255, 255;
+}
+
+/* ================================
+   Dark Mode Variables (WCAG Safe)
+================================ */
+.dark {
+  --foreground-rgb: 229, 231, 235;        /* gray-200 (not pure white) */
+  --foreground-muted-rgb: 156, 163, 175;  /* gray-400 */
+  --background-start-rgb: 17, 24, 39;     /* gray-900 */
+  --background-end-rgb: 3, 7, 18;         /* near-black */
+}
+
+/* ================================
+   Body Styling
+================================ */
+body {
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================
+   Typography Improvements
+================================ */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+code, pre {
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+/* ================================
+   Text Utility Helpers
+================================ */
+.text-muted {
+  color: rgb(var(--foreground-muted-rgb));
+}
+
+.dark .text-muted {
+  color: rgb(var(--foreground-muted-rgb));
+}
