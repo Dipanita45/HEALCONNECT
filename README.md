@@ -1,216 +1,168 @@
-# HEALCONNECT [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://Dipanita45.github.io/HEALCONNECT)
+<div align="center">
+
+# 🏥 HEALCONNECT
+### Smart Remote Health Monitoring & Hospital Management System
+
+[![Build Status](https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square)](https://github.com/Dipanita45/HEALCONNECT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](License.md)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blue?style=flat-square)](contributing.md)
+[![Firebase](https://img.shields.io/badge/Database-Firebase-orange?style=flat-square&logo=firebase)](https://firebase.google.com/)
+[![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
+
+[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues)
+
+</div>
 
 ---
 
 ## 🩺 About
 
-**HEALCONNECT** is a smart health monitoring system designed to help hospitals manage patient health parameters remotely.  
-Our goal is to enable doctors to access patient data anytime, anywhere — enabling faster and better treatment decisions.
+**HEALCONNECT** is a professional-grade health monitoring system designed for real-time remote patient care. By bridging the gap between physical sensors and cloud-based dashboards, it allows medical professionals to monitor vital parameters (ECG, Heart Rate, etc.) and manage appointments seamlessly from any location.
 
 ---
 
-## 🚀 Features
+## 🚀 Key Features
 
-- 🔐 Secure Firebase Authentication  
-- 🗄️ Cloud Firestore for real-time data storage  
-- 🧑‍⚕️ Patient health parameter tracking and monitoring  
-- 📅 Appointment booking system  
-- 📸 Image uploads for health records  
-- 🛠️ Reactive forms using `react-hook-form`  
+- 🔐 **Secure Auth:** Multi-role Firebase Authentication (Admin, Doctor, Patient).
+- 🗄️ **Real-time Database:** Cloud Firestore for zero-latency health parameter updates.
+- 📈 **Live Monitoring:** Interactive ECG and health charts using real-time data streams.
+- 📅 **Hospital Management:** Integrated appointment booking and prescription systems.
+- 🌓 **UX Focused:** Fully responsive design with Dark Mode support.
 
 ---
 
 ## 🛠 Tech Stack
 
-- **Frontend**: React.js with Vite  
-- **Backend Services**: Firebase Authentication & Firestore  
-- **Forms**: React Hook Form  
-- **Styling**: CSS / SCSS  
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | React.js (Vite), Next.js |
+| **Styling** | SCSS / Tailwind CSS |
+| **Backend Services** | Firebase Auth & Cloud Firestore |
+| **Hardware** | Arduino (C++) / ESP32 |
+| **Form Handling** | React Hook Form |
 
 ---
-# 📁 Project Structure
 
-```
+## 🔌 Hardware Setup & Flashing
+
+To connect physical sensors to the HEALCONNECT dashboard, you must flash the kit with the provided firmware:
+
+1. **Software:** Install the latest [Arduino IDE](https://www.arduino.cc/en/software).
+2. **Open Project:** Open `HealthConnect_Kit_Arduino_Code/HealthConnect_Kit_Arduino_Code.ino`.
+3. **Configuration:**
+   - Update `Network.h` with your WiFi credentials.
+   - Ensure the Firebase Secret/URL matches your project settings.
+4. **Library Installation:** Use the Library Manager to install `Firebase ESP32 Client` and `ArduinoJson`.
+5. **Upload:** Connect your hardware via USB, select the correct COM port, and click **Upload**.
+
+---
+
+## 📂 Project Structure
+
+```text
 HEALCONNECT/
-├── .github/
-│   └── workflows/
-│       └── deploy-react.yml
-│
-├── HealthConnect_Kit_Arduino_Code/
-│   ├── HealthConnect_Kit_Arduino_Code.ino        # Main sketch
-│   ├── Network.cpp
-│   └── Network.h
-│
-├── components/
-│   ├── Auth/
-│   │   ├── AuthCheck.js
-│   │   ├── DemoPhoneAuth.js
-│   │   ├── IndexAuthCheck.js
-│   │   ├── PatientLogin.js
-│   │   └── SignIn.js
-│   │
-│   ├── DoctorComponents/
-│   │   └── DoctorCard.js
-│   │
-│   ├── LiveMonitor/
-│   │   ├── ECGMonitor.js
-│   │   ├── RealtimeChart.js
-│   │   └── ViewLivePatient.js
-│   │
-│   ├── PatientComponents/
-│   │   ├── PatientCard.js
-│   │   ├── PatientDetails.js
-│   │   ├── PatientStatus.js
-│   │   └── ViewPatient.js
-│   │
-│   ├── Profile/
-│   ├── Sidebar/
-│   ├── Loader.js
-│   ├── Navbar.module.css
-│   ├── Note.js
-│   └── navbar.js
-│
-├── lib/
-│   ├── firebase.js
-│   ├── useDarkMode.js
-│   └── userInfo.js
-│
-├── pages/
-│   ├── admin/
-│   ├── doctor/
-│   ├── patient/
-│   ├── Appointments.module.css
-│   ├── Contact.module.css
-│   ├── Monitoring.module.css
-│   ├── _app.jsx
-│   ├── about.jsx
-│   ├── appointments.jsx
-│   ├── contact.jsx
-│   ├── footer.js
-│   ├── index.js
-│   ├── layout.js
-│   ├── login.jsx
-│   ├── monitoring.jsx
-│   ├── prescriptions.jsx
-│   └── profile.jsx
-│ 
-├── public/
-│   └── Untitled design .png
-│
-├── styles/
-│   ├── Home.module.scss
-│   ├── app.scss
-│   ├── button.scss
-│   ├── globals.css
-│   ├── special-effects.scss
-│   └── ui.scss
-│
-├── .env.example
-├── .eslintrc.json
-├── .gitignore
-├── Code_of_Conduct.md
-├── License.md
-├── README.md
-├── Security.md
-├── jsconfig.json
-├── next.config.js
-├── package.json
-├── package-lock.json
-├── postcss.config.js
-└── tailwind.config.js
-
+├── .github/workflows/       # Automated CI/CD (GitHub Actions)
+├── HealthConnect_Kit_Arduino_Code/ # Hardware Firmware (Arduino/C++)
+├── components/              # Reusable UI Components
+│   ├── Auth/                # Login & Auth State Logic
+│   ├── DoctorComponents/    # Doctor-specific views
+│   ├── LiveMonitor/         # ECG & Real-time Chart Logic
+│   └── PatientComponents/   # Patient-specific views
+├── lib/                     # Firebase Config & Custom Hooks
+├── pages/                   # Next.js Routing & API Logic
+├── public/                  # Static Assets & Images
+└── styles/                  # Global SCSS & Tailwind Styles
 ```
+
 ---
 
 ## ⚙️ Getting Started
 
 ### ✅ Prerequisites
-
 - Node.js (version 14 or higher)
 - Firebase project (setup on [Firebase Console](https://console.firebase.google.com))
 
----
-
 ### 🔧 Installation Steps
-
-- Clone the repository
-``` git clone https://github.com/Dipanita45/HEALCONNECT```
-- Navigate to project directory
-``` cd HEALCONNECT ```
-
-- Install dependencies
-``` npm install ```
-
-- Start the development server
-``` npm run dev ``` 
-
----
-
-## Backend Setup & Configuration
-
-Although this project uses a unified Next.js structure, backend services
-(API routes, database connections, and authentication) require proper
-environment configuration.
-
-### Prerequisites
-- Node.js (v16+)
-- npm or yarn
-- Database (MongoDB / PostgreSQL as applicable)
-
-### Environment Setup
-1. Create a `.env` file in the root directory
-2. Copy variables from `.env.example`
-3. Fill in required values
-
-### Install Dependencies
+#### Clone the repository
+```bash
+git clone [https://github.com/Dipanita45/HEALCONNECT](https://github.com/Dipanita45/HEALCONNECT)
+cd HEALCONNECT
+```
+#### Install dependencies
 ```bash
 npm install
 ```
-
-### Run the Application
+#### Start development server
 ```bash
 npm run dev
 ```
 
-### Backend/API
+#### Backend Setup & Configuration
+Although this project uses a unified Next.js structure, backend services (API routes, database connections, and authentication) require proper environment configuration.
 
-API routes are located inside the `pages/api` directory
+##### Prerequisites
+- Node.js (v16+)
+- npm or yarn
+- Database (MongoDB / PostgreSQL as applicable)
 
-Ensure database connection variables are correctly set
+##### 🔐 Environment Configuration
+Create a `.env` file in the root directory and copy the values from `.env.example`. Focus strictly on **Firebase credentials** as this project uses Firestore for all database needs.
+```Code snippet
+NEXT_PUBLIC_FIREBASE_API_KEY=your_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
+```
+
+##### Install Dependencies
+```bash
+npm install
+```
+##### Run the Application
+```bash
+npm run dev
+```
+##### Backend/API
+- API routes are located inside the `pages/api` directory
+- Ensure database connection variables are correctly set
 
 ---
 
-### 🤝 Contributing
+## 🖼️ Website Preview
 
-We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
+<details> <summary>Click to view Screenshots</summary>
 
----
-<p align="center"><strong>Made with ❤️ by the HEALCONNECT </strong><br>Empowering healthcare, one heartbeat at a time.</p>
+### Homepage
 
----
-
-<p align="center"><a href="#top" style="font-size: 18px; padding: 10px 20px; background: #e0f7fa; border-radius: 8px; text-decoration: none;">
-⬆️ Back to Top</a></p>
-
-Website Preview
-
-### Homepage Preview
 <img width="1885" height="878" alt="Screenshot 2025-08-12 204702" src="https://github.com/user-attachments/assets/eec7755b-0074-4b92-ba36-b97ef77baa55" />
 
-### Prescription 
-<img width="1882" height="562" alt="Screenshot 2025-08-12 204741" src="https://github.com/user-attachments/assets/ba062cfc-81e5-4aa5-8277-4332913ad21b" />
-
-### Appointments
-<img width="1890" height="577" alt="Screenshot 2025-08-12 204752" src="https://github.com/user-attachments/assets/25b665c5-7fe3-4d70-8d48-d12c7d04ba8e" />
 
 ### Monitoring
+
 <img width="1878" height="558" alt="Screenshot 2025-08-12 204802" src="https://github.com/user-attachments/assets/87e82497-2daa-4515-bac0-04038633f261" />
 
-### FAQ Section
-<img width="1239" height="867" alt="Screenshot 2025-08-12 204828" src="https://github.com/user-attachments/assets/3f90d130-bb49-43f0-b648-d0756ff47040" />
-
-### Contact Page
-<img width="1910" height="340" alt="Screenshot 2025-08-12 204840" src="https://github.com/user-attachments/assets/018d9d69-c48b-444a-9e82-87799ba497d7" />
-
 ### Dark Mode
+
 <img width="1845" height="834" alt="Screenshot 2025-08-12 204852" src="https://github.com/user-attachments/assets/b7361658-739c-4296-858e-de966e6cae55" />
+
+### Appointments
+
+<img width="1890" height="577" alt="Screenshot 2025-08-12 204752" src="https://github.com/user-attachments/assets/25b665c5-7fe3-4d70-8d48-d12c7d04ba8e" />
+
+</details>
+
+---
+
+## 🤝 Contributing
+Contributions are what make the open-source community an amazing place to learn and inspire. We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
+
+---
+
+<p align="center">
+   <strong>Made with ❤️ by the HEALCONNECT Team</strong>
+    <strong>Empowering healthcare, one heartbeat at a time.</strong>
+</p>
+
+<p align="center"><a href="#top">⬆️ Back to Top</a></p>
