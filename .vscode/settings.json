@@ -59,5 +59,6 @@
   "css.validate": false,
   "stylelint.enable": false,
   "scss.validate": false,
-  "less.validate": false
+  "less.validate": false,
+  "liveServer.settings.port": 5501
 }
