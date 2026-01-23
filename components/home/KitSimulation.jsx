@@ -30,9 +30,9 @@ export default function KitSimulation() {
 
     return (
         <div id="kit" className="min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden flex flex-col justify-center py-20">
-            <section className="container mx-auto px-4 md:w-1/2 text-center place-content-center">
-                <div className="prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm mx-auto mb-12">
-                    <h1 className="bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-12 rounded-lg text-white font-bold">
+            <section className="container mx-auto px-4 md:w-4/5 lg:w-3/4 text-center place-content-center">
+                <div className="prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm mx-auto mb-8">
+                    <h1 className="bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-8 rounded-lg text-white font-bold">
                         Our Kit :
                     </h1>
                     <p className="py-2 text-md md:text-2xl text-gray-700 dark:text-gray-300 text-center w-3/4 mx-auto leading-relaxed">
@@ -53,6 +53,7 @@ export default function KitSimulation() {
                     </p>
                 </div>
 
+                {/* Kit Visualization Section */}
                 <div className={styles.kitVisualization}>
                     <div className={styles.kitDevice}>
                         <div className={styles.deviceOuter}>
@@ -151,22 +152,28 @@ export default function KitSimulation() {
                     </div>
                 </div>
 
-                <div className="mt-12 text-center">
+                {/* Simulate Buttons Section */}
+                <div className={styles.simulateSection}>
                     <h3 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
                         Try Our Virtual Demo
                     </h3>
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        <Button variant="outline" onClick={simulateHeartRate}>
-                            Simulate Heart Rate
+                    <div className={styles.buttonGrid}>
+                        <Button variant="outline" onClick={simulateHeartRate} className={styles.simulateButton}>
+                            <span className={styles.buttonIcon}>❤️</span>
+                            <span className={styles.buttonText}>Simulate Heart Rate</span>
+                            <span className={styles.buttonValue}>{heartRate} bpm</span>
                         </Button>
-                        <Button variant="outline" onClick={simulateTemperature}>
-                            Simulate Temperature
+                        <Button variant="outline" onClick={simulateTemperature} className={styles.simulateButton}>
+                            <span className={styles.buttonIcon}>🌡️</span>
+                            <span className={styles.buttonText}>Simulate Temperature</span>
+                            <span className={styles.buttonValue}>{temperature}°F</span>
                         </Button>
-                        <Button variant="outline" onClick={simulateOxygen}>
-                            Simulate Oxygen Levels
+                        <Button variant="outline" onClick={simulateOxygen} className={styles.simulateButton}>
+                            <span className={styles.buttonIcon}>💨</span>
+                            <span className={styles.buttonText}>Simulate Oxygen Levels</span>
+                            <span className={styles.buttonValue}>{oxygen}%</span>
                         </Button>
                     </div>
-
                     <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
                         <p>
                             Note: This is a simulation. Actual device requires physical contact
