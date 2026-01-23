@@ -29,13 +29,13 @@ export default function KitSimulation() {
     };
 
     return (
-        <div id="kit" className="min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden flex flex-col justify-center py-20">
-            <section className="container mx-auto px-4 md:w-4/5 lg:w-3/4 text-center place-content-center">
-                <div className="prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm mx-auto mb-8">
-                    <h1 className="bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-8 rounded-lg text-white font-bold">
+        <div id="kit" className="min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden flex flex-col justify-center py-16 sm:py-20">
+            <section className="container mx-auto px-4 sm:px-6 lg:px-8 md:w-4/5 lg:w-3/4 text-center place-content-center">
+                <div className="prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm mx-auto mb-6 sm:mb-8">
+                    <h1 className="bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-4 sm:px-6 py-2 sm:py-3 text-lg md:text-2xl shadow-lg mb-6 sm:mb-8 rounded-lg text-white font-bold">
                         Our Kit :
                     </h1>
-                    <p className="py-2 text-md md:text-2xl text-gray-700 dark:text-gray-300 text-center w-3/4 mx-auto leading-relaxed">
+                    <p className="py-2 text-sm sm:text-md md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 text-center w-full sm:w-3/4 mx-auto leading-relaxed">
                         This system is established with a health monitoring Kit which enables
                         the doctors to measure{' '}
                         <span className="text-blue-600 dark:text-blue-400 font-display animate-pulse font-bold">
@@ -43,7 +43,7 @@ export default function KitSimulation() {
                         </span>{' '}
                         in a single device.
                     </p>
-                    <p className="py-2 text-lg md:text-2xl text-gray-700 dark:text-gray-300 w-3/4 mx-auto leading-relaxed">
+                    <p className="py-2 text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 dark:text-gray-300 w-full sm:w-3/4 mx-auto leading-relaxed">
                         The parameter measured using the kit is shown to appropriate doctor
                         through the website. The{' '}
                         <span className="text-green-600 dark:text-green-400 font-display animate-pulse font-bold">
@@ -154,7 +154,7 @@ export default function KitSimulation() {
 
                 {/* Simulate Buttons Section */}
                 <div className={styles.simulateSection}>
-                    <h3 className="text-xl font-semibold mb-6 text-gray-800 dark:text-gray-200">
+                    <h3 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 text-gray-800 dark:text-gray-200">
                         Try Our Virtual Demo
                     </h3>
                     <div className={styles.buttonGrid}>
@@ -174,7 +174,7 @@ export default function KitSimulation() {
                             <span className={styles.buttonValue}>{oxygen}%</span>
                         </Button>
                     </div>
-                    <div className="mt-4 text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+                    <div className="mt-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
                         <p>
                             Note: This is a simulation. Actual device requires physical contact
                             for accurate readings.
