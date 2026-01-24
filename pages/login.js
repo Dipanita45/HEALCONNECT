@@ -3,15 +3,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
 import { updateUserState } from "@lib/authUtils";
+import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, setUserRole, setCurrentUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("doctor");
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   // Initialize dark mode
   useEffect(() => {
@@ -37,18 +38,46 @@ export default function LoginPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
     
     if (!username.trim() || !password.trim()) {
-      alert("Please enter both username and password");
+      setError("Please enter both username and password");
+      return;
+    }
+    
+    // Get registered users from localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    
+    // Find user by username
+    const user = registeredUsers.find(u => u.username === username);
+    
+    if (!user) {
+      setError("User not found. Please sign up first.");
+      return;
+    }
+    
+    // Check password
+    if (user.password !== password) {
+      setError("Incorrect password. Please try again.");
       return;
     }
     
     // Update state immediately for navbar UI update
-    updateUserState(setUser, setUserRole, setCurrentUser, role, username);
+    updateUserState(setUser, setUserRole, setCurrentUser, user.role, username);
+    
+    // Store additional user info
+    localStorage.setItem('currentUser', JSON.stringify({
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      phone: user.phone,
+      age: user.age,
+      gender: user.gender
+    }));
     
     // Small delay to ensure state updates before navigation
     setTimeout(() => {
-      router.push(`/${role}/dashboard`);
+      router.push(`/${user.role}/dashboard`);
     }, 100);
   };
 
@@ -98,6 +127,29 @@ export default function LoginPage() {
       }}>
         {/* Form - Compact */}
         <div style={{ padding: "20px" }}>
+          {/* Error Message */}
+          {error && (
+            <div style={{
+              marginBottom: "16px",
+              padding: "12px",
+              background: darkMode ? "#742a2a" : "#fed7d7",
+              border: darkMode ? "1px solid #e53e3e" : "1px solid #feb2b2",
+              borderRadius: "6px",
+              color: darkMode ? "#fff5f5" : "#c53030",
+              fontSize: "14px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              {error}
+            </div>
+          )}
+          
           <form onSubmit={handleLogin}>
             {/* Username */}
             <div style={{ marginBottom: "16px" }}>
@@ -114,7 +166,10 @@ export default function LoginPage() {
                 type="text"
                 placeholder="Username"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value);
+                  setError(""); // Clear error when user starts typing
+                }}
                 style={{
                   width: "100%",
                   padding: "10px",
@@ -145,7 +200,10 @@ export default function LoginPage() {
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError(""); // Clear error when user starts typing
+                  }}
                   style={{
                     width: "100%",
                     padding: "10px 40px 10px 10px",
@@ -202,78 +260,6 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Role Selection - Compact */}
-            <div style={{ marginBottom: "20px" }}>
-              <label style={{
-                display: "block",
-                marginBottom: "6px",
-                color: darkMode ? "#e2e8f0" : "#4a5568",
-                fontSize: "13px",
-                fontWeight: "600",
-              }}>
-                LOGIN AS
-              </label>
-              <div style={{
-                display: "flex",
-                gap: "8px",
-              }}>
-                <button
-                  type="button"
-                  onClick={() => setRole("doctor")}
-                  style={{
-                    flex: 1,
-                    padding: "10px",
-                    background: role === "doctor" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
-                      : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: role === "doctor" 
-                      ? "white" 
-                      : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: role === "doctor" 
-                      ? "none" 
-                      : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "13px",
-                    fontWeight: role === "doctor" ? "600" : "500",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "6px",
-                  }}
-                >
-                  <span>👨‍⚕️</span> DOCTOR
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole("patient")}
-                  style={{
-                    flex: 1,
-                    padding: "10px",
-                    background: role === "patient" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
-                      : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: role === "patient" 
-                      ? "white" 
-                      : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: role === "patient" 
-                      ? "none" 
-                      : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
-                    borderRadius: "6px",
-                    cursor: "pointer",
-                    fontSize: "13px",
-                    fontWeight: role === "patient" ? "600" : "500",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "6px",
-                  }}
-                >
-                  <span>👤</span> PATIENT
-                </button>
-              </div>
-            </div>
-
             {/* Login Button - Compact */}
             <button
               type="submit"
@@ -287,11 +273,38 @@ export default function LoginPage() {
                 cursor: "pointer",
                 fontSize: "15px",
                 fontWeight: "600",
-                marginBottom: "10px",
+                marginBottom: "16px",
               }}
             >
               LOGIN
             </button>
+
+            {/* Signup Link */}
+            <div style={{
+              textAlign: "center",
+              fontSize: "14px",
+              color: darkMode ? "#a0aec0" : "#718096",
+            }}>
+              Don&apos;t have an account?{" "}
+              <button
+                onClick={() => {
+                  // Navigate to signup page
+                  router.push('/signup');
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: darkMode ? "#63b3ed" : "#1976d2",
+                  textDecoration: "none",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  padding: "0",
+                  fontSize: "14px",
+                }}
+              >
+                Sign up here
+              </button>
+            </div>
 
           </form>
         </div>
