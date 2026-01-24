@@ -1,9 +1,12 @@
 // pages/login.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
+import { UserContext } from "@lib/context";
+import { updateUserState } from "@lib/authUtils";
 
 export default function LoginPage() {
   const router = useRouter();
+  const { setUser, setUserRole, setCurrentUser } = useContext(UserContext);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("doctor");
@@ -39,9 +42,13 @@ export default function LoginPage() {
       return;
     }
     
-    localStorage.setItem("userType", role);
-    localStorage.setItem("username", username);
-    router.push(`/${role}/dashboard`);
+    // Update state immediately for navbar UI update
+    updateUserState(setUser, setUserRole, setCurrentUser, role, username);
+    
+    // Small delay to ensure state updates before navigation
+    setTimeout(() => {
+      router.push(`/${role}/dashboard`);
+    }, 100);
   };
 
   return (

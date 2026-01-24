@@ -9,7 +9,7 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const { user, currentUser, userRole } = useContext(UserContext)
+  const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
@@ -26,6 +26,11 @@ export default function Navbar() {
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
+    
+    // Clear React state immediately for UI update
+    setUser(null)
+    setUserRole(null)
+    setCurrentUser(null)
     
     // Clear any Firebase auth state if available
     if (typeof window !== 'undefined' && window.firebaseAuth) {
@@ -162,7 +167,7 @@ export default function Navbar() {
       {/* Mobile menu overlay */}
       {isMenuOpen && (
         <div 
-          className={styles.overlay}
+          className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
           onClick={() => setIsMenuOpen(false)}
         ></div>
       )}

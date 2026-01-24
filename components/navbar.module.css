@@ -184,8 +184,37 @@
 }
 
 /* Mobile menu button */
+.menuButton {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+}
+
 .menuButton span {
+  width: 100%;
+  height: 3px;
   background: #374151;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform-origin: center;
+}
+
+.menuButton.menuOpen span:nth-child(1) {
+  transform: rotate(45deg) translate(7px, 7px);
+}
+
+.menuButton.menuOpen span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuButton.menuOpen span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -7px);
 }
 
 /* Overlay */
@@ -226,8 +255,157 @@
 }
 
 /* Responsive tweaks */
+@media (max-width: 968px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  .navLinks {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 5rem 2rem 2rem;
+    gap: 1rem;
+    transition: right 0.3s ease;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+  }
+  
+  .navLinks.navOpen {
+    display: flex;
+    right: 0;
+  }
+  
+  .navLink {
+    padding: 1rem 0;
+    font-size: 1.1rem;
+    width: 100%;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  }
+  
+  .rightSection {
+    gap: 0.8rem;
+  }
+  
+  .loginButton {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .menuButton {
+    display: flex;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 @media (max-width: 640px) {
+  .navbar {
+    padding: 0.6rem 0;
+  }
+  
+  .navbar.scrolled {
+    padding: 0.4rem 0;
+  }
+  
+  .container {
+    padding: 0 0.75rem;
+  }
+  
+  .logoIcon {
+    width: 32px;
+    height: 32px;
+    margin-right: 8px;
+  }
+  
   .logoText {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+  
+  .navLinks {
+    width: 85%;
+    padding: 4rem 1.5rem 2rem;
+  }
+  
+  .navLink {
+    font-size: 1rem;
+    padding: 0.8rem 0;
+  }
+  
+  .rightSection {
+    gap: 0.5rem;
+  }
+  
+  .loginButton {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .menuButton {
+    width: 25px;
+    height: 20px;
+  }
+  
+  .menuButton span {
+    height: 2.5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 0.5rem;
+  }
+  
+  .logoText {
+    font-size: 1rem;
+  }
+  
+  .navLinks {
+    width: 90%;
+    max-width: 250px;
+    padding: 4rem 1rem 2rem;
+  }
+  
+  .loginButton span {
+    display: none;
+  }
+  
+  .loginButton {
+    padding: 0.5rem;
+    min-width: 40px;
+  }
+  
+  .menuButton {
+    width: 22px;
+    height: 18px;
+  }
+  
+  .menuButton span {
+    height: 2px;
   }
 }
