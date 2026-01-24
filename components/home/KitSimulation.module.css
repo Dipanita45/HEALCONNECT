@@ -11,10 +11,25 @@
 
 .buttonGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem;
     margin: 0 auto;
     max-width: 900px;
+}
+
+/* Responsive button grid */
+@media (min-width: 640px) {
+    .buttonGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .buttonGrid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+    }
 }
 
 .simulateButton {
@@ -530,131 +545,110 @@
 }
 
 .dark .simulateButton:hover .buttonValue {
-    background: rgba(37, 99, 235, 0.3);
+background: rgba(37, 99, 235, 0.3);
 }
 
 /* Responsive adjustments */
 @media (max-width: 968px) {
-    /* Simulate Section Styles */
-.simulateSection {
-    background: linear-gradient(135deg, rgba(var(--background-start-rgb), 0.9) 0%, rgba(var(--background-end-rgb), 0.9) 100%);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2rem;
-    margin: 2rem 0;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(37, 99, 235, 0.1);
+.kitVisualization {
+flex-direction: column;
+gap: 3rem;
 }
 
-.buttonGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1.5rem;
-    margin: 0 auto;
-    max-width: 900px;
+.dataTransmission {
+position: relative;
+left: 0;
+width: 100%;
+justify-content: center;
+margin: 2rem 0;
+}
+
+.receivingDevices {
+position: relative;
+justify-content: center;
+}
+}
+
+@media (max-width: 768px) {
+.deviceOuter {
+width: 180px;
+height: 240px;
+padding: 12px;
+}
+
+.doctorDevice {
+width: 150px;
+height: 190px;
+padding: 10px;
+}
+
+.mobileDevice {
+width: 80px;
+height: 150px;
+padding: 8px;
+}
+
+.simulateSection {
+padding: 1.5rem;
+margin: 1.5rem 0;
 }
 
 .simulateButton {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 1.5rem;
-    background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
-    border: 2px solid rgba(37, 99, 235, 0.2);
-    border-radius: 16px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.simulateButton::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.05) 100%);
-    z-index: -1;
-}
-
-.simulateButton:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 35px rgba(37, 99, 235, 0.2);
-    border-color: rgba(37, 99, 235, 0.4);
+padding: 1rem;
 }
 
 .buttonIcon {
-    font-size: 2.5rem;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+font-size: 2rem;
 }
 
 .buttonText {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: rgb(var(--foreground-rgb));
-    text-align: center;
+font-size: 1rem;
 }
 
 .buttonValue {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #2563eb;
-    background: rgba(37, 99, 235, 0.1);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    transition: all 0.3s ease;
+font-size: 0.9rem;
+}
 }
 
-.simulateButton:hover .buttonValue {
-    background: rgba(37, 99, 235, 0.2);
-    transform: scale(1.05);
+@media (max-width: 640px) {
+.deviceOuter {
+width: 160px;
+height: 220px;
+padding: 10px;
 }
 
-/* Dark mode support */
-.dark .simulateSection {
-    background: linear-gradient(135deg, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.9) 100%);
-    border-color: rgba(37, 99, 235, 0.2);
+.doctorDevice {
+width: 140px;
+height: 180px;
+padding: 8px;
 }
 
-.dark .simulateButton {
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-    border-color: rgba(37, 99, 235, 0.3);
-}
-
-.dark .simulateButton::before {
-    background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
-}
-
-.dark .buttonText {
-    color: #f1f5f9;
-}
-
-.dark .buttonValue {
-    color: #60a5fa;
-    background: rgba(37, 99, 235, 0.2);
-}
-
-.dark .simulateButton:hover .buttonValue {
-    background: rgba(37, 99, 235, 0.3);
+.mobileDevice {
+width: 70px;
+height: 130px;
+padding: 6px;
 }
 
 .kitVisualization {
-        flex-direction: column;
-        gap: 3rem;
-    }
+gap: 2rem;
+min-height: 300px;
+}
 
-    .dataTransmission {
-        position: relative;
-        left: 0;
-        width: 100%;
-        justify-content: center;
-        margin: 2rem 0;
-    }
+.simulateSection {
+padding: 1rem;
+margin: 1rem 0;
+}
 
-    .receivingDevices {
-        position: relative;
-        justify-content: center;
-    }
+.buttonIcon {
+font-size: 1.8rem;
+}
+
+.buttonText {
+font-size: 0.9rem;
+}
+
+.buttonValue {
+font-size: 0.8rem;
+padding: 0.2rem 0.6rem;
+}
 }
