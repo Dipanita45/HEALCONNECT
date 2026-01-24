@@ -73,6 +73,11 @@
     font-weight: 600;
     color: rgb(var(--foreground-rgb));
     text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    max-width: 100%;
 }
 
 .buttonValue {
@@ -173,6 +178,8 @@
     background: rgba(255, 255, 255, 0.05);
     transition: all 0.5s ease;
     transform-origin: center;
+    flex-wrap: nowrap;
+    min-width: 0;
 }
 
 .vitalItem:hover {
@@ -182,12 +189,17 @@
 
 .vitalIcon {
     font-size: 1.2rem;
+    flex-shrink: 0;
 }
 
 .vitalLabel {
     flex: 1;
     font-size: 0.8rem;
     color: #fff;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .vitalValue {
@@ -196,6 +208,8 @@
     color: #fff;
     transition: all 0.5s ease;
     transform-origin: center;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .vitalValue small {
@@ -450,12 +464,13 @@
 }
 
 .mobileDevice {
-    width: 100px;
-    height: 180px;
+    width: 110px;
+    height: 190px;
     background: #222;
     border-radius: 15px;
     padding: 10px;
     align-self: flex-end;
+    overflow: hidden; /* Ensure content stays within device */
 }
 
 .mobileScreen {
@@ -464,6 +479,7 @@
     background: #000;
     border-radius: 10px;
     padding: 8px;
+    overflow: hidden; /* Ensure content stays within screen */
 }
 
 .appInterface {
@@ -471,13 +487,17 @@
     flex-direction: column;
     height: 100%;
     color: #fff;
+    overflow: hidden; /* Ensure content stays within interface */
 }
 
 .appHeader {
     font-size: 0.6rem;
     text-align: center;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     color: #3498db;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .appStats {
@@ -485,12 +505,14 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    overflow: hidden;
 }
 
 .metric {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .metricValue {
@@ -499,25 +521,46 @@
     color: #fff;
     transition: all 0.5s ease;
     transform-origin: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .metricLabel {
     font-size: 0.5rem;
     opacity: 0.7;
     color: #ccc;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .trendIndicator {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 3px;
     font-size: 0.6rem;
     color: #2ecc71;
+    width: 100%;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    padding: 3px 0;
+}
+
+.trendIndicator span:not(.trendUp) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+    font-size: 0.55rem;
 }
 
 .trendUp {
     color: #2ecc71;
+    flex-shrink: 0;
+    font-size: 0.6rem;
 }
 
 /* Dark mode support */
