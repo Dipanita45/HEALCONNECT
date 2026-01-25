@@ -13,6 +13,9 @@ export default function LoginPage() {
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotMessage, setForgotMessage] = useState("");
 
   // Initialize dark mode
   useEffect(() => {
@@ -81,6 +84,37 @@ export default function LoginPage() {
     }, 100);
   };
 
+  const handleForgotPassword = () => {
+    setForgotMessage("");
+    
+    if (!forgotEmail.trim()) {
+      setForgotMessage("Please enter your email address");
+      return;
+    }
+    
+    if (!/\S+@\S+\.\S+/.test(forgotEmail)) {
+      setForgotMessage("Please enter a valid email address");
+      return;
+    }
+    
+    // Get registered users from localStorage
+    const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+    
+    // Find user by email
+    const user = registeredUsers.find(u => u.email === forgotEmail);
+    
+    if (user) {
+      setForgotMessage(`Password reset instructions have been sent to ${forgotEmail}. In this demo, your username is: ${user.username}`);
+    } else {
+      setForgotMessage("If an account with this email exists, password reset instructions will be sent.");
+    }
+    
+    // Clear email after 3 seconds
+    setTimeout(() => {
+      setForgotEmail("");
+    }, 3000);
+  };
+
   return (
     <div style={{
       minHeight: "100vh",
@@ -89,7 +123,7 @@ export default function LoginPage() {
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
       padding: "10px 20px",
-      marginTop: "10px", // Very small top margin
+      marginTop: "10px",
     }}>
       {/* Dark Mode Toggle */}
       <button 
@@ -115,7 +149,7 @@ export default function LoginPage() {
         {darkMode ? "☀️" : "🌙"}
       </button>
 
-      {/* Main Container - Compact */}
+      {/* Main Container */}
       <div style={{
         width: "100%",
         maxWidth: "380px",
@@ -125,7 +159,7 @@ export default function LoginPage() {
         overflow: "hidden",
         border: darkMode ? "1px solid #2d3748" : "1px solid #e9ecef",
       }}>
-        {/* Form - Compact */}
+        {/* Form */}
         <div style={{ padding: "20px" }}>
           {/* Error Message */}
           {error && (
@@ -260,7 +294,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            {/* Login Button - Compact */}
+            {/* Login Button */}
             <button
               type="submit"
               style={{
@@ -273,11 +307,33 @@ export default function LoginPage() {
                 cursor: "pointer",
                 fontSize: "15px",
                 fontWeight: "600",
-                marginBottom: "16px",
+                marginBottom: "12px",
               }}
             >
               LOGIN
             </button>
+
+            {/* Forgot Password Link */}
+            <div style={{
+              textAlign: "center",
+              marginBottom: "16px",
+            }}>
+              <button
+                onClick={() => setShowForgotPassword(true)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: darkMode ? "#63b3ed" : "#1976d2",
+                  textDecoration: "none",
+                  fontWeight: "600",
+                  cursor: "pointer",
+                  padding: "0",
+                  fontSize: "13px",
+                }}
+              >
+                Forgot password?
+              </button>
+            </div>
 
             {/* Signup Link */}
             <div style={{
@@ -309,6 +365,178 @@ export default function LoginPage() {
           </form>
         </div>
       </div>
+
+      {/* Forgot Password Modal */}
+      {showForgotPassword && (
+        <div style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 1000,
+        }}>
+          <div style={{
+            width: "100%",
+            maxWidth: "400px",
+            background: darkMode ? "#1b263b" : "white",
+            borderRadius: "10px",
+            padding: "24px",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.3)",
+            border: darkMode ? "1px solid #2d3748" : "1px solid #e9ecef",
+          }}>
+            {/* Modal Header */}
+            <div style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: "20px",
+            }}>
+              <h3 style={{
+                margin: 0,
+                fontSize: "18px",
+                fontWeight: "600",
+                color: darkMode ? "#ffffff" : "#2d3748",
+              }}>
+                Reset Password
+              </h3>
+              <button
+                onClick={() => {
+                  setShowForgotPassword(false);
+                  setForgotEmail("");
+                  setForgotMessage("");
+                }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  fontSize: "20px",
+                  cursor: "pointer",
+                  color: darkMode ? "#a0aec0" : "#718096",
+                  padding: "0",
+                  width: "24px",
+                  height: "24px",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <p style={{
+              margin: "0 0 16px 0",
+              fontSize: "14px",
+              color: darkMode ? "#a0aec0" : "#718096",
+              lineHeight: "1.5",
+            }}>
+              Enter your email address and we'll send you instructions to reset your password.
+            </p>
+
+            {/* Email Input */}
+            <div style={{ marginBottom: "16px" }}>
+              <label style={{
+                display: "block",
+                marginBottom: "6px",
+                color: darkMode ? "#e2e8f0" : "#4a5568",
+                fontSize: "13px",
+                fontWeight: "600",
+              }}>
+                EMAIL ADDRESS
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={forgotEmail}
+                onChange={(e) => {
+                  setForgotEmail(e.target.value);
+                  setForgotMessage("");
+                }}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  border: darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0",
+                  borderRadius: "6px",
+                  background: darkMode ? "#2d3748" : "#f7fafc",
+                  color: darkMode ? "#ffffff" : "#2d3748",
+                  fontSize: "14px",
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            {/* Message Display */}
+            {forgotMessage && (
+              <div style={{
+                marginBottom: "16px",
+                padding: "12px",
+                background: forgotMessage.includes("sent") 
+                  ? (darkMode ? "#2d5a3d" : "#d4edda")
+                  : (darkMode ? "#742a2a" : "#fed7d7"),
+                border: forgotMessage.includes("sent")
+                  ? (darkMode ? "1px solid #38a169" : "1px solid #c3e6cb")
+                  : (darkMode ? "1px solid #e53e3e" : "1px solid #feb2b2"),
+                borderRadius: "6px",
+                color: forgotMessage.includes("sent")
+                  ? (darkMode ? "#fff5f5" : "#155724")
+                  : (darkMode ? "#fff5f5" : "#c53030"),
+                fontSize: "13px",
+                lineHeight: "1.4",
+              }}>
+                {forgotMessage}
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div style={{
+              display: "flex",
+              gap: "12px",
+            }}>
+              <button
+                onClick={handleForgotPassword}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  background: darkMode ? "#1565c0" : "#1976d2",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+              >
+                Send Reset Link
+              </button>
+              <button
+                onClick={() => {
+                  setShowForgotPassword(false);
+                  setForgotEmail("");
+                  setForgotMessage("");
+                }}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  background: darkMode ? "#2d3748" : "#f7fafc",
+                  color: darkMode ? "#e2e8f0" : "#4a5568",
+                  border: darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  fontWeight: "600",
+                }}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
