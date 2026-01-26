@@ -69,14 +69,22 @@ export default function LoginPage() {
     updateUserState(setUser, setUserRole, setCurrentUser, user.role, username);
     
     // Store additional user info
-    localStorage.setItem('currentUser', JSON.stringify({
+    const currentUserData = {
       id: user.id,
-      fullName: user.fullName,
+      name: user.fullName, // Map fullName to name for dashboard
       email: user.email,
+      number: user.phone, // Map phone to number for dashboard
       phone: user.phone,
+      fullName: user.fullName,
       age: user.age,
-      gender: user.gender
-    }));
+      gender: user.gender,
+      role: user.role,
+      username: user.username
+    };
+    localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+    
+    // Update React state with proper field mapping
+    setCurrentUser(currentUserData);
     
     // Small delay to ensure state updates before navigation
     setTimeout(() => {
@@ -435,7 +443,7 @@ export default function LoginPage() {
               color: darkMode ? "#a0aec0" : "#718096",
               lineHeight: "1.5",
             }}>
-              Enter your email address and we'll send you instructions to reset your password.
+              Enter your email address and we&apos;ll send you instructions to reset your password.
             </p>
 
             {/* Email Input */}
@@ -540,3 +548,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
