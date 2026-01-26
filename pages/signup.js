@@ -166,13 +166,35 @@ export default function SignupPage() {
       localStorage.setItem('userType', newUser.role);
       localStorage.setItem('username', newUser.username);
       
+      // Set currentUser in localStorage for persistence
+      const currentUserData = {
+        name: newUser.fullName,
+        email: newUser.email,
+        number: newUser.phone,
+        role: newUser.role,
+        username: newUser.username,
+        fullName: newUser.fullName,
+        phone: newUser.phone,
+        age: newUser.age,
+        gender: newUser.gender,
+        id: newUser.id
+      };
+      localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+      
       // Update React state for immediate UI update
       setUser({ uid: newUser.id });
       setUserRole(newUser.role);
       setCurrentUser({ 
-        name: newUser.username,
+        name: newUser.fullName, // Use fullName instead of username
+        email: newUser.email,
+        number: newUser.phone, // Map phone to number
         role: newUser.role,
-        fullName: newUser.fullName
+        username: newUser.username,
+        fullName: newUser.fullName,
+        phone: newUser.phone,
+        age: newUser.age,
+        gender: newUser.gender,
+        id: newUser.id
       });
 
       // Show success message and redirect
