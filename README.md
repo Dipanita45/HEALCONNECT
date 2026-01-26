@@ -26,6 +26,7 @@
 - 🔐 **Secure Auth:** Multi-role Firebase Authentication (Admin, Doctor, Patient).
 - 🗄️ **Real-time Database:** Cloud Firestore for zero-latency health parameter updates.
 - 📈 **Live Monitoring:** Interactive ECG and health charts using real-time data streams.
+- 🚨 **Emergency Alerts:** Automated real-time alerts when patient vitals exceed safe thresholds.
 - 📅 **Hospital Management:** Integrated appointment booking and prescription systems.
 - 🌓 **UX Focused:** Fully responsive design with Dark Mode support.
 
@@ -65,11 +66,17 @@ HEALCONNECT/
 ├── HealthConnect_Kit_Arduino_Code/ # Hardware Firmware (Arduino/C++)
 ├── components/              # Reusable UI Components
 │   ├── Auth/                # Login & Auth State Logic
-│   ├── DoctorComponents/    # Doctor-specific views
+│   ├── DoctorComponents/    # Doctor-specific views & Alert System
 │   ├── LiveMonitor/         # ECG & Real-time Chart Logic
 │   └── PatientComponents/   # Patient-specific views
-├── lib/                     # Firebase Config & Custom Hooks
+├── lib/                     # Firebase Config, Custom Hooks & Alert System
+│   ├── alertSystem.js       # Core alert monitoring & generation
+│   ├── thresholdDefaults.js # Medical threshold configurations
+│   └── useAlertMonitor.js   # Real-time monitoring hooks
 ├── pages/                   # Next.js Routing & API Logic
+│   ├── admin/               # Admin dashboard & threshold management
+│   ├── doctor/              # Doctor dashboard with alerts
+│   └── patient/             # Patient dashboard
 ├── public/                  # Static Assets & Images
 └── styles/                  # Global SCSS & Tailwind Styles
 ```
@@ -127,6 +134,9 @@ npm run dev
 ##### Backend/API
 - API routes are located inside the `pages/api` directory
 - Ensure database connection variables are correctly set
+
+##### 🚨 Emergency Alert System
+For detailed information about the real-time alert system, see [ALERT_SYSTEM_GUIDE.md](ALERT_SYSTEM_GUIDE.md)
 
 ---
 
