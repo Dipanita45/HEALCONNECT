@@ -435,7 +435,7 @@ export default function LoginPage() {
               color: darkMode ? "#a0aec0" : "#718096",
               lineHeight: "1.5",
             }}>
-              Enter your email address and we'll send you instructions to reset your password.
+              Enter your email address and we&apos;ll send you instructions to reset your password.
             </p>
 
             {/* Email Input */}
@@ -540,3 +540,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
