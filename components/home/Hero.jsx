@@ -4,89 +4,97 @@ import Button from "@/components/ui/Button";
 
 export default function Hero({ scrollToSection }) {
     return (
-        <section id="hero" className="min-h-screen flex items-center relative px-4 sm:px-6 lg:px-8 overflow-hidden">
-            {/* Background with animated circles */}
+        <section id="hero" className="min-h-screen flex items-center relative px-6 sm:px-12 lg:px-32 overflow-hidden bg-slate-50 dark:bg-[#050a15] pt-28 pb-12 lg:pt-32 lg:pb-24 transition-colors duration-500">
+            {/* Background Decorations */}
             <div className="absolute inset-0 w-full h-full -z-10 overflow-hidden">
-                <motion.div
-                    className="absolute rounded-full bg-gradient-radial from-blue-500/10 to-transparent"
-                    style={{ width: '300px', height: '300px', top: '-10%', right: '-10%' }}
-                    animate={{ scale: [1, 1.1], opacity: [0.3, 0.6] }}
-                    transition={{ duration: 10, repeat: Infinity, repeatType: "reverse" }}
-                />
-                <motion.div
-                    className="absolute rounded-full bg-gradient-radial from-blue-500/10 to-transparent"
-                    style={{ width: '400px', height: '400px', bottom: '-20%', left: '-20%' }}
-                    animate={{ scale: [1, 1.15], opacity: [0.3, 0.6] }}
-                    transition={{ duration: 12, repeat: Infinity, repeatType: "reverse", delay: 2 }}
-                />
+                <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-blue-600/5 dark:bg-blue-600/10 blur-[120px] rounded-full"></div>
+                <div className="absolute bottom-[-20%] left-[-20%] w-[600px] h-[600px] bg-emerald-600/5 dark:bg-emerald-600/10 blur-[150px] rounded-full"></div>
             </div>
 
-            <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-8 lg:gap-10 items-center">
-                <div className="max-w-2xl">
+            <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 lg:gap-16 items-center">
+                <div className="relative z-10 text-center lg:text-left">
                     <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 text-slate-800 leading-tight"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white leading-[1.1] tracking-tight font-poppins"
                     >
-                        HealConnect <span className="bg-gradient-to-br from-blue-500 to-emerald-500 bg-clip-text text-transparent">System</span>
+                        <span className="block">Your Health</span>
+                        <span className="block whitespace-nowrap">Monitored Anywhere</span>
                     </motion.h1>
 
                     <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.1 }}
-                        className="text-lg sm:text-xl text-slate-500 mb-6 sm:mb-8 leading-relaxed"
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed font-inter font-medium max-w-xl mx-auto lg:mx-0 px-4 sm:px-0"
                     >
-                        This system is a <span className="bg-amber-100 text-amber-800 px-1 rounded">virtual</span> platform to{' '}
-                        <span className="bg-pink-100 text-pink-700 px-1 rounded">monitor</span> health anytime and anywhere.
+                        Connect with world class healthcare providers and track your vital signs in real-time with our secure, virtual monitoring platform
                     </motion.p>
 
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: 0.2 }}
-                        className="flex flex-col sm:flex-row gap-3 sm:gap-4"
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        className="flex flex-wrap gap-5 justify-center lg:justify-start"
                     >
-                        <Button variant="primary" onClick={() => scrollToSection('problem')} className="w-full sm:w-auto">
-                            Explore Features
-                        </Button>
-                        <Button variant="secondary" onClick={() => scrollToSection('doctors')} className="w-full sm:w-auto">
+                        <button
+                            onClick={() => scrollToSection('problem')}
+                            className="px-9 py-4 bg-[#2563eb] text-white rounded-full font-inter font-medium text-lg hover:bg-blue-700 transition-all hover:shadow-[0_8px_25px_rgba(37,99,235,0.4)] active:scale-95"
+                        >
+                            Get Started
+                        </button>
+                        <button
+                            onClick={() => scrollToSection('doctors')}
+                            className="px-9 py-4 border-2 border-[#10b981] text-[#10b981] dark:text-white rounded-full font-inter font-medium text-lg hover:bg-[#10b981]/10 transition-all active:scale-95"
+                        >
                             Meet Our Doctors
-                        </Button>
+                        </button>
                     </motion.div>
                 </div>
 
-                <div className="flex justify-center relative order-first lg:order-last">
+                <div className="relative flex justify-center lg:justify-end items-center mt-8 lg:mt-0">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.8 }}
-                        className="relative rounded-xl overflow-hidden shadow-2xl shadow-blue-500/20 w-full max-w-md"
+                        className="relative z-10"
                     >
-                        <Image
-                            src="/dashboard.svg"
-                            alt="Healthcare dashboard illustration"
-                            width={600}
-                            height={400}
-                            priority
-                            className="w-full h-auto object-cover"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-emerald-500/10 mix-blend-overlay"></div>
+                        <div className="relative inline-block">
+                            {/* Doctor Image Container */}
+                            <div className="relative w-[280px] sm:w-[340px] lg:w-[380px] aspect-[4/5] rounded-[32px] sm:rounded-[48px] overflow-hidden bg-white dark:bg-[#111827] border border-slate-200 dark:border-white/5 shadow-2xl">
+                                <Image
+                                    src="/doctor.png"
+                                    alt="Healthcare professional"
+                                    fill
+                                    className="object-cover object-top"
+                                    priority
+                                />
+                            </div>
+
+                            {/* Floating Badges */}
+                            <motion.div
+                                animate={{ y: [0, -10, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                className="absolute top-[25%] -right-4 sm:-right-6 lg:-right-8 translate-y-[-50%] z-20 scale-[0.7] sm:scale-85 lg:scale-90"
+                            >
+                                <div className="bg-gradient-to-r from-[#7c3aed] to-[#db2777] text-white px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full shadow-xl text-xs sm:text-sm font-semibold whitespace-nowrap border-[1.5px] border-white/20 backdrop-blur-sm">
+                                    24/7 Support
+                                </div>
+                            </motion.div>
+
+                            <motion.div
+                                animate={{ y: [0, 10, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                                className="absolute bottom-[25%] -left-4 sm:-left-6 lg:-left-8 z-20 scale-[0.7] sm:scale-85 lg:scale-90"
+                            >
+                                <div className="bg-[#10b981] text-white px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-full shadow-xl text-xs sm:text-sm font-semibold whitespace-nowrap border-[1.5px] border-white/20 backdrop-blur-sm">
+                                    Real-Time Care
+                                </div>
+                            </motion.div>
+                        </div>
                     </motion.div>
                 </div>
-            </div>
-
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 cursor-pointer z-10" onClick={() => scrollToSection('problem')}>
-                <span className="text-slate-400 text-xs sm:text-sm font-medium">Discover More</span>
-                <motion.div
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                    className="flex flex-col items-center"
-                >
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-b-2 border-slate-400 rotate-45"></div>
-                    <div className="w-2 h-2 sm:w-3 sm:h-3 border-r-2 border-b-2 border-slate-400 rotate-45 -mt-1 sm:-mt-1.5 opacity-50"></div>
-                </motion.div>
             </div>
         </section>
     );

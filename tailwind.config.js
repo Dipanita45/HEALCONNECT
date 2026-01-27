@@ -21,6 +21,8 @@ module.exports = {
       display: ['Poppins', 'Space Grotesk', 'system-ui', 'sans-serif'],
       body: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
       code: ['JetBrains Mono', 'Consolas', 'monospace'],
+      poppins: ['Poppins', 'sans-serif'],
+      inter: ['Inter', 'sans-serif'],
     },
     colors: {
       white: '#ffffff',
