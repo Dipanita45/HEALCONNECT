@@ -17,9 +17,9 @@ module.exports = {
       '2xl': '1536px',
     },
     fontFamily: {
-      sans: ['Inter', 'system-ui', 'sans-serif'],
-      display: ['Space Grotesk', 'system-ui', 'sans-serif'],
-      body: ['Inter', 'system-ui', 'sans-serif'],
+      sans: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
+      display: ['Poppins', 'Space Grotesk', 'system-ui', 'sans-serif'],
+      body: ['Manrope', 'Inter', 'system-ui', 'sans-serif'],
       code: ['JetBrains Mono', 'Consolas', 'monospace'],
     },
     colors: {
