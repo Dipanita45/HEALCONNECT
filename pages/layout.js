@@ -36,7 +36,7 @@ export default function Layout({ children }) {
     if (!mounted) return;
 
     const userType = getUserType();
-    const publicPages = ["/", "/login", "/signup", "/signup-test", "/faq", "/contact", "/about"];
+    const publicPages = ["/", "/login", "/signup", "/signup-test", "/faq", "/contact", "/about", "/privacy", "/terms", "/how-it-works"];
 
     // Convert pathname to string for comparison
     const currentPath = pathname || "";
