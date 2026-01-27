@@ -29,7 +29,7 @@ export default function LoginPage() {
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    
+
     if (newDarkMode) {
       document.documentElement.classList.add("dark");
       localStorage.setItem("theme", "dark");
@@ -42,32 +42,32 @@ export default function LoginPage() {
   const handleLogin = (e) => {
     e.preventDefault();
     setError(""); // Clear previous errors
-    
+
     if (!username.trim() || !password.trim()) {
       setError("Please enter both username and password");
       return;
     }
-    
+
     // Get registered users from localStorage
     const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    
+
     // Find user by username
     const user = registeredUsers.find(u => u.username === username);
-    
+
     if (!user) {
       setError("User not found. Please sign up first.");
       return;
     }
-    
+
     // Check password
     if (user.password !== password) {
       setError("Incorrect password. Please try again.");
       return;
     }
-    
+
     // Update state immediately for navbar UI update
     updateUserState(setUser, setUserRole, setCurrentUser, user.role, username);
-    
+
     // Store additional user info
     localStorage.setItem('currentUser', JSON.stringify({
       id: user.id,
@@ -77,7 +77,7 @@ export default function LoginPage() {
       age: user.age,
       gender: user.gender
     }));
-    
+
     // Small delay to ensure state updates before navigation
     setTimeout(() => {
       router.push(`/${user.role}/dashboard`);
@@ -86,29 +86,29 @@ export default function LoginPage() {
 
   const handleForgotPassword = () => {
     setForgotMessage("");
-    
+
     if (!forgotEmail.trim()) {
       setForgotMessage("Please enter your email address");
       return;
     }
-    
+
     if (!/\S+@\S+\.\S+/.test(forgotEmail)) {
       setForgotMessage("Please enter a valid email address");
       return;
     }
-    
+
     // Get registered users from localStorage
     const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-    
+
     // Find user by email
     const user = registeredUsers.find(u => u.email === forgotEmail);
-    
+
     if (user) {
       setForgotMessage(`Password reset instructions have been sent to ${forgotEmail}. In this demo, your username is: ${user.username}`);
     } else {
       setForgotMessage("If an account with this email exists, password reset instructions will be sent.");
     }
-    
+
     // Clear email after 3 seconds
     setTimeout(() => {
       setForgotEmail("");
@@ -126,7 +126,7 @@ export default function LoginPage() {
       marginTop: "10px",
     }}>
       {/* Dark Mode Toggle */}
-      <button 
+      <button
         onClick={toggleDarkMode}
         style={{
           position: "fixed",
@@ -183,7 +183,7 @@ export default function LoginPage() {
               {error}
             </div>
           )}
-          
+
           <form onSubmit={handleLogin}>
             {/* Username */}
             <div style={{ marginBottom: "16px" }}>
@@ -435,7 +435,7 @@ export default function LoginPage() {
               color: darkMode ? "#a0aec0" : "#718096",
               lineHeight: "1.5",
             }}>
-              Enter your email address and we'll send you instructions to reset your password.
+              Enter your email address and we&apos;ll send you instructions to reset your password.
             </p>
 
             {/* Email Input */}
@@ -475,7 +475,7 @@ export default function LoginPage() {
               <div style={{
                 marginBottom: "16px",
                 padding: "12px",
-                background: forgotMessage.includes("sent") 
+                background: forgotMessage.includes("sent")
                   ? (darkMode ? "#2d5a3d" : "#d4edda")
                   : (darkMode ? "#742a2a" : "#fed7d7"),
                 border: forgotMessage.includes("sent")
