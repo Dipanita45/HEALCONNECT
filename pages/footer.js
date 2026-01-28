@@ -50,7 +50,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
+                <Link href="/how-it-works" className={styles.footerLink}>
                   <span className={styles.linkIcon}></span>
                   How it Works
                 </Link>
@@ -75,22 +75,22 @@ export default function Footer() {
             <h4 className={styles.sectionTitle}>Support</h4>
             <ul className={styles.linkList}>
               <li>
-                <Link href="#" className={styles.footerLink}>
+                <Link href="/privacy" className={styles.footerLink}>
                   <span className={styles.linkIcon}></span>
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
+                <Link href="/terms" className={styles.footerLink}>
                   <span className={styles.linkIcon}></span>
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <a href="mailto:dipanitamondal@gmail.com" className={styles.footerLink}>
-                  <span className={styles.linkIcon}><IoMdMail /></span>
+                <Link href="/contact" className={styles.footerLink}>
+                  <span className={styles.linkIcon}></span>
                   Contact Support
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

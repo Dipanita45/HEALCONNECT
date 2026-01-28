@@ -22,15 +22,15 @@ export default function Problem({ scrollToSection }) {
               <div className={styles.problemPoints}>
                 <div className={`${styles.problemPoint} ${styles.point1}`}>
                   <div className={styles.pointPulse}></div>
-                  <span className="text-gray-800 dark:text-gray-200 text-xs sm:text-sm">Delayed Data</span>
+                  <span className="text-slate-700 dark:text-slate-100 font-semibold text-xs sm:text-sm">Delayed Data</span>
                 </div>
                 <div className={`${styles.problemPoint} ${styles.point2}`}>
                   <div className={styles.pointPulse}></div>
-                  <span className="text-gray-800 dark:text-gray-200 text-xs sm:text-sm">No History</span>
+                  <span className="text-slate-700 dark:text-slate-100 font-semibold text-xs sm:text-sm">No History</span>
                 </div>
                 <div className={`${styles.problemPoint} ${styles.point3}`}>
                   <div className={styles.pointPulse}></div>
-                  <span className="text-gray-800 dark:text-gray-200 text-xs sm:text-sm">Limited Access</span>
+                  <span className="text-slate-700 dark:text-slate-100 font-semibold text-xs sm:text-sm">Limited Access</span>
                 </div>
               </div>
             </div>
