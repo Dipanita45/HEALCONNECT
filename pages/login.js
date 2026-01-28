@@ -69,11 +69,13 @@ export default function LoginPage() {
     updateUserState(setUser, setUserRole, setCurrentUser, user.role, username);
 
     // Store additional user info
-    localStorage.setItem('currentUser', JSON.stringify({
+    const currentUserData = {
       id: user.id,
-      fullName: user.fullName,
+      name: user.fullName, // Map fullName to name for dashboard
       email: user.email,
+      number: user.phone, // Map phone to number for dashboard
       phone: user.phone,
+      fullName: user.fullName,
       age: user.age,
       gender: user.gender
     }));
@@ -540,3 +542,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
