@@ -202,16 +202,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 0.5rem;
-  width: 16px;
-  height: 16px;
-  font-size: 0.8rem;
-  color: rgb(var(--foreground-rgb));
-  transition: transform 0.3s ease;
+  margin-right: 0.75rem;
+  width: 18px;
+  height: 18px;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.3s ease;
 }
 
 .footerLink:hover .linkIcon {
-  transform: rotate(90deg);
+  transform: rotate(15deg) scale(1.2);
+  color: white;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
 .socialLinks {

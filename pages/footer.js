@@ -1,6 +1,19 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { FaGithubAlt, FaHeartbeat, FaRegHospital, FaHeart } from 'react-icons/fa';
+import { 
+  FaGithubAlt, 
+  FaHeartbeat, 
+  FaRegHospital, 
+  FaHeart,
+  FaInfoCircle,
+  FaCog,
+  FaCode,
+  FaUsers,
+  FaShieldAlt,
+  FaFileContract,
+  FaEnvelope,
+  FaHeadset
+} from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
 
@@ -45,20 +58,26 @@ export default function Footer() {
             <ul className={styles.linkList}>
               <li>
                 <Link href="/about" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaInfoCircle className={styles.linkIcon} />
                   About Us
                 </Link>
               </li>
               <li>
                 <Link href="/how-it-works" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaCog className={styles.linkIcon} />
                   How it Works
                 </Link>
               </li>
               <li>
                 <Link href="/open-source" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaCode className={styles.linkIcon} />
                   Open Source
+                </Link>
+              </li>
+              <li>
+                <Link href="/open-source#contributors" className={styles.footerLink}>
+                  <FaUsers className={styles.linkIcon} />
+                  Contributors
                 </Link>
               </li>
             </ul>
@@ -70,19 +89,19 @@ export default function Footer() {
             <ul className={styles.linkList}>
               <li>
                 <Link href="/privacy" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaShieldAlt className={styles.linkIcon} />
                   Privacy Policy
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaFileContract className={styles.linkIcon} />
                   Terms & Conditions
                 </Link>
               </li>
               <li>
                 <Link href="/contact" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaHeadset className={styles.linkIcon} />
                   Contact Support
                 </Link>
               </li>
