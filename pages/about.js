@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Footer from "./footer";
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { FaHeartbeat, FaHospital, FaUsers, FaShieldAlt, FaGlobe, FaRocket, FaStethoscope, FaChartLine, FaHandHoldingMedical, FaClock, FaCheckCircle, FaArrowRight, FaLightbulb } from "react-icons/fa";
@@ -461,7 +460,6 @@ export default function About() {
             </div>
           </motion.section>
         </div>
-        <Footer />
       </main>
     </>
   );
