@@ -56,15 +56,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
+                <Link href="/open-source" className={styles.footerLink}>
                   <span className={styles.linkIcon}></span>
                   Open Source
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
-                  Contributors
                 </Link>
               </li>
             </ul>
