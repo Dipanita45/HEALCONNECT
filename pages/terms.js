@@ -274,7 +274,7 @@ export default function Terms() {
                       <ul className="space-y-2 text-sm text-gray-800 dark:text-gray-300">
                         <li className="flex items-center"><FaPhoneAlt className="mr-2 text-red-700 dark:text-red-600" /> Call 911 for medical emergencies</li>
                         <li className="flex items-center"><FaUserCheck className="mr-2 text-red-700 dark:text-red-600" /> Always consult qualified healthcare professionals</li>
-                        <li className="flex items-center"><FaBalanceScale className="mr-2 text-red-700 dark:text-red-600" /> We're not liable for medical decisions</li>
+                        <li className="flex items-center"><FaBalanceScale className="mr-2 text-red-700 dark:text-red-600" /> We&quot;re not liable for medical decisions</li>
                       </ul>
                     </div>
                 </motion.section>
@@ -332,7 +332,7 @@ export default function Terms() {
                     </h3>
                   </div>
                   <div className="space-y-2 text-sm text-gray-800 dark:text-gray-300">
-                    <div className="flex items-center"><FaInfoCircle className="mr-2 text-orange-700 dark:text-orange-600" /> Service provided "as is"</div>
+                    <div className="flex items-center"><FaInfoCircle className="mr-2 text-orange-700 dark:text-orange-600" /> Service provided &quot;as is&quot;</div>
                     <div className="flex items-center"><FaExclamationTriangle className="mr-2 text-orange-700 dark:text-orange-600" /> No warranties of any kind</div>
                     <div className="flex items-center"><FaBalanceScale className="mr-2 text-orange-700 dark:text-orange-600" /> Use at your own risk</div>
                   </div>
@@ -408,7 +408,7 @@ export default function Terms() {
                       <FaInfoCircle className="text-blue-600 dark:text-blue-500 mt-1 mr-3 flex-shrink-0" />
                       <div>
                         <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Notification Process</h4>
-                        <p className="text-sm text-gray-700 dark:text-gray-300">We'll notify you of significant changes via email and in-app notifications at least 30 days before they take effect.</p>
+                        <p className="text-sm text-gray-700 dark:text-gray-300">We&quot;ll notify you of significant changes via email and in-app notifications at least 30 days before they take effect.</p>
                       </div>
                     </div>
                   </div>
