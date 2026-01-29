@@ -8,8 +8,9 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-blue?style=flat-square)](contributing.md)
 [![Firebase](https://img.shields.io/badge/Database-Firebase-orange?style=flat-square&logo=firebase)](https://firebase.google.com/)
 [![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
+[![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
 
-[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues)
+[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
 
 </div>
 
@@ -167,6 +168,19 @@ For detailed information about the real-time alert system, see [ALERT_SYSTEM_GUI
 
 ## 🤝 Contributing
 Contributions are what make the open-source community an amazing place to learn and inspire. We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
+
+---
+
+## 💬 Connect With Us
+
+Join our growing community! Connect with us on Discord for:
+- 🗣️ Real-time discussions and support
+- 🚀 Project updates and announcements
+- 💡 Feature suggestions and feedback
+- 🤝 Collaboration opportunities
+
+[![Join our Discord](https://img.shields.io/badge/Discord-Join%20Server-7289DA?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
+
 
 ---
 
