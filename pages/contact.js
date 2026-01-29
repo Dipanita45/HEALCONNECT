@@ -221,7 +221,7 @@ export default function Contact() {
               
               <motion.p variants={fadeInUp} className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
                 Our dedicated support team is here to assist you with any questions, concerns, or feedback. 
-                We're committed to providing you with the best possible experience.
+                We&apos;re committed to providing you with the best possible experience.
               </motion.p>
 
               <motion.div variants={fadeInUp} className="flex flex-wrap justify-center gap-4">
@@ -354,7 +354,7 @@ export default function Contact() {
                 </div>
 
                 <p className="text-gray-600 dark:text-gray-300 mb-8">
-                  Fill out the form below and we'll get back to you as soon as possible.
+                  Fill out the form below and we&apos;ll get back to you as soon as possible.
                 </p>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -662,7 +662,7 @@ export default function Contact() {
                   </h3>
                   
                   <p className="text-gray-600 dark:text-gray-300 mb-6">
-                    Thank you for contacting us. We've received your message and will get back to you within 24 hours.
+                    Thank you for contacting us. We&apos;ve received your message and will get back to you within 24 hours.
                   </p>
                   
                   <button
