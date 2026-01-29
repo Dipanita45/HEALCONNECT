@@ -78,7 +78,7 @@ export default function LoginPage() {
       fullName: user.fullName,
       age: user.age,
       gender: user.gender
-    }));
+    };
 
     // Small delay to ensure state updates before navigation
     setTimeout(() => {
