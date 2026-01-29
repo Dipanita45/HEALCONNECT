@@ -264,8 +264,7 @@ export default function SignupPage() {
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
-      padding: "10px 20px",
-      marginTop: "10px",
+      padding: "80px 20px 20px",
     }}>
       {/* Dark Mode Toggle */}
       <button 
