@@ -1,6 +1,6 @@
 import AuthCheck from "@components/Auth/AuthCheck";
 import AdminSidebar from "@components/Sidebar/AdminSidebar";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { doc, getDoc, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "@lib/firebase";
 import { DEFAULT_THRESHOLDS, initializeDefaultThresholds } from "@lib/thresholdDefaults";
@@ -17,7 +17,7 @@ export default function ThresholdsPage() {
         loadThresholds();
     }, []);
 
-    const loadThresholds = async () => {
+    const loadThresholds = useCallback(async () => {
         try {
             const thresholdsRef = doc(db, 'systemConfig', 'thresholds');
             const thresholdsSnap = await getDoc(thresholdsRef);
@@ -38,7 +38,7 @@ export default function ThresholdsPage() {
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     const handleThresholdChange = (vitalType, field, value) => {
         setThresholds(prev => ({
@@ -241,8 +241,8 @@ export default function ThresholdsPage() {
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             className={`mb-4 p-4 rounded-lg flex items-center gap-2 ${message.type === 'success' ? 'bg-green-100 text-green-800' :
-                                    message.type === 'error' ? 'bg-red-100 text-red-800' :
-                                        'bg-blue-100 text-blue-800'
+                                message.type === 'error' ? 'bg-red-100 text-red-800' :
+                                    'bg-blue-100 text-blue-800'
                                 }`}
                         >
                             <FaCheckCircle />

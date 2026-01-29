@@ -26,17 +26,17 @@ export default function Navbar() {
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
-    
+
     // Clear React state immediately for UI update
     setUser(null)
     setUserRole(null)
     setCurrentUser(null)
-    
+
     // Clear any Firebase auth state if available
     if (typeof window !== 'undefined' && window.firebaseAuth) {
       window.firebaseAuth.signOut()
     }
-    
+
     // Redirect to login
     router.push('/login')
     setIsMenuOpen(false)
@@ -72,49 +72,49 @@ export default function Navbar() {
 
         {/* Navigation Links with hover effects */}
         <div className={`${styles.navLinks} ${isMenuOpen ? styles.navOpen : ''}`}>
-          <Link 
-            href="/" 
-            className={styles.navLink}
+          <Link
+            href="/"
+            className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Home</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/prescriptions" 
-            className={styles.navLink}
+          <Link
+            href="/prescriptions"
+            className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Prescriptions</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/appointments" 
-            className={styles.navLink}
+          <Link
+            href="/appointments"
+            className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/monitoring" 
-            className={styles.navLink}
+          <Link
+            href="/monitoring"
+            className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Monitoring</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/faq" 
-            className={styles.navLink}
+          <Link
+            href="/faq"
+            className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>FAQ</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/contact" 
-            className={styles.navLink}
+          <Link
+            href="/contact"
+            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
@@ -152,7 +152,7 @@ export default function Navbar() {
           <ThemeToggle />
 
           {/* Mobile menu button */}
-          <button 
+          <button
             className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
@@ -166,7 +166,7 @@ export default function Navbar() {
 
       {/* Mobile menu overlay */}
       {isMenuOpen && (
-        <div 
+        <div
           className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
           onClick={() => setIsMenuOpen(false)}
         ></div>

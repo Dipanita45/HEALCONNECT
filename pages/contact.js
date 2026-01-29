@@ -42,7 +42,7 @@ export default function Contact() {
 
     // Simulate form submission
     setTimeout(() => {
-      setSubmitMessage("Thank you for contacting us. We'll get back to you within 24 hours.");
+      setSubmitMessage("Thank you for contacting us. We&apos;ll get back to you within 24 hours.");
       setFormData({
         name: "",
         email: "",
@@ -85,7 +85,7 @@ export default function Contact() {
               />
             </h1>
             <p className="text-gray-600 dark:text-gray-300 text-lg max-w-3xl mx-auto">
-              We're here to help. Reach out to our support team for any questions or assistance.
+              We&apos;re here to help. Reach out to our support team for any questions or assistance.
             </p>
             <div className="mx-auto w-24 h-1 mt-4 bg-gradient-to-r from-green-600 to-green-400 rounded-full"></div>
           </motion.header>
@@ -322,7 +322,7 @@ export default function Contact() {
                       How do I reset my password?
                     </summary>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 pl-4">
-                      Click "Forgot Password" on the login page and follow the instructions sent to your email.
+                      Click &quot;Forgot Password&quot; on the login page and follow the instructions sent to your email.
                     </p>
                   </details>
                   <details className="cursor-pointer">
@@ -338,7 +338,7 @@ export default function Contact() {
                       How do I connect with my doctor?
                     </summary>
                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 pl-4">
-                      Use the "Find Doctors" feature in your dashboard to search and connect with healthcare providers.
+                      Use the &quot;Find Doctors&quot; feature in your dashboard to search and connect with healthcare providers.
                     </p>
                   </details>
                 </div>
