@@ -201,7 +201,7 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
             >
-              Revolutionizing healthcare monitoring in Pune and beyond. We're connecting patients with doctors through innovative technology.
+              Revolutionizing healthcare monitoring in Pune and beyond. We&apos;re connecting patients with doctors through innovative technology.
             </motion.p>
             
             <motion.div 
@@ -265,8 +265,8 @@ export default function About() {
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                HealConnect is Pune's growing health monitoring site to help hospitals manage their patients' health parameters anytime, anywhere. 
-                Our goal is to make patients' health data accessible to doctors worldwide for quicker diagnosis and treatment.
+                HealConnect is Pune&apos;s growing health monitoring site to help hospitals manage their patients&apos; health parameters anytime, anywhere. 
+                Our goal is to make patients&apos; health data accessible to doctors worldwide for quicker diagnosis and treatment.
               </p>
             </div>
           </motion.section>
@@ -339,7 +339,7 @@ export default function About() {
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                The HealConnect system's kit allows doctors or nurses to measure the patient's body temperature and heart rate. 
+                The HealConnect system&apos;s kit allows doctors or nurses to measure the patient&apos;s body temperature and heart rate. 
                 This real-time data is automatically updated on the WeCare platform, which doctors and hospitals can access remotely.
               </p>
               <motion.div 
