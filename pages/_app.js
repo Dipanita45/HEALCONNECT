@@ -1,7 +1,6 @@
 // ✅ All imports at the top
 import '@/styles/globals.css'
-import '@styles/app.scss'
-import '../styles/app.scss'
+import '@/styles/app.scss'
 
 import { ThemeProvider } from '@/context/ThemeContext'
 import Navbar from '@/components/navbar'

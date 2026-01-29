@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { collection, query, where, getDocs, orderBy, limit } from 'firebase/firestore';
 import { db } from '@lib/firebase';
@@ -14,7 +14,7 @@ export default function AlertHistory({ doctorId }) {
         fetchAlertHistory();
     }, [doctorId, filter, dateFilter]);
 
-    const fetchAlertHistory = async () => {
+    const fetchAlertHistory = useCallback(async () => {
         setLoading(true);
 
         try {
@@ -65,7 +65,7 @@ export default function AlertHistory({ doctorId }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [doctorId, filter, dateFilter]);
 
     const formatDate = (timestamp) => {
         if (!timestamp) return 'Unknown';
