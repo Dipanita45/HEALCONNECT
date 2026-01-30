@@ -188,14 +188,35 @@
   color: rgb(var(--foreground-muted-rgb));
   text-decoration: none;
   font-size: 0.9rem;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   position: relative;
   overflow: hidden;
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  margin: 0 -0.8rem;
+}
+
+.footerLink::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+  transition: left 0.6s ease;
+  z-index: -1;
 }
 
 .footerLink:hover {
   color: rgb(var(--foreground-rgb));
-  transform: translateX(5px);
+  transform: translateX(8px) scale(1.02);
+  background: rgba(37, 99, 235, 0.05);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.footerLink:hover::before {
+  left: 100%;
 }
 
 .linkIcon {
@@ -203,17 +224,35 @@
   align-items: center;
   justify-content: center;
   margin-right: 0.75rem;
-  width: 18px;
-  height: 18px;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
+  width: 20px;
+  height: 20px;
+  font-size: 0.95rem;
+  color: rgba(37, 99, 235, 0.7);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  position: relative;
+}
+
+.linkIcon::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, transparent 70%);
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.4s ease;
 }
 
 .footerLink:hover .linkIcon {
-  transform: rotate(15deg) scale(1.2);
-  color: white;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
+  transform: rotate(90deg) scale(1.2);
+  color: rgb(37, 99, 235);
+  filter: drop-shadow(0 0 8px rgba(37, 99, 235, 0.4));
+}
+
+.footerLink:hover .linkIcon::after {
+  opacity: 1;
+  transform: scale(1.5);
 }
 
 .socialLinks {
@@ -227,14 +266,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.1);
+  width: 44px;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 50%;
   color: rgb(var(--foreground-rgb));
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   overflow: hidden;
+  border: 2px solid transparent;
 }
 
 .socialLink::before {
@@ -244,48 +284,93 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: all 0.4s ease;
   border-radius: 50%;
+  transform: scale(0.8);
+}
+
+.socialLink::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.6s ease;
 }
 
 .socialLink:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
+  transform: translateY(-8px) rotate(5deg);
+  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
   color: white;
+  border-color: rgba(102, 126, 234, 0.3);
+  background: rgba(102, 126, 234, 0.1);
 }
 
 .socialLink:hover::before {
   opacity: 1;
+  transform: scale(1);
+}
+
+.socialLink:hover::after {
+  width: 100%;
+  height: 100%;
+  opacity: 0;
 }
 
 .socialLink svg {
   position: relative;
-  z-index: 1;
-  font-size: 1.2rem;
+  z-index: 2;
+  font-size: 1.3rem;
+  transition: all 0.4s ease;
+}
+
+.socialLink:hover svg {
+  transform: scale(1.1) rotate(-5deg);
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.5));
 }
 
 .socialTooltip {
   position: absolute;
-  bottom: -30px;
+  bottom: -35px;
   left: 50%;
-  transform: translateX(-50%);
-  background: rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-  padding: 5px 10px;
-  border-radius: 4px;
+  transform: translateX(-50%) scale(0.8);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
   font-size: 0.7rem;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.socialTooltip::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #667eea;
 }
 
 .socialLink:hover .socialTooltip {
   opacity: 1;
   visibility: visible;
-  bottom: -25px;
+  bottom: -30px;
+  transform: translateX(-50%) scale(1);
 }
 
 .feedbackText {
