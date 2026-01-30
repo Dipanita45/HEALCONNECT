@@ -4,6 +4,7 @@ import ThemeToggle from './ThemeToggle'
 import { useState, useEffect, useContext } from 'react'
 import { UserContext } from '@lib/context'
 import { useRouter } from 'next/router'
+import { FaHeadset } from 'react-icons/fa'
 import styles from './navbar.module.css'
 
 export default function Navbar() {
@@ -118,6 +119,15 @@ export default function Navbar() {
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link>
+          <Link
+            href="/support"
+            className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <FaHeadset className={styles.supportIcon} />
+            <span className={styles.linkText}>Support</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
         </div>

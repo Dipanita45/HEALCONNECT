@@ -191,14 +191,28 @@
 }
 
 .navLink {
+  position: relative;
+  padding: 0.5rem 1rem;
+  color: #cbd5e1;
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
   font-weight: 500;
-  color: white;
   font-size: 0.95rem;
   transition: all 0.3s ease;
-  padding: 0.4rem 0;
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.supportIcon {
+  font-size: 1rem;
+  color: #667eea;
+  transition: all 0.3s ease;
+}
+
+.navLink:hover .supportIcon {
+  color: #818cf8;
+  transform: scale(1.1);
 }
 
 :global(.light) .navLink {

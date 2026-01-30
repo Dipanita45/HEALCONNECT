@@ -1,8 +1,9 @@
 import React from 'react'
 import AdminSidebar from "@components/Sidebar/AdminSidebar";
 import AuthCheck from "@components/Auth/AuthCheck";
-import { FaFileAlt, FaBell, FaUsers, FaAngleLeft, FaAngleRight} from 'react-icons/fa';
+import { FaFileAlt, FaBell, FaUsers, FaAngleLeft, FaAngleRight, FaHeadset, FaTicketAlt, FaChartLine } from 'react-icons/fa';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export default function Dashboard(props) {
   return (
@@ -30,6 +31,38 @@ export default function Dashboard(props) {
               <p className="text-2xl">03</p>
               <p>Appointments</p>
             </div>
+          </div>
+          <Link href="/admin/support-management" className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-green-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                <FaHeadset className='text-green-500 dark:text-gray-100' size={36} />
+            <div className="text-right">
+              <p className="text-2xl">24</p>
+              <p>Support Tickets</p>
+            </div>
+          </Link>
+        </div>
+
+        {/* Support Management Quick Actions */}
+        <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md p-6 md:mx-4 mt-6">
+          <h2 className="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center gap-2">
+            <FaHeadset className="text-green-500" />
+            Support Management Quick Actions
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Link href="/admin/support-management" className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+              <FaTicketAlt className="text-blue-600 dark:text-blue-400 mb-2" size={24} />
+              <h3 className="font-semibold text-blue-800 dark:text-blue-200">View All Tickets</h3>
+              <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">Manage and monitor support tickets</p>
+            </Link>
+            <Link href="/admin/support-management?view=agents" className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4 hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+              <FaUsers className="text-green-600 dark:text-green-400 mb-2" size={24} />
+              <h3 className="font-semibold text-green-800 dark:text-green-200">Agent Management</h3>
+              <p className="text-sm text-green-600 dark:text-green-400 mt-1">Manage support agents and performance</p>
+            </Link>
+            <Link href="/admin/support-management?view=analytics" className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+              <FaChartLine className="text-purple-600 dark:text-purple-400 mb-2" size={24} />
+              <h3 className="font-semibold text-purple-800 dark:text-purple-200">Analytics</h3>
+              <p className="text-sm text-purple-600 dark:text-purple-400 mt-1">View support metrics and insights</p>
+            </Link>
           </div>
         </div>
 

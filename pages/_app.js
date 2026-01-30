@@ -9,6 +9,7 @@ import Footer from './footer'
 import { UserContext } from '@lib/context'
 import { useUserData } from '@lib/userInfo'
 import Layout from './layout'
+import SupportWidget from '@/components/Support/SupportWidget'
 
 // ✅ Single App component
 function MyApp({ Component, pageProps }) {
@@ -23,6 +24,7 @@ function MyApp({ Component, pageProps }) {
         </Layout>
         <ScrollToTop />
         <Footer />
+        <SupportWidget />
       </UserContext.Provider>
     </ThemeProvider>
   )
