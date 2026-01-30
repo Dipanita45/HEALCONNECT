@@ -16,7 +16,8 @@ export default function SignupPage() {
     fullName: "",
     phone: "",
     age: "",
-    gender: "male"
+    gender: "male",
+    adminCode: ""
   });
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -155,6 +156,15 @@ export default function SignupPage() {
       newErrors.age = "Please enter a valid age";
     }
 
+    // Admin code validation
+    if (formData.role === "admin") {
+      if (!formData.adminCode.trim()) {
+        newErrors.adminCode = "Admin code is required for admin registration";
+      } else if (formData.adminCode !== "HEALCONNECT2024") {
+        newErrors.adminCode = "Invalid admin code. Please contact system administrator.";
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -200,6 +210,7 @@ export default function SignupPage() {
         phone: formData.phone,
         age: formData.age,
         gender: formData.gender,
+        adminCode: formData.role === "admin" ? formData.adminCode : undefined,
         createdAt: new Date().toISOString()
       };
 
@@ -222,6 +233,7 @@ export default function SignupPage() {
         phone: newUser.phone,
         age: newUser.age,
         gender: newUser.gender,
+        adminCode: newUser.adminCode,
         id: newUser.id
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUserData));
@@ -239,6 +251,7 @@ export default function SignupPage() {
         phone: newUser.phone,
         age: newUser.age,
         gender: newUser.gender,
+        adminCode: newUser.adminCode,
         id: newUser.id
       });
 
@@ -751,17 +764,14 @@ export default function SignupPage() {
             <div style={{ marginBottom: "20px" }}>
               <label style={{
                 display: "block",
-                marginBottom: "6px",
+                marginBottom: "8px",
                 color: darkMode ? "#e2e8f0" : "#4a5568",
                 fontSize: "13px",
                 fontWeight: "600",
               }}>
-                SIGN UP AS
+                SELECT YOUR ROLE
               </label>
-              <div style={{
-                display: "flex",
-                gap: "8px",
-              }}>
+              <div style={{ display: "flex", gap: "8px" }}>
                 <button
                   type="button"
                   onClick={() => setFormData(prev => ({ ...prev, role: "doctor" }))}
@@ -784,10 +794,20 @@ export default function SignupPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "6px",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (formData.role !== "doctor") {
+                      e.target.style.background = darkMode ? "#4a5568" : "#edf2f7";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (formData.role !== "doctor") {
+                      e.target.style.background = darkMode ? "#2d3748" : "#f7fafc";
+                    }
                   }}
                 >
-                  <span>👨‍⚕️</span> DOCTOR
+                  Doctor
                 </button>
                 <button
                   type="button"
@@ -811,12 +831,120 @@ export default function SignupPage() {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    gap: "6px",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (formData.role !== "patient") {
+                      e.target.style.background = darkMode ? "#4a5568" : "#edf2f7";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (formData.role !== "patient") {
+                      e.target.style.background = darkMode ? "#2d3748" : "#f7fafc";
+                    }
                   }}
                 >
-                  <span>👤</span> PATIENT
+                  Patient
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, role: "admin" }))}
+                  style={{
+                    flex: 1,
+                    padding: "10px",
+                    background: formData.role === "admin" 
+                      ? (darkMode ? "#b91c1c" : "#dc2626") 
+                      : (darkMode ? "#2d3748" : "#f7fafc"),
+                    color: formData.role === "admin" 
+                      ? "white" 
+                      : (darkMode ? "#e2e8f0" : "#4a5568"),
+                    border: formData.role === "admin" 
+                      ? "none" 
+                      : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
+                    borderRadius: "6px",
+                    cursor: "pointer",
+                    fontSize: "13px",
+                    fontWeight: formData.role === "admin" ? "600" : "500",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.2s ease",
+                    position: "relative",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (formData.role !== "admin") {
+                      e.target.style.background = darkMode ? "#4a5568" : "#edf2f7";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (formData.role !== "admin") {
+                      e.target.style.background = darkMode ? "#2d3748" : "#f7fafc";
+                    }
+                  }}
+                >
+                  Admin
                 </button>
               </div>
+              {formData.role === "admin" && (
+                <div style={{
+                  marginTop: "8px",
+                  padding: "8px 12px",
+                  background: darkMode ? "#7f1d1d" : "#fef2f2",
+                  border: `1px solid ${darkMode ? "#991b1b" : "#fecaca"}`,
+                  borderRadius: "6px",
+                  fontSize: "11px",
+                  color: darkMode ? "#fca5a5" : "#991b1b",
+                  lineHeight: "1.4",
+                }}>
+                  Admin access provides full system control including user management, 
+                  support system oversight, and platform settings.
+                </div>
+              )}
+
+              {/* Admin Code Field - Only shown for admin role */}
+              {formData.role === "admin" && (
+                <div style={{ marginBottom: "16px" }}>
+                  <label style={{
+                    display: "block",
+                    marginBottom: "6px",
+                    color: darkMode ? "#e2e8f0" : "#4a5568",
+                    fontSize: "13px",
+                    fontWeight: "600",
+                  }}>
+                    ADMIN CODE
+                  </label>
+                  <input
+                    type="password"
+                    name="adminCode"
+                    placeholder="Enter admin authorization code"
+                    value={formData.adminCode}
+                    onChange={handleChange}
+                    style={{
+                      width: "100%",
+                      padding: "10px",
+                      border: errors.adminCode ? "1px solid #e53e3e" : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
+                      borderRadius: "6px",
+                      background: darkMode ? "#2d3748" : "#f7fafc",
+                      color: darkMode ? "#ffffff" : "#2d3748",
+                      fontSize: "14px",
+                      outline: "none",
+                    }}
+                    required
+                  />
+                  {errors.adminCode && (
+                    <div style={{ color: "#e53e3e", fontSize: "12px", marginTop: "4px" }}>
+                      {errors.adminCode}
+                    </div>
+                  )}
+                  <div style={{
+                    marginTop: "4px",
+                    fontSize: "11px",
+                    color: darkMode ? "#a0aec0" : "#718096",
+                  }}>
+                    Contact system administrator for the admin code
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Error Message */}
