@@ -12,7 +12,8 @@ import {
   FaShieldAlt,
   FaFileContract,
   FaEnvelope,
-  FaHeadset
+  FaHeadset,
+  FaDiscord
 } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
@@ -121,6 +122,16 @@ export default function Footer() {
               >
                 <FaGithubAlt />
                 <span className={styles.socialTooltip}>Visit our GitHub</span>
+              </a>
+              <a
+                href="https://discord.gg/WbvxB2F4G"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="Discord"
+              >
+                <FaDiscord />
+                <span className={styles.socialTooltip}>Join our Discord</span>
               </a>
             </div>
             <p className={styles.feedbackText}>
