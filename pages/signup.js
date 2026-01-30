@@ -23,6 +23,7 @@ export default function SignupPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState({ score: 0, message: "", color: "" });
 
   // Initialize dark mode
   useEffect(() => {
@@ -59,6 +60,12 @@ export default function SignupPage() {
       ...prev,
       [name]: value
     }));
+    
+    // Check password strength when password changes
+    if (name === 'password') {
+      checkPasswordStrength(value);
+    }
+    
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -66,6 +73,44 @@ export default function SignupPage() {
         [name]: ""
       }));
     }
+  };
+
+  const checkPasswordStrength = (password) => {
+    let score = 0;
+    let message = "";
+    let color = "";
+
+    if (!password) {
+      setPasswordStrength({ score: 0, message: "", color: "" });
+      return;
+    }
+
+    // Length check
+    if (password.length >= 8) score += 1;
+    if (password.length >= 12) score += 1;
+
+    // Complexity checks
+    if (/[a-z]/.test(password)) score += 1; // lowercase
+    if (/[A-Z]/.test(password)) score += 1; // uppercase
+    if (/[0-9]/.test(password)) score += 1; // numbers
+    if (/[^a-zA-Z0-9]/.test(password)) score += 1; // special characters
+
+    // Determine strength message and color
+    if (score <= 2) {
+      message = "Weak password";
+      color = "#e53e3e"; // red
+    } else if (score <= 4) {
+      message = "Fair password";
+      color = "#dd6b20"; // orange
+    } else if (score <= 5) {
+      message = "Good password";
+      color = "#38a169"; // green
+    } else {
+      message = "Strong password";
+      color = "#2b6cb0"; // blue
+    }
+
+    setPasswordStrength({ score, message, color });
   };
 
   const validateForm = () => {
@@ -571,6 +616,54 @@ export default function SignupPage() {
               {errors.password && (
                 <div style={{ color: "#e53e3e", fontSize: "12px", marginTop: "4px" }}>
                   {errors.password}
+                </div>
+              )}
+              
+              {/* Password Strength Indicator */}
+              {formData.password && (
+                <div style={{ marginTop: "8px" }}>
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "4px"
+                  }}>
+                    <span style={{
+                      fontSize: "11px",
+                      color: darkMode ? "#a0aec0" : "#718096"
+                    }}>
+                      Password Strength:
+                    </span>
+                    <span style={{
+                      fontSize: "11px",
+                      color: passwordStrength.color,
+                      fontWeight: "600"
+                    }}>
+                      {passwordStrength.message}
+                    </span>
+                  </div>
+                  <div style={{
+                    width: "100%",
+                    height: "4px",
+                    backgroundColor: darkMode ? "#2d3748" : "#e2e8f0",
+                    borderRadius: "2px",
+                    overflow: "hidden"
+                  }}>
+                    <div style={{
+                      width: `${(passwordStrength.score / 6) * 100}%`,
+                      height: "100%",
+                      backgroundColor: passwordStrength.color,
+                      transition: "width 0.3s ease, background-color 0.3s ease"
+                    }} />
+                  </div>
+                  <div style={{
+                    fontSize: "10px",
+                    color: darkMode ? "#a0aec0" : "#718096",
+                    marginTop: "4px",
+                    lineHeight: "1.3"
+                  }}>
+                    Use 8+ characters with uppercase, lowercase, numbers, and symbols
+                  </div>
                 </div>
               )}
             </div>
