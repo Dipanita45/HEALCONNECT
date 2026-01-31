@@ -8,133 +8,86 @@ export default function Custom404() {
         <title>404 - Page Not Found | HEALCONNECT</title>
         <meta name="description" content="The page you are looking for does not exist." />
       </Head>
-      
-      <div style={styles.container}>
-        <div style={styles.content}>
-          <h1 style={styles.title}>404</h1>
-          <h2 style={styles.subtitle}>Page Not Found</h2>
-          <p style={styles.message}>
+
+      <div className="flex flex-col items-center justify-center min-h-[100vh] px-8 py-8 bg-[#f8f9fa] dark:bg-gray-900 text-[#2d3748] dark:text-gray-100 font-sans">
+        <div className="text-center max-w-[600px] p-12 bg-white dark:bg-gray-800 rounded-[12px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] dark:shadow-gray-900/50">
+          <h1 className="text-6xl sm:text-7xl font-extrabold m-0 text-[#2d3748] dark:text-gray-100 leading-none">
+            404
+          </h1>
+          <h2 className="text-2xl font-semibold mt-2 mb-6 text-[#4a5568] dark:text-gray-400">
+            Page Not Found
+          </h2>
+          <p className="text-lg text-[#718096] dark:text-gray-400 my-4 leading-relaxed">
             Oops! The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </p>
-          <p style={styles.instructions}>
+          <p className="text-base text-[#a0aec0] dark:text-gray-500 mb-10">
             Please check the URL or use the navigation below.
           </p>
-          
-          <div style={styles.buttonContainer}>
-            <Link href="/" style={styles.homeButton}>
+
+          <div className="flex gap-4 justify-center my-8 flex-wrap">
+            <Link
+              href="/"
+              className="px-8 py-3 bg-[#4299e1] hover:bg-[#3182ce] dark:bg-blue-600 dark:hover:bg-blue-700 text-white no-underline rounded-[6px] font-semibold text-base transition-[background-color] duration-200 inline-block"
+            >
               Home
             </Link>
-            <Link href="/login" style={styles.secondaryButton}>
+            <Link
+              href="/login"
+              className="px-6 py-3 bg-[#e2e8f0] hover:bg-[#cbd5e0] dark:bg-gray-700 dark:hover:bg-gray-600 text-[#4a5568] dark:text-gray-300 no-underline rounded-[6px] font-semibold text-base transition-[background-color] duration-200 inline-block"
+            >
               Login
             </Link>
-            <Link href="/appointments" style={styles.secondaryButton}>
+            <Link
+              href="/appointments"
+              className="px-6 py-3 bg-[#e2e8f0] hover:bg-[#cbd5e0] dark:bg-gray-700 dark:hover:bg-gray-600 text-[#4a5568] dark:text-gray-300 no-underline rounded-[6px] font-semibold text-base transition-[background-color] duration-200 inline-block"
+            >
               Appointments
             </Link>
-            <Link href="/contact" style={styles.secondaryButton}>
+            <Link
+              href="/contact"
+              className="px-6 py-3 bg-[#e2e8f0] hover:bg-[#cbd5e0] dark:bg-gray-700 dark:hover:bg-gray-600 text-[#4a5568] dark:text-gray-300 no-underline rounded-[6px] font-semibold text-base transition-[background-color] duration-200 inline-block"
+            >
               Contact
             </Link>
           </div>
-          
-          <div style={styles.links}>
-            <Link href="/about" style={styles.link}>About</Link>
-            <span style={styles.separator}>•</span>
-            <Link href="/faq" style={styles.link}>FAQ</Link>
-            <span style={styles.separator}>•</span>
-            <Link href="/monitoring" style={styles.link}>Monitoring</Link>
-            <span style={styles.separator}>•</span>
-            <Link href="/prescriptions" style={styles.link}>Prescriptions</Link>
+
+          <div className="mt-8 pt-6 border-t border-[#e2e8f0] dark:border-gray-700">
+            <Link
+              href="/about"
+              className="text-[#4299e1] hover:text-[#3182ce] dark:text-blue-400 dark:hover:text-blue-300 no-underline text-sm mx-2"
+            >
+              About
+            </Link>
+            <span className="text-[#cbd5e0] dark:text-gray-500 mx-2" aria-hidden="true">
+              •
+            </span>
+            <Link
+              href="/faq"
+              className="text-[#4299e1] hover:text-[#3182ce] dark:text-blue-400 dark:hover:text-blue-300 no-underline text-sm mx-2"
+            >
+              FAQ
+            </Link>
+            <span className="text-[#cbd5e0] dark:text-gray-500 mx-2" aria-hidden="true">
+              •
+            </span>
+            <Link
+              href="/monitoring"
+              className="text-[#4299e1] hover:text-[#3182ce] dark:text-blue-400 dark:hover:text-blue-300 no-underline text-sm mx-2"
+            >
+              Monitoring
+            </Link>
+            <span className="text-[#cbd5e0] dark:text-gray-500 mx-2" aria-hidden="true">
+              •
+            </span>
+            <Link
+              href="/prescriptions"
+              className="text-[#4299e1] hover:text-[#3182ce] dark:text-blue-400 dark:hover:text-blue-300 no-underline text-sm mx-2"
+            >
+              Prescriptions
+            </Link>
           </div>
         </div>
       </div>
     </>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    minHeight: '100vh',
-    padding: '2rem',
-    backgroundColor: '#f8f9fa',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-  },
-  content: {
-    textAlign: 'center',
-    maxWidth: '600px',
-    padding: '3rem',
-    backgroundColor: 'white',
-    borderRadius: '12px',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-  },
-  title: {
-    fontSize: '6rem',
-    fontWeight: '800',
-    margin: '0',
-    color: '#2d3748',
-    lineHeight: '1',
-  },
-  subtitle: {
-    fontSize: '2rem',
-    fontWeight: '600',
-    margin: '0.5rem 0 1.5rem',
-    color: '#4a5568',
-  },
-  message: {
-    fontSize: '1.125rem',
-    color: '#718096',
-    margin: '1rem 0',
-    lineHeight: '1.6',
-  },
-  instructions: {
-    fontSize: '1rem',
-    color: '#a0aec0',
-    marginBottom: '2.5rem',
-  },
-  buttonContainer: {
-    display: 'flex',
-    gap: '1rem',
-    justifyContent: 'center',
-    margin: '2rem 0',
-    flexWrap: 'wrap',
-  },
-  homeButton: {
-    padding: '0.75rem 2rem',
-    backgroundColor: '#4299e1',
-    color: 'white',
-    textDecoration: 'none',
-    borderRadius: '6px',
-    fontWeight: '600',
-    fontSize: '1rem',
-    transition: 'background-color 0.2s',
-    display: 'inline-block',
-  },
-  secondaryButton: {
-    padding: '0.75rem 1.5rem',
-    backgroundColor: '#e2e8f0',
-    color: '#4a5568',
-    textDecoration: 'none',
-    borderRadius: '6px',
-    fontWeight: '600',
-    fontSize: '1rem',
-    transition: 'background-color 0.2s',
-    display: 'inline-block',
-  },
-  links: {
-    marginTop: '2rem',
-    paddingTop: '1.5rem',
-    borderTop: '1px solid #e2e8f0',
-  },
-  link: {
-    color: '#4299e1',
-    textDecoration: 'none',
-    fontSize: '0.9rem',
-    margin: '0 0.5rem',
-  },
-  separator: {
-    color: '#cbd5e0',
-    margin: '0 0.5rem',
-  },
-};
