@@ -9,6 +9,7 @@ export default function AlertNotifications({ doctorId, doctorName }) {
     const [showAlerts, setShowAlerts] = useState(false);
     const [acknowledging, setAcknowledging] = useState(null);
     const [soundEnabled, setSoundEnabled] = useState(true);
+    const [acknowledgeError, setAcknowledgeError] = useState(null);
 
     // Play alert sound when new alerts arrive
     useEffect(() => {
@@ -36,13 +37,14 @@ export default function AlertNotifications({ doctorId, doctorName }) {
 
     const handleAcknowledge = async (alertId) => {
         setAcknowledging(alertId);
+        setAcknowledgeError(null);
 
         const result = await acknowledgeAlert(alertId, doctorId, doctorName);
 
         if (result.success) {
             console.log('Alert acknowledged successfully');
         } else {
-            alert('Failed to acknowledge alert. Please try again.');
+            setAcknowledgeError('Failed to acknowledge alert. Please try again.');
         }
 
         setAcknowledging(null);
@@ -91,7 +93,10 @@ export default function AlertNotifications({ doctorId, doctorName }) {
             <motion.button
                 onClick={() => {
                     setShowAlerts(!showAlerts);
-                    if (!showAlerts) clearNewAlertCount();
+                    if (!showAlerts) {
+                        clearNewAlertCount();
+                        setAcknowledgeError(null);
+                    }
                 }}
                 className="relative p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-shadow"
                 whileHover={{ scale: 1.05 }}
@@ -145,6 +150,17 @@ export default function AlertNotifications({ doctorId, doctorName }) {
                                 <FaTimes className="text-gray-500" size={16} />
                             </button>
                         </div>
+
+                        {/* Inline error message - contextual to alert actions */}
+                        {acknowledgeError && (
+                            <div
+                                className="mx-4 mt-4 p-3 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 text-sm flex items-center gap-2"
+                                role="alert"
+                            >
+                                <FaExclamationTriangle className="flex-shrink-0" size={16} />
+                                {acknowledgeError}
+                            </div>
+                        )}
 
                         {/* Alert List */}
                         <div className="overflow-y-auto flex-1">
