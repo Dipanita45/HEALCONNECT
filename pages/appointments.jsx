@@ -118,6 +118,7 @@ export default function Appointments() {
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
   const [isVisible, setIsVisible] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [submitMessage, setSubmitMessage] = useState(null); // { text, type: 'success' | 'error' }
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -131,6 +132,10 @@ export default function Appointments() {
     // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors({ ...formErrors, [name]: '' });
+    }
+    // Clear submit message when user edits form
+    if (submitMessage) {
+      setSubmitMessage(null);
     }
   };
 
@@ -156,6 +161,7 @@ export default function Appointments() {
     setSelectedDoctor(null);
     setStep(1);
     setFormErrors({});
+    setSubmitMessage(null);
   };
 
 const checkAppointmentConflict = async (doctorId, date, time) => {
@@ -185,7 +191,7 @@ const handleSubmit = async (e) => {
     );
 
     if (conflict) {
-      alert("This time slot is already booked. Please choose another.");
+      setSubmitMessage({ text: "This time slot is already booked. Please choose another.", type: "error" });
       setIsSubmitting(false);
       return;
     }
@@ -200,7 +206,7 @@ const handleSubmit = async (e) => {
       createdAt: Timestamp.now()
     });
 
-    alert("Appointment booked successfully!");
+    setSubmitMessage({ text: "Appointment booked successfully!", type: "success" });
 
     setFormData({
       name: '',
@@ -213,7 +219,7 @@ const handleSubmit = async (e) => {
     setSelectedDoctor(null);
   } catch (error) {
     console.error(error);
-    alert("Failed to book appointment.");
+    setSubmitMessage({ text: "Failed to book appointment.", type: "error" });
   }
 
   setIsSubmitting(false);
@@ -373,6 +379,26 @@ const handleSubmit = async (e) => {
                   initial="hidden"
                   animate="visible"
                 >
+                  {submitMessage && (
+                    <div
+                      className={`${styles.submitMessage} ${submitMessage.type === 'success' ? styles.submitMessageSuccess : styles.submitMessageError}`}
+                      role="alert"
+                    >
+                      {submitMessage.type === 'success' ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                          <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                      )}
+                      {submitMessage.text}
+                    </div>
+                  )}
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}
