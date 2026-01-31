@@ -30,8 +30,11 @@ const SupportWidget = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [isMinimized, setIsMinimized] = useState(false);
+  const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
+  const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -46,6 +49,181 @@ const SupportWidget = () => {
       inputRef.current?.focus();
     }
   }, [isOpen, isMinimized]);
+
+  // Keyboard navigation handler
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Detect keyboard user
+      if (event.key === 'Tab') {
+        setIsKeyboardUser(true);
+      }
+
+      // Global shortcuts when widget is closed
+      if (!isOpen) {
+        if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+          event.preventDefault();
+          setIsOpen(true);
+          return;
+        }
+        return;
+      }
+
+      // Don't handle keyboard events when modal is open (let modal handle them)
+      if (showTicketModal) {
+        if (event.key === 'Escape') {
+          event.preventDefault();
+          setShowTicketModal(false);
+          inputRef.current?.focus();
+        }
+        return;
+      }
+
+      // Escape key to close widget
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        setIsOpen(false);
+        setFocusedMessageIndex(-1);
+        return;
+      }
+
+      // Ctrl/Cmd + K to close widget
+      if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      // Navigation within messages when not focused on input
+      if (document.activeElement !== inputRef.current && messages.length > 0) {
+        switch (event.key) {
+          case 'ArrowUp':
+            event.preventDefault();
+            navigateMessages('up');
+            break;
+          case 'ArrowDown':
+            event.preventDefault();
+            navigateMessages('down');
+            break;
+          case 'Home':
+            event.preventDefault();
+            setFocusedMessageIndex(0);
+            break;
+          case 'End':
+            event.preventDefault();
+            setFocusedMessageIndex(messages.length - 1);
+            break;
+          case 'Enter':
+          case ' ':
+            if (focusedMessageIndex >= 0) {
+              event.preventDefault();
+              // Focus back to input after selecting a message
+              inputRef.current?.focus();
+              setFocusedMessageIndex(-1);
+            }
+            break;
+        }
+      }
+    };
+
+    const handleMouseDown = () => {
+      setIsKeyboardUser(false);
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handleMouseDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handleMouseDown);
+    };
+  }, [isOpen, showTicketModal, messages, focusedMessageIndex]);
+
+  const navigateMessages = (direction) => {
+    if (direction === 'up') {
+      setFocusedMessageIndex(prev => {
+        if (prev <= 0) return messages.length - 1;
+        return prev - 1;
+      });
+    } else {
+      setFocusedMessageIndex(prev => {
+        if (prev >= messages.length - 1) return 0;
+        return prev + 1;
+      });
+    }
+  };
+
+  // Modal accessibility and focus management
+  useEffect(() => {
+    if (showTicketModal) {
+      // Store the element that had focus before modal opened
+      const previousFocus = document.activeElement;
+      
+      // Find all focusable elements in the modal
+      const modalElement = document.querySelector(`.${styles.modal}`);
+      if (modalElement) {
+        const focusableElements = modalElement.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        
+        if (focusableElements.length > 0) {
+          // Focus first element in modal
+          focusableElements[0].focus();
+        }
+      }
+
+      // Trap focus within modal
+      const handleModalKeyDown = (event) => {
+        if (event.key === 'Tab') {
+          const modalElement = document.querySelector(`.${styles.modal}`);
+          if (modalElement) {
+            const focusableElements = modalElement.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            
+            if (focusableElements.length === 0) return;
+
+            const firstElement = focusableElements[0];
+            const lastElement = focusableElements[focusableElements.length - 1];
+
+            if (event.shiftKey) {
+              // Shift + Tab (going backwards)
+              if (document.activeElement === firstElement) {
+                event.preventDefault();
+                lastElement.focus();
+              }
+            } else {
+              // Tab (going forwards)
+              if (document.activeElement === lastElement) {
+                event.preventDefault();
+                firstElement.focus();
+              }
+            }
+          }
+        }
+      };
+
+      document.addEventListener('keydown', handleModalKeyDown);
+
+      return () => {
+        document.removeEventListener('keydown', handleModalKeyDown);
+        // Restore focus to previous element when modal closes
+        if (previousFocus && typeof previousFocus.focus === 'function') {
+          previousFocus.focus();
+        }
+      };
+    }
+  }, [showTicketModal]);
+
+  // Focus management for messages
+  useEffect(() => {
+    if (focusedMessageIndex >= 0 && focusedMessageIndex < messages.length) {
+      const messageElements = document.querySelectorAll('[data-message-index]');
+      const targetElement = messageElements[focusedMessageIndex];
+      if (targetElement) {
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }, [focusedMessageIndex]);
 
   // Subscribe to real-time ticket updates
   useEffect(() => {
@@ -369,15 +547,23 @@ const SupportWidget = () => {
   if (!isOpen) {
     return (
       <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
+        className={styles.widgetButton}
         onClick={() => setIsOpen(true)}
-        className={styles.floatingButton}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        aria-label="Open support chat"
+        aria-expanded="false"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(true);
+          }
+        }}
       >
-        <FaHeadset size={24} />
-        <span className={styles.notificationDot}></span>
+        <FaHeadset />
+        <span className={styles.widgetBadge}>Support</span>
       </motion.button>
     );
   }
@@ -388,11 +574,15 @@ const SupportWidget = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className={`${styles.supportWidget} ${isMinimized ? styles.minimized : ''}`}
+        role="application"
+        aria-label="Support chat widget"
+        aria-live="polite"
+        ref={chatContainerRef}
       >
         {/* Header */}
         <div className={styles.header}>
           <div className={styles.headerLeft}>
-            <FaHeadset className={styles.headerIcon} />
+            <FaHeadset className={styles.headerIcon} aria-hidden="true" />
             <div>
               <h3>HealConnect Support</h3>
               <span className={styles.status}>
@@ -405,12 +595,15 @@ const SupportWidget = () => {
             <button
               onClick={() => setIsMinimized(!isMinimized)}
               className={styles.minimizeBtn}
+              aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
+              aria-expanded={!isMinimized}
             >
               {isMinimized ? '□' : '−'}
             </button>
             <button
               onClick={() => setIsOpen(false)}
               className={styles.closeBtn}
+              aria-label="Close support chat"
             >
               <FaTimes />
             </button>
@@ -440,27 +633,40 @@ const SupportWidget = () => {
                 </div>
               )}
 
-              {messages.map((message) => (
+              {messages.map((message, index) => (
                 <motion.div
                   key={message.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`${styles.message} ${styles[message.type]}`}
+                  className={`${styles.message} ${styles[message.type]} ${focusedMessageIndex === index ? styles.focused : ''}`}
+                  data-message-index={index}
+                  tabIndex={isKeyboardUser ? 0 : -1}
+                  role="article"
+                  aria-label={`${message.type} message: ${message.text.substring(0, 50)}${message.text.length > 50 ? '...' : ''}`}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      inputRef.current?.focus();
+                      setFocusedMessageIndex(-1);
+                    }
+                  }}
+                  onFocus={() => setFocusedMessageIndex(index)}
+                  onBlur={() => setFocusedMessageIndex(-1)}
                 >
                   <div className={styles.messageContent}>
                     {message.type === 'ai' && (
-                      <FaRobot className={styles.avatar} />
+                      <FaRobot className={styles.avatar} aria-hidden="true" />
                     )}
                     {message.type === 'user' && (
-                      <FaUser className={styles.avatar} />
+                      <FaUser className={styles.avatar} aria-hidden="true" />
                     )}
                     {message.type === 'agent' && (
-                      <div className={styles.agentAvatar}>
+                      <div className={styles.agentAvatar} aria-hidden="true">
                         {message.sender?.avatar || '👨‍⚕️'}
                       </div>
                     )}
                     {message.type === 'system' && (
-                      <FaTicketAlt className={styles.avatar} />
+                      <FaTicketAlt className={styles.avatar} aria-hidden="true" />
                     )}
                     <div className={styles.messageText}>
                       {message.type === 'agent' && (
@@ -471,12 +677,14 @@ const SupportWidget = () => {
                       )}
                       <p>{message.text}</p>
                       {message.suggestions && (
-                        <div className={styles.suggestions}>
+                        <div className={styles.suggestions} role="list" aria-label="Suggested actions">
                           {message.suggestions.map((suggestion, index) => (
                             <button
                               key={index}
                               onClick={() => handleSuggestionClick(suggestion)}
                               className={styles.suggestionBtn}
+                              role="listitem"
+                              aria-label={`Suggestion: ${suggestion}`}
                             >
                               {suggestion}
                             </button>
@@ -487,12 +695,13 @@ const SupportWidget = () => {
                         <button
                           onClick={() => setShowTicketModal(true)}
                           className={styles.escalateBtn}
+                          aria-label="Create support ticket"
                         >
                           <FaTicketAlt /> Create Support Ticket
                         </button>
                       )}
                       {message.ticket && (
-                        <div className={styles.ticketInfo}>
+                        <div className={styles.ticketInfo} role="region" aria-label="Ticket information">
                           <div className={styles.ticketHeader}>
                             <FaTicketAlt /> Ticket {message.ticket.id}
                           </div>
@@ -509,7 +718,7 @@ const SupportWidget = () => {
                       )}
                     </div>
                   </div>
-                  <span className={styles.timestamp}>
+                  <span className={styles.timestamp} aria-label={`Message time: ${message.timestamp.toLocaleTimeString()}`}>
                     {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </motion.div>
@@ -534,7 +743,7 @@ const SupportWidget = () => {
             {/* Input Area */}
             <div className={styles.inputArea}>
               <div className={styles.inputContainer}>
-                <button className={styles.attachBtn}>
+                <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
                   <FaPaperclip />
                 </button>
                 <input
@@ -545,26 +754,37 @@ const SupportWidget = () => {
                   onKeyPress={handleKeyPress}
                   placeholder="Type your message..."
                   className={styles.messageInput}
+                  aria-label="Type your message"
+                  aria-describedby="input-help"
+                  autoComplete="off"
                 />
-                <button className={styles.emojiBtn}>
+                <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />
                 </button>
-                <button className={styles.voiceBtn}>
+                <button className={styles.voiceBtn} aria-label="Voice input" tabIndex={0}>
                   <FaMicrophone />
                 </button>
                 <button
                   onClick={sendMessage}
                   disabled={!inputValue.trim()}
                   className={styles.sendBtn}
+                  aria-label="Send message"
+                  aria-disabled={!inputValue.trim()}
+                  tabIndex={0}
                 >
                   <FaPaperPlane />
                 </button>
+              </div>
+              <div id="input-help" className="sr-only">
+                Press Enter to send, Shift+Enter for new line
               </div>
               <div className={styles.inputActions}>
                 {currentTicket && currentTicket.status !== 'resolved' ? (
                   <button
                     onClick={handleCloseTicket}
                     className={styles.closeTicketBtn}
+                    aria-label="Close current ticket"
+                    tabIndex={0}
                   >
                     <FaCheckCircle /> Close Ticket
                   </button>
@@ -572,11 +792,13 @@ const SupportWidget = () => {
                   <button
                     onClick={() => setShowTicketModal(true)}
                     className={styles.createTicketBtn}
+                    aria-label="Create support ticket"
+                    tabIndex={0}
                   >
                     <FaTicketAlt /> Create Ticket
                   </button>
                 )}
-                <button className={styles.callBtn}>
+                <button className={styles.callBtn} aria-label="Request phone call" tabIndex={0}>
                   <FaPhone /> Request Call
                 </button>
               </div>
@@ -594,6 +816,10 @@ const SupportWidget = () => {
             exit={{ opacity: 0 }}
             className={styles.modalOverlay}
             onClick={() => setShowTicketModal(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
+            aria-describedby="modal-description"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -601,79 +827,149 @@ const SupportWidget = () => {
               exit={{ scale: 0.9, opacity: 0 }}
               className={styles.modal}
               onClick={(e) => e.stopPropagation()}
+              role="document"
+              tabIndex={-1}
             >
               <div className={styles.modalHeader}>
-                <h3>Create Support Ticket</h3>
-                <button onClick={() => setShowTicketModal(false)}>
+                <h2 id="modal-title" className={styles.modalTitle}>
+                  Create Support Ticket
+                </h2>
+                <button
+                  onClick={() => setShowTicketModal(false)}
+                  className={styles.closeModal}
+                  aria-label="Close ticket creation modal"
+                  tabIndex={0}
+                >
                   <FaTimes />
                 </button>
               </div>
               
               <div className={styles.modalBody}>
-                <div className={styles.formGroup}>
-                  <label>Subject *</label>
-                  <input
-                    type="text"
-                    value={ticketData.subject}
-                    onChange={(e) => setTicketData(prev => ({ ...prev, subject: e.target.value }))}
-                    placeholder="Brief description of your issue"
-                  />
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Category *</label>
-                  <select
-                    value={ticketData.category}
-                    onChange={(e) => setTicketData(prev => ({ ...prev, category: e.target.value }))}
-                  >
-                    <option value="general">General Inquiry</option>
-                    <option value="technical">Technical Support</option>
-                    <option value="billing">Billing & Payment</option>
-                    <option value="medical">Medical Question</option>
-                    <option value="account">Account Issue</option>
-                  </select>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Priority *</label>
-                  <div className={styles.priorityOptions}>
-                    {['low', 'normal', 'high', 'urgent'].map(priority => (
-                      <button
-                        key={priority}
-                        onClick={() => setTicketData(prev => ({ ...prev, priority }))}
-                        className={`${styles.priorityBtn} ${styles[priority]} ${ticketData.priority === priority ? styles.active : ''}`}
-                      >
-                        {priority.charAt(0).toUpperCase() + priority.slice(1)}
-                      </button>
-                    ))}
+                <p id="modal-description" className={styles.modalDescription}>
+                  Please provide details about your issue so we can assist you better.
+                </p>
+                
+                <form onSubmit={createTicket} className={styles.ticketForm}>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="ticket-subject" className={styles.formLabel}>
+                      Subject *
+                    </label>
+                    <input
+                      id="ticket-subject"
+                      type="text"
+                      value={ticketData.subject}
+                      onChange={(e) => setTicketData(prev => ({ ...prev, subject: e.target.value }))}
+                      className={styles.formInput}
+                      placeholder="Brief description of your issue"
+                      required
+                      aria-required="true"
+                      aria-describedby="subject-help"
+                    />
+                    <small id="subject-help" className={styles.formHelp}>
+                      Be specific about your issue for faster resolution
+                    </small>
                   </div>
-                </div>
 
-                <div className={styles.formGroup}>
-                  <label>Description *</label>
-                  <textarea
-                    value={ticketData.description}
-                    onChange={(e) => setTicketData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Please provide detailed information about your issue..."
-                    rows={4}
-                  />
-                </div>
-              </div>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="ticket-category" className={styles.formLabel}>
+                      Category
+                    </label>
+                    <select
+                      id="ticket-category"
+                      value={ticketData.category}
+                      onChange={(e) => setTicketData(prev => ({ ...prev, category: e.target.value }))}
+                      className={styles.formSelect}
+                      aria-describedby="category-help"
+                    >
+                      <option value="general">General Inquiry</option>
+                      <option value="technical">Technical Issue</option>
+                      <option value="billing">Billing Question</option>
+                      <option value="appointment">Appointment Issue</option>
+                      <option value="prescription">Prescription Help</option>
+                      <option value="emergency">Emergency</option>
+                    </select>
+                    <small id="category-help" className={styles.formHelp}>
+                      Select the category that best describes your issue
+                    </small>
+                  </div>
 
-              <div className={styles.modalFooter}>
-                <button
-                  onClick={() => setShowTicketModal(false)}
-                  className={styles.cancelBtn}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={createTicket}
-                  disabled={!ticketData.subject || !ticketData.description}
-                  className={styles.submitBtn}
-                >
-                  <FaTicketAlt /> Create Ticket
-                </button>
+                  <div className={styles.formGroup}>
+                    <label htmlFor="ticket-priority" className={styles.formLabel}>
+                      Priority Level
+                    </label>
+                    <div 
+                      className={styles.priorityOptions}
+                      role="radiogroup"
+                      aria-labelledby="ticket-priority"
+                      aria-describedby="priority-help"
+                    >
+                      {['normal', 'high', 'urgent'].map((priority) => (
+                        <label key={priority} className={styles.priorityOption}>
+                          <input
+                            type="radio"
+                            name="priority"
+                            value={priority}
+                            checked={ticketData.priority === priority}
+                            onChange={(e) => setTicketData(prev => ({ ...prev, priority: e.target.value }))}
+                            className={styles.priorityRadio}
+                            aria-describedby={`${priority}-desc`}
+                          />
+                          <span className={styles.priorityLabel}>
+                            {priority.charAt(0).toUpperCase() + priority.slice(1)}
+                          </span>
+                          <span id={`${priority}-desc`} className="sr-only">
+                            {priority === 'urgent' && 'Urgent priority for critical issues'}
+                            {priority === 'high' && 'High priority for important issues'}
+                            {priority === 'normal' && 'Normal priority for general inquiries'}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <small id="priority-help" className={styles.formHelp}>
+                      Choose urgent only for critical medical emergencies
+                    </small>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label htmlFor="ticket-description" className={styles.formLabel}>
+                      Description *
+                    </label>
+                    <textarea
+                      id="ticket-description"
+                      value={ticketData.description}
+                      onChange={(e) => setTicketData(prev => ({ ...prev, description: e.target.value }))}
+                      className={styles.formTextarea}
+                      placeholder="Please describe your issue in detail..."
+                      rows={4}
+                      required
+                      aria-required="true"
+                      aria-describedby="description-help"
+                    />
+                    <small id="description-help" className={styles.formHelp}>
+                      Include any relevant details, error messages, or steps you've already taken
+                    </small>
+                  </div>
+
+                  <div className={styles.formActions}>
+                    <button
+                      type="button"
+                      onClick={() => setShowTicketModal(false)}
+                      className={styles.cancelBtn}
+                      aria-label="Cancel ticket creation"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={!ticketData.subject || !ticketData.description}
+                      className={styles.submitBtn}
+                      aria-disabled={!ticketData.subject || !ticketData.description}
+                      aria-label="Create support ticket"
+                    >
+                      <FaTicketAlt /> Create Ticket
+                    </button>
+                  </div>
+                </form>
               </div>
             </motion.div>
           </motion.div>
