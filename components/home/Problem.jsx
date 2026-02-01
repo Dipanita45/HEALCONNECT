@@ -42,9 +42,9 @@ export default function Problem({ scrollToSection }) {
             The Healthcare Challenge
           </span>
 
-          <div className="bg-white text-black  dark:bg-gray-800 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-8 sm:mb-10 w-full max-w-2xl border border-gray-100 dark:border-gray-700">
+          <div className="bg-cyan-50/30 text-black dark:bg-gray-800 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-8 sm:mb-10 w-full max-w-2xl border border-cyan-200/50 dark:border-gray-700">
 
-            <div className="flex gap-4 mb-6 p-4 rounded-xl  text text-black hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="flex gap-4 mb-6 p-4 rounded-xl text text-black bg-blue-50/50 hover:bg-blue-100/50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors border border-blue-100/50 dark:border-gray-600">
               <div className="text-xl sm:text-2xl">⏱️</div>
               <div>
                 <h3 className=" text-lg sm:text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Time-Critical Decisions</h3>
@@ -55,7 +55,7 @@ export default function Problem({ scrollToSection }) {
               </div>
             </div>
 
-            <div className="flex gap-4 mb-6 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="flex gap-4 mb-6 p-4 rounded-xl bg-blue-50/50 hover:bg-blue-100/50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors border border-blue-100/50 dark:border-gray-600">
               <div className="text-2xl">📋</div>
               <div>
                 <h3 className="text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Incomplete Patient History</h3>
@@ -68,7 +68,7 @@ export default function Problem({ scrollToSection }) {
             </div>
             {/* // new clasese added here */}
 
-            <div className="flex gap-4 p-4 rounded-xl hover:bg-slate-50 dark:hover:bg-gray-700/50 transition-colors">
+            <div className="flex gap-4 p-4 rounded-xl bg-blue-50/50 hover:bg-blue-100/50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors border border-blue-100/50 dark:border-gray-600">
               <div className="text-2xl">🔍</div>
               <div>
                 <h3 className="text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Data Fragmentation</h3>

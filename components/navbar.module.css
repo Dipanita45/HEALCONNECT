@@ -4,11 +4,12 @@
   left: 0;
   width: 100%;
   background: #050a15;
-  padding: 0.8rem 0;
+  padding: 1rem 0;
   z-index: 1000;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: visible;
 }
 
 :global(.light) .navbar {
@@ -38,6 +39,7 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 0 1rem;
+  overflow: visible;
 }
 
 @media (min-width: 640px) {
@@ -250,6 +252,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  z-index: 1002;
+  position: relative;
 }
 
 @media (min-width: 420px) {
@@ -261,6 +265,18 @@
 @media (min-width: 768px) {
   .rightSection {
     gap: 1.5rem;
+  }
+}
+
+/* Ensure right section items remain visible on smaller screens */
+@media (max-width: 1024px) {
+  .rightSection {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+  
+  .rightSection > * {
+    flex-shrink: 0;
   }
 }
 

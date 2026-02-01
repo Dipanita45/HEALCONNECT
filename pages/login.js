@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
 import { updateUserState } from "@lib/authUtils";
 import Link from "next/link";
+import styles from "./login.module.css";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,9 +21,19 @@ export default function LoginPage() {
   // Initialize dark mode
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
+    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Default to light mode unless explicitly saved as dark
     if (savedTheme === "dark") {
       setDarkMode(true);
       document.documentElement.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.documentElement.classList.remove("dark");
+      // Ensure light theme is saved if not already set
+      if (!savedTheme) {
+        localStorage.setItem("theme", "light");
+      }
     }
   }, []);
 
@@ -119,14 +130,45 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: "100vh",
+      minHeight: "calc(100vh - 80px)",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
-      padding: "10px 20px",
-      marginTop: "10px",
+      padding: "20px",
+      marginTop: "0px",
+      overflow: "hidden",
+      position: "relative",
     }}>
+      {/* Animated background elements */}
+      <div className={styles.backgroundElements}>
+        <div className={styles.circleElement} style={{
+          background: darkMode 
+            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+        }}></div>
+        <div className={styles.circleElement} style={{
+          background: darkMode 
+            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+        }}></div>
+        <div className={styles.circleElement} style={{
+          background: darkMode 
+            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+        }}></div>
+        <div className={styles.circleElement} style={{
+          background: darkMode 
+            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+        }}></div>
+        <div className={styles.circleElement} style={{
+          background: darkMode 
+            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+        }}></div>
+      </div>
+
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleDarkMode}
@@ -153,13 +195,15 @@ export default function LoginPage() {
 
       {/* Main Container */}
       <div style={{
+        position: "relative",
+        zIndex: 1,
         width: "100%",
         maxWidth: "380px",
-        background: darkMode ? "#1b263b" : "white",
+        background: darkMode ? "#1b263b" : "linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(191, 219, 254, 0.8) 100%)",
         borderRadius: "10px",
         boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
         overflow: "hidden",
-        border: darkMode ? "1px solid #2d3748" : "1px solid #e9ecef",
+        border: darkMode ? "1px solid #2d3748" : "1px solid rgba(37, 99, 235, 0.2)",
       }}>
         {/* Form */}
         <div style={{ padding: "20px" }}>
