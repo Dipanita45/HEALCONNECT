@@ -345,7 +345,7 @@ export default function Contact() {
               viewport={{ once: true }}
               className="lg:col-span-2"
             >
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+              <div className="bg-blue-100/70 dark:bg-gray-800 rounded-2xl shadow-xl p-8 border-2 border-blue-300/80 dark:border-gray-700">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white">Send Us a Message</h2>
                   <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-lg">
@@ -374,7 +374,7 @@ export default function Contact() {
                             className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
                               formData.category === category.value
                                 ? `border-${category.color}-500 bg-${category.color}-50 dark:bg-${category.color}-900/20`
-                                : 'border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500'
+                                : 'border-gray-400 dark:border-gray-600 hover:border-gray-500 dark:hover:border-gray-500'
                             }`}
                           >
                             <Icon className={`text-xl ${
@@ -407,10 +407,10 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`w-full px-4 py-3 rounded-lg border ${
+                        className={`w-full px-4 py-3 rounded-lg border-2 ${
                           errors.name && touched[name]
                             ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
+                            : 'border-gray-400 dark:border-gray-600 focus:ring-blue-500'
                         } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200`}
                         placeholder="Dipanita"
                       />
@@ -429,10 +429,10 @@ export default function Contact() {
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`w-full px-4 py-3 rounded-lg border ${
+                        className={`w-full px-4 py-3 rounded-lg border-2 ${
                           errors.email && touched.email
                             ? 'border-red-500 focus:ring-red-500'
-                            : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
+                            : 'border-gray-400 dark:border-gray-600 focus:ring-blue-500'
                         } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200`}
                         placeholder="dipanita@example.com"
                       />
@@ -453,10 +453,10 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className={`w-full px-4 py-3 rounded-lg border ${
+                      className={`w-full px-4 py-3 rounded-lg border-2 ${
                         errors.subject && touched.subject
                           ? 'border-red-500 focus:ring-red-500'
-                          : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
+                          : 'border-gray-400 dark:border-gray-600 focus:ring-blue-500'
                       } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200`}
                       placeholder="How can we help you?"
                     />
@@ -504,10 +504,10 @@ export default function Contact() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       rows={6}
-                      className={`w-full px-4 py-3 rounded-lg border resize-none ${
+                      className={`w-full px-4 py-3 rounded-lg border-2 resize-none ${
                         errors.message && touched.message
                           ? 'border-red-500 focus:ring-red-500'
-                          : 'border-gray-300 dark:border-gray-600 focus:ring-blue-500'
+                          : 'border-gray-400 dark:border-gray-600 focus:ring-blue-500'
                       } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200`}
                       placeholder="Please describe your issue or question in detail..."
                     />
@@ -550,11 +550,11 @@ export default function Contact() {
               className="space-y-8"
             >
               {/* Contact Information */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+              <div className="bg-blue-100/70 dark:bg-gray-800 rounded-2xl shadow-xl p-6 border-2 border-blue-300/80 dark:border-gray-700">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Other Ways to Reach Us</h3>
                 
                 <div className="space-y-4">
-                  <a href="mailto:support@healconnect.com" className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group">
+                  <a href="mailto:support@healconnect.com" className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group border-2 border-blue-200/50 dark:border-gray-600">
                     <div className="bg-blue-100 dark:bg-blue-900/30 p-2 rounded-lg group-hover:scale-110 transition-transform duration-200">
                       <FaEnvelope className="text-xl text-blue-600 dark:text-blue-400" />
                     </div>
@@ -565,7 +565,7 @@ export default function Contact() {
                     </div>
                   </a>
 
-                  <a href="mailto:doctors@healconnect.com" className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group">
+                  <a href="mailto:doctors@healconnect.com" className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 group border-2 border-green-200/50 dark:border-gray-600">
                     <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-lg group-hover:scale-110 transition-transform duration-200">
                       <FaUserMd className="text-xl text-green-600 dark:text-green-400" />
                     </div>
@@ -576,7 +576,7 @@ export default function Contact() {
                     </div>
                   </a>
 
-                  <div className="flex items-start space-x-4 p-4 rounded-lg">
+                  <div className="flex items-start space-x-4 p-4 rounded-lg border-2 border-red-200/50 dark:border-gray-600">
                     <div className="bg-red-100 dark:bg-red-900/30 p-2 rounded-lg">
                       <FaMapMarkerAlt className="text-xl text-red-600 dark:text-red-400" />
                     </div>
@@ -593,12 +593,12 @@ export default function Contact() {
               </div>
 
               {/* FAQ Section */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6">
+              <div className="bg-blue-100/70 dark:bg-gray-800 rounded-2xl shadow-xl p-6 border-2 border-blue-300/80 dark:border-gray-700">
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-6">Frequently Asked Questions</h3>
                 
                 <div className="space-y-3">
                   {faqs.map((faq) => (
-                    <div key={faq.id} className="border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <div key={faq.id} className="border-2 border-gray-300 dark:border-gray-600 rounded-lg">
                       <button
                         onClick={() => setSelectedFAQ(selectedFAQ === faq.id ? null : faq.id)}
                         className="w-full px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
