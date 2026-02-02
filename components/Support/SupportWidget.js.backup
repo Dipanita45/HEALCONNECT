@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot, 
   FaTicketAlt, FaClock, FaCheckCircle, FaExclamationTriangle,
-  FaPaperclip, FaSmile, FaMicrophone, FaPhone
+  FaPaperclip, FaSmile, FaMicrophone, FaPhone, FaSignIn
 } from 'react-icons/fa';
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
+import { SkeletonLoader, CardSkeleton, AvatarSkeleton, ButtonSkeleton } from '../ui/SkeletonLoader';
 import styles from './SupportWidget.module.css';
 
 // Local cache for tickets to avoid global dependency issues
@@ -32,9 +33,15 @@ const SupportWidget = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
+  const [announcement, setAnnouncement] = useState('');
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const announcementRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -437,59 +444,189 @@ const SupportWidget = () => {
 
       const result = await createSupportTicket(ticketPayload);
       
-      if (result.success) {
-        const ticket = result.ticket;
-        setCurrentTicket(ticket);
-        setShowTicketModal(false);
         
-        // Add system message about ticket creation
-        const ticketMessage = {
-          id: Date.now() + 2,
-          type: 'system',
-          text: `Support ticket ${ticket.id} has been created successfully! Our team will respond within 24 hours. You can track the status below.`,
-          ticket: ticket,
-          timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, ticketMessage]);
-        
-        // Reset form
-        setTicketData({
-          subject: '',
-          category: 'general',
-          priority: 'normal',
-          description: ''
+        console.log('SupportWidget: Processing message:', {
+          id: msgId,
+          text: msg.text,
+          type: msg.type,
+          timestamp: msg.timestamp
         });
-      } else {
-        // Show error message
-        const errorMessage = {
-          id: Date.now(),
-          type: 'system',
-          text: `Error creating ticket: ${result.error}. Please try again.`,
-          timestamp: new Date(),
-          isError: true
+        
+        return {
+          id: msgId,
+          type: msg.type,
+          text: msg.text,
+          timestamp: new Date(msg.timestamp),
+          sender: msg.sender
         };
-        setMessages(prev => [...prev, errorMessage]);
-      }
-    } catch (error) {
-      console.error('Error creating ticket:', error);
-      const errorMessage = {
-        id: Date.now(),
-        type: 'system',
-        text: 'Failed to create ticket. Please try again later.',
-        timestamp: new Date(),
-        isError: true
-      };
-      setMessages(prev => [...prev, errorMessage]);
+      });
+      
+      console.log('SupportWidget: Adding formatted messages:', formattedMessages);
+      
+      // Update messages and processed IDs in one go
+      setMessages(prev => {
+        const updated = [...prev, ...formattedMessages];
+        console.log('SupportWidget: Final updated messages array:', updated);
+        return updated;
+      });
+      
+      // Update processed message IDs
+      setProcessedMessageIds(prev => {
+        const newIds = new Set(prev);
+        formattedMessages.forEach(msg => newIds.add(msg.id));
+        console.log('SupportWidget: Updated processed IDs:', Array.from(newIds));
+        return newIds;
+      });
+      
+      // Update current ticket reference
+      setCurrentTicket(updatedTicket);
+    } else {
+      console.log('SupportWidget: No new messages found');
+}
+
+// Initialize with welcome message
+useEffect(() => {
+if (messages.length === 0 && isLoading) {
+  // Simulate loading time for better perceived performance
+  const loadingTimer = setTimeout(() => {
+    const welcomeMessage = {
+      id: Date.now(),
+      type: 'ai',
+      text: isAuthenticated 
+        ? "Hello! I'm your HealConnect assistant. How can I help you today? You can ask about appointments, prescriptions, billing, or create a support ticket."
+        : "Hello! I'm your HealConnect assistant. How can I help you today? For personalized support, please log in. You can still ask general questions about our services.",
+      timestamp: new Date(),
+      suggestions: isAuthenticated ? [
+        'Schedule appointment',
+        'Prescription help',
+        'Billing inquiry',
+        'Technical support'
+      ] : [
+        'How to create an account',
+        'General health information',
+        'Available services',
+        'Contact information'
+      ]
+    };
+    setMessages([welcomeMessage]);
+    setIsLoading(false);
+  }, 800); // 800ms delay for perceived loading
+
+  return () => clearTimeout(loadingTimer);
+}
+}, [isAuthenticated, messages.length, isLoading]);
+
+const createTicket = async () => {
+try {
+  const ticketPayload = {
+    subject: ticketData.subject,
+    category: ticketData.category,
+    priority: ticketData.priority,
+    description: ticketData.description,
+    user: {
+      name: 'Current User', // In production, get from auth context
+      email: 'user@example.com', // In production, get from auth context
+      avatar: '👤'
+    },
+    messages: messages,
+    tags: ticketData.tags || []
+  };
+
+  const result = await createSupportTicket(ticketPayload);
+  
+  if (result.success) {
+    const ticket = result.ticket;
+    setCurrentTicket(ticket);
+    setShowTicketModal(false);
+    
+    // Add system message about ticket creation
+    const ticketMessage = {
+      id: Date.now() + 2,
+      type: 'system',
+      text: `Support ticket ${ticket.id} has been created successfully! Our team will respond within 24 hours. You can track the status below.`,
+      ticket: ticket,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, ticketMessage]);
+    
+    // Reset form
+    setTicketData({
+      subject: '',
+      category: 'general',
+      priority: 'normal',
+      description: ''
+    });
+  } else {
+    // Show error message
+    const errorMessage = {
+      id: Date.now(),
+      type: 'system',
+      text: `Error creating ticket: ${result.error}. Please try again.`,
+      timestamp: new Date(),
+      isError: true
+    };
+    setMessages(prev => [...prev, errorMessage]);
+  }
+} catch (error) {
+  console.error('Error creating ticket:', error);
+  const errorMessage = {
+    id: Date.now(),
+    type: 'system',
+    text: 'Failed to create ticket. Please try again later.',
+    timestamp: new Date(),
+    isError: true
+  };
+  setMessages(prev => [...prev, errorMessage]);
+}
+};
+
+const handleCloseTicket = async () => {
+if (!currentTicket || currentTicket.status === 'resolved') {
+  return;
+}
+
+if (!confirm('Are you sure you want to close this ticket? This action cannot be undone.')) {
+  return;
+}
+
+try {
+  // Add closing message
+  const closingMessage = {
+    type: 'user',
+    text: 'I would like to close this ticket. My issue has been resolved.',
+    sender: {
+      name: 'Current User',
+      email: 'user@example.com',
+      avatar: '👤'
     }
   };
 
-  const handleCloseTicket = async () => {
-    if (!currentTicket || currentTicket.status === 'resolved') {
-      return;
-    }
+  const messageResult = await addTicketMessage(currentTicket.id, closingMessage);
+  
+  if (messageResult.success) {
+    // Update ticket status to resolved
+    const statusResult = await updateTicketStatus(currentTicket.id, 'resolved', {
+      name: 'Current User',
+      avatar: '👤'
+    });
+    
+    if (statusResult.success) {
+      // Add system message about ticket closure
+      const closureMessage = {
+        id: Date.now(),
+        type: 'system',
+        text: `Ticket ${currentTicket.id} has been closed. Thank you for using HealConnect Support!`,
+        timestamp: new Date()
+      };
 
-    if (!confirm('Are you sure you want to close this ticket? This action cannot be undone.')) {
+      setMessages(prev => [...prev, closureMessage]);
+      setCurrentTicket(prev => ({ ...prev, status: 'resolved' }));
+    } else {
+      alert('Failed to update ticket status. Please try again.');
+    }
+  } else {
+    alert('Failed to add closing message. Please try again.');
       return;
     }
 
@@ -551,8 +688,19 @@ const SupportWidget = () => {
         onClick={() => setIsOpen(true)}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
+        aria-label="Open support chat"
+        aria-expanded="false"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            setIsOpen(true);
+          }
+        }}
       >
         <FaHeadset />
+        <span className={styles.widgetBadge}>Support</span>
       </motion.button>
     );
   }

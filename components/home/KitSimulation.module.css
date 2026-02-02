@@ -9,6 +9,16 @@
     border: 1px solid rgba(37, 99, 235, 0.1);
 }
 
+/* Light mode specific styling */
+html:not(.dark) .simulateSection {
+    background: linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(191, 219, 254, 0.8) 100%);
+    border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.light .simulateSection {
+    background: linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(191, 219, 254, 0.8) 100%);
+}
+
 .buttonGrid {
     display: grid;
     grid-template-columns: 1fr;
@@ -73,9 +83,10 @@
     font-weight: 600;
     color: rgb(var(--foreground-rgb));
     text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
     width: 100%;
     max-width: 100%;
 }

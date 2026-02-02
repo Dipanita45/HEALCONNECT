@@ -1,8 +1,8 @@
 /* Support Widget Styles */
 .supportWidget {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+  position: fixed !important;
+  bottom: 80px !important;
+  right: 32px !important;
   width: 380px;
   height: 600px;
   background: white;
@@ -10,7 +10,7 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
+  z-index: 1000 !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -19,10 +19,10 @@
 }
 
 /* Floating Button */
-.floatingButton {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
+.widgetButton {
+  position: fixed !important;
+  bottom: 80px !important;
+  right: 32px !important;
   width: 60px;
   height: 60px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -30,15 +30,15 @@
   border-radius: 50%;
   color: white;
   cursor: pointer;
-  display: flex;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
-  z-index: 1000;
+  z-index: 1000 !important;
   transition: all 0.3s ease;
 }
 
-.floatingButton:hover {
+.widgetButton:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
 }
