@@ -4,6 +4,7 @@
   background: linear-gradient(135deg, #f8fafc 0%, #f0fdf4 100%);
   color: #1e293b;
   overflow: hidden;
+  overflow-x: hidden; /* prevent horizontal scroll */
 }
 
 .container.dark {
@@ -27,7 +28,11 @@
 .circleElement {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.1) 0%,
+    rgba(16, 185, 129, 0.1) 100%
+  );
   animation: float 20s infinite ease-in-out;
 }
 
@@ -56,7 +61,8 @@
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
   33% {
@@ -163,10 +169,20 @@
   padding: 0 1.5rem 3rem;
 }
 
+/* GRID LAYOUT */
 .prescriptionsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
+}
+
+/* explicit order on desktop (list left, form right) */
+.listSection {
+  order: 1;
+}
+
+.formSection {
+  order: 2;
 }
 
 .sectionHeader {
@@ -434,8 +450,12 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* List Section Styles */
@@ -527,4 +547,72 @@
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid #e2e8f0;
+}
+
+/* ============== */
+/*  RESPONSIVE    */
+/* ============== */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+    min-height: auto;
+    overflow-x: hidden;
+  }
+
+  .content {
+    max-width: 100%;
+    padding: 0 0 2rem;
+    margin: 0;
+  }
+
+  .prescriptionsGrid {
+    grid-template-columns: 1fr; /* stack vertically */
+    gap: 1.5rem;
+    width: 100%;
+  }
+
+  /* Your Prescriptions FIRST */
+  .listSection {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Add New Prescription SECOND (below) */
+  .formSection {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    position: relative;
+    z-index: 2;
+  }
+
+  .formGrid {
+    grid-template-columns: 1fr; /* inputs single column */
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2.1rem;
+  }
+
+  .formSection,
+  .listSection {
+    padding: 1.5rem 1.1rem;
+    box-sizing: border-box; /* avoid overflow from padding */
+  }
 }
