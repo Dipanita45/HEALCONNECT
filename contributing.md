@@ -90,7 +90,9 @@ git push origin feature-name
 
 - Admin will review your PR.
 
-- They may suggest changes — you can make them in the same branch and push again.
+- Make the PR only after the issue is assigned.
+
+- They may suggest changes — you can make them in the same  branch and push again in "base" branch.
 
 - Once approved, your PR will be merged! 
 
