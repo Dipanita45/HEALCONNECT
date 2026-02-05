@@ -16,8 +16,8 @@ export default function Dashboard(params) {
                 <div className="h-20"></div>
                     <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 text-gray-900 dark:text-gray-100">
                 Patient Dashboard</h1>
-                    <div className="flex flex-row w-full h-auto gap-4">
-                        <div className=" basis-2/4 flex">
+                    <div className="flex flex-col lg:flex-row w-full h-auto gap-4">
+                        <div className="w-full lg:basis-2/4 flex">
                             <div className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">
                                 <div className="flex flex-row w-full h-auto">
                                     <div className=" basis-1/4 flex p-2">
@@ -56,8 +56,8 @@ export default function Dashboard(params) {
                             </div>
                         </div>
 
-                        <div className=" basis-1/4 flex">
-                            <div className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">
+                        <div className="w-full lg:basis-1/4 flex mt-4 lg:mt-0">
+                            <div className="w-full h-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">
                                 <div className="flex flex-col w-full h-auto">
                                             <h1 className="text-xl font-bold text-gray-900 dark:text-gray-100">Patient</h1>
                                              <hr className="m-1 bg-gray-200 dark:bg-gray-800 border border-blue-400 dark:border-blue-400 
