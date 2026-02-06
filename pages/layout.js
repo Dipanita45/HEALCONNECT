@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 function getUserType() {
   if (typeof window !== "undefined") {
@@ -12,7 +12,7 @@ function getUserType() {
 
 export default function Layout({ children }) {
   const router = useRouter();
-  const pathname = usePathname(); // Use usePathname instead of router.pathname
+  const pathname = router.pathname;
   const [isOffline, setIsOffline] = useState(false);
   const [mounted, setMounted] = useState(false); // Track client mounting
 
@@ -36,7 +36,7 @@ export default function Layout({ children }) {
     if (!mounted) return;
 
     const userType = getUserType();
-    const publicPages = ["/", "/login"];
+    const publicPages = ["/", "/login", "/signup", "/signup-test", "/faq", "/contact", "/about", "/privacy", "/terms", "/how-it-works", "/open-source", "/support", "/appointments", "/monitoring", "/prescriptions"];
 
     // Convert pathname to string for comparison
     const currentPath = pathname || "";

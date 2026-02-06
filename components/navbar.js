@@ -1,12 +1,17 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
+import { UserContext } from '@lib/context'
+import { useRouter } from 'next/router'
+import { FaHeadset } from 'react-icons/fa'
 import styles from './navbar.module.css'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
+  const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +22,38 @@ export default function Navbar() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.removeItem('userType')
+    localStorage.removeItem('username')
+
+    // Clear React state immediately for UI update
+    setUser(null)
+    setUserRole(null)
+    setCurrentUser(null)
+
+    // Clear any Firebase auth state if available
+    if (typeof window !== 'undefined' && window.firebaseAuth) {
+      window.firebaseAuth.signOut()
+    }
+
+    // Redirect to login
+    router.push('/login')
+    setIsMenuOpen(false)
+  }
+
+  const handleLoginRedirect = () => {
+    router.push('/login')
+    setIsMenuOpen(false)
+  }
+
+  const handleDashboardRedirect = () => {
+    if (userRole) {
+      router.push(`/${userRole}/dashboard`)
+      setIsMenuOpen(false)
+    }
+  }
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
@@ -36,70 +73,96 @@ export default function Navbar() {
 
         {/* Navigation Links with hover effects */}
         <div className={`${styles.navLinks} ${isMenuOpen ? styles.navOpen : ''}`}>
-          <Link 
-            href="/" 
-            className={styles.navLink}
+          <Link
+            href="/"
+            className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Home</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/prescriptions" 
-            className={styles.navLink}
+          <Link
+            href="/prescriptions"
+            className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Prescriptions</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/appointments" 
-            className={styles.navLink}
+          <Link
+            href="/appointments"
+            className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/monitoring" 
-            className={styles.navLink}
+          <Link
+            href="/monitoring"
+            className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Monitoring</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/faq" 
-            className={styles.navLink}
+          <Link
+            href="/faq"
+            className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>FAQ</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-          <Link 
-            href="/contact" 
-            className={styles.navLink}
+          <Link
+            href="/contact"
+            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-        </div>
-
-        {/* Right side - Login + Theme Toggle */}
-        <div className={styles.rightSection}>
-          <Link 
-            href="/login" 
-            className={styles.loginButton}
+          <Link
+            href="/support"
+            className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
-            <span>Login</span>
-            <div className={styles.buttonPulse}></div>
+            <FaHeadset className={styles.supportIcon} />
+            <span className={styles.linkText}>Support</span>
+            <div className={styles.linkHoverEffect}></div>
           </Link>
+        </div>
+
+        {/* Right side - Auth buttons + Theme Toggle */}
+        <div className={styles.rightSection}>
+          {user || currentUser ? (
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleDashboardRedirect}
+                className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+              >
+                <span>Dashboard</span>
+              </button>
+              <button
+                onClick={handleLogout}
+                className={`${styles.loginButton} bg-red-600 hover:bg-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 transform transition-all duration-300 ease-out active:scale-95 relative overflow-hidden group`}
+              >
+                <span className="relative z-10">Logout</span>
+                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className={styles.loginButton}
+            >
+              <span>Login</span>
+              <div className={styles.buttonPulse}></div>
+            </button>
+          )}
           <ThemeToggle />
 
           {/* Mobile menu button */}
-          <button 
+          <button
             className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
@@ -113,8 +176,8 @@ export default function Navbar() {
 
       {/* Mobile menu overlay */}
       {isMenuOpen && (
-        <div 
-          className={styles.overlay}
+        <div
+          className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
           onClick={() => setIsMenuOpen(false)}
         ></div>
       )}

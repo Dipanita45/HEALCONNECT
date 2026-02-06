@@ -1,6 +1,20 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { FaGithubAlt, FaHeartbeat, FaRegHospital, FaHeart } from 'react-icons/fa';
+import { 
+  FaGithubAlt, 
+  FaHeartbeat, 
+  FaRegHospital, 
+  FaHeart,
+  FaInfoCircle,
+  FaCog,
+  FaCode,
+  FaUsers,
+  FaShieldAlt,
+  FaFileContract,
+  FaEnvelope,
+  FaHeadset,
+  FaDiscord
+} from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
 
@@ -45,25 +59,25 @@ export default function Footer() {
             <ul className={styles.linkList}>
               <li>
                 <Link href="/about" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                  <FaInfoCircle className={styles.linkIcon} />
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                <Link href="/how-it-works" className={styles.footerLink}>
+                  <FaCog className={styles.linkIcon} />
                   How it Works
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                <Link href="/open-source" className={styles.footerLink}>
+                  <FaCode className={styles.linkIcon} />
                   Open Source
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                <Link href="/open-source#contributors" className={styles.footerLink}>
+                  <FaUsers className={styles.linkIcon} />
                   Contributors
                 </Link>
               </li>
@@ -75,22 +89,22 @@ export default function Footer() {
             <h4 className={styles.sectionTitle}>Support</h4>
             <ul className={styles.linkList}>
               <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                <Link href="/privacy" className={styles.footerLink}>
+                  <FaShieldAlt className={styles.linkIcon} />
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className={styles.footerLink}>
-                  <span className={styles.linkIcon}></span>
+                <Link href="/terms" className={styles.footerLink}>
+                  <FaFileContract className={styles.linkIcon} />
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <a href="mailto:dipanitamondal@gmail.com" className={styles.footerLink}>
-                  <span className={styles.linkIcon}><IoMdMail /></span>
+                <Link href="/contact" className={styles.footerLink}>
+                  <FaHeadset className={styles.linkIcon} />
                   Contact Support
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -108,6 +122,16 @@ export default function Footer() {
               >
                 <FaGithubAlt />
                 <span className={styles.socialTooltip}>Visit our GitHub</span>
+              </a>
+              <a
+                href="https://discord.gg/WbvxB2F4G"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="Discord"
+              >
+                <FaDiscord />
+                <span className={styles.socialTooltip}>Join our Discord</span>
               </a>
             </div>
             <p className={styles.feedbackText}>

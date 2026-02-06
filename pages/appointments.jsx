@@ -1,10 +1,17 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
-import Image from 'next/image';
-import { addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  Timestamp
+} from "firebase/firestore";
+
+import { db } from "../lib/firebase";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import styles from "./Appointments.module.css";
+import Image from "next/image";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -112,6 +119,7 @@ export default function Appointments() {
   const [isVisible, setIsVisible] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [bookedTimes, setBookedTimes] = useState([]);
+  const [submitMessage, setSubmitMessage] = useState(null); 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -131,6 +139,10 @@ export default function Appointments() {
     // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors({ ...formErrors, [name]: '' });
+    }
+    // Clear submit message when user edits form
+    if (submitMessage) {
+      setSubmitMessage(null);
     }
   };
 
@@ -156,14 +168,15 @@ export default function Appointments() {
     setSelectedDoctor(null);
     setStep(1);
     setFormErrors({});
+    setSubmitMessage(null);
   };
 
- const isSlotAlreadyBooked = async () => {
+const checkAppointmentConflict = async (doctorId, date, time) => {
   const q = query(
     collection(db, "appointments"),
-    where("date", "==", formData.date),
-    where("doctorName", "==", formData.doctor),
-    where("time", "==", formData.time)
+    where("doctorId", "==", doctorId),
+    where("date", "==", date),
+    where("time", "==", time)
   );
 
   const snapshot = await getDocs(q);
@@ -176,30 +189,36 @@ const handleSubmit = async (e) => {
   if (!validateForm()) return;
   setIsSubmitting(true);
 
-  const alreadyBooked = await isSlotAlreadyBooked();
+  try {
+    const conflict = await checkAppointmentConflict(
+      selectedDoctor.id,
+      formData.date,
+      formData.time
+    );
 
-  if (alreadyBooked) {
-    alert("This time slot is already booked. Please choose another.");
-    setIsSubmitting(false);
-    return;
-  }
+    if (conflict) {
+      setSubmitMessage({
+        text: "This time slot is already booked. Please choose another.",
+        type: "error"
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
-  // 👉 IMPORTANT: save appointment
-  await addDoc(collection(db, "appointments"), {
-    name: formData.name,
-    date: formData.date,
-    time: formData.time,
-    doctorName: formData.doctor,
-    reason: formData.reason,
-    createdAt: new Date()
-  });
+    await addDoc(collection(db, "appointments"), {
+      patientName: formData.name,
+      doctorId: selectedDoctor.id,
+      doctorName: selectedDoctor.name,
+      date: formData.date,
+      time: formData.time,
+      reason: formData.reason,
+      createdAt: Timestamp.now()
+    });
 
-  const successElement = document.getElementById("booking-success");
-  successElement.style.display = "flex";
-
-  setTimeout(() => {
-    successElement.style.display = "none";
-    alert("Appointment booked successfully!");
+    setSubmitMessage({
+      text: "Appointment booked successfully!",
+      type: "success"
+    });
 
     setFormData({
       name: "",
@@ -211,33 +230,35 @@ const handleSubmit = async (e) => {
 
     setStep(1);
     setSelectedDoctor(null);
-    setFormErrors({});
     setBookedTimes([]);
-    setIsSubmitting(false);
-  }, 2000);
+  } catch (error) {
+    console.error(error);
+    setSubmitMessage({
+      text: "Failed to book appointment.",
+      type: "error"
+    });
+  }
+
+  setIsSubmitting(false);
 };
 
-  const fetchBookedSlots = async (date, doctor) => {
-  if (!date || !doctor) return;
-
+  const fetchBookedSlots = async (date, doctorName) => {
   try {
     const q = query(
       collection(db, "appointments"),
       where("date", "==", date),
-      where("doctorName", "==", doctor)
+      where("doctorName", "==", doctorName)
     );
 
     const snapshot = await getDocs(q);
     const times = snapshot.docs.map(doc => doc.data().time);
-
     setBookedTimes(times);
   } catch (error) {
     console.error("Error fetching booked slots:", error);
   }
 };
-
-
-  const availableTimes = [
+  
+   const availableTimes = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
     "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", 
     "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", 
@@ -283,18 +304,35 @@ const handleSubmit = async (e) => {
               exit="hidden"
               variants={staggerChildren}
             >
-              <motion.h2 
-                className={styles.sectionTitle}
+              <motion.div 
+                className={styles.titleContainer}
                 variants={fadeInUp}
               >
-                Our Specialist Doctors
-              </motion.h2>
-              <motion.p 
-                className={styles.sectionSubtitle}
-                variants={fadeInUp}
-              >
-                Select a doctor to book an appointment
-              </motion.p>
+                <motion.h2 
+                  className={styles.sectionTitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <span className={styles.titlePrefix}>Meet</span>
+                  <span className={styles.titleMain}>Our Specialist Doctors</span>
+                </motion.h2>
+                <motion.div 
+                  className={styles.titleUnderline}
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                ></motion.div>
+                <motion.p 
+                  className={styles.sectionSubtitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.2 }}
+                >
+                  Choose from our team of board-certified healthcare professionals
+                </motion.p>
+              </motion.div>
               
               <div className={styles.doctorsGrid}>
                 {doctors.map((doctor) => (
@@ -374,6 +412,26 @@ const handleSubmit = async (e) => {
                   initial="hidden"
                   animate="visible"
                 >
+                  {submitMessage && (
+                    <div
+                      className={`${styles.submitMessage} ${submitMessage.type === 'success' ? styles.submitMessageSuccess : styles.submitMessageError}`}
+                      role="alert"
+                    >
+                      {submitMessage.type === 'success' ? (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                          <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                      ) : (
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                      )}
+                      {submitMessage.text}
+                    </div>
+                  )}
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}
