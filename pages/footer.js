@@ -13,7 +13,8 @@ import {
   FaFileContract,
   FaEnvelope,
   FaHeadset,
-  FaDiscord
+  FaDiscord,
+  FaLinkedin
 } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
@@ -132,6 +133,16 @@ export default function Footer() {
               >
                 <FaDiscord />
                 <span className={styles.socialTooltip}>Join our Discord</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/dipanita-mondal-6a9257306/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin />
+                <span className={styles.socialTooltip}>Connect on LinkedIn</span>
               </a>
             </div>
             <p className={styles.feedbackText}>
