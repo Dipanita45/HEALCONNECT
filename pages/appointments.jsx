@@ -1,12 +1,11 @@
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
-import Image from 'next/image';
-import { addDoc } from "firebase/firestore";
-import { auth } from "../lib/firebase";
+import { auth } from "@/lib/firebase";
 import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import styles from "./Appointments.module.css";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -111,7 +110,6 @@ export default function Appointments() {
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
-  const [isVisible, setIsVisible] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -129,11 +127,7 @@ useEffect(() => {
 
   return () => unsub();
 }, []);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
+  
   useEffect(() => {
   if (formData.date && formData.doctor) {
     fetchBookedSlots(formData.date, formData.doctor);
@@ -174,6 +168,7 @@ useEffect(() => {
     setFormErrors({});
   };
 
+
  const isSlotAlreadyBooked = async () => {
   const q = query(
     collection(db, "appointments"),
@@ -188,8 +183,8 @@ useEffect(() => {
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
   if (!validateForm()) return;
+  
   setIsSubmitting(true);
 
   const alreadyBooked = await isSlotAlreadyBooked();
@@ -251,9 +246,8 @@ const handleSubmit = async (e) => {
     console.error("Error fetching booked slots:", error);
   }
 };
-
-
-  const availableTimes = [
+  
+   const availableTimes = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
     "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", 
     "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", 
@@ -299,18 +293,35 @@ const handleSubmit = async (e) => {
               exit="hidden"
               variants={staggerChildren}
             >
-              <motion.h2 
-                className={styles.sectionTitle}
+              <motion.div 
+                className={styles.titleContainer}
                 variants={fadeInUp}
               >
-                Our Specialist Doctors
-              </motion.h2>
-              <motion.p 
-                className={styles.sectionSubtitle}
-                variants={fadeInUp}
-              >
-                Select a doctor to book an appointment
-              </motion.p>
+                <motion.h2 
+                  className={styles.sectionTitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  <span className={styles.titlePrefix}>Meet</span>
+                  <span className={styles.titleMain}>Our Specialist Doctors</span>
+                </motion.h2>
+                <motion.div 
+                  className={styles.titleUnderline}
+                  initial={{ width: 0 }}
+                  animate={{ width: "100%" }}
+                  transition={{ duration: 0.8, delay: 0.3 }}
+                ></motion.div>
+                <motion.p 
+                  className={styles.sectionSubtitle}
+                  variants={fadeInUp}
+                  initial="hidden"
+                  animate="visible"
+                  transition={{ delay: 0.2 }}
+                >
+                  Choose from our team of board-certified healthcare professionals
+                </motion.p>
+              </motion.div>
               
               <div className={styles.doctorsGrid}>
                 {doctors.map((doctor) => (
@@ -390,6 +401,7 @@ const handleSubmit = async (e) => {
                   initial="hidden"
                   animate="visible"
                 >
+                  
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}

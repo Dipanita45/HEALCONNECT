@@ -6,9 +6,11 @@ import dynamic from "next/dynamic";
 
 const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), { ssr: false });
 const DoctorSidebar = dynamic(() => import("@components/Sidebar/DoctorSidebar"), { ssr: false });
+const AlertNotifications = dynamic(() => import("@components/DoctorComponents/AlertNotifications"), { ssr: false });
 
 // FetchPatients can stay, but we will override its behavior for offline caching
 import FetchPatients from "../../lib/fetchPatients";
+import { useMultiPatientMonitor } from "../../lib/useAlertMonitor";
 
 export default function DoctorDashboard() {
   const router = useRouter();
@@ -16,6 +18,10 @@ export default function DoctorDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  const [doctorInfo, setDoctorInfo] = useState({ id: null, name: null });
+
+  // Enable real-time patient monitoring for alert generation
+  const { monitoring } = useMultiPatientMonitor(doctorInfo.id, !!doctorInfo.id);
 
   // Network status listener
   useEffect(() => {
@@ -31,7 +37,7 @@ export default function DoctorDashboard() {
     };
   }, []);
 
-  // Role protection
+  // Role protection and doctor info setup
   useEffect(() => {
     if (typeof window !== "undefined") {
       const role = localStorage.getItem("userType");
@@ -39,6 +45,11 @@ export default function DoctorDashboard() {
         router.push("/login");
       } else if (role !== "doctor") {
         router.push(`/${role}/dashboard`);
+      } else {
+        // Get doctor info for alert system
+        const doctorId = localStorage.getItem("userId") || localStorage.getItem("username");
+        const doctorName = localStorage.getItem("username") || "Doctor";
+        setDoctorInfo({ id: doctorId, name: doctorName });
       }
     }
   }, [router]);
@@ -105,7 +116,26 @@ export default function DoctorDashboard() {
           </div>
         )}
 
-        <h1 className="prose lg:prose-xl font-bold md:ml-4 dark:text-gray-100">Doctor Dashboard</h1>
+        <div className="flex items-center justify-between md:px-4 mb-4">
+          <h1 className="prose lg:prose-xl font-bold dark:text-gray-100">Doctor Dashboard</h1>
+
+          {/* Real-time Alert Notifications */}
+          {doctorInfo.id && (
+            <AlertNotifications
+              doctorId={doctorInfo.id}
+              doctorName={doctorInfo.name}
+            />
+          )}
+        </div>
+
+        {monitoring && (
+          <div className="md:px-4 mb-2">
+            <p className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+              Real-time patient monitoring active
+            </p>
+          </div>
+        )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-4 md:px-4 gap-4">
           {summaryStats.map((stat, i) => (
