@@ -101,7 +101,9 @@ const FAQ = () => {
               <button 
                 className={styles.faqQuestion}
                 onClick={() => toggleFAQ(index)}
-                aria-expanded={activeIndex === index}
+             aria-controls={`faq-answer-${index}`}
+                74
+                  ={activeIndex === index}
               >
                 <span className={styles.questionText}>
                   <span className={styles.questionNumber}>Q{index + 1}.</span>
@@ -121,9 +123,11 @@ const FAQ = () => {
               <AnimatePresence>
                 {activeIndex === index && (
                   <motion.div 
-                    className={styles.faqAnswer}
+             role="region" id={`faq-answer-${index}`}
+                    className={styles.128
+                              }
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
+                    animate={{ maxHeight: "500px", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.3 }}
                   >
