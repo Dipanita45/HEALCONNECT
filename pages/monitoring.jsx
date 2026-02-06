@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Monitoring.module.css';
 import { isVitalNormal, getVitalStatusMessage } from '../lib/thresholdDefaults';
+import HealthInsights from '../components/monitoring/HealthInsights';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -49,8 +50,37 @@ export default function Monitoring() {
   const [currentHeartRate, setCurrentHeartRate] = useState(72);
   const [currentOxygen, setCurrentOxygen] = useState(98);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [criticalAlert, setCriticalAlert] = useState(null);
   const heartRateInterval = useRef(null);
   const oxygenInterval = useRef(null);
+
+  useEffect(() => {
+    if (isMonitoring || data.heartRate || data.oxygen) {
+        const hrValue = data.heartRate ? parseFloat(data.heartRate) : (isMonitoring ? currentHeartRate : 72);
+        const oxValue = data.oxygen ? parseFloat(data.oxygen) : (isMonitoring ? currentOxygen : 98);
+        
+        const hrStatus = isVitalNormal('heartRate', hrValue);
+        const oxStatus = isVitalNormal('oxygen', oxValue);
+
+        if (hrStatus.severity === 'critical' || oxStatus.severity === 'critical') {
+            setCriticalAlert({
+                title: 'Critical Vital Sign Alert',
+                message: `We've detected a critical reading: ${hrStatus.severity === 'critical' ? 'Heart Rate' : 'Oxygen Levels'}. Please remain calm and follow the recommendations below.`,
+                type: 'critical'
+            });
+        } else if (hrStatus.severity === 'warning' || oxStatus.severity === 'warning') {
+            setCriticalAlert({
+                title: 'Health Warning',
+                message: 'One or more of your vitals are outside the optimal range.',
+                type: 'warning'
+            });
+        } else {
+            setCriticalAlert(null);
+        }
+    } else {
+        setCriticalAlert(null);
+    }
+  }, [currentHeartRate, currentOxygen, isMonitoring, data.heartRate, data.oxygen]);
 
   useEffect(() => {
     // Load sample history data
@@ -168,6 +198,30 @@ export default function Monitoring() {
       </div>
 
       {/* Success Notification */}
+      {/* Critical Alert Toast */}
+      <AnimatePresence>
+        {criticalAlert && (
+          <motion.div
+            initial={{ opacity: 0, y: -100 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -100 }}
+            className={`fixed top-24 left-1/2 -translate-x-1/2 z-[60] w-full max-w-md p-4 rounded-2xl shadow-2xl border-2 ${
+                criticalAlert.type === 'critical' ? 'bg-red-50 border-red-500 text-red-900' : 'bg-amber-50 border-amber-500 text-amber-900'
+            }`}
+          >
+            <div className="flex gap-4">
+              <div className="text-2xl">
+                {criticalAlert.type === 'critical' ? '⚠️' : '🔔'}
+              </div>
+              <div>
+                <h3 className="font-bold">{criticalAlert.title}</h3>
+                <p className="text-sm">{criticalAlert.message}</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div id="success-notification" className={styles.successNotification}>
         <div className={styles.notificationContent}>
           <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -270,6 +324,16 @@ export default function Monitoring() {
                 </div>
               </motion.div>
             </div>
+
+            <HealthInsights 
+              currentVitals={{
+                heartRate: data.heartRate ? parseFloat(data.heartRate) : (isMonitoring ? currentHeartRate : 0),
+                oxygen: data.oxygen ? parseFloat(data.oxygen) : (isMonitoring ? currentOxygen : 0),
+                temperature: data.temperature ? parseFloat(data.temperature) : 0,
+                bloodPressure: data.bloodPressure
+              }}
+              history={history}
+            />
           </motion.section>
 
           {/* Data Entry Section */}
