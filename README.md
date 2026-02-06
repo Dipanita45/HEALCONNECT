@@ -151,7 +151,8 @@ For detailed information about the real-time alert system, see [ALERT_SYSTEM_GUI
 
 ### Team Member(Doctors)
 
-<img width="1915" height="903" alt="Screenshot 2026-02-06 213023" src="https://github.com/user-attachments/assets/a00c3e93-8cbe-453c-bcf7-626d92e75c42" />
+<img width="1908" height="908" alt="Screenshot 2026-02-06 213107" src="https://github.com/user-attachments/assets/cf996724-9975-4203-894f-09d484092a77" />
+
 
 ### Dark Mode
 
