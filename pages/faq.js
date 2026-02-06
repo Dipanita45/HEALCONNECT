@@ -52,14 +52,14 @@ const FAQ = () => {
         <meta name="description" content="Frequently asked questions about HEALCONNECT" />
       </Head>
 
-      {/* Animated background elements */}
+  {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement}></div>
         <div className={styles.circleElement}></div>
         <div className={styles.circleElement}></div>
       </div>
 
-      {/* Navbar spacer */}
+{/* Navbar spacer */}
       <div className={styles.navbarSpacer}></div>
 
       <motion.div 
@@ -99,9 +99,11 @@ const FAQ = () => {
               whileHover={{ y: -3 }}
             >
               <button 
+                id={`faq-question-${index}`}
                 className={styles.faqQuestion}
                 onClick={() => toggleFAQ(index)}
                 aria-expanded={activeIndex === index}
+                aria-controls={`faq-answer-${index}`}
               >
                 <span className={styles.questionText}>
                   <span className={styles.questionNumber}>Q{index + 1}.</span>
@@ -117,15 +119,19 @@ const FAQ = () => {
                   </svg>
                 </motion.span>
               </button>
-              
+
               <AnimatePresence>
                 {activeIndex === index && (
                   <motion.div 
+                    id={`faq-answer-${index}`}
+                    role="region"
+                    aria-labelledby={`faq-question-${index}`}
                     className={styles.faqAnswer}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
+                    initial={{ opacity: 0, scaleY: 0 }}
+                    animate={{ opacity: 1, scaleY: 1 }}
+                    exit={{ opacity: 0, scaleY: 0 }}
+                    transition={{ duration: 0.25, ease: 'easeOut' }}
+                    style={{ transformOrigin: 'top' }}
                   >
                     <div className={styles.answerContent}>
                       <span className={styles.answerIcon}>
