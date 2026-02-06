@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaPlus, FaUser, FaUsers, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft } from 'react-icons/fa';
+import { FaPlus, FaUser, FaUsers, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft, FaHeadset } from 'react-icons/fa';
 
 export default function AdminSidebar({ children }) {
   const router = useRouter();
@@ -28,6 +28,11 @@ export default function AdminSidebar({ children }) {
       addHref: '/admin/patients/' + path.slug,
       title: 'Patients',
       icon: <FaUsers size={28}/>,
+    },
+    {
+      href: '/admin/support-management',
+      title: 'Support Management',
+      icon: <FaHeadset size={28}/>,
     },
     {
       href: '/admin/notifications',

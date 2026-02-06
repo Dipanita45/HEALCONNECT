@@ -15,6 +15,29 @@
   height: 350px;
 }
 
+/* Responsive sizing */
+@media (max-width: 768px) {
+  .patientSilhouette {
+    width: 150px;
+    height: 280px;
+  }
+  
+  .problemVisualization {
+    height: 300px;
+  }
+}
+
+@media (max-width: 640px) {
+  .patientSilhouette {
+    width: 120px;
+    height: 220px;
+  }
+  
+  .problemVisualization {
+    height: 250px;
+  }
+}
+
 .silhouetteBody {
   width: 100%;
   height: 100%;
@@ -42,6 +65,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Responsive monitor sizing */
+@media (max-width: 768px) {
+  .vitalMonitor {
+    width: 100px;
+    height: 65px;
+    top: 45px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 640px) {
+  .vitalMonitor {
+    width: 80px;
+    height: 50px;
+    top: 35px;
+    padding: 4px;
+  }
 }
 
 .dark .vitalMonitor {

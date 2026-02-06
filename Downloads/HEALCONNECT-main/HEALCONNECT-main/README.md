@@ -29,7 +29,22 @@ Our goal is to enable doctors to access patient data anytime, anywhere — enabl
 
 ---
 
-## ⚙️ Getting Started
+### ⚙️ Getting Started
+
+## 🚀 Deployment
+
+HEALCONNECT is deployed using Vercel for production and GitHub Pages for demo preview.
+
+## 🌐 Live Production Deployment (Vercel)
+
+The application is deployed on Vercel, which provides seamless support for Next.js, automatic builds, and environment variable management.
+
+## 🔗 Live URL:
+👉 https://healconnect.vercel.app/
+
+---
+
+## To test the website locally 
 
 ### ✅ Prerequisites
 
