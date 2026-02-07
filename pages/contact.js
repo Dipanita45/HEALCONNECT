@@ -138,19 +138,27 @@ export default function Contact() {
       [name]: true
     }));
   };
+  const form_id =process.env.NEXT_PUBLIC_FORM_ID;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+   
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
     setSubmitStatus({ type: "", message: "" });
-
-    // Simulate form submission
-    setTimeout(() => {
+    //submit form
+     await fetch(`https://formspree.io/f/${form_id}`,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body:JSON.stringify(formData)
+    })
+    //success message
       setSubmitStatus({
         type: "success",
         message: "Thank you for contacting us. We'll get back to you within 24 hours."
@@ -167,7 +175,6 @@ export default function Contact() {
       setErrors({});
       setTouched({});
       setIsSubmitting(false);
-    }, 2000);
   };
 
   const getPriorityColor = (priority) => {
@@ -370,6 +377,7 @@ export default function Contact() {
                           <button
                             key={category.value}
                             type="button"
+                            name="category"
                             onClick={() => setFormData(prev => ({ ...prev, category: category.value }))}
                             className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
                               formData.category === category.value
@@ -408,7 +416,7 @@ export default function Contact() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                         className={`w-full px-4 py-3 rounded-lg border-2 ${
-                          errors.name && touched[name]
+                          errors.name && touched.name
                             ? 'border-red-500 focus:ring-red-500'
                             : 'border-gray-400 dark:border-gray-600 focus:ring-blue-500'
                         } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200`}
@@ -480,6 +488,7 @@ export default function Contact() {
                         <button
                           key={priority.value}
                           type="button"
+                          name="priority"
                           onClick={() => setFormData(prev => ({ ...prev, priority: priority.value }))}
                           className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all duration-200 ${
                             formData.priority === priority.value
