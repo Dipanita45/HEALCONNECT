@@ -26,7 +26,7 @@ export default function Terms() {
       <main className="bg-white dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100 relative overflow-hidden">
         {/* Background with animated bubbles */}
         <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ zIndex: 0 }}>
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '300px',
@@ -39,7 +39,7 @@ export default function Terms() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '200px',
@@ -52,7 +52,7 @@ export default function Terms() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '150px',
@@ -66,7 +66,7 @@ export default function Terms() {
             }}
           />
         </div>
-        
+
         <style jsx>{`
           @keyframes float {
             0%, 100% {
@@ -80,7 +80,7 @@ export default function Terms() {
             }
           }
         `}</style>
-        
+
         <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
@@ -127,7 +127,7 @@ export default function Terms() {
                 </h2>
               </div>
               <p className="text-center text-gray-700 dark:text-gray-300 text-lg">
-                These Terms & Conditions govern your use of our healthcare monitoring platform. 
+                These Terms & Conditions govern your use of our healthcare monitoring platform.
                 Please read them carefully to understand your rights and responsibilities.
               </p>
             </motion.div>
@@ -193,7 +193,7 @@ export default function Terms() {
                       "Emergency alerts"
                     ].map((service, index) => (
                       <motion.div
-                        key={index}
+                        key={service}
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
@@ -232,7 +232,7 @@ export default function Terms() {
                       { icon: FaExclamationTriangle, text: "Report issues promptly" }
                     ].map((item, index) => (
                       <motion.div
-                        key={index}
+                        key={item.text}
                         initial={{ opacity: 0, x: -20 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
@@ -266,17 +266,17 @@ export default function Terms() {
                       Medical Disclaimer
                     </h3>
                   </div>
-                    <div className="bg-red-200 dark:bg-red-900/30 p-4 rounded-lg border-2 border-red-400 dark:border-red-700">
-                      <p className="font-bold text-red-900 dark:text-red-200 mb-3 flex items-center">
-                        <FaExclamationTriangle className="mr-2" />
-                        IMPORTANT: Not a substitute for professional medical advice
-                      </p>
-                      <ul className="space-y-2 text-sm text-gray-800 dark:text-gray-300">
-                        <li className="flex items-center"><FaPhoneAlt className="mr-2 text-red-700 dark:text-red-600" /> Call 911 for medical emergencies</li>
-                        <li className="flex items-center"><FaUserCheck className="mr-2 text-red-700 dark:text-red-600" /> Always consult qualified healthcare professionals</li>
-                        <li className="flex items-center"><FaBalanceScale className="mr-2 text-red-700 dark:text-red-600" /> We&quot;re not liable for medical decisions</li>
-                      </ul>
-                    </div>
+                  <div className="bg-red-200 dark:bg-red-900/30 p-4 rounded-lg border-2 border-red-400 dark:border-red-700">
+                    <p className="font-bold text-red-900 dark:text-red-200 mb-3 flex items-center">
+                      <FaExclamationTriangle className="mr-2" />
+                      IMPORTANT: Not a substitute for professional medical advice
+                    </p>
+                    <ul className="space-y-2 text-sm text-gray-800 dark:text-gray-300">
+                      <li className="flex items-center"><FaPhoneAlt className="mr-2 text-red-700 dark:text-red-600" /> Call 911 for medical emergencies</li>
+                      <li className="flex items-center"><FaUserCheck className="mr-2 text-red-700 dark:text-red-600" /> Always consult qualified healthcare professionals</li>
+                      <li className="flex items-center"><FaBalanceScale className="mr-2 text-red-700 dark:text-red-600" /> We&quot;re not liable for medical decisions</li>
+                    </ul>
+                  </div>
                 </motion.section>
 
                 {/* Privacy & Security */}
@@ -304,8 +304,8 @@ export default function Terms() {
                         { icon: FaShieldAlt, text: "HIPAA compliance" },
                         { icon: FaServer, text: "Secure servers" },
                         { icon: FaChartLine, text: "Privacy controls" }
-                      ].map((feature, index) => (
-                        <div key={index} className="bg-blue-100 dark:bg-blue-900/20 p-3 rounded-lg text-center flex flex-col items-center justify-center border border-blue-200 dark:border-blue-700">
+                      ].map((feature) => (
+                        <div key={feature.text} className="bg-blue-100 dark:bg-blue-900/20 p-3 rounded-lg text-center flex flex-col items-center justify-center border border-blue-200 dark:border-blue-700">
                           <feature.icon className="text-blue-700 dark:text-blue-600 mb-1" />
                           <p className="text-xs font-medium text-gray-800 dark:text-gray-300">{feature.text}</p>
                         </div>
@@ -454,9 +454,9 @@ export default function Terms() {
                   Our legal and support teams are here to help you understand your rights and responsibilities.
                 </p>
               </div>
-              
+
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <motion.div 
+                <motion.div
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-center"
                 >
@@ -467,8 +467,8 @@ export default function Terms() {
                     legal@healconnect.com
                   </a>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-center"
                 >
@@ -479,8 +479,8 @@ export default function Terms() {
                     +91 1234567890
                   </a>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.div
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20 text-center"
                 >
@@ -492,7 +492,7 @@ export default function Terms() {
                   </button>
                 </motion.div>
               </div>
-              
+
               <div className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-white/20">
                 <div className="flex items-center mb-4">
                   <FaMapMarkerAlt className="text-2xl mr-3 text-blue-600 dark:text-blue-200" />
@@ -506,7 +506,7 @@ export default function Terms() {
                   <span className="text-gray-700 dark:text-blue-100">Response Time: Within 24 hours</span>
                 </div>
               </div>
-              
+
               <div className="flex items-center justify-center mt-4">
                 <FaShieldAlt className="mr-2 text-blue-600 dark:text-blue-200" />
                 <span className="text-sm text-gray-700 dark:text-blue-100">Confidential & Secure</span>
@@ -523,10 +523,10 @@ export default function Terms() {
             >
               <div className="bg-gray-100 dark:bg-gray-800 px-6 py-3 rounded-lg border border-gray-200 dark:border-gray-700">
                 <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                  <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric' 
+                  <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
                   })}
                 </p>
               </div>

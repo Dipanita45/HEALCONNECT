@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle, 
+import {
+  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle,
   FaRobot, FaPhone, FaEnvelope
 } from 'react-icons/fa';
 import SupportWidget from '../components/Support/SupportWidget';
@@ -98,11 +98,11 @@ const Support = () => {
           >
             <h1>HealConnect Support Center</h1>
             <p>
-              Get help when you need it most. Our AI-powered support system provides instant answers 
+              Get help when you need it most. Our AI-powered support system provides instant answers
               and connects you with human experts for complex issues.
             </p>
             <div className={styles.heroActions}>
-              <button 
+              <button
                 onClick={() => setView('dashboard')}
                 className={styles.dashboardBtn}
               >
@@ -113,7 +113,7 @@ const Support = () => {
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -160,14 +160,14 @@ const Support = () => {
               const Icon = feature.icon;
               return (
                 <motion.div
-                  key={index}
+                  key={feature.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className={styles.featureCard}
                 >
-                  <div 
+                  <div
                     className={styles.featureIcon}
                     style={{ background: `${feature.color}20`, color: feature.color }}
                   >
@@ -200,7 +200,7 @@ const Support = () => {
           <div className={styles.stepsContainer}>
             {howItWorks.map((step, index) => (
               <motion.div
-                key={index}
+                key={step.title}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -324,7 +324,7 @@ const Support = () => {
             <div className={styles.emergencyIcon}>🚨</div>
             <h2>Medical Emergency?</h2>
             <p>
-              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room. 
+              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room.
               Our support system is not designed for medical emergencies.
             </p>
             <button className={styles.emergencyBtn}>
