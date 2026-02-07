@@ -3,51 +3,26 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
 import { updateUserState } from "@lib/authUtils";
+import useDarkMode from "@lib/useDarkMode";
 import Link from "next/link";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, setUserRole, setCurrentUser } = useContext(UserContext);
+  const [colorTheme, setTheme] = useDarkMode();
+  const darkMode = colorTheme === "light"; // If colorTheme is "light", we're in dark mode
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
 
-  // Initialize dark mode
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    // Default to light mode unless explicitly saved as dark
-    if (savedTheme === "dark") {
-      setDarkMode(true);
-      document.documentElement.classList.add("dark");
-    } else {
-      setDarkMode(false);
-      document.documentElement.classList.remove("dark");
-      // Ensure light theme is saved if not already set
-      if (!savedTheme) {
-        localStorage.setItem("theme", "light");
-      }
-    }
-  }, []);
-
   const toggleDarkMode = () => {
-    const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode);
-
-    if (newDarkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    setTheme(colorTheme);
   };
 
   const handleLogin = (e) => {
@@ -143,27 +118,27 @@ export default function LoginPage() {
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
