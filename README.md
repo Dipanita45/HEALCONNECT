@@ -10,7 +10,7 @@
 [![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
 
-[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
+[**Live Demo**](healconnect.vercel.app/) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
 
 </div>
 
