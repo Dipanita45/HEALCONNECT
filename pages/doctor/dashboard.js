@@ -37,22 +37,16 @@ export default function DoctorDashboard() {
     };
   }, []);
 
-  // Role protection and doctor info setup
+  // Get doctor info for alert system (after auth is verified by layout.js)
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const role = localStorage.getItem("userType");
-      if (!role) {
-        router.push("/login");
-      } else if (role !== "doctor") {
-        router.push(`/${role}/dashboard`);
-      } else {
-        // Get doctor info for alert system
-        const doctorId = localStorage.getItem("userId") || localStorage.getItem("username");
-        const doctorName = localStorage.getItem("username") || "Doctor";
-        setDoctorInfo({ id: doctorId, name: doctorName });
-      }
+      // SECURITY: Role is already verified by layout.js using Firebase Auth
+      // This only fetches doctor ID for the alert system
+      const doctorId = localStorage.getItem("userId") || localStorage.getItem("username");
+      const doctorName = localStorage.getItem("username") || "Doctor";
+      setDoctorInfo({ id: doctorId, name: doctorName });
     }
-  }, [router]);
+  }, []);
 
   // Fetch patients with offline support
   useEffect(() => {
