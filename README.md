@@ -147,12 +147,12 @@ For detailed information about the real-time alert system, see [ALERT_SYSTEM_GUI
 
 ### Homepage
 
-<img width="1885" height="878" alt="Screenshot 2025-08-12 204702" src="https://github.com/user-attachments/assets/eec7755b-0074-4b92-ba36-b97ef77baa55" />
+<img width="1915" height="903" alt="Screenshot 2026-02-06 213023" src="https://github.com/user-attachments/assets/98730514-a5fd-46af-b5d3-3b3cce912df2" />
 
+### Team Member(Doctors)
 
-### Monitoring
+<img width="1908" height="908" alt="Screenshot 2026-02-06 213107" src="https://github.com/user-attachments/assets/cf996724-9975-4203-894f-09d484092a77" />
 
-<img width="1878" height="558" alt="Screenshot 2025-08-12 204802" src="https://github.com/user-attachments/assets/87e82497-2daa-4515-bac0-04038633f261" />
 
 ### Dark Mode
 
