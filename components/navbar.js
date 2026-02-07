@@ -56,11 +56,11 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.container}>
-        {/* Logo/Brand with animation */}
-        <div className={styles.logoContainer}>
-          <Link href="/" className={styles.logo}>
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}>
+      <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
+        {/* Logo/Brand */}
+        <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
+          <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
             <div className={styles.logoIcon}>
               <div className={styles.crossSymbol}>
                 <div className={styles.crossLine1}></div>
@@ -71,8 +71,8 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links with hover effects */}
-        <div className={`${styles.navLinks} ${isMenuOpen ? styles.navOpen : ''}`}>
+        {/* Navigation Links - Centered with proper gaps */}
+        <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
           <Link
             href="/"
             className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
@@ -133,37 +133,41 @@ export default function Navbar() {
         </div>
 
         {/* Right side - Auth buttons + Theme Toggle */}
-        <div className={styles.rightSection}>
-          {user || currentUser ? (
-            <div className="flex items-center gap-2">
+        <div className="flex items-center gap-6 ml-6">
+          <div className="flex items-center">
+            {user || currentUser ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+                >
+                  <span>Dashboard</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
+                >
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
               <button
-                onClick={handleDashboardRedirect}
-                className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+                onClick={handleLoginRedirect}
+                className={styles.loginButton}
               >
-                <span>Dashboard</span>
+                <span>Login</span>
+                <div className={styles.buttonPulse}></div>
               </button>
-              <button
-                onClick={handleLogout}
-                className={`${styles.loginButton} bg-red-600 hover:bg-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 transform transition-all duration-300 ease-out active:scale-95 relative overflow-hidden group`}
-              >
-                <span className="relative z-10">Logout</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={handleLoginRedirect}
-              className={styles.loginButton}
-            >
-              <span>Login</span>
-              <div className={styles.buttonPulse}></div>
-            </button>
-          )}
-          <ThemeToggle />
+            )}
+          </div>
+
+          <div className="flex items-center pl-4 border-l border-gray-700">
+            <ThemeToggle />
+          </div>
 
           {/* Mobile menu button */}
           <button
-            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
+            className={`${styles.menuButton} lg:hidden ${isMenuOpen ? styles.menuOpen : ''} ml-2`}
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle menu"
           >
