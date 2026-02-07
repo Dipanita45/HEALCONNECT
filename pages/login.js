@@ -3,17 +3,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
 import { updateUserState } from "@lib/authUtils";
+import { useForm } from "react-hook-form";
 import Link from "next/link";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
   const router = useRouter();
   const { setUser, setUserRole, setCurrentUser } = useContext(UserContext);
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState("");
+  const [loginError, setLoginError] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotMessage, setForgotMessage] = useState("");
@@ -21,8 +22,7 @@ export default function LoginPage() {
   // Initialize dark mode
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
-    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     // Default to light mode unless explicitly saved as dark
     if (savedTheme === "dark") {
       setDarkMode(true);
@@ -30,7 +30,6 @@ export default function LoginPage() {
     } else {
       setDarkMode(false);
       document.documentElement.classList.remove("dark");
-      // Ensure light theme is saved if not already set
       if (!savedTheme) {
         localStorage.setItem("theme", "light");
       }
@@ -50,34 +49,28 @@ export default function LoginPage() {
     }
   };
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setError(""); // Clear previous errors
-
-    if (!username.trim() || !password.trim()) {
-      setError("Please enter both username and password");
-      return;
-    }
+  const onSubmit = (data) => {
+    setLoginError("");
 
     // Get registered users from localStorage
     const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
 
     // Find user by username
-    const user = registeredUsers.find(u => u.username === username);
+    const user = registeredUsers.find(u => u.username === data.username);
 
     if (!user) {
-      setError("User not found. Please sign up first.");
+      setLoginError("User not found. Please sign up first.");
       return;
     }
 
     // Check password
-    if (user.password !== password) {
-      setError("Incorrect password. Please try again.");
+    if (user.password !== data.password) {
+      setLoginError("Incorrect password. Please try again.");
       return;
     }
 
     // Update state immediately for navbar UI update
-    updateUserState(setUser, setUserRole, setCurrentUser, user.role, username);
+    updateUserState(setUser, setUserRole, setCurrentUser, user.role, data.username);
 
     // Store additional user info
     const currentUserData = {
@@ -142,31 +135,13 @@ export default function LoginPage() {
     }}>
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
-        <div className={styles.circleElement} style={{
-          background: darkMode 
-            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
-            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
-        }}></div>
-        <div className={styles.circleElement} style={{
-          background: darkMode 
-            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
-            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
-        }}></div>
-        <div className={styles.circleElement} style={{
-          background: darkMode 
-            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
-            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
-        }}></div>
-        <div className={styles.circleElement} style={{
-          background: darkMode 
-            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
-            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
-        }}></div>
-        <div className={styles.circleElement} style={{
-          background: darkMode 
-            ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
-            : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
-        }}></div>
+        {[...Array(5)].map((_, i) => (
+          <div key={i} className={styles.circleElement} style={{
+            background: darkMode
+              ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
+              : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
+          }}></div>
+        ))}
       </div>
 
       {/* Dark Mode Toggle */}
@@ -189,6 +164,7 @@ export default function LoginPage() {
           zIndex: 100,
           boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
         }}
+        type="button"
       >
         {darkMode ? "☀️" : "🌙"}
       </button>
@@ -208,7 +184,7 @@ export default function LoginPage() {
         {/* Form */}
         <div style={{ padding: "20px" }}>
           {/* Error Message */}
-          {error && (
+          {loginError && (
             <div style={{
               marginBottom: "16px",
               padding: "12px",
@@ -226,11 +202,11 @@ export default function LoginPage() {
                 <line x1="12" y1="8" x2="12" y2="12"></line>
                 <line x1="12" y1="16" x2="12.01" y2="16"></line>
               </svg>
-              {error}
+              {loginError}
             </div>
           )}
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             {/* Username */}
             <div style={{ marginBottom: "16px" }}>
               <label style={{
@@ -245,23 +221,23 @@ export default function LoginPage() {
               <input
                 type="text"
                 placeholder="Username"
-                value={username}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                  setError(""); // Clear error when user starts typing
-                }}
                 style={{
                   width: "100%",
                   padding: "10px",
-                  border: darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0",
+                  border: errors.username ? "1px solid #e53e3e" : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                   borderRadius: "6px",
                   background: darkMode ? "#2d3748" : "#f7fafc",
                   color: darkMode ? "#ffffff" : "#2d3748",
                   fontSize: "14px",
                   outline: "none",
                 }}
-                required
+                {...register("username", { required: "Username is required" })}
               />
+              {errors.username && (
+                <div style={{ color: "#e53e3e", fontSize: "12px", marginTop: "4px" }}>
+                  {errors.username.message}
+                </div>
+              )}
             </div>
 
             {/* Password */}
@@ -279,22 +255,17 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
-                  value={password}
-                  onChange={(e) => {
-                    setPassword(e.target.value);
-                    setError(""); // Clear error when user starts typing
-                  }}
                   style={{
                     width: "100%",
                     padding: "10px 40px 10px 10px",
-                    border: darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0",
+                    border: errors.password ? "1px solid #e53e3e" : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     background: darkMode ? "#2d3748" : "#f7fafc",
                     color: darkMode ? "#ffffff" : "#2d3748",
                     fontSize: "14px",
                     outline: "none",
                   }}
-                  required
+                  {...register("password", { required: "Password is required" })}
                 />
                 <button
                   type="button"
@@ -316,14 +287,6 @@ export default function LoginPage() {
                     width: "24px",
                     height: "24px",
                   }}
-                  onMouseEnter={(e) => {
-                    e.target.style.color = darkMode ? "#e2e8f0" : "#4a5568";
-                    e.target.style.background = darkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.05)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.color = darkMode ? "#a0aec0" : "#718096";
-                    e.target.style.background = "none";
-                  }}
                 >
                   {showPassword ? (
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -338,6 +301,11 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
+              {errors.password && (
+                <div style={{ color: "#e53e3e", fontSize: "12px", marginTop: "4px" }}>
+                  {errors.password.message}
+                </div>
+              )}
             </div>
 
             {/* Login Button */}
@@ -365,6 +333,7 @@ export default function LoginPage() {
               marginBottom: "16px",
             }}>
               <button
+                type="button"
                 onClick={() => setShowForgotPassword(true)}
                 style={{
                   background: "none",
@@ -389,6 +358,7 @@ export default function LoginPage() {
             }}>
               Don&apos;t have an account?{" "}
               <button
+                type="button"
                 onClick={() => {
                   // Navigate to signup page
                   router.push('/signup');
@@ -412,7 +382,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Forgot Password Modal */}
+      {/* Forgot Password Modal - Remains unchanged */}
       {showForgotPassword && (
         <div style={{
           position: "fixed",
