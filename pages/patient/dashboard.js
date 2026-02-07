@@ -8,7 +8,8 @@ import { FaEdit, FaSpinner, FaUserMd, FaSearch } from "react-icons/fa";
 
 
 export default function Dashboard(params) {
-    const { currentUser } = useContext(UserContext);
+    const userContext = useContext(UserContext);
+    const { currentUser , userRole } = useContext;
     return (
         <AuthCheck>
             <PatientSidebar>

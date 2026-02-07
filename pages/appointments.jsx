@@ -63,7 +63,27 @@ const doctors = [
     nextAvailable: "Today, 3:00 PM",
     experience: "12 years",
     rating: 4.8,
-    reviews: 124
+    reviews: 124,
+    availability: {
+  monday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  wednesday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  thursday: [
+    { start: "13:00", end: "17:00" }
+  ],
+  friday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ]
+}
   },
   {
     id: 2,
@@ -74,7 +94,23 @@ const doctors = [
     nextAvailable: "Tomorrow, 10:00 AM",
     experience: "8 years",
     rating: 4.6,
-    reviews: 98
+    reviews: 98,
+    availability: {
+  monday: [
+    { start: "10:00", end: "14:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ],
+  wednesday: [],
+  thursday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  friday: [
+    { start: "13:00", end: "17:00" }
+  ]
+}   
   },
   {
     id: 3,
@@ -85,7 +121,25 @@ const doctors = [
     nextAvailable: "Today, 5:30 PM",
     experience: "10 years",
     rating: 4.9,
-    reviews: 156
+    reviews: 156,
+    availability: {
+  monday: [
+    { start: "08:00", end: "12:00" },
+    { start: "13:00", end: "15:00" }
+  ],
+  tuesday: [
+    { start: "10:00", end: "14:00" }
+  ],
+  wednesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  thursday: [],
+  friday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ]
+}
   },
   {
     id: 4,
@@ -96,9 +150,68 @@ const doctors = [
     nextAvailable: "Today, 1:00 PM",
     experience: "15 years",
     rating: 4.7,
-    reviews: 203
+    reviews: 203,
+    availability: {
+  monday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  wednesday: [
+    { start: "13:00", end: "17:00" }
+  ],
+  thursday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ],
+  friday: [
+    { start: "10:00", end: "14:00" }
+  ]
+} 
   }
 ];
+
+const getDayFromDate = (date) => {
+  return new Date(date)
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+};
+
+const filterTimesByAvailability = (times, doctor, date) => {
+  if (!doctor || !date) return times;
+
+  const day = getDayFromDate(date);
+  const windows = doctor.availability?.[day];
+
+  // Doctor not working that day
+  if (!windows || windows.length === 0) return [];
+
+  return times.filter((time) => {
+    const [value, period] = time.split(" ");
+    let [hours, minutes] = value.split(":").map(Number);
+
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    const timeInMinutes = hours * 60 + (minutes || 0);
+
+    // ✅ check against ANY availability window
+    return windows.some(({ start, end }) => {
+      const [sh, sm] = start.split(":").map(Number);
+      const [eh, em] = end.split(":").map(Number);
+
+      const startMinutes = sh * 60 + sm;
+      const endMinutes = eh * 60 + em;
+
+      return (
+        timeInMinutes >= startMinutes &&
+        timeInMinutes <= endMinutes
+      );
+    });
+  });
+};
 
 export default function Appointments() {
   const [formData, setFormData] = useState({
@@ -439,15 +552,19 @@ const handleSubmit = async (e) => {
                         className={`${styles.formInput} ${formErrors.time ? styles.error : ''}`}
                       >
                         <option value="">Select Time</option>
-                        {availableTimes.map(time => (
-                                              <option
-                                                key={time}
-                                                value={time}
-                                         disabled={bookedTimes.includes(time)}
-                                           >
-                             {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
+                          {filterTimesByAvailability(
+                              availableTimes,
+                               selectedDoctor,
+                             formData.date
+                            ).map(time => (
+                            <option
+                            key={time}
+                             value={time}
+                            disabled={bookedTimes.includes(time)}
+                          >
+                          {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
                            </option>
-                          ))}
+                       ))}
                       </select>
                       <label className={styles.formLabel}>Preferred Time</label>
                       <div className={styles.formUnderline}></div>
