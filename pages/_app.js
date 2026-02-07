@@ -10,6 +10,8 @@ import { UserContext } from '@lib/context'
 import { useUserData } from '@lib/userInfo'
 import Layout from './layout'
 import SupportWidget from '@/components/Support/SupportWidget'
+import PWAInstallPrompt from '@/components/PWAInstallPrompt'
+import PWAInitializer from '@/components/PWAInitializer'
 
 // ✅ Single App component
 function MyApp({ Component, pageProps }) {
@@ -18,6 +20,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider>
       <UserContext.Provider value={userData}>
+        <PWAInitializer />
+        <PWAInstallPrompt />
         <Navbar />
         <Layout>
           <Component {...pageProps} />
