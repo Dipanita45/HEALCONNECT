@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Appointments.module.css';
 import Image from 'next/image';
 import { addDoc } from "firebase/firestore";
+import { auth } from "../lib/firebase";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -113,6 +115,20 @@ export default function Appointments() {
   const [formErrors, setFormErrors] = useState({});
   const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+useEffect(() => {
+  // Auto sign-in anonymously
+  signInAnonymously(auth).catch((error) => {
+    console.error("Anonymous auth failed:", error);
+  });
+
+  // Listen to auth state
+  const unsub = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+  });
+
+  return () => unsub();
+}, []);
 
   useEffect(() => {
     setIsVisible(true);
