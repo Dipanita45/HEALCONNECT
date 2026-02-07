@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle, 
+import {
+  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle,
   FaRobot, FaPhone, FaEnvelope
 } from 'react-icons/fa';
 import SupportWidget from '../components/Support/SupportWidget';
 import SupportDashboard from '../components/Support/SupportDashboard';
 import styles from './support.module.css';
+import { useTheme } from '@/context/ThemeContext';
 
 const Support = () => {
   const [view, setView] = useState('landing');
@@ -16,6 +17,8 @@ const Support = () => {
     satisfactionRate: '94%',
     activeAgents: 0
   });
+
+  const { setIsMinimized, setSupportWidgetOpen } = useTheme();
 
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
@@ -98,22 +101,28 @@ const Support = () => {
           >
             <h1>HealConnect Support Center</h1>
             <p>
-              Get help when you need it most. Our AI-powered support system provides instant answers 
+              Get help when you need it most. Our AI-powered support system provides instant answers
               and connects you with human experts for complex issues.
             </p>
             <div className={styles.heroActions}>
-              <button 
+              <button
                 onClick={() => setView('dashboard')}
                 className={styles.dashboardBtn}
               >
                 <FaChartLine /> Support Dashboard
               </button>
-              <button className={styles.chatBtn}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsMinimized(false)
+                  setSupportWidgetOpen(true)
+                }}
+                className={styles.chatBtn}>
                 <FaHeadset /> Start Live Chat
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -167,7 +176,7 @@ const Support = () => {
                   transition={{ delay: index * 0.1 }}
                   className={styles.featureCard}
                 >
-                  <div 
+                  <div
                     className={styles.featureIcon}
                     style={{ background: `${feature.color}20`, color: feature.color }}
                   >
@@ -324,7 +333,7 @@ const Support = () => {
             <div className={styles.emergencyIcon}>🚨</div>
             <h2>Medical Emergency?</h2>
             <p>
-              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room. 
+              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room.
               Our support system is not designed for medical emergencies.
             </p>
             <button className={styles.emergencyBtn}>
