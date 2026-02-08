@@ -378,3 +378,18 @@
     visibility: visible;
   }
 }
+
+
+/* --- Active State: Persistence Logic --- */
+
+/* This ensures that when a link is active, the dot stays visible */
+.active .linkHoverEffect {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  background: #10b981; /* Matches your brand green */
+}
+
+/* Optional: add a slight glow to the active link text */
+.active .linkText {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+}

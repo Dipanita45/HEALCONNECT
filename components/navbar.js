@@ -10,11 +10,13 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
+      // Logic for background styling (Existing behavior)
       const isScrolled = window.scrollY > 10
       setScrolled(isScrolled)
     }
@@ -24,21 +26,16 @@ export default function Navbar() {
   }, [])
 
   const handleLogout = () => {
-    // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
-
-    // Clear React state immediately for UI update
     setUser(null)
     setUserRole(null)
     setCurrentUser(null)
 
-    // Clear any Firebase auth state if available
     if (typeof window !== 'undefined' && window.firebaseAuth) {
       window.firebaseAuth.signOut()
     }
 
-    // Redirect to login
     router.push('/login')
     setIsMenuOpen(false)
   }
@@ -56,7 +53,13 @@ export default function Navbar() {
   }
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}>
+    <nav 
+      className={`
+        ${styles.navbar} 
+        ${scrolled ? styles.scrolled : ''} 
+        h-20
+      `}
+    >
       <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
         {/* Logo/Brand */}
         <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
@@ -71,7 +74,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links - Centered with proper gaps */}
+        {/* Navigation Links - Active State Highlighting Only */}
         <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
           <Link
             href="/"
@@ -81,6 +84,7 @@ export default function Navbar() {
             <span className={styles.linkText}>Home</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/prescriptions"
             className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
@@ -89,6 +93,7 @@ export default function Navbar() {
             <span className={styles.linkText}>Prescriptions</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/appointments"
             className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
@@ -97,6 +102,7 @@ export default function Navbar() {
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/monitoring"
             className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
@@ -105,6 +111,7 @@ export default function Navbar() {
             <span className={styles.linkText}>Monitoring</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/faq"
             className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
@@ -113,6 +120,7 @@ export default function Navbar() {
             <span className={styles.linkText}>FAQ</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/contact"
             className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
@@ -121,6 +129,7 @@ export default function Navbar() {
             <span className={styles.linkText}>Contact</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+
           <Link
             href="/support"
             className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
