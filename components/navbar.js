@@ -10,20 +10,34 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  
+  const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
+  const [prevScrollPos, setPrevScrollPos] = useState(0)
+
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
   useEffect(() => {
     const handleScroll = () => {
-      // Logic for background styling (Existing behavior)
-      const isScrolled = window.scrollY > 10
+      const currentScrollPos = window.scrollY
+
+      // 1. Logic for background styling (Existing behavior)
+      const isScrolled = currentScrollPos > 10
       setScrolled(isScrolled)
+
+      // 2. Logic for Smart Navbar (Hide on scroll down, Show on scroll up)
+      if (currentScrollPos < 10) {
+        setVisible(true) // Always show at the top
+      } else {
+        // Show if scrolling up, hide if scrolling down
+        setVisible(prevScrollPos > currentScrollPos)
+      }
+
+      setPrevScrollPos(currentScrollPos)
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [prevScrollPos])
 
   const handleLogout = () => {
     localStorage.removeItem('userType')
@@ -53,10 +67,11 @@ export default function Navbar() {
   }
 
   return (
-    <nav 
+    <nav
       className={`
         ${styles.navbar} 
         ${scrolled ? styles.scrolled : ''} 
+        ${!visible ? styles.navHidden : ''} 
         h-20
       `}
     >
@@ -74,7 +89,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links - Active State Highlighting Only */}
+        {/* Navigation Links - Centered with Active State Highlighting */}
         <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
           <Link
             href="/"
