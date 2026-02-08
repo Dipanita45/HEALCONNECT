@@ -51,12 +51,16 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   33% {
     transform: translate(30px, -30px) rotate(60deg);
   }
+
   66% {
     transform: translate(-20px, 20px) rotate(-30deg);
   }
@@ -157,6 +161,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -388,8 +393,8 @@
   transition: all 0.3s ease;
 }
 
-.formInput:focus ~ .formLabel,
-.formInput:not(:placeholder-shown) ~ .formLabel {
+.formInput:focus~.formLabel,
+.formInput:not(:placeholder-shown)~.formLabel {
   top: -0.5rem;
   left: 0;
   font-size: 0.875rem;
@@ -406,7 +411,7 @@
   transition: width 0.3s ease;
 }
 
-.formInput:focus ~ .formUnderline {
+.formInput:focus~.formUnderline {
   width: 100%;
 }
 
@@ -624,7 +629,7 @@
     grid-template-columns: 1fr;
     gap: 2rem;
   }
-  
+
   .doctorsGrid {
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   }
@@ -634,12 +639,12 @@
   .title {
     font-size: 2.25rem;
   }
-  
+
   .formRow {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
-  
+
   .navbarSpacer {
     height: 70px;
   }
@@ -649,15 +654,15 @@
   .title {
     font-size: 2rem;
   }
-  
+
   .content {
     padding: 0 1rem 2rem;
   }
-  
+
   .bookingSection {
     padding: 1.5rem;
   }
-  
+
   .navbarSpacer {
     height: 60px;
   }
@@ -707,8 +712,8 @@
   transform-origin: left top;
 }
 
-.formInput:focus ~ .formLabel,
-.formInput:not(:placeholder-shown) ~ .formLabel {
+.formInput:focus~.formLabel,
+.formInput:not(:placeholder-shown)~.formLabel {
   top: -0.5rem;
   left: 0;
   font-size: 0.875rem;
@@ -716,7 +721,7 @@
   transform: translateY(-100%) scale(0.9);
 }
 
-.formInput.error ~ .formLabel {
+.formInput.error~.formLabel {
   color: #ef4444;
 }
 
@@ -730,11 +735,11 @@
   transition: width 0.3s ease;
 }
 
-.formInput:focus ~ .formUnderline {
+.formInput:focus~.formUnderline {
   width: 100%;
 }
 
-.formInput.error ~ .formUnderline {
+.formInput.error~.formUnderline {
   background: #ef4444;
   width: 100%;
 }
@@ -793,8 +798,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Enhanced button animations */
@@ -861,15 +871,25 @@ select.formInput {
 }
 
 /* Enhanced transitions for form elements */
-.formInput, .formLabel, .formUnderline {
+.formInput,
+.formLabel,
+.formUnderline {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Pulse animation for required fields */
 @keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(37, 99, 235, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+  }
 }
 
 .formInput:required:not(:placeholder-shown):invalid {
@@ -886,15 +906,15 @@ select.formInput {
   color: rgb(var(--foreground-rgb));
   border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
 }
-  
+
 .dark .formLabel {
   color: rgb(var(--foreground-muted-rgb));
 }
-  
-.dark .formInput:focus ~ .formLabel {
+
+.dark .formInput:focus~.formLabel {
   color: #2563eb;
 }
-  
+
 .dark select.formInput {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(var(--foreground-rgb))' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
