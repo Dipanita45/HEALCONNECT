@@ -163,6 +163,17 @@ export default function Footer() {
                 <FaDiscord />
                 <span className={styles.socialTooltip}>Join our Discord</span>
               </a>
+              {/* Download App Button */}
+              <a
+                href="https://play.google.com/store/apps/details?id=com.healconnect"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="Download App"
+              >
+                <FaDownload />
+                <span className={styles.socialTooltip}>Download App</span>
+              </a>
               {/* PWA Install Button */}
               {showInstallButton && (
                 <button 
