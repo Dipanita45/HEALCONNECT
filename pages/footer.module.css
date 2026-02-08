@@ -435,7 +435,7 @@
   background: transparent;
   border: none;
   padding: 0.6rem 1rem;
-  color: white;
+  color: rgb(var(--foreground-rgb));
   font-size: 0.8rem;
   outline: none;
   transition: all 0.3s ease;
