@@ -109,7 +109,7 @@ export default function About() {
       <main className="bg-white dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100 relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ zIndex: 0 }}>
-          <div 
+          <div
             className="absolute rounded-full opacity-20"
             style={{
               width: '400px',
@@ -121,7 +121,7 @@ export default function About() {
               animationDelay: '0s'
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full opacity-20"
             style={{
               width: '300px',
@@ -133,7 +133,7 @@ export default function About() {
               animationDelay: '-5s'
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full opacity-20"
             style={{
               width: '250px',
@@ -170,7 +170,7 @@ export default function About() {
             viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <motion.div 
+            <motion.div
               className="flex justify-center mb-6"
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
@@ -181,7 +181,7 @@ export default function About() {
                 <FaHeartbeat className="text-4xl text-white animate-pulse" />
               </div>
             </motion.div>
-            
+
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight mb-4">
               <Typewriter
                 words={["About HealConnect"]}
@@ -193,8 +193,8 @@ export default function About() {
                 delaySpeed={1000}
               />
             </h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-gray-600 dark:text-gray-300 text-xl max-w-3xl mx-auto mb-6"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -203,8 +203,8 @@ export default function About() {
             >
               Revolutionizing healthcare monitoring in Pune and beyond. We&apos;re connecting patients with doctors through innovative technology.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               className="mx-auto w-32 h-1 bg-gradient-to-r from-green-600 to-blue-600 rounded-full"
               initial={{ width: 0 }}
               whileInView={{ width: "8rem" }}
@@ -222,12 +222,12 @@ export default function About() {
             variants={staggerContainer}
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              {stats.map((stat, index) => (
+              {stats.map((stat) => (
                 <motion.div
-                  key={index}
+                  key={stat.label}
                   variants={scaleIn}
-                  whileHover={{ 
-                    scale: 1.05, 
+                  whileHover={{
+                    scale: 1.05,
                     y: -5,
                     boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)"
                   }}
@@ -265,7 +265,7 @@ export default function About() {
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                HealConnect is Pune&apos;s growing health monitoring site to help hospitals manage their patients&apos; health parameters anytime, anywhere. 
+                HealConnect is Pune&apos;s growing health monitoring site to help hospitals manage their patients&apos; health parameters anytime, anywhere.
                 Our goal is to make patients&apos; health data accessible to doctors worldwide for quicker diagnosis and treatment.
               </p>
             </div>
@@ -283,12 +283,12 @@ export default function About() {
               What We Offer
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {features.map((feature, index) => (
+              {features.map((feature) => (
                 <motion.div
-                  key={index}
+                  key={feature.title}
                   variants={scaleIn}
-                  whileHover={{ 
-                    scale: 1.05, 
+                  whileHover={{
+                    scale: 1.05,
                     y: -10,
                     boxShadow: "0 20px 40px rgba(0, 0, 0, 0.1)"
                   }}
@@ -339,10 +339,10 @@ export default function About() {
                 </h2>
               </div>
               <p className="text-lg leading-relaxed text-gray-700 dark:text-gray-300">
-                The HealConnect system&apos;s kit allows doctors or nurses to measure the patient&apos;s body temperature and heart rate. 
+                The HealConnect system&apos;s kit allows doctors or nurses to measure the patient&apos;s body temperature and heart rate.
                 This real-time data is automatically updated on the WeCare platform, which doctors and hospitals can access remotely.
               </p>
-              <motion.div 
+              <motion.div
                 className="mt-6 flex items-center text-blue-600 dark:text-blue-400 cursor-pointer"
                 whileHover={{ x: 10 }}
               >
@@ -364,11 +364,11 @@ export default function About() {
               Our Journey
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {timeline.map((item, index) => (
+              {timeline.map((item) => (
                 <motion.div
-                  key={index}
+                  key={item.title}
                   variants={scaleIn}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     y: -5
                   }}
@@ -401,8 +401,8 @@ export default function About() {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <motion.div
-                whileHover={{ 
-                  scale: 1.02, 
+                whileHover={{
+                  scale: 1.02,
                   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)"
                 }}
                 className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700"
@@ -411,14 +411,14 @@ export default function About() {
                   Terms & Conditions
                 </h3>
                 <p className="text-gray-600 dark:text-gray-300">
-                  By accessing this website, you agree to our terms and conditions, applicable laws, and local regulations. 
+                  By accessing this website, you agree to our terms and conditions, applicable laws, and local regulations.
                   If you do not agree, you are prohibited from using the site.
                 </p>
               </motion.div>
 
               <motion.div
-                whileHover={{ 
-                  scale: 1.02, 
+                whileHover={{
+                  scale: 1.02,
                   boxShadow: "0 10px 30px rgba(0, 0, 0, 0.1)"
                 }}
                 className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700"

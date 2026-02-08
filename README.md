@@ -10,7 +10,7 @@
 [![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
 
-[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
+[**Live Demo**](healconnect.vercel.app/) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
 
 </div>
 
@@ -174,12 +174,13 @@ For comprehensive information about the database and API infrastructure:
 
 ### Homepage
 
-<img width="1885" height="878" alt="Screenshot 2025-08-12 204702" src="https://github.com/user-attachments/assets/eec7755b-0074-4b92-ba36-b97ef77baa55" />
+<img width="1915" height="903" alt="Screenshot 2026-02-06 213023 - Copy" src="https://github.com/user-attachments/assets/cbc7b47d-3a86-410c-b1a9-dd3b97fdf311" />
 
 
-### Monitoring
+### Team member (Doctor)
 
-<img width="1878" height="558" alt="Screenshot 2025-08-12 204802" src="https://github.com/user-attachments/assets/87e82497-2daa-4515-bac0-04038633f261" />
+<img width="1908" height="908" alt="Screenshot 2026-02-06 213107" src="https://github.com/user-attachments/assets/59cb6721-5625-4deb-b26d-6455b99d1539" />
+
 
 ### Dark Mode
 
