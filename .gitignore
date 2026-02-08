@@ -43,3 +43,5 @@ firebase-debug.log
 
 # Firebase service account key (if any)
 serviceAccountKey.json
+
+npm-cache/
