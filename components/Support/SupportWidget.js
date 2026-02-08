@@ -612,7 +612,7 @@ const SupportWidget = () => {
                 <div className={styles.welcomeMessage}>
                   <FaRobot className={styles.welcomeIcon} />
                   <h4>Welcome to HealConnect Support!</h4>
-                  <p>I'm your AI assistant. How can I help you today?</p>
+                  <p>I&apos;m your AI assistant. How can I help you today&lsquo;</p>
                   <div className={styles.quickActions}>
                     <button onClick={() => handleSuggestionClick('I need to schedule an appointment')}>
                       📅 Schedule Appointment
