@@ -3,19 +3,71 @@ import PatientSidebar from "@components/Sidebar/PatientSidebar";
 import { UserContext } from "@lib/context";
 import Image from "next/image";
 import Link from "next/link";
-import { useContext } from "react";
-import { FaEdit, FaSpinner, FaUserMd, FaSearch } from "react-icons/fa";
+import { useContext, useState, useEffect } from "react";
+import { FaEdit, FaSpinner, FaUserMd, FaSearch, FaWifiSlash, FaSync, FaHeartbeat } from "react-icons/fa";
+import { useOfflineSync } from "@/hooks/useOfflineSync";
+import OfflineDashboard from "@/components/OfflineDashboard";
 
 
 export default function Dashboard(params) {
-    const { currentUser } = useContext(UserContext);
+    const userContext = useContext(UserContext);
+    const { currentUser , userRole } = useContext;
+    const [showOfflineView, setShowOfflineView] = useState(false);
+    
+    const {
+        syncStatus,
+        unsyncedCount,
+        isOnline,
+        syncData,
+        saveOfflineVitals,
+        getOfflineVitals
+    } = useOfflineSync(currentUser?.id);
+
+    useEffect(() => {
+        // Show offline dashboard when offline and has cached data
+        if (!isOnline && currentUser?.id) {
+            setShowOfflineView(true);
+        } else {
+            setShowOfflineView(false);
+        }
+    }, [isOnline, currentUser]);
+
+    if (showOfflineView) {
+        return (
+            <AuthCheck>
+                <PatientSidebar>
+                    <OfflineDashboard patientId={currentUser?.id} />
+                </PatientSidebar>
+            </AuthCheck>
+        );
+    }
+
     return (
         <AuthCheck>
             <PatientSidebar>
                 <div className="p-2 w-full h-full flex flex-col">
-                <div className="h-20"></div>
+                    {/* Offline Status Indicator */}
+                    {!isOnline && (
+                        <div className="bg-orange-600 text-white rounded-lg p-3 mb-4 flex items-center space-x-3">
+                            <FaWifiSlash className="animate-pulse" />
+                            <div>
+                                <p className="font-semibold">Offline Mode</p>
+                                <p className="text-sm opacity-90">{unsyncedCount} items pending sync</p>
+                            </div>
+                            <button
+                                onClick={syncData}
+                                disabled={syncStatus === 'syncing'}
+                                className="ml-auto bg-white text-orange-600 px-3 py-1 rounded font-medium text-sm hover:bg-orange-50 transition-colors flex items-center space-x-1"
+                            >
+                                <FaSync className={syncStatus === 'syncing' ? 'animate-spin' : ''} />
+                                <span>{syncStatus === 'syncing' ? 'Syncing' : 'Sync'}</span>
+                            </button>
+                        </div>
+                    )}
+                    
+                    <div className="h-20"></div>
                     <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 text-gray-900 dark:text-gray-100">
-                Patient Dashboard</h1>
+                        Patient Dashboard</h1>
                     <div className="flex flex-col lg:flex-row w-full h-auto gap-4">
                         <div className="w-full lg:basis-2/4 flex">
                             <div className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2">
@@ -34,18 +86,18 @@ export default function Dashboard(params) {
                                         </div>
                                     </div>
                                     <div className=" basis-3/4 flex flex-col p-2">
-                                            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 pb-2">Welcome Patient</h1>
-                                            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                                {"Name: " + currentUser?.name}</h2>
-                                            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                                {"Email: " + currentUser?.email}</h2>
-                                            <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-                                                {"Number: " + currentUser?.number}</h2>
-                                            <h2 className="bg-gray-100 dark:bg-gray-800 rounded-lg p-2 my-2 text-gray-900 dark:text-gray-100">
-                                                {"You tracked your health on Monday 21/04/2023 last time."}</h2>
-                                            <Link href="/patient/reports">
-                                                <p className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 cursor-pointer underline transition-colors">View last report!</p>
-                                            </Link>
+                                        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100 pb-2">Welcome Patient</h1>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                            {"Name: " + currentUser?.name}</h2>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                            {"Email: " + currentUser?.email}</h2>
+                                        <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                            {"Number: " + currentUser?.number}</h2>
+                                        <h2 className="bg-gray-100 dark:bg-gray-800 rounded-lg p-2 my-2 text-gray-900 dark:text-gray-100">
+                                            {"You tracked your health on Monday 21/04/2023 last time."}</h2>
+                                        <Link href="/patient/reports">
+                                            <p className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 cursor-pointer underline transition-colors">View last report!</p>
+                                        </Link>
                                     </div>
                                     <div className=" flex flex-col ">
                                         <Link href="/patient/edit-profile">
