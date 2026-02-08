@@ -13,7 +13,8 @@ import {
   FaFileContract,
   FaEnvelope,
   FaHeadset,
-  FaDiscord
+  FaDiscord,
+  FaDownload
 } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
@@ -21,10 +22,39 @@ import styles from './footer.module.css';
 export default function Footer() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [isVisible, setIsVisible] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
+    
+    // Check if PWA can be installed
+    const checkInstallPrompt = () => {
+      const handleBeforeInstallPrompt = (e) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setShowInstallButton(true);
+      };
+      
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+    
+    checkInstallPrompt();
   }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    
+    try {
+      const result = await deferredPrompt.prompt();
+      if (result.outcome === 'accepted') {
+        setShowInstallButton(false);
+        setDeferredPrompt(null);
+      }
+    } catch (error) {
+      console.error('Install error:', error);
+    }
+  };
 
   return (
     <footer className={styles.footer}>
@@ -133,6 +163,17 @@ export default function Footer() {
                 <FaDiscord />
                 <span className={styles.socialTooltip}>Join our Discord</span>
               </a>
+              {/* PWA Install Button */}
+              {showInstallButton && (
+                <button 
+                  onClick={handleInstall} 
+                  className={styles.pwaInstallButton}
+                  aria-label="Install HEALCONNECT App"
+                >
+                  <FaDownload className={styles.installIcon} />
+                  <span>Install App</span>
+                </button>
+              )}
             </div>
             <p className={styles.feedbackText}>
               Have feedback or ideas? Reach out — we had love to hear from you!
