@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@lib/firebase";
 import { UserContext } from "@lib/context";
 import { updateUserState } from "@lib/authUtils";
-import { useTheme } from "@context/ThemeContext";
+import { useTheme } from "@/context/ThemeContext";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
