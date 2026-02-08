@@ -62,13 +62,13 @@ const FAQ = () => {
       {/* Navbar spacer */}
       <div className={styles.navbarSpacer}></div>
 
-      <motion.div 
+      <motion.div
         className={styles.content}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <motion.header 
+        <motion.header
           className={styles.header}
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -83,44 +83,44 @@ const FAQ = () => {
           <div className={styles.titleUnderline}></div>
         </motion.header>
 
-        <motion.div 
+        <motion.div
           className={styles.faqContainer}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          {faqs.map((faq, index) => (
-            <motion.div 
-              key={index}
+          {faqs.map((faq) => (
+            <motion.div
+              key={faq.question}
               className={styles.faqItem}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
+              transition={{ duration: 0.3, delay: faqs.indexOf(faq) * 0.1 }}
               whileHover={{ y: -3 }}
             >
-              <button 
+              <button
                 className={styles.faqQuestion}
-                onClick={() => toggleFAQ(index)}
-                aria-expanded={activeIndex === index}
+                onClick={() => toggleFAQ(faqs.indexOf(faq))}
+                aria-expanded={activeIndex === faqs.indexOf(faq)}
               >
                 <span className={styles.questionText}>
-                  <span className={styles.questionNumber}>Q{index + 1}.</span>
+                  <span className={styles.questionNumber}>Q{faqs.indexOf(faq) + 1}.</span>
                   {faq.question}
                 </span>
-                <motion.span 
+                <motion.span
                   className={styles.chevron}
-                  animate={{ rotate: activeIndex === index ? 180 : 0 }}
+                  animate={{ rotate: activeIndex === faqs.indexOf(faq) ? 180 : 0 }}
                   transition={{ duration: 0.3 }}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </motion.span>
               </button>
-              
+
               <AnimatePresence>
-                {activeIndex === index && (
-                  <motion.div 
+                {activeIndex === faqs.indexOf(faq) && (
+                  <motion.div
                     className={styles.faqAnswer}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
@@ -130,7 +130,7 @@ const FAQ = () => {
                     <div className={styles.answerContent}>
                       <span className={styles.answerIcon}>
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </span>
                       <p>{faq.answer}</p>
@@ -142,7 +142,7 @@ const FAQ = () => {
           ))}
         </motion.div>
 
-        <motion.div 
+        <motion.div
           className={styles.helpSection}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -151,12 +151,12 @@ const FAQ = () => {
           <div className={styles.helpContent}>
             <div className={styles.helpIcon}>
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M12 12H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M12 12H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </div>
             <h3 className={styles.helpTitle}>Still have questions?</h3>
             <p className={styles.helpText}>Contact our support team for personalized assistance</p>
-            <motion.button 
+            <motion.button
               className={styles.helpButton}
               onClick={() => window.location.href = '/contact'}
               whileHover={{ scale: 1.05 }}
@@ -164,8 +164,8 @@ const FAQ = () => {
             >
               Contact Support
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </motion.button>
           </div>

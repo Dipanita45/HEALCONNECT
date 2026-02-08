@@ -78,7 +78,7 @@ export default function HowItWorks() {
       <main className="bg-white dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100 relative overflow-hidden">
         {/* Background with animated bubbles */}
         <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ zIndex: 0 }}>
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '300px',
@@ -91,7 +91,7 @@ export default function HowItWorks() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '200px',
@@ -104,7 +104,7 @@ export default function HowItWorks() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '150px',
@@ -118,7 +118,7 @@ export default function HowItWorks() {
             }}
           />
         </div>
-        
+
         <style jsx>{`
           @keyframes float {
             0%, 100% {
@@ -132,7 +132,7 @@ export default function HowItWorks() {
             }
           }
         `}</style>
-        
+
         <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
@@ -166,21 +166,21 @@ export default function HowItWorks() {
           {/* Steps Section */}
           <div className="max-w-6xl mx-auto mb-16">
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-              {steps.map((step, index) => (
+              {steps.map((step) => (
                 <motion.div
-                  key={index}
+                  key={step.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  transition={{ duration: 0.5, delay: steps.indexOf(step) * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05, y: -5 }}
                   className="relative"
                 >
                   {/* Connection Line */}
-                  {index < steps.length - 1 && (
+                  {steps.indexOf(step) < steps.length - 1 && (
                     <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-gray-300 dark:from-gray-700 dark:via-gray-600 dark:to-transparent transform -translate-x-1/2"></div>
                   )}
-                  
+
                   {/* Step Card */}
                   <div className={`
                     ${step.color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : ''}
@@ -201,7 +201,7 @@ export default function HowItWorks() {
                     `}>
                       {step.number}
                     </div>
-                    
+
                     {/* Icon */}
                     <div className={`
                       ${step.color === 'blue' ? 'text-blue-600 dark:text-blue-400' : ''}
@@ -213,32 +213,30 @@ export default function HowItWorks() {
                     `}>
                       {step.icon}
                     </div>
-                    
+
                     {/* Content */}
-                    <h3 className={`font-bold text-lg mb-2 ${
-                      step.color === 'blue' ? 'text-blue-800 dark:text-blue-200' : ''
-                    }${step.color === 'green' ? 'text-green-800 dark:text-green-200' : ''
-                    }${step.color === 'red' ? 'text-red-800 dark:text-red-200' : ''
-                    }${step.color === 'purple' ? 'text-purple-800 dark:text-purple-200' : ''
-                    }${step.color === 'indigo' ? 'text-indigo-800 dark:text-indigo-200' : ''
-                    }`}>
+                    <h3 className={`font-bold text-lg mb-2 ${step.color === 'blue' ? 'text-blue-800 dark:text-blue-200' : ''
+                      }${step.color === 'green' ? 'text-green-800 dark:text-green-200' : ''
+                      }${step.color === 'red' ? 'text-red-800 dark:text-red-200' : ''
+                      }${step.color === 'purple' ? 'text-purple-800 dark:text-purple-200' : ''
+                      }${step.color === 'indigo' ? 'text-indigo-800 dark:text-indigo-200' : ''
+                      }`}>
                       {step.title}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
                       {step.description}
                     </p>
-                    
+
                     {/* Features */}
                     <ul className="space-y-1">
-                      {step.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                          <FaCheckCircle className={`mr-2 ${
-                            step.color === 'blue' ? 'text-blue-500' : ''
-                          }${step.color === 'green' ? 'text-green-500' : ''
-                          }${step.color === 'red' ? 'text-red-500' : ''
-                          }${step.color === 'purple' ? 'text-purple-500' : ''
-                          }${step.color === 'indigo' ? 'text-indigo-500' : ''
-                          }`} />
+                      {step.features.map((feature) => (
+                        <li key={feature} className="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                          <FaCheckCircle className={`mr-2 ${step.color === 'blue' ? 'text-blue-500' : ''
+                            }${step.color === 'green' ? 'text-green-500' : ''
+                            }${step.color === 'red' ? 'text-red-500' : ''
+                            }${step.color === 'purple' ? 'text-purple-500' : ''
+                            }${step.color === 'indigo' ? 'text-indigo-500' : ''
+                            }`} />
                           {feature}
                         </li>
                       ))}
@@ -261,12 +259,12 @@ export default function HowItWorks() {
               Platform Features
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, index) => (
+              {features.map((feature) => (
                 <motion.div
-                  key={index}
+                  key={feature.title}
                   initial={{ opacity: 0, scale: 0.9 }}
                   whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
+                  transition={{ duration: 0.3, delay: features.indexOf(feature) * 0.1 }}
                   viewport={{ once: true }}
                   whileHover={{ scale: 1.05, y: -3 }}
                   className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 text-center"
