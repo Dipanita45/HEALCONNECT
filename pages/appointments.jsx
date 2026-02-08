@@ -230,12 +230,14 @@ export default function Appointments() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen to auth state
+ useEffect(() => {
   const unsub = onAuthStateChanged(auth, (user) => {
     console.log("AUTH USER:", user);
   });
 
   return () => unsub();
 }, []);
+
 
   useEffect(() => {
   if (formData.date && formData.doctor) {
