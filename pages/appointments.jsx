@@ -230,18 +230,19 @@ export default function Appointments() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen to auth state
-  const unsub = onAuthStateChanged(auth, (user) => {
-    console.log("AUTH USER:", user);
-  });
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      console.log("AUTH USER:", user);
+    });
 
-  return () => unsub();
-}, []);
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
-  if (formData.date && formData.doctor) {
-    fetchBookedSlots(formData.date, formData.doctor);
-  }
-}, [formData.date, formData.doctor]);
+    if (formData.date && formData.doctor) {
+      fetchBookedSlots(formData.date, formData.doctor);
+    }
+  }, [formData.date, formData.doctor]);
 
   const handleChange = e => {
     const { name, value } = e.target;
