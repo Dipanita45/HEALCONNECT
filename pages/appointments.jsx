@@ -1,12 +1,12 @@
 
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
-import Image from 'next/image';
-import { auth } from "../lib/firebase";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import React, { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import styles from './Appointments.module.css'
+import Image from 'next/image'
+import { auth } from '../lib/firebase'
+import { signInAnonymously, onAuthStateChanged } from 'firebase/auth'
+import { useBookedSlots } from '@/hooks/useBookedSlots'
+import { createAppointment } from '@/lib/appointmentUtils'
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -238,11 +238,8 @@ export default function Appointments() {
     return () => unsub();
   }, []);
 
-  useEffect(() => {
-    if (formData.date && formData.doctor) {
-      fetchBookedSlots(formData.date, formData.doctor);
-    }
-  }, [formData.date, formData.doctor]);
+  // Slot fetching is handled by useBookedSlots hook below
+  // (keeps real-time subscriptions and caching centralized)
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -291,72 +288,83 @@ export default function Appointments() {
   return !snapshot.empty;
 };
 
+const [slotLoadingError, setSlotLoadingError] = useState(null);
+const [appointmentError, setAppointmentError] = useState(null);
+
+// Use custom hook to fetch booked slots with real-time updates
+const { bookedSlots, loading: slotsLoading, error: slotsError } = useBookedSlots(
+  formData.date,
+  formData.doctor
+);
+
+// Update bookedTimes when bookedSlots changes
+useEffect(() => {
+  setBookedTimes(bookedSlots);
+}, [bookedSlots]);
+
+// Update error state when slots error changes
+useEffect(() => {
+  setSlotLoadingError(slotsError);
+}, [slotsError]);
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!validateForm()) return;
   setIsSubmitting(true);
-
-  const alreadyBooked = await isSlotAlreadyBooked();
-
-  if (alreadyBooked) {
-    alert("This time slot is already booked. Please choose another.");
-    setIsSubmitting(false);
-    return;
-  }
-
-  // 👉 IMPORTANT: save appointment
-  await addDoc(collection(db, "appointments"), {
-    name: formData.name,
-    date: formData.date,
-    time: formData.time,
-    doctorName: formData.doctor,
-    reason: formData.reason,
-    createdAt: new Date()
-  });
-
-  const successElement = document.getElementById("booking-success");
-  successElement.style.display = "flex";
-
-  setTimeout(() => {
-    successElement.style.display = "none";
-    alert("Appointment booked successfully!");
-
-    setFormData({
-      name: "",
-      date: "",
-      time: "",
-      doctor: "",
-      reason: ""
-    });
-
-    setStep(1);
-    setSelectedDoctor(null);
-    setFormErrors({});
-    setBookedTimes([]);
-    setIsSubmitting(false);
-  }, 2000);
-};
-
-  const fetchBookedSlots = async (date, doctor) => {
-  if (!date || !doctor) return;
+  setAppointmentError(null);
 
   try {
-    const q = query(
-      collection(db, "appointments"),
-      where("date", "==", date),
-      where("doctorName", "==", doctor)
-    );
+    // Try to create appointment using utility function
+    // This function handles duplicate checking internally
+    const appointmentId = await createAppointment({
+      name: formData.name,
+      date: formData.date,
+      time: formData.time,
+      doctorName: formData.doctor,
+      reason: formData.reason,
+    });
 
-    const snapshot = await getDocs(q);
-    const times = snapshot.docs.map(doc => doc.data().time);
+    // Show success animation
+    const successElement = document.getElementById('booking-success');
+    if (successElement) {
+      successElement.style.display = 'flex';
+    }
 
-    setBookedTimes(times);
+    // Reset form after success
+    setTimeout(() => {
+      if (successElement) {
+        successElement.style.display = 'none';
+      }
+
+      setFormData({
+        name: '',
+        date: '',
+        time: '',
+        doctor: '',
+        reason: '',
+      });
+
+      setStep(1);
+      setSelectedDoctor(null);
+      setFormErrors({});
+      setBookedTimes([]);
+      setIsSubmitting(false);
+    }, 2000);
   } catch (error) {
-    console.error("Error fetching booked slots:", error);
+    // Show error message without alert
+    const errorMessage =
+      error.message || 'Failed to book appointment. Please try again.';
+    setAppointmentError(errorMessage);
+    setIsSubmitting(false);
+
+    // Optionally scroll to error message
+    setTimeout(() => setAppointmentError(null), 5000);
   }
 };
 
+// `bookedTimes` and `isSubmitting` are defined earlier and updated
+// via the `useBookedSlots` hook and submission flow above.
 
    const availableTimes = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
@@ -562,19 +570,80 @@ const handleSubmit = async (e) => {
                         className={`${styles.formInput} ${formErrors.time ? styles.error : ''}`}
                       >
                         <option value="">Select Time</option>
-                          {filterTimesByAvailability(
+                            {slotsLoading ? (
+                              <option disabled>Loading available times...</option>
+                            ) : filterTimesByAvailability(
                               availableTimes,
-                               selectedDoctor,
-                             formData.date
-                            ).map(time => (
-                            <option
-                            key={time}
-                             value={time}
-                            disabled={bookedTimes.includes(time)}
-                          >
-                          {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
-                           </option>
-                       ))}
+                              selectedDoctor,
+                              formData.date
+                            ).map((time) => (
+                              <option
+                                key={time}
+                                value={time}
+                                disabled={bookedTimes.includes(time)}
+                              >
+                                {time}
+                                {bookedTimes.includes(time) ? ' (Booked)' : ''}
+                              </option>
+                            ))}
+                                        {/* Show error message if slot loading failed */}
+                                        {slotLoadingError && (
+                                          <motion.div
+                                            className={styles.errorAlert}
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            variants={formItemVariants}
+                                          >
+                                            <svg
+                                              className={styles.errorIcon}
+                                              viewBox="0 0 24 24"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"
+                                                fill="currentColor"
+                                              />
+                                            </svg>
+                                            <div>
+                                              <p className={styles.errorAlertTitle}>
+                                                Unable to Load Availability
+                                              </p>
+                                              <p className={styles.errorAlertMessage}>
+                                                {slotLoadingError}
+                                              </p>
+                                            </div>
+                                          </motion.div>
+                                        )}
+
+                                        {/* Show error message if appointment creation failed */}
+                                        {appointmentError && (
+                                          <motion.div
+                                            className={styles.errorAlert}
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            variants={formItemVariants}
+                                          >
+                                            <svg
+                                              className={styles.errorIcon}
+                                              viewBox="0 0 24 24"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+                                              <path d="M12 7v5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                                              <circle cx="12" cy="18" r="1" fill="currentColor" />
+                                            </svg>
+                                            <div>
+                                              <p className={styles.errorAlertTitle}>
+                                                Booking Error
+                                              </p>
+                                              <p className={styles.errorAlertMessage}>
+                                                {appointmentError}
+                                              </p>
+                                            </div>
+                                          </motion.div>
+                                        )}
                       </select>
                       <label className={styles.formLabel}>Preferred Time</label>
                       <div className={styles.formUnderline}></div>

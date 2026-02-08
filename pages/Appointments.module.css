@@ -898,3 +898,109 @@ select.formInput {
 .dark select.formInput {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(var(--foreground-rgb))' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
 }
+
+/* ==================== Error Alert Styles ==================== */
+.errorAlert {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.dark .errorAlert {
+  background-color: #7f1d1d;
+  border-color: #b91c1c;
+  color: #fecaca;
+}
+
+.errorIcon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.errorAlertTitle {
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  font-size: 0.95rem;
+}
+
+.errorAlertMessage {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+/* ==================== Disabled Slot Styles ==================== */
+select.formInput option:disabled {
+  background-color: #f3f4f6;
+  color: #9ca3af;
+  opacity: 0.6;
+  text-decoration: line-through;
+}
+
+.dark select.formInput option:disabled {
+  background-color: #374151;
+  color: #6b7280;
+}
+
+select.formInput option:disabled::before {
+  content: '❌ ';
+}
+
+/* Indicate loading state on select */
+select.formInput:disabled {
+  background-color: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.dark select.formInput:disabled {
+  background-color: #1f2937;
+  color: #6b7280;
+}
+
+/* ==================== Loading Indicator ==================== */
+.slotsLoadingIndicator {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  color: #6366f1;
+}
+
+.dark .slotsLoadingIndicator {
+  color: #a5b4fc;
+}
+
+.loadingSpinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.5rem;
+}
+
+.dark .loadingSpinner {
+  border-color: #374151;
+  border-top-color: #a5b4fc;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
