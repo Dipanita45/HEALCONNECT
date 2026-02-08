@@ -12,10 +12,30 @@ import Layout from './layout'
 import SupportWidget from '@/components/Support/SupportWidget'
 import PWAInstallPrompt from '@/components/PWAInstallPrompt'
 import PWAInitializer from '@/components/PWAInitializer'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/router'
+import Loader from '@/components/Loader'
 
 // ✅ Single App component
 function MyApp({ Component, pageProps }) {
   const userData = useUserData()
+  const router = useRouter()
+  const [isRouteLoading, setIsRouteLoading] = useState(false)
+
+  useEffect(() => {
+    const handleStart = () => setIsRouteLoading(true)
+    const handleEnd = () => setIsRouteLoading(false)
+
+    router.events.on('routeChangeStart', handleStart)
+    router.events.on('routeChangeComplete', handleEnd)
+    router.events.on('routeChangeError', handleEnd)
+
+    return () => {
+      router.events.off('routeChangeStart', handleStart)
+      router.events.off('routeChangeComplete', handleEnd)
+      router.events.off('routeChangeError', handleEnd)
+    }
+  }, [router.events])
 
   return (
     <ThemeProvider>
@@ -23,6 +43,11 @@ function MyApp({ Component, pageProps }) {
         <PWAInitializer />
         <PWAInstallPrompt />
         <Navbar />
+        {isRouteLoading && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-white/60 backdrop-blur">
+            <Loader show variant="stethoscope" size={64} />
+          </div>
+        )}
         <Layout>
           <Component {...pageProps} />
         </Layout>
