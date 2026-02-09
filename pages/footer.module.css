@@ -49,13 +49,20 @@
 
 @keyframes float {
   0%, 100% {
-    transform: translate(0, 0) rotate(0deg);
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.1;
   }
   33% {
-    transform: translate(30px, -30px) rotate(60deg);
+    transform: translateY(-30px) rotate(0deg);
+    opacity: 0.5;
   }
   66% {
-    transform: translate(-20px, 20px) rotate(-30deg);
+    transform: translateY(20px) rotate(180deg);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0) rotate(360deg);
+    opacity: 0.1;
   }
 }
 

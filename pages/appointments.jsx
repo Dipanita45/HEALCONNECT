@@ -1,17 +1,12 @@
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  Timestamp
-} from "firebase/firestore";
 
-import { db } from "../lib/firebase";
+import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Appointments.module.css';
 import Image from 'next/image';
+import { auth } from "../lib/firebase";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -68,7 +63,27 @@ const doctors = [
     nextAvailable: "Today, 3:00 PM",
     experience: "12 years",
     rating: 4.8,
-    reviews: 124
+    reviews: 124,
+    availability: {
+  monday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  wednesday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  thursday: [
+    { start: "13:00", end: "17:00" }
+  ],
+  friday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ]
+}
   },
   {
     id: 2,
@@ -79,7 +94,23 @@ const doctors = [
     nextAvailable: "Tomorrow, 10:00 AM",
     experience: "8 years",
     rating: 4.6,
-    reviews: 98
+    reviews: 98,
+    availability: {
+  monday: [
+    { start: "10:00", end: "14:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ],
+  wednesday: [],
+  thursday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  friday: [
+    { start: "13:00", end: "17:00" }
+  ]
+}   
   },
   {
     id: 3,
@@ -90,7 +121,25 @@ const doctors = [
     nextAvailable: "Today, 5:30 PM",
     experience: "10 years",
     rating: 4.9,
-    reviews: 156
+    reviews: 156,
+    availability: {
+  monday: [
+    { start: "08:00", end: "12:00" },
+    { start: "13:00", end: "15:00" }
+  ],
+  tuesday: [
+    { start: "10:00", end: "14:00" }
+  ],
+  wednesday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  thursday: [],
+  friday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ]
+}
   },
   {
     id: 4,
@@ -101,9 +150,68 @@ const doctors = [
     nextAvailable: "Today, 1:00 PM",
     experience: "15 years",
     rating: 4.7,
-    reviews: 203
+    reviews: 203,
+    availability: {
+  monday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "17:00" }
+  ],
+  tuesday: [
+    { start: "09:00", end: "12:00" }
+  ],
+  wednesday: [
+    { start: "13:00", end: "17:00" }
+  ],
+  thursday: [
+    { start: "09:00", end: "12:00" },
+    { start: "13:00", end: "16:00" }
+  ],
+  friday: [
+    { start: "10:00", end: "14:00" }
+  ]
+} 
   }
 ];
+
+const getDayFromDate = (date) => {
+  return new Date(date)
+    .toLocaleDateString("en-US", { weekday: "long" })
+    .toLowerCase();
+};
+
+const filterTimesByAvailability = (times, doctor, date) => {
+  if (!doctor || !date) return times;
+
+  const day = getDayFromDate(date);
+  const windows = doctor.availability?.[day];
+
+  // Doctor not working that day
+  if (!windows || windows.length === 0) return [];
+
+  return times.filter((time) => {
+    const [value, period] = time.split(" ");
+    let [hours, minutes] = value.split(":").map(Number);
+
+    if (period === "PM" && hours !== 12) hours += 12;
+    if (period === "AM" && hours === 12) hours = 0;
+
+    const timeInMinutes = hours * 60 + (minutes || 0);
+
+    // ✅ check against ANY availability window
+    return windows.some(({ start, end }) => {
+      const [sh, sm] = start.split(":").map(Number);
+      const [eh, em] = end.split(":").map(Number);
+
+      const startMinutes = sh * 60 + sm;
+      const endMinutes = eh * 60 + em;
+
+      return (
+        timeInMinutes >= startMinutes &&
+        timeInMinutes <= endMinutes
+      );
+    });
+  });
+};
 
 export default function Appointments() {
   const [formData, setFormData] = useState({
@@ -116,14 +224,24 @@ export default function Appointments() {
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
-  const [isVisible, setIsVisible] = useState(false);
   const [formErrors, setFormErrors] = useState({});
-  const [submitMessage, setSubmitMessage] = useState(null); // { text, type: 'success' | 'error' }
+  const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Listen to auth state
   useEffect(() => {
-    setIsVisible(true);
+    const unsub = onAuthStateChanged(auth, (user) => {
+      console.log("AUTH USER:", user);
+    });
+
+    return () => unsub();
   }, []);
+
+  useEffect(() => {
+    if (formData.date && formData.doctor) {
+      fetchBookedSlots(formData.date, formData.doctor);
+    }
+  }, [formData.date, formData.doctor]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -133,10 +251,7 @@ export default function Appointments() {
     if (formErrors[name]) {
       setFormErrors({ ...formErrors, [name]: '' });
     }
-    // Clear submit message when user edits form
-    if (submitMessage) {
-      setSubmitMessage(null);
-    }
+    
   };
 
   const validateForm = () => {
@@ -161,15 +276,14 @@ export default function Appointments() {
     setSelectedDoctor(null);
     setStep(1);
     setFormErrors({});
-    setSubmitMessage(null);
   };
-
-const checkAppointmentConflict = async (doctorId, date, time) => {
+ 
+ const isSlotAlreadyBooked = async () => {
   const q = query(
     collection(db, "appointments"),
-    where("doctorId", "==", doctorId),
-    where("date", "==", date),
-    where("time", "==", time)
+    where("date", "==", formData.date),
+    where("doctorName", "==", formData.doctor),
+    where("time", "==", formData.time)
   );
 
   const snapshot = await getDocs(q);
@@ -180,50 +294,68 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!validateForm()) return;
-
   setIsSubmitting(true);
 
-  try {
-    const conflict = await checkAppointmentConflict(
-      selectedDoctor.id,
-      formData.date,
-      formData.time
-    );
+  const alreadyBooked = await isSlotAlreadyBooked();
 
-    if (conflict) {
-      setSubmitMessage({ text: "This time slot is already booked. Please choose another.", type: "error" });
-      setIsSubmitting(false);
-      return;
-    }
-
-    await addDoc(collection(db, "appointments"), {
-      patientName: formData.name,
-      doctorId: selectedDoctor.id,
-      doctorName: selectedDoctor.name,
-      date: formData.date,
-      time: formData.time,
-      reason: formData.reason,
-      createdAt: Timestamp.now()
-    });
-
-    setSubmitMessage({ text: "Appointment booked successfully!", type: "success" });
-
-    setFormData({
-      name: '',
-      date: '',
-      time: '',
-      doctor: '',
-      reason: ''
-    });
-    setStep(1);
-    setSelectedDoctor(null);
-  } catch (error) {
-    console.error(error);
-    setSubmitMessage({ text: "Failed to book appointment.", type: "error" });
+  if (alreadyBooked) {
+    alert("This time slot is already booked. Please choose another.");
+    setIsSubmitting(false);
+    return;
   }
 
-  setIsSubmitting(false);
+  // 👉 IMPORTANT: save appointment
+  await addDoc(collection(db, "appointments"), {
+    name: formData.name,
+    date: formData.date,
+    time: formData.time,
+    doctorName: formData.doctor,
+    reason: formData.reason,
+    createdAt: new Date()
+  });
+
+  const successElement = document.getElementById("booking-success");
+  successElement.style.display = "flex";
+
+  setTimeout(() => {
+    successElement.style.display = "none";
+    alert("Appointment booked successfully!");
+
+    setFormData({
+      name: "",
+      date: "",
+      time: "",
+      doctor: "",
+      reason: ""
+    });
+
+    setStep(1);
+    setSelectedDoctor(null);
+    setFormErrors({});
+    setBookedTimes([]);
+    setIsSubmitting(false);
+  }, 2000);
 };
+
+  const fetchBookedSlots = async (date, doctor) => {
+  if (!date || !doctor) return;
+
+  try {
+    const q = query(
+      collection(db, "appointments"),
+      where("date", "==", date),
+      where("doctorName", "==", doctor)
+    );
+
+    const snapshot = await getDocs(q);
+    const times = snapshot.docs.map(doc => doc.data().time);
+
+    setBookedTimes(times);
+  } catch (error) {
+    console.error("Error fetching booked slots:", error);
+  }
+};
+
 
    const availableTimes = [
     "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
@@ -379,26 +511,7 @@ const handleSubmit = async (e) => {
                   initial="hidden"
                   animate="visible"
                 >
-                  {submitMessage && (
-                    <div
-                      className={`${styles.submitMessage} ${submitMessage.type === 'success' ? styles.submitMessageSuccess : styles.submitMessageError}`}
-                      role="alert"
-                    >
-                      {submitMessage.type === 'success' ? (
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                          <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
-                      ) : (
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <circle cx="12" cy="12" r="10" />
-                          <line x1="12" y1="8" x2="12" y2="12" />
-                          <line x1="12" y1="16" x2="12.01" y2="16" />
-                        </svg>
-                      )}
-                      {submitMessage.text}
-                    </div>
-                  )}
+                 
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}
@@ -448,9 +561,19 @@ const handleSubmit = async (e) => {
                         className={`${styles.formInput} ${formErrors.time ? styles.error : ''}`}
                       >
                         <option value="">Select Time</option>
-                        {availableTimes.map(time => (
-                          <option key={time} value={time}>{time}</option>
-                        ))}
+                          {filterTimesByAvailability(
+                              availableTimes,
+                               selectedDoctor,
+                             formData.date
+                            ).map(time => (
+                            <option
+                            key={time}
+                             value={time}
+                            disabled={bookedTimes.includes(time)}
+                          >
+                          {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
+                           </option>
+                       ))}
                       </select>
                       <label className={styles.formLabel}>Preferred Time</label>
                       <div className={styles.formUnderline}></div>
