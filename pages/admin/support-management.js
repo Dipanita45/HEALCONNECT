@@ -583,7 +583,7 @@ const AdminSupportManagement = () => {
           <div className={styles.emptyState}>
             <FaBell className={styles.emptyIcon} />
             <h3>No notifications</h3>
-            <p>You're all caught up!</p>
+            <p>You&apos;re all caught up!</p>
           </div>
         ) : (
           notifications.map((notification) => (
