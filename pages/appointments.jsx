@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   collection,
   addDoc,
@@ -8,10 +9,17 @@ import {
 } from "firebase/firestore";
 
 import { db } from "../lib/firebase";
+=======
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+>>>>>>> fix/secure-firestore-auth
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Appointments.module.css';
 import Image from 'next/image';
+import { addDoc } from "firebase/firestore";
+import { auth } from "../lib/firebase";
+import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -118,12 +126,36 @@ export default function Appointments() {
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
   const [isVisible, setIsVisible] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+<<<<<<< HEAD
   const [submitMessage, setSubmitMessage] = useState(null); // { text, type: 'success' | 'error' }
+=======
+  const [bookedTimes, setBookedTimes] = useState([]);
+>>>>>>> fix/secure-firestore-auth
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+useEffect(() => {
+  // Auto sign-in anonymously
+  signInAnonymously(auth).catch((error) => {
+    console.error("Anonymous auth failed:", error);
+  });
+
+  // Listen to auth state
+  const unsub = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+  });
+
+  return () => unsub();
+}, []);
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  useEffect(() => {
+  if (formData.date && formData.doctor) {
+    fetchBookedSlots(formData.date, formData.doctor);
+  }
+}, [formData.date, formData.doctor]);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -164,12 +196,21 @@ export default function Appointments() {
     setSubmitMessage(null);
   };
 
+<<<<<<< HEAD
 const checkAppointmentConflict = async (doctorId, date, time) => {
   const q = query(
     collection(db, "appointments"),
     where("doctorId", "==", doctorId),
     where("date", "==", date),
     where("time", "==", time)
+=======
+ const isSlotAlreadyBooked = async () => {
+  const q = query(
+    collection(db, "appointments"),
+    where("date", "==", formData.date),
+    where("doctorName", "==", formData.doctor),
+    where("time", "==", formData.time)
+>>>>>>> fix/secure-firestore-auth
   );
 
   const snapshot = await getDocs(q);
@@ -180,6 +221,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   if (!validateForm()) return;
+<<<<<<< HEAD
 
   setIsSubmitting(true);
 
@@ -195,6 +237,70 @@ const handleSubmit = async (e) => {
       setIsSubmitting(false);
       return;
     }
+=======
+  setIsSubmitting(true);
+
+  const alreadyBooked = await isSlotAlreadyBooked();
+
+  if (alreadyBooked) {
+    alert("This time slot is already booked. Please choose another.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  // 👉 IMPORTANT: save appointment
+  await addDoc(collection(db, "appointments"), {
+    name: formData.name,
+    date: formData.date,
+    time: formData.time,
+    doctorName: formData.doctor,
+    reason: formData.reason,
+    createdAt: new Date()
+  });
+
+  const successElement = document.getElementById("booking-success");
+  successElement.style.display = "flex";
+
+  setTimeout(() => {
+    successElement.style.display = "none";
+    alert("Appointment booked successfully!");
+
+    setFormData({
+      name: "",
+      date: "",
+      time: "",
+      doctor: "",
+      reason: ""
+    });
+
+    setStep(1);
+    setSelectedDoctor(null);
+    setFormErrors({});
+    setBookedTimes([]);
+    setIsSubmitting(false);
+  }, 2000);
+};
+
+  const fetchBookedSlots = async (date, doctor) => {
+  if (!date || !doctor) return;
+
+  try {
+    const q = query(
+      collection(db, "appointments"),
+      where("date", "==", date),
+      where("doctorName", "==", doctor)
+    );
+
+    const snapshot = await getDocs(q);
+    const times = snapshot.docs.map(doc => doc.data().time);
+
+    setBookedTimes(times);
+  } catch (error) {
+    console.error("Error fetching booked slots:", error);
+  }
+};
+
+>>>>>>> fix/secure-firestore-auth
 
     await addDoc(collection(db, "appointments"), {
       patientName: formData.name,
@@ -449,8 +555,14 @@ const handleSubmit = async (e) => {
                       >
                         <option value="">Select Time</option>
                         {availableTimes.map(time => (
-                          <option key={time} value={time}>{time}</option>
-                        ))}
+                                              <option
+                                                key={time}
+                                                value={time}
+                                         disabled={bookedTimes.includes(time)}
+                                           >
+                             {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
+                           </option>
+                          ))}
                       </select>
                       <label className={styles.formLabel}>Preferred Time</label>
                       <div className={styles.formUnderline}></div>
