@@ -225,7 +225,6 @@ export default function Appointments() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
   const [formErrors, setFormErrors] = useState({});
-
   const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -278,7 +277,7 @@ export default function Appointments() {
     setStep(1);
     setFormErrors({});
   };
-
+ 
  const isSlotAlreadyBooked = async () => {
   const q = query(
     collection(db, "appointments"),
