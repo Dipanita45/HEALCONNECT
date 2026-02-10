@@ -32,13 +32,13 @@ export default function EditProfile() {
                 name: currentUser?.name || "",
                 email: currentUser?.email || "",
                 number: currentUser?.number || "",
-                age: "22",
-                bloodGroup: "B+",
-                weight: "90",
-                height: "185",
-                diabetesStatus: "No",
-                surgicalHistory: "No",
-                cardiacHistory: "No"
+                age: currentUser?.age || "",
+                bloodGroup: currentUser?.bloodGroup || "",
+                weight: currentUser?.weight || "",
+                height: currentUser?.height || "",
+                diabetesStatus: currentUser?.diabetesStatus || "",
+                surgicalHistory: currentUser?.surgicalHistory || "",
+                cardiacHistory: currentUser?.cardiacHistory || ""
             });
         }
     }, [currentUser]);
@@ -67,14 +67,14 @@ export default function EditProfile() {
                     ...formData
                 };
                 localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
-                
+
                 // Update React context
                 setCurrentUser(updatedUserData);
-                
+
                 const successMessage = "Profile updated successfully!";
                 console.log("Setting message:", successMessage); // Debug log
                 setMessage(successMessage);
-                
+
                 // Clear message after 3 seconds
                 setTimeout(() => {
                     setMessage("");
@@ -93,7 +93,7 @@ export default function EditProfile() {
             <PatientSidebar>
                 <div className="p-2 w-full h-full flex flex-col">
                     <div className="h-20"></div>
-                    
+
                     <div className="max-w-4xl mx-auto w-full">
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                             <div className="flex justify-between items-center mb-6">
@@ -109,11 +109,10 @@ export default function EditProfile() {
                             {message && (
                                 <>
                                     {console.log("Rendering message:", message)}
-                                    <div className={`mb-4 p-4 rounded-lg ${
-                                        message.includes("success") 
-                                            ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600" 
+                                    <div className={`mb-4 p-4 rounded-lg ${message.includes("success")
+                                            ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600"
                                             : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-600"
-                                    }`}>
+                                        }`}>
                                         {message}
                                     </div>
                                 </>
@@ -183,7 +182,7 @@ export default function EditProfile() {
                                 {/* Medical Information */}
                                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                                     <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Medical Information</h2>
-                                    
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
