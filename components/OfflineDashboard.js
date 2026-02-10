@@ -27,21 +27,59 @@ export default function OfflineDashboard({ patientId }) {
   useEffect(() => {
     setIsOnline(navigator.onLine)
     
+    let isMounted = true
+
     const handleOnline = () => {
-      setIsOnline(true)
-      setSyncStatus('syncing')
-      syncData()
+      if (isMounted) {
+        setIsOnline(true)
+        setSyncStatus('syncing')
+        syncData()
+      }
     }
     
     const handleOffline = () => {
-      setIsOnline(false)
-      setSyncStatus('offline')
+      if (isMounted) {
+        setIsOnline(false)
+        setSyncStatus('offline')
+      }
     }
+
+    // Periodic connectivity check (more reliable than just relying on events)
+    const checkConnectivity = async () => {
+      if (!isMounted) return
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3000)
+        
+        await fetch(window.location.origin + '/manifest.json', {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
+        if (isMounted) {
+          setIsOnline(true)
+          setSyncStatus('syncing')
+          syncData()
+        }
+      } catch (error) {
+        if (isMounted) {
+          setIsOnline(false)
+          setSyncStatus('offline')
+        }
+      }
+    }
+
+    // Run connectivity check every 5 seconds
+    const connectivityInterval = setInterval(checkConnectivity, 5000)
 
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
 
     return () => {
+      isMounted = false
+      clearInterval(connectivityInterval)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
     }

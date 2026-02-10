@@ -160,7 +160,7 @@ const Support = () => {
           >
             <h2>Why Choose Our Support System?</h2>
             <p>
-              Experience healthcare support that\'s fast, intelligent, and always available when you need it.
+              Experience healthcare support that&apos;s fast, intelligent, and always available when you need it.
             </p>
           </motion.div>
 

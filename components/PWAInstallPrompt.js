@@ -18,16 +18,54 @@ export default function PWAInstallPrompt() {
     // Check online status
     setIsOnline(navigator.onLine)
     
+    let isMounted = true
+
     const handleOnline = () => {
-      setIsOnline(true)
-      setShowOfflineMessage(false)
+      if (isMounted) {
+        setIsOnline(true)
+        setShowOfflineMessage(false)
+      }
     }
     
     const handleOffline = () => {
-      setIsOnline(false)
-      setShowOfflineMessage(true)
-      setTimeout(() => setShowOfflineMessage(false), 5000)
+      if (isMounted) {
+        setIsOnline(false)
+        setShowOfflineMessage(true)
+        setTimeout(() => {
+          if (isMounted) setShowOfflineMessage(false)
+        }, 5000)
+      }
     }
+
+    // Periodic connectivity check (more reliable than just relying on events)
+    const checkConnectivity = async () => {
+      if (!isMounted) return
+      try {
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 3000)
+        
+        await fetch(window.location.origin + '/manifest.json', {
+          method: 'HEAD',
+          mode: 'no-cors',
+          cache: 'no-store',
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        if (isMounted) setIsOnline(true)
+      } catch (error) {
+        if (isMounted) {
+          setIsOnline(false)
+          setShowOfflineMessage(true)
+          setTimeout(() => {
+            if (isMounted) setShowOfflineMessage(false)
+          }, 5000)
+        }
+      }
+    }
+
+    // Run connectivity check every 5 seconds
+    const connectivityInterval = setInterval(checkConnectivity, 5000)
 
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
@@ -42,6 +80,8 @@ export default function PWAInstallPrompt() {
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
 
     return () => {
+      isMounted = false
+      clearInterval(connectivityInterval)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
@@ -156,9 +196,9 @@ export default function PWAInstallPrompt() {
 
       {/* Online Status Indicator */}
       {isOnline && (
-        <div className="fixed bottom-4 right-4 z-30">
-          <div className="bg-green-600 text-white rounded-full p-2 shadow-lg flex items-center space-x-2">
-            <FaWifi className="text-sm" />
+        <div className="fixed bottom-8 right-8 z-30">
+          <div className="bg-green-600 text-white rounded-full py-1.5 px-3 shadow-lg flex items-center space-x-2 text-sm">
+            <FaWifi className="text-sm animate-pulse" />
             <span className="text-xs font-medium">Online</span>
           </div>
         </div>
