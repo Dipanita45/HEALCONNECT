@@ -31,7 +31,24 @@ export default function Layout({ children }) {
     if (!mounted || isUserLoading) return; // Wait for auth to load
 
     // SECURITY: userRole comes from Firebase Auth + Firestore (verified in userInfo.js)
-    const publicPages = ["/", "/login", "/signup", "/signup-test", "/faq", "/contact", "/about", "/privacy", "/terms", "/how-it-works", "/open-source", "/support", "/appointments", "/monitoring", "/prescriptions"];
+const publicPages = [
+  "/",
+  "/login",
+  "/signup",
+  "/signup-test",
+  "/faq",
+  "/contact",
+  "/about",
+  "/privacy",
+  "/terms",
+  "/how-it-works",
+  "/open-source",
+  "/support",
+  "/appointments",
+  "/monitoring",
+  "/prescriptions",
+  "/feedback"
+];
 
     const currentPath = pathname || "";
 

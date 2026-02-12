@@ -1,103 +1,68 @@
 # Contributing Guidelines
 
-Thank you for your interest in contributing to this project!  
-We welcome beginners and experienced developers alike. Here's a step-by-step guide to help you get started.
+Thank you for your interest in contributing to **HEALCONNECT** during **Apertre'26**!  
+We welcome beginners and experienced developers alike. Adhering to these guidelines is **mandatory** to receive points.
 
 ---
 
-## 1. Fork the Repository
+## 🚨 CRITICAL APERTRE'26 RULES 🚨
 
-Forking means creating your own copy of the project on GitHub.
-
-- Click the **"Fork"** button on the top-right corner of this repository.
-- This creates a copy under your GitHub account.
+1.  **Join Discord**: [https://discord.gg/2GmmTyWwwv](https://discord.gg/2GmmTyWwwv).
+2.  **Get Roles**: Take the **Mentee** role in `#self-roles` and the **Project Role** in `#project-roles`.
+3.  **Issue Assignment**: Issues will only be assigned after **Feb 1st**. Do NOT start working until assigned.
+4.  **Tags are Points**:
+    *   **Easy**: 5 Points
+    *   **Medium**: 7 Points
+    *   **Hard**: 10 Points
+    *   **Bonus**: 5 Points
 
 ---
 
-## 2. Clone Your Fork Locally
+## 🛠️ Step-by-Step Contribution Workflow
 
-- Cloning brings the code from GitHub to your local computer.
+### 1. Find or Create an Issue
+*   **Creating an Issue**: You MUST use the following format or it will be closed.
+    *   **Required Tag**: `apertre3.0`
+    *   **One Difficulty Tag**: `easy`, `medium`, or `hard` (Zero other difficulty tags).
+    *   **Format**:
+        *   Clear description
+        *   Screenshots (if UI/Frontend)
+        *   Steps to reproduce (if Bug)
 
-- Open your terminal or Git Bash and run:
+### 2. Wait for Assignment
+*   A Project Admin or Mentor must assign the issue to you.
+*   **Do not create a PR before assignment.**
 
+### 3. Fork & Clone
 ```bash
-git clone https://github.com/your-username/project-name.git
+git clone https://github.com/Dipanita45/HEALCONNECT.git
+cd HEALCONNECT
 ```
-- Replace:
-`your-username` with your GitHub username
-`project-name` with the name of the repository
 
-- Now, go into the project folder:
+### 4. Create a Branch
 ```bash
-cd project-name
+git checkout -b your-feature-name
 ```
----
 
-## 3. Create a New Branch
+### 5. Make Changes & Commit
+*   Write clean, readable code.
+*   Remove all `console.log` and unused files.
 
-- Never work directly on the `main` branch. Create a new branch for your changes:
-```bash
-git checkout -b feature-name
-```
-- Replace `feature-name` with a name related to the change you're making.
-
----
-
-## 4. Make Your Changes
-
-- Open the project in your code editor, make your changes, and save the files.
-
----
-## 5. Stage and Commit Your Changes
-
-- In your terminal, run:
-```bash
-git add .
-```
-- Then commit your changes with a meaningful message(For example):
-```bash
-git commit -m "Added CONTRIBUTING.md with detailed contribution steps"
-```
----
-
-## 6. Push Your Changes to GitHub
-
-- Send your changes to your GitHub forked repository:
-```bash
-git push origin feature-name
-```
----
-
-## 7. Open a Pull Request (PR)
-
-- Go to your forked repository on GitHub.
-
-- You’ll see a “Compare & pull request” button. Click it.
-
-- Fill in the title and description:
-
-    - Mention the issue you’re fixing.
-
-    - Describe what you changed and why.
-
-    - Add screenshots if it’s a UI change.
-
-- Click “Create Pull Request”.
+### 6. Submit a Pull Request (PR)
+*   **Title**: Clear and descriptive (e.g., "Fix: Navigation overlap on mobile").
+*   **Description**:
+    *   Mention the issue: `Closes #IssueNumber`
+    *   Explain your changes.
+    *   **Screenshots**: MANDATORY for UI changes.
+*   **Tags**:
+    *   request the **`apertre3.0`** tag.
+    *   request the **Difficulty Tag** (`easy`/`medium`/`hard`) that matches your issue.
 
 ---
 
-## 9. Wait for Review
+## ⚠️ Important Notes
+*   **PRs without `apertre3.0` and a difficulty tag will NOT receive points.**
+*   Mentees must request mentors to add these tags if they are missing.
+*   Violating rules or offensive behavior results in disqualification.
 
-- Admin will review your PR.
-
-- Make the PR only after the issue is assigned.
-
-- They may suggest changes — you can make them in the same  branch and push again in ##"base" branch.
-
-- Once approved, your PR will be merged! 
-
----
-
-Happy contributing! 🚀
-
----
+Happy Coding! 🚀

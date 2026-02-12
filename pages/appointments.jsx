@@ -1,12 +1,13 @@
 'use client';
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
+import { onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { auth } from "../lib/firebase";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import styles from './Appointments.module.css';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
