@@ -128,12 +128,13 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/faq"
-            className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
+            key={link.href}
+            href={link.href}
+            className={`${styles.navLink} ${
+              router.pathname === link.href ? styles.active : ''
+            }`}
           >
-            <span className={styles.linkText}>FAQ</span>
-            <div className={styles.linkHoverEffect}></div>
+            {link.label}
           </Link>
 
           <Link
@@ -146,69 +147,47 @@ export default function Navbar() {
           </Link>
 
           <Link
-            href="/support"
-            className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
+            key={link.href}
+            href={link.href}
+            className="block text-white py-2 border-b border-gray-700"
             onClick={() => setIsMenuOpen(false)}
           >
-            <FaHeadset className={styles.supportIcon} />
-            <span className={styles.linkText}>Support</span>
-            <div className={styles.linkHoverEffect}></div>
+            {link.label}
           </Link>
-        </div>
+        ))}
 
-        {/* Right side - Auth buttons + Theme Toggle */}
-        <div className="flex items-center gap-6 ml-6">
-          <div className="flex items-center">
-            {user || currentUser ? (
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleDashboardRedirect}
-                  className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
-                >
-                  <span>Dashboard</span>
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
-                >
-                  <span>Logout</span>
-                </button>
-              </div>
-            ) : (
+        <div className="pt-4 space-y-3">
+          {user || currentUser ? (
+            <>
               <button
-                onClick={handleLoginRedirect}
-                className={styles.loginButton}
+                onClick={handleDashboardRedirect}
+                className="w-full py-2 bg-green-600 text-white rounded-md"
               >
-                <span>Login</span>
-                <div className={styles.buttonPulse}></div>
+                Dashboard
               </button>
-            )}
-          </div>
+              <button
+                onClick={handleLogout}
+                className="w-full py-2 bg-red-600 text-white rounded-md"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className="w-full py-2 bg-blue-600 text-white rounded-md"
+            >
+              Login
+            </button>
+          )}
 
-          <div className="flex items-center pl-4 border-l border-gray-700">
+          <div className="pt-2">
             <ThemeToggle />
           </div>
-
-          {/* Mobile menu button */}
-          <button
-            className={`${styles.menuButton} lg:hidden ${isMenuOpen ? styles.menuOpen : ''} ml-2`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
         </div>
       </div>
+    )}
+  </nav>
+)
 
-      {/* Mobile menu overlay */}
-      {isMenuOpen && (
-        <div
-          className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
-          onClick={() => setIsMenuOpen(false)}
-        ></div>
-      )}
-    </nav>
-  )
 }

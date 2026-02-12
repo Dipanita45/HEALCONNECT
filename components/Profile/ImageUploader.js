@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Loader from '../Loader';
 import Image from 'next/image';
 
@@ -7,6 +7,7 @@ export default function ImageUploader() {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloadURL, setDownloadURL] = useState(null);
+  const [uploadSucceeded, setUploadSucceeded] = useState(false);
 
   // Creates a Firebase Upload Task
   const uploadFile = async (e) => {
@@ -35,12 +36,22 @@ export default function ImageUploader() {
       .then((url) => {
         setDownloadURL(url);
         setUploading(false);
+        setUploadSucceeded(true);
+      })
+      .catch(() => {
+        setUploading(false);
       });
   };
 
+  useEffect(() => {
+    if (!uploadSucceeded) return;
+    const t = setTimeout(() => setUploadSucceeded(false), 1400);
+    return () => clearTimeout(t);
+  }, [uploadSucceeded]);
+
   return (
     <div>
-      <Loader show={uploading} />
+      <Loader show={uploading || uploadSucceeded} variant="syringe" status={uploading ? 'loading' : uploadSucceeded ? 'success' : null} />
       {uploading && <h3>{progress}%</h3>}
 
       <div className=" flex flex-col h-auto w-auto items-center justify-center font-medium group">
