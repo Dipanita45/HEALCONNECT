@@ -19,11 +19,6 @@ export default function EditProfile() {
         cardiacHistory: ""
     });
     const [message, setMessage] = useState("");
-
-    // Debug log for message changes
-    useEffect(() => {
-        console.log("Message state changed:", message);
-    }, [message]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -137,15 +132,12 @@ export default function EditProfile() {
                             </div>
 
                             {message && (
-                                <>
-                                    {console.log("Rendering message:", message)}
-                                    <div className={`mb-4 p-4 rounded-lg ${message.includes("success")
-                                        ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600"
-                                        : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-600"
-                                        }`}>
-                                        {message}
-                                    </div>
-                                </>
+                                <div className={`mb-4 p-4 rounded-lg ${message.includes("success")
+                                    ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600"
+                                    : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-600"
+                                    }`}>
+                                    {message}
+                                </div>
                             )}
 
                             <form onSubmit={handleSubmit} className="space-y-6">

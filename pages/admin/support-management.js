@@ -7,6 +7,7 @@ import {
   FaRobot, FaPhone, FaEnvelope, FaCalendarAlt, FaTrendingUp, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
 import { getSupportTickets, subscribeToTickets, getTicketStats, addTicketMessage, updateTicketStatus } from '../../lib/ticketSync';
+import logger from '../../lib/logger';
 import styles from './support-management.module.css';
 
 const AdminSupportManagement = () => {
@@ -139,8 +140,8 @@ const AdminSupportManagement = () => {
   const handleSendReply = async () => {
     if (!replyMessage.trim() || !selectedTicket) return;
 
-    console.log('AdminDashboard: Sending reply to ticket:', selectedTicket.id);
-    console.log('AdminDashboard: Reply message:', replyMessage);
+    logger.debug('AdminDashboard: Sending reply to ticket:', selectedTicket.id);
+    logger.debug('AdminDashboard: Reply message:', replyMessage);
 
     try {
       // Add message to ticket
@@ -154,14 +155,14 @@ const AdminSupportManagement = () => {
         }
       };
 
-      console.log('AdminDashboard: Calling addTicketMessage with:', messageData);
+      logger.debug('AdminDashboard: Calling addTicketMessage with:', messageData);
       const result = await addTicketMessage(selectedTicket.id, messageData);
-      console.log('AdminDashboard: addTicketMessage result:', result);
+      logger.debug('AdminDashboard: addTicketMessage result:', result);
 
       if (result.success) {
         // Update ticket status to in_progress if it was open
         if (selectedTicket.status === 'open') {
-          console.log('AdminDashboard: Updating ticket status to in_progress');
+          logger.debug('AdminDashboard: Updating ticket status to in_progress');
           await updateTicketStatus(selectedTicket.id, 'in_progress', {
             name: 'Support Agent',
             avatar: '👨‍⚕️'
@@ -191,7 +192,7 @@ const AdminSupportManagement = () => {
     }
 
     try {
-      console.log('AdminDashboard: Closing ticket:', ticket.id);
+      logger.debug('AdminDashboard: Closing ticket:', ticket.id);
 
       // Add closing message
       const closingMessage = {
