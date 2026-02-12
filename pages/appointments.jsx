@@ -1,12 +1,12 @@
 
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
+import { onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { auth } from "../lib/firebase";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import styles from './Appointments.module.css';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -225,11 +225,14 @@ export default function Appointments() {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
   const [formErrors, setFormErrors] = useState({});
-
   const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen to auth state
+ useEffect(() => {
+  const unsub = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+  });
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("AUTH USER:", user);
@@ -237,6 +240,7 @@ export default function Appointments() {
 
     return () => unsub();
   }, []);
+
 
   useEffect(() => {
     if (formData.date && formData.doctor) {
@@ -278,7 +282,7 @@ export default function Appointments() {
     setStep(1);
     setFormErrors({});
   };
-
+ 
  const isSlotAlreadyBooked = async () => {
   const q = query(
     collection(db, "appointments"),
@@ -533,22 +537,26 @@ const handleSubmit = async (e) => {
                     </div>
                     
                     <div className={styles.inputGroup}>
-                      <input
-                        type="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        required
-                        className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
-                        min={new Date().toISOString().split('T')[0]}
-                        placeholder=" "
-                      />
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      required
+                      min={new Date().toISOString().split('T')[0]}
+                      className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
+                      style={{
+                        paddingRight: "42px",
+                        colorScheme: "light"
+                      }}
+                    />
+
+
                       <label className={styles.formLabel}>Appointment Date</label>
                       <div className={styles.formUnderline}></div>
                       {formErrors.date && <span className={styles.errorText}>{formErrors.date}</span>}
                     </div>
                   </motion.div>
-                  
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}

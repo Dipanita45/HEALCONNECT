@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
 import styles from './Appointments.module.css';
 
 export default function Appointments() {
@@ -17,6 +18,13 @@ export default function Appointments() {
     alert('Appointment booked!');
     console.log(formData);
   };
+
+  useEffect(() => {
+  if (formData.date && formData.doctor) {
+    console.log('Date and doctor selected');
+  }
+}, [formData.date, formData.doctor]);
+
 
   return (
     <div className={styles.container}>
