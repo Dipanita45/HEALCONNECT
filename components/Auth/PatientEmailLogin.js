@@ -53,9 +53,30 @@ export default function PatientEmailLogin() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
+
+    const nameRegex = /^[A-Za-z\s]+$/;
+    const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     
     if (!email || !password || !patientInfo.name || !patientInfo.phone) {
       setError('All fields are required for registration');
+      return;
+    }
+
+    // ✅ Name validation
+    if (!nameRegex.test(patientInfo.name)) {
+      setError('Name should contain only alphabets (no numbers or special characters)');
+      return;
+    }
+
+    // ✅ Gmail only validation
+    if (!gmailRegex.test(email)) {
+      setError('Email must be in format username@gmail.com');
+      return;
+    }
+
+    // ✅ Age validation
+    if (patientInfo.age <= 0 || patientInfo.age > 150) {
+      setError('Age must be between 1 and 150');
       return;
     }
 
