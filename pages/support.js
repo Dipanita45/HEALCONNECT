@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle, 
+import {
+  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle,
   FaRobot, FaPhone, FaEnvelope
 } from 'react-icons/fa';
 import SupportWidget from '../components/Support/SupportWidget';
 import SupportDashboard from '../components/Support/SupportDashboard';
 import styles from './support.module.css';
+import { useTheme } from '@/context/ThemeContext';
 
 const Support = () => {
   const [view, setView] = useState('landing');
@@ -17,6 +18,8 @@ const Support = () => {
     activeAgents: 0
   });
 
+  const { setIsMinimized, setSupportWidgetOpen } = useTheme();
+
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
     setStats({
@@ -26,6 +29,19 @@ const Support = () => {
       activeAgents: 8
     });
   }, []);
+
+  const handleSendEmail = () => {
+  const email = 'support@healconnect.com';
+  const subject = encodeURIComponent('HealConnect Support Request');
+  const body = encodeURIComponent(
+    'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
+  );
+
+  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+
+  window.open(gmailUrl, '_blank');
+};
+
 
   const features = [
     {
@@ -98,22 +114,28 @@ const Support = () => {
           >
             <h1>HealConnect Support Center</h1>
             <p>
-              Get help when you need it most. Our AI-powered support system provides instant answers 
+              Get help when you need it most. Our AI-powered support system provides instant answers
               and connects you with human experts for complex issues.
             </p>
             <div className={styles.heroActions}>
-              <button 
+              <button
                 onClick={() => setView('dashboard')}
                 className={styles.dashboardBtn}
               >
                 <FaChartLine /> Support Dashboard
               </button>
-              <button className={styles.chatBtn}>
+              <button
+                onClick={(e) => {
+                  e.preventDefault()
+                  setIsMinimized(false)
+                  setSupportWidgetOpen(true)
+                }}
+                className={styles.chatBtn}>
                 <FaHeadset /> Start Live Chat
               </button>
             </div>
           </motion.div>
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -151,7 +173,7 @@ const Support = () => {
           >
             <h2>Why Choose Our Support System?</h2>
             <p>
-              Experience healthcare support that\'s fast, intelligent, and always available when you need it.
+              Experience healthcare support that&apos;s fast, intelligent, and always available when you need it.
             </p>
           </motion.div>
 
@@ -160,14 +182,14 @@ const Support = () => {
               const Icon = feature.icon;
               return (
                 <motion.div
-                  key={index}
+                  key={feature.title}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   className={styles.featureCard}
                 >
-                  <div 
+                  <div
                     className={styles.featureIcon}
                     style={{ background: `${feature.color}20`, color: feature.color }}
                   >
@@ -200,7 +222,7 @@ const Support = () => {
           <div className={styles.stepsContainer}>
             {howItWorks.map((step, index) => (
               <motion.div
-                key={index}
+                key={step.title}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -306,7 +328,14 @@ const Support = () => {
                 <span>✓ Documentation</span>
                 <span>✓ 24h response</span>
               </div>
-              <button className={styles.channelBtn}>Send Email</button>
+              <button
+  className={styles.channelBtn}
+  onClick={handleSendEmail}
+>
+  <FaEnvelope style={{ marginRight: '6px' }} />
+  Send Email
+</button>
+
             </motion.div>
           </div>
         </div>
@@ -324,7 +353,7 @@ const Support = () => {
             <div className={styles.emergencyIcon}>🚨</div>
             <h2>Medical Emergency?</h2>
             <p>
-              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room. 
+              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room.
               Our support system is not designed for medical emergencies.
             </p>
             <button className={styles.emergencyBtn}>

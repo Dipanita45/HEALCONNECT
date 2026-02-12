@@ -1,18 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot, 
+import {
+  FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot,
   FaTicketAlt, FaClock, FaCheckCircle, FaExclamationTriangle,
   FaPaperclip, FaSmile, FaMicrophone, FaPhone
 } from 'react-icons/fa';
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
 import styles from './SupportWidget.module.css';
+import { useTheme } from '@/context/ThemeContext';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
 
 const SupportWidget = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen } = useTheme();
+  const isOpen = supportWidgetOpen;
+  const setIsOpen = setSupportWidgetOpen;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -29,7 +32,7 @@ const SupportWidget = () => {
   const [processedMessageIds, setProcessedMessageIds] = useState(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const [isMinimized, setIsMinimized] = useState(false);
+  // const [isMinimized, setIsMinimized] = useState(false);
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
@@ -49,6 +52,7 @@ const SupportWidget = () => {
       inputRef.current?.focus();
     }
   }, [isOpen, isMinimized]);
+
 
   // Keyboard navigation handler
   useEffect(() => {
@@ -157,14 +161,14 @@ const SupportWidget = () => {
     if (showTicketModal) {
       // Store the element that had focus before modal opened
       const previousFocus = document.activeElement;
-      
+
       // Find all focusable elements in the modal
       const modalElement = document.querySelector(`.${styles.modal}`);
       if (modalElement) {
         const focusableElements = modalElement.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
-        
+
         if (focusableElements.length > 0) {
           // Focus first element in modal
           focusableElements[0].focus();
@@ -179,7 +183,7 @@ const SupportWidget = () => {
             const focusableElements = modalElement.querySelectorAll(
               'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             );
-            
+
             if (focusableElements.length === 0) return;
 
             const firstElement = focusableElements[0];
@@ -228,62 +232,62 @@ const SupportWidget = () => {
   // Subscribe to real-time ticket updates
   useEffect(() => {
     console.log('SupportWidget: Setting up ticket subscription');
-    
+
     // Set up real-time listener
     const listenerId = subscribeToTickets((updatedTickets) => {
       console.log('SupportWidget: Received tickets update:', updatedTickets);
-      
+
       // Prevent processing if already processing
       if (isProcessing) {
         console.log('SupportWidget: Already processing, skipping update');
         return;
       }
-      
+
       // Ensure updatedTickets is an array
       const ticketsArray = Array.isArray(updatedTickets) ? updatedTickets : [];
-      
+
       // Update local cache
       localTicketCache.length = 0;
       localTicketCache.push(...ticketsArray);
-      
+
       // If we have a current ticket, check for updates
       if (currentTicket) {
         console.log('SupportWidget: Looking for ticket:', currentTicket.id);
-        const updatedTicket = ticketsArray.find(t => 
+        const updatedTicket = ticketsArray.find(t =>
           t.id === currentTicket.id || t.firestoreId === currentTicket.firestoreId
         );
-        
+
         console.log('SupportWidget: Found updated ticket:', updatedTicket);
-        
+
         if (updatedTicket && updatedTicket.messages) {
           console.log('SupportWidget: Ticket has messages:', updatedTicket.messages.length);
           console.log('SupportWidget: Current messages:', messages.length);
           console.log('SupportWidget: Processed message IDs:', Array.from(processedMessageIds));
-          
+
           // Set processing flag to prevent loops
           setIsProcessing(true);
-          
+
           // Filter out messages that have already been processed
           const newMessages = updatedTicket.messages.filter(msg => {
             // Create a unique ID for this message
             const msgId = `${new Date(msg.timestamp).getTime()}-${msg.type}-${msg.text.substring(0, 20)}`;
             return !processedMessageIds.has(msgId);
           });
-          
+
           console.log('SupportWidget: New messages to add:', newMessages.length);
-          
+
           if (newMessages.length > 0) {
             // Add new messages to the chat
             const formattedMessages = newMessages.map((msg, index) => {
               const msgId = `${new Date(msg.timestamp).getTime()}-${msg.type}-${msg.text.substring(0, 20)}`;
-              
+
               console.log('SupportWidget: Processing message:', {
                 id: msgId,
                 text: msg.text,
                 type: msg.type,
                 timestamp: msg.timestamp
               });
-              
+
               return {
                 id: msgId,
                 type: msg.type,
@@ -292,16 +296,16 @@ const SupportWidget = () => {
                 sender: msg.sender
               };
             });
-            
+
             console.log('SupportWidget: Adding formatted messages:', formattedMessages);
-            
+
             // Update messages and processed IDs in one go
             setMessages(prev => {
               const updated = [...prev, ...formattedMessages];
               console.log('SupportWidget: Final updated messages array:', updated);
               return updated;
             });
-            
+
             // Update processed message IDs
             setProcessedMessageIds(prev => {
               const newIds = new Set(prev);
@@ -309,13 +313,13 @@ const SupportWidget = () => {
               console.log('SupportWidget: Updated processed IDs:', Array.from(newIds));
               return newIds;
             });
-            
+
             // Update current ticket reference
             setCurrentTicket(updatedTicket);
           } else {
             console.log('SupportWidget: No new messages found');
           }
-          
+
           // Clear processing flag
           setIsProcessing(false);
         }
@@ -333,7 +337,7 @@ const SupportWidget = () => {
 
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
-    
+
     // Common health-related queries
     if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
       return {
@@ -342,7 +346,7 @@ const SupportWidget = () => {
         needsEscalation: false
       };
     }
-    
+
     if (lowerMessage.includes('appointment') || lowerMessage.includes('schedule')) {
       return {
         text: "I can help you schedule an appointment! You can book appointments through our dashboard, or I can guide you through the process. What type of appointment do you need?",
@@ -350,7 +354,7 @@ const SupportWidget = () => {
         needsEscalation: false
       };
     }
-    
+
     if (lowerMessage.includes('prescription') || lowerMessage.includes('medicine')) {
       return {
         text: "For prescription-related queries, I can help you view your current prescriptions, request refills, or connect you with a pharmacist. What specific help do you need with your medications?",
@@ -358,7 +362,7 @@ const SupportWidget = () => {
         needsEscalation: false
       };
     }
-    
+
     if (lowerMessage.includes('login') || lowerMessage.includes('password') || lowerMessage.includes('account')) {
       return {
         text: "I can help you with account issues! For password resets, click 'Forgot Password' on the login page. For other account problems, I can connect you with our support team.",
@@ -366,7 +370,7 @@ const SupportWidget = () => {
         needsEscalation: true
       };
     }
-    
+
     if (lowerMessage.includes('billing') || lowerMessage.includes('payment') || lowerMessage.includes('insurance')) {
       return {
         text: "Billing and insurance questions often require personal account access. I'd recommend connecting with our billing team for accurate information about your specific situation.",
@@ -374,7 +378,7 @@ const SupportWidget = () => {
         needsEscalation: true
       };
     }
-    
+
     // Default response
     return {
       text: "I'm here to help you with HealConnect! I can assist with appointments, prescriptions, finding doctors, and general questions. For complex issues, I can connect you with our support team.",
@@ -436,12 +440,12 @@ const SupportWidget = () => {
       };
 
       const result = await createSupportTicket(ticketPayload);
-      
+
       if (result.success) {
         const ticket = result.ticket;
         setCurrentTicket(ticket);
         setShowTicketModal(false);
-        
+
         // Add system message about ticket creation
         const ticketMessage = {
           id: Date.now() + 2,
@@ -452,7 +456,7 @@ const SupportWidget = () => {
         };
 
         setMessages(prev => [...prev, ticketMessage]);
-        
+
         // Reset form
         setTicketData({
           subject: '',
@@ -506,14 +510,14 @@ const SupportWidget = () => {
       };
 
       const messageResult = await addTicketMessage(currentTicket.id, closingMessage);
-      
+
       if (messageResult.success) {
         // Update ticket status to resolved
         const statusResult = await updateTicketStatus(currentTicket.id, 'resolved', {
           name: 'Current User',
           avatar: '👤'
         });
-        
+
         if (statusResult.success) {
           // Add system message about ticket closure
           const closureMessage = {
@@ -568,46 +572,47 @@ const SupportWidget = () => {
         aria-live="polite"
         ref={chatContainerRef}
       >
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <FaHeadset className={styles.headerIcon} aria-hidden="true" />
-            <div>
-              <h3>HealConnect Support</h3>
-              <span className={styles.status}>
-                <span className={styles.onlineDot}></span>
-                Online - AI Assistant
-              </span>
-            </div>
-          </div>
-          <div className={styles.headerActions}>
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-              className={styles.minimizeBtn}
-              aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
-              aria-expanded={!isMinimized}
-            >
-              {isMinimized ? '□' : '−'}
-            </button>
-            <button
-              onClick={() => setIsOpen(false)}
-              className={styles.closeBtn}
-              aria-label="Close support chat"
-            >
-              <FaTimes />
-            </button>
-          </div>
-        </div>
+
 
         {!isMinimized && (
           <>
+            {/* Header */}
+            <div className={styles.header}>
+              <div className={styles.headerLeft}>
+                <FaHeadset className={styles.headerIcon} aria-hidden="true" />
+                <div>
+                  <h3>HealConnect Support</h3>
+                  <span className={styles.status}>
+                    <span className={styles.onlineDot}></span>
+                    Online - AI Assistant
+                  </span>
+                </div>
+              </div>
+              <div className={styles.headerActions}>
+                <button
+                  onClick={() => setIsMinimized(!isMinimized)}
+                  className={styles.minimizeBtn}
+                  aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
+                  aria-expanded={!isMinimized}
+                >
+                  {isMinimized ? '□' : '−'}
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className={styles.closeBtn}
+                  aria-label="Close support chat"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+            </div>
             {/* Messages Area */}
             <div className={styles.messagesArea}>
               {messages.length === 0 && (
                 <div className={styles.welcomeMessage}>
                   <FaRobot className={styles.welcomeIcon} />
                   <h4>Welcome to HealConnect Support!</h4>
-                  <p>I'm your AI assistant. How can I help you today?</p>
+                  <p>I&apos;m your AI assistant. How can I help you today&lsquo;</p>
                   <div className={styles.quickActions}>
                     <button onClick={() => handleSuggestionClick('I need to schedule an appointment')}>
                       📅 Schedule Appointment
@@ -697,7 +702,7 @@ const SupportWidget = () => {
                           <div className={styles.ticketDetails}>
                             <p><strong>Subject:</strong> {message.ticket.subject}</p>
                             <p><strong>Priority:</strong> {message.ticket.priority}</p>
-                            <p><strong>Status:</strong> 
+                            <p><strong>Status:</strong>
                               <span className={`${styles.status} ${styles[message.ticket.status]}`}>
                                 {message.ticket.status}
                               </span>
@@ -832,12 +837,12 @@ const SupportWidget = () => {
                   <FaTimes />
                 </button>
               </div>
-              
+
               <div className={styles.modalBody}>
                 <p id="modal-description" className={styles.modalDescription}>
                   Please provide details about your issue so we can assist you better.
                 </p>
-                
+
                 <form onSubmit={createTicket} className={styles.ticketForm}>
                   <div className={styles.formGroup}>
                     <label htmlFor="ticket-subject" className={styles.formLabel}>
@@ -886,7 +891,7 @@ const SupportWidget = () => {
                     <label htmlFor="ticket-priority" className={styles.formLabel}>
                       Priority Level
                     </label>
-                    <div 
+                    <div
                       className={styles.priorityOptions}
                       role="radiogroup"
                       aria-labelledby="ticket-priority"

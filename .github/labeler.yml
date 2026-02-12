@@ -1,0 +1,20 @@
+apertre3.0:
+  - "**/*"
+
+easy:
+  - "**/*.css"
+  - "**/*.md"
+  - "docs/**"
+
+medium:
+  - "**/components/**"
+  - "**/*.jsx"
+  - "**/*.js"
+  - "**/*.tsx"
+  - "**/*.ts"
+
+hard:
+  - "**/pages/**"
+  - "**/api/**"
+  - "**/services/**"
+  - "lib/**"

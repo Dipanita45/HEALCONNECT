@@ -55,132 +55,132 @@ export default function Navbar() {
     }
   }
 
-  return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.container}>
-        {/* Logo/Brand with animation */}
-        <div className={styles.logoContainer}>
-          <Link href="/" className={styles.logo}>
-            <div className={styles.logoIcon}>
-              <div className={styles.crossSymbol}>
-                <div className={styles.crossLine1}></div>
-                <div className={styles.crossLine2}></div>
-              </div>
-            </div>
-            <span className={styles.logoText}>HEALCONNECT</span>
-          </Link>
-        </div>
+ return (
+  <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
+    <div className="max-w-[1440px] mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-12 h-16">
 
-        {/* Navigation Links with hover effects */}
-        <div className={`${styles.navLinks} ${isMenuOpen ? styles.navOpen : ''}`}>
-          <Link
-            href="/"
-            className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Home</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/prescriptions"
-            className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Prescriptions</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/appointments"
-            className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Appointments</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/monitoring"
-            className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Monitoring</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/faq"
-            className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>FAQ</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/contact"
-            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Contact</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/support"
-            className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <FaHeadset className={styles.supportIcon} />
-            <span className={styles.linkText}>Support</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-        </div>
+      {/* Logo */}
+      <Link href="/" className="flex items-center gap-2">
+        <span className={styles.logoText}>HEALCONNECT</span>
+      </Link>
 
-        {/* Right side - Auth buttons + Theme Toggle */}
-        <div className={styles.rightSection}>
+      {/* Desktop Navigation */}
+      <div className="hidden lg:flex items-center gap-8">
+        {[
+          { href: '/', label: 'Home' },
+          { href: '/prescriptions', label: 'Prescriptions' },
+          { href: '/appointments', label: 'Appointments' },
+          { href: '/monitoring', label: 'Monitoring' },
+          { href: '/faq', label: 'FAQ' },
+          { href: '/contact', label: 'Contact' },
+          { href: '/support', label: 'Support' },
+        ].map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className={`${styles.navLink} ${
+              router.pathname === link.href ? styles.active : ''
+            }`}
+          >
+            {link.label}
+          </Link>
+        ))}
+      </div>
+
+      {/* Right Side */}
+      <div className="hidden lg:flex items-center gap-4">
+        {user || currentUser ? (
+          <>
+            <button
+              onClick={handleDashboardRedirect}
+              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+            >
+              Dashboard
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
+            >
+              Logout
+            </button>
+          </>
+        ) : (
+          <button
+            onClick={handleLoginRedirect}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+          >
+            Login
+          </button>
+        )}
+
+        <ThemeToggle />
+      </div>
+
+      {/* Mobile Menu Button */}
+      <button
+        className="lg:hidden flex flex-col gap-1"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+      >
+        <span className="w-6 h-0.5 bg-white"></span>
+        <span className="w-6 h-0.5 bg-white"></span>
+        <span className="w-6 h-0.5 bg-white"></span>
+      </button>
+    </div>
+
+    {/* Mobile Menu */}
+    {isMenuOpen && (
+      <div className="lg:hidden bg-[#0f172a] px-6 py-6 space-y-4">
+        {[
+          { href: '/', label: 'Home' },
+          { href: '/prescriptions', label: 'Prescriptions' },
+          { href: '/appointments', label: 'Appointments' },
+          { href: '/monitoring', label: 'Monitoring' },
+          { href: '/faq', label: 'FAQ' },
+          { href: '/contact', label: 'Contact' },
+          { href: '/support', label: 'Support' },
+        ].map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="block text-white py-2 border-b border-gray-700"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        <div className="pt-4 space-y-3">
           {user || currentUser ? (
-            <div className="flex items-center gap-2">
+            <>
               <button
                 onClick={handleDashboardRedirect}
-                className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+                className="w-full py-2 bg-green-600 text-white rounded-md"
               >
-                <span>Dashboard</span>
+                Dashboard
               </button>
               <button
                 onClick={handleLogout}
-                className={`${styles.loginButton} bg-red-600 hover:bg-red-700 hover:scale-105 hover:shadow-lg hover:shadow-red-500/25 transform transition-all duration-300 ease-out active:scale-95 relative overflow-hidden group`}
+                className="w-full py-2 bg-red-600 text-white rounded-md"
               >
-                <span className="relative z-10">Logout</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                Logout
               </button>
-            </div>
+            </>
           ) : (
             <button
               onClick={handleLoginRedirect}
-              className={styles.loginButton}
+              className="w-full py-2 bg-blue-600 text-white rounded-md"
             >
-              <span>Login</span>
-              <div className={styles.buttonPulse}></div>
+              Login
             </button>
           )}
-          <ThemeToggle />
 
-          {/* Mobile menu button */}
-          <button
-            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
+          <div className="pt-2">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
+    )}
+  </nav>
+)
 
-      {/* Mobile menu overlay */}
-      {isMenuOpen && (
-        <div
-          className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
-          onClick={() => setIsMenuOpen(false)}
-        ></div>
-      )}
-    </nav>
-  )
 }

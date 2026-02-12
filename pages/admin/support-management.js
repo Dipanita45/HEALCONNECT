@@ -368,8 +368,8 @@ const AdminSupportManagement = () => {
 
                 <div className={styles.ticketFooter}>
                   <div className={styles.tags}>
-                    {(ticket.tags || []).map((tag, index) => (
-                      <span key={index} className={styles.tag}>
+                    {(ticket.tags || []).map((tag) => (
+                      <span key={tag} className={styles.tag}>
                         {tag}
                       </span>
                     ))}
@@ -487,8 +487,8 @@ const AdminSupportManagement = () => {
             <div className={styles.agentSpecialties}>
               <h4>Specialties</h4>
               <div className={styles.specialtiesList}>
-                {agent.specialties.map((specialty, index) => (
-                  <span key={index} className={styles.specialty}>
+                {agent.specialties.map((specialty) => (
+                  <span key={specialty} className={styles.specialty}>
                     {specialty}
                   </span>
                 ))}
@@ -642,7 +642,7 @@ const AdminSupportManagement = () => {
           <div className={styles.emptyState}>
             <FaBell className={styles.emptyIcon} />
             <h3>No notifications</h3>
-            <p>You're all caught up!</p>
+            <p>You&apos;re all caught up!</p>
           </div>
         ) : (
           notifications.map((notification) => (
