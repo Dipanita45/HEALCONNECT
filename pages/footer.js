@@ -106,6 +106,12 @@ export default function Footer() {
                   Contact Support
                 </Link>
               </li>
+              <li>
+                <Link href="/feedback" className={styles.footerLink}>
+                  <FaEnvelope className={styles.linkIcon} />
+                  Feedback
+                </Link>
+              </li>
             </ul>
           </div>
 
