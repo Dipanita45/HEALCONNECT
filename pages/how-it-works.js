@@ -180,7 +180,7 @@ export default function HowItWorks() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 relative">
               {steps.map((step, index) => (
                 <motion.div
-                  key={step.title}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.15 }}
@@ -192,7 +192,7 @@ export default function HowItWorks() {
                   {index < steps.length - 1 && (
                     <div className="hidden lg:block absolute top-1/2 left-full w-20 h-1 bg-gradient-to-r from-blue-400 via-gray-300 to-gray-300 dark:from-blue-400 dark:via-gray-600 dark:to-gray-700 -translate-y-1/2"></div>
                   )}
-
+                  
                   {/* Step Card */}
                   <div
                     className={`flex flex-col items-center text-center p-6 border-2 rounded-2xl shadow-lg w-full h-full max-w-xs transition-all duration-300 ease-in-out 
@@ -222,7 +222,7 @@ export default function HowItWorks() {
                     >
                       {step.number}
                     </div>
-
+                    
                     {/* Icon */}
                     <div
                       className={`text-4xl mb-4 ${step.color === "blue"

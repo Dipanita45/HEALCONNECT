@@ -173,7 +173,7 @@ const Support = () => {
           >
             <h2>Why Choose Our Support System?</h2>
             <p>
-              Experience healthcare support that&apos;s fast, intelligent, and always available when you need it.
+              Experience healthcare support that\'s fast, intelligent, and always available when you need it.
             </p>
           </motion.div>
 
@@ -182,7 +182,7 @@ const Support = () => {
               const Icon = feature.icon;
               return (
                 <motion.div
-                  key={feature.title}
+                  key={index}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -222,7 +222,7 @@ const Support = () => {
           <div className={styles.stepsContainer}>
             {howItWorks.map((step, index) => (
               <motion.div
-                key={step.title}
+                key={index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}

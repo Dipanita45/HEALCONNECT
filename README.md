@@ -10,7 +10,7 @@
 [![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
 
-[**Live Demo**](healconnect.vercel.app/) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
+[**Live Demo**](https://Dipanita45.github.io/HEALCONNECT) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
 
 </div>
 
@@ -26,13 +26,10 @@
 
 - 🔐 **Secure Auth:** Multi-role Firebase Authentication (Admin, Doctor, Patient).
 - 🗄️ **Real-time Database:** Cloud Firestore for zero-latency health parameter updates.
-- 🔌 **RESTful API:** Complete API infrastructure for all entities (patients, vitals, alerts, devices).
-- 📊 **Service Layer:** Business logic abstraction with comprehensive error handling.
 - 📈 **Live Monitoring:** Interactive ECG and health charts using real-time data streams.
 - 🚨 **Emergency Alerts:** Automated real-time alerts when patient vitals exceed safe thresholds.
 - 📅 **Hospital Management:** Integrated appointment booking and prescription systems.
 - 🌓 **UX Focused:** Fully responsive design with Dark Mode support.
-- ⚡ **Real-time Sync:** Live data updates using Firestore subscriptions.
 
 ---
 
@@ -73,29 +70,14 @@ HEALCONNECT/
 │   ├── DoctorComponents/    # Doctor-specific views & Alert System
 │   ├── LiveMonitor/         # ECG & Real-time Chart Logic
 │   └── PatientComponents/   # Patient-specific views
-├── lib/                     # Core Libraries & Services
-│   ├── api/                 # API client & middleware
-│   ├── db/                  # Database operations & schema
-│   ├── services/            # Business logic layer
-│   ├── hooks/               # Custom React hooks
+├── lib/                     # Firebase Config, Custom Hooks & Alert System
 │   ├── alertSystem.js       # Core alert monitoring & generation
 │   ├── thresholdDefaults.js # Medical threshold configurations
 │   └── useAlertMonitor.js   # Real-time monitoring hooks
 ├── pages/                   # Next.js Routing & API Logic
-│   ├── api/                 # RESTful API endpoints
-│   │   ├── patients/        # Patient CRUD operations
-│   │   ├── vitals/          # Vitals recording & retrieval
-│   │   ├── alerts/          # Alert management
-│   │   └── devices/         # Device registration & status
 │   ├── admin/               # Admin dashboard & threshold management
 │   ├── doctor/              # Doctor dashboard with alerts
 │   └── patient/             # Patient dashboard
-├── docs/                    # Comprehensive Documentation
-│   ├── API_DOCUMENTATION.md # Complete API reference
-│   ├── DATABASE_SCHEMA.md   # Database structure
-│   ├── SETUP_GUIDE.md       # Installation & setup
-│   ├── USAGE_EXAMPLES.md    # Code examples
-│   └── QUICK_REFERENCE.md   # Quick reference guide
 ├── public/                  # Static Assets & Images
 └── styles/                  # Global SCSS & Tailwind Styles
 ```
@@ -156,15 +138,6 @@ npm run dev
 
 ##### 🚨 Emergency Alert System
 For detailed information about the real-time alert system, see [ALERT_SYSTEM_GUIDE.md](ALERT_SYSTEM_GUIDE.md)
-
-##### 📚 Database & API Documentation
-For comprehensive information about the database and API infrastructure:
-- **[Database & API Overview](docs/DATABASE_API_README.md)** - Complete implementation guide
-- **[API Documentation](docs/API_DOCUMENTATION.md)** - RESTful API endpoints reference
-- **[Database Schema](docs/DATABASE_SCHEMA.md)** - Firestore collections structure
-- **[Setup Guide](docs/SETUP_GUIDE.md)** - Step-by-step installation
-- **[Usage Examples](docs/USAGE_EXAMPLES.md)** - Code examples and patterns
-- **[Quick Reference](docs/QUICK_REFERENCE.md)** - Cheat sheet for common operations
 
 ---
 

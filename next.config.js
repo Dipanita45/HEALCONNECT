@@ -3,7 +3,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Enable PWA in all environments
+  disable: process.env.NODE_ENV === 'development',
   runtimeCaching: [
     {
       // Cache Next.js static assets
@@ -12,63 +12,20 @@ const withPWA = require('next-pwa')({
       options: { cacheName: 'next-assets' },
     },
     {
-      // Cache patient vitals API
-      urlPattern: /^https:\/\/.*\/api\/patient\/vitals.*/i,
-      handler: 'NetworkFirst',
+      // Cache API requests and dynamic data
+      urlPattern: /^https:\/\/your-api-domain\.com\/.*/i, // Replace with your API domain
+      handler: 'NetworkFirst', // Try network first, fallback to cache if offline
       options: {
-        cacheName: 'patient-vitals',
-        networkTimeoutSeconds: 3,
-        expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 }, // 1 hour
-      },
-    },
-    {
-      // Cache emergency contacts API
-      urlPattern: /^https:\/\/.*\/api\/patient\/emergency.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'emergency-contacts',
-        networkTimeoutSeconds: 3,
-        expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 }, // 24 hours
-      },
-    },
-    {
-      // Cache medications API
-      urlPattern: /^https:\/\/.*\/api\/patient\/medications.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'medications',
-        networkTimeoutSeconds: 3,
-        expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 }, // 24 hours
-      },
-    },
-    {
-      // Cache medical records API
-      urlPattern: /^https:\/\/.*\/api\/patient\/records.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'medical-records',
-        networkTimeoutSeconds: 3,
-        expiration: { maxEntries: 100, maxAgeSeconds: 12 * 60 * 60 }, // 12 hours
-      },
-    },
-    {
-      // Cache doctor appointments API
-      urlPattern: /^https:\/\/.*\/api\/appointments.*/i,
-      handler: 'NetworkFirst',
-      options: {
-        cacheName: 'appointments',
-        networkTimeoutSeconds: 5,
-        expiration: { maxEntries: 50, maxAgeSeconds: 6 * 60 * 60 }, // 6 hours
+        cacheName: 'api-data',
+        networkTimeoutSeconds: 10, // fallback to cache if network takes too long
+        expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 }, // cache up to 1 day
       },
     },
     {
       // Cache images and other resources
       urlPattern: /^https?.*/i,
-      handler: 'CacheFirst',
-      options: { 
-        cacheName: 'external-resources',
-        expiration: { maxEntries: 200, maxAgeSeconds: 24 * 60 * 60 }, // 24 hours
-      },
+      handler: 'NetworkFirst',
+      options: { cacheName: 'external-resources' },
     },
   ],
 });

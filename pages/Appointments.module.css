@@ -1,3 +1,7 @@
+/* ============================================================================
+   BASE STYLES & LAYOUT
+   ============================================================================ */
+
 .container {
   position: relative;
   min-height: 100vh;
@@ -10,6 +14,16 @@
   height: 80px;
 }
 
+.content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+/* ============================================================================
+   BACKGROUND DECORATION
+   ============================================================================ */
+
 .backgroundElements {
   position: absolute;
   top: 0;
@@ -17,13 +31,15 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  z-index: 0;
 }
 
 .circleElement {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(16, 185, 129, 0.25) 100%);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
   animation: float 20s infinite ease-in-out;
+  will-change: transform;
 }
 
 .circleElement:nth-child(1) {
@@ -62,46 +78,16 @@
   }
 }
 
+/* ============================================================================
+   HEADER & TITLES
+   ============================================================================ */
+
 .header {
   text-align: center;
   margin-bottom: 3rem;
   padding: 1rem;
-}
-
-.title {
-  font-size: 3rem;
-  font-weight: 800;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.titleAccent {
-  color: #10b981;
-}
-
-.subtitle {
-  font-size: 1.25rem;
-  color: rgb(var(--foreground-muted-rgb));
-  max-width: 600px;
-  margin: 0 auto 1.5rem;
-}
-
-.titleUnderline {
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
-  background: linear-gradient(90deg, #2563eb, #10b981);
-  border-radius: 2px;
-  margin: 0 auto;
-}
-
-.content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.5rem 3rem;
+  position: relative;
+  z-index: 1;
 }
 
 .titleContainer {
@@ -112,25 +98,25 @@
 
 .titlePrefix {
   display: block;
-  font-size: 1.2rem;
-  font-weight: 500;
+  font-size: 1rem;
+  font-weight: 600;
   color: rgb(var(--foreground-muted-rgb));
   margin-bottom: 0.5rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
   opacity: 0;
   animation: fadeInUp 0.6s ease-out 0.1s forwards;
 }
 
 .titleMain {
   display: block;
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   font-weight: 800;
   background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   line-height: 1.1;
   opacity: 0;
   animation: fadeInUp 0.6s ease-out 0.2s forwards;
@@ -138,18 +124,21 @@
 
 .titleSuffix {
   display: inline-block;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  color: rgb(var(--background-end-rgb));
-  background: linear-gradient(135deg, rgb(var(--background-end-rgb)) 0%, rgb(var(--background-start-rgb)) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  padding: 0.2rem 0.8rem;
-  border-radius: 20px;
-  border: 2px solid rgb(var(--background-end-rgb));
+  color: #10b981;
+  padding: 0.4rem 1rem;
+  border-radius: 24px;
+  border: 2px solid #10b981;
   opacity: 0;
   animation: fadeInUp 0.6s ease-out 0.3s forwards;
+  transition: all 0.3s ease;
+}
+
+.titleSuffix:hover {
+  background: #10b981;
+  color: white;
+  transform: scale(1.05);
 }
 
 @keyframes fadeInUp {
@@ -163,19 +152,33 @@
   }
 }
 
-.bookingHeader .sectionTitle,
-.doctorsSection .sectionTitle {
+/* ============================================================================
+   SECTION HEADERS
+   ============================================================================ */
+
+.sectionTitle {
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
   margin-bottom: 1rem;
-  color: rgb(var(--foreground-rgb)) !important;
+  color: rgb(var(--foreground-rgb));
 }
 
 .sectionSubtitle {
   text-align: center;
   color: rgb(var(--foreground-muted-rgb));
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* ============================================================================
+   DOCTORS SECTION
+   ============================================================================ */
+
+.doctorsSection {
+  position: relative;
+  z-index: 1;
 }
 
 .doctorsGrid {
@@ -185,37 +188,57 @@
   margin-top: 2rem;
 }
 
+.noAvailability {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(var(--background-start-rgb), 0.8);
+  border-radius: 16px;
+  margin-top: 2rem;
+}
+
+.noAvailability p {
+  color: rgb(var(--foreground-muted-rgb));
+  font-size: 1.1rem;
+}
+
+/* ============================================================================
+   DOCTOR CARDS
+   ============================================================================ */
+
 .doctorCard {
   background: rgb(var(--background-start-rgb));
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 .doctorCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+.doctorCard:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .doctorImage {
   position: relative;
-  height: 200px;
+  height: 220px;
   overflow: hidden;
+  background: linear-gradient(135deg, #e0e7ff 0%, #d1fae5 100%);
 }
 
 .doctorImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .doctorCard:hover .doctorImage img {
-  transform: scale(1.05);
+  transform: scale(1.08);
 }
 
 .availability {
@@ -227,87 +250,136 @@
   font-size: 0.8rem;
   font-weight: 600;
   color: white;
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  z-index: 2;
 }
 
 .available {
-  background: #10b981;
+  background: rgba(16, 185, 129, 0.95);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
 .unavailable {
-  background: #ef4444;
+  background: rgba(239, 68, 68, 0.95);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .doctorInfo {
   padding: 1.5rem;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .doctorInfo h3 {
   font-size: 1.25rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin: 0;
   color: rgb(var(--foreground-rgb));
 }
 
 .specialty {
   color: rgb(var(--foreground-muted-rgb));
-  margin-bottom: 1rem;
   font-weight: 500;
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 .rating {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.25rem;
 }
 
 .stars {
   color: #f59e0b;
   font-size: 0.9rem;
+  letter-spacing: 1px;
 }
 
 .ratingText {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: rgb(var(--foreground-muted-rgb));
 }
 
 .experience {
   font-size: 0.9rem;
   color: rgb(var(--foreground-muted-rgb));
-  margin-bottom: 0.5rem;
+  margin: 0;
 }
 
 .nextAvailable {
   font-size: 0.9rem;
   color: #10b981;
-  font-weight: 500;
+  font-weight: 600;
+  margin: 0;
 }
 
 .selectButton {
   background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   color: white;
   border: none;
-  padding: 0.75rem;
+  padding: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: auto;
+  font-size: 0.95rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.selectButton:hover {
-  background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+.selectButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: 0.5s;
 }
+
+.selectButton:hover::before {
+  left: 100%;
+}
+
+.selectButton:hover:not(:disabled) {
+  background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.selectButton:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.selectButton:focus-visible {
+  outline: 3px solid white;
+  outline-offset: -3px;
+}
+
+/* ============================================================================
+   BOOKING SECTION
+   ============================================================================ */
 
 .bookingSection {
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  background: rgba(var(--background-start-rgb), 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 1;
 }
 
 .bookingHeader {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   position: relative;
   text-align: center;
 }
@@ -321,15 +393,22 @@
   gap: 0.5rem;
   background: #f1f5f9;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 1.25rem;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  color: #334155;
 }
 
 .backButton:hover {
   background: #e2e8f0;
+  transform: translateX(-3px);
+}
+
+.backButton:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 2px;
 }
 
 .backButton svg {
@@ -338,20 +417,26 @@
 }
 
 .selectedDoctorSpecialty {
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   font-size: 1.1rem;
+  margin-top: 0.5rem;
 }
 
 .bookingContent {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
+  align-items: start;
 }
+
+/* ============================================================================
+   FORM STYLES
+   ============================================================================ */
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .formRow {
@@ -362,335 +447,29 @@
 
 .inputGroup {
   position: relative;
+  margin-bottom: 1.5rem;
 }
 
 .formInput {
   width: 100%;
-  padding: 1rem 0;
+  padding: 1rem 0 0.75rem;
   border: none;
   border-bottom: 2px solid #e2e8f0;
   background: transparent;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgb(var(--foreground-rgb));
 }
 
 .formInput:focus {
   outline: none;
   border-bottom-color: #2563eb;
+  transform: translateY(-2px);
 }
 
-.formLabel {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  color: #64748b;
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-
-.formInput:focus ~ .formLabel,
-.formInput:not(:placeholder-shown) ~ .formLabel {
-  top: -0.5rem;
-  left: 0;
-  font-size: 0.875rem;
-  color: #2563eb;
-}
-
-.formUnderline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2563eb, #10b981);
-  transition: width 0.3s ease;
-}
-
-.formInput:focus ~ .formUnderline {
-  width: 100%;
-}
-
-.selectedDoctorSummary {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  margin: 1rem 0;
-}
-
-.summaryImage {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.summaryImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.summaryInfo h4 {
-  margin-bottom: 0.25rem;
-  color: #1e293b;
-}
-
-.summaryInfo p {
-  color: #64748b;
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.availableText {
-  color: #10b981;
-  font-weight: 600;
-}
-
-.unavailableText {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-.submitButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
-}
-
-.submitButton:hover:not(:disabled) {
-  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
-}
-
-.submitButton:disabled {
-  background: #94a3b8;
+.formInput:disabled {
+  opacity: 0.6;
   cursor: not-allowed;
-}
-
-.submitButton svg {
-  width: 20px;
-  height: 20px;
-}
-
-.doctorDetails {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 12px;
-}
-
-.doctorDetails h3 {
-  margin-bottom: 1rem;
-  color: #1e293b;
-}
-
-.doctorBio {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.detailItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.detailItem:last-child {
-  border-bottom: none;
-}
-
-.detailLabel {
-  font-weight: 600;
-  color: #374151;
-}
-
-.detailValue {
-  color: #64748b;
-}
-
-.successAnimation {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
-.successContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.checkmark {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1rem;
-}
-
-.checkmarkCircle {
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  stroke-width: 2;
-  stroke-miterlimit: 10;
-  stroke: #10b981;
-  fill: none;
-  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmarkCheck {
-  transform-origin: 50% 50%;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  stroke: #10b981;
-  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-}
-
-@keyframes stroke {
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Dark mode support */
-.dark .container {
-  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorCard,
-.dark .bookingSection {
-  background: rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorInfo h3 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .formInput {
-  color: rgb(var(--foreground-rgb));
-  border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
-}
-
-.dark .selectedDoctorSummary {
-  background: rgb(var(--background-start-rgb));
-}
-
-.dark .summaryInfo h4 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorDetails {
-  background: rgb(var(--background-start-rgb));
-}
-
-.dark .doctorDetails h3 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .detailLabel {
-  color: rgb(var(--foreground-muted-rgb));
-}
-
-.dark .successContent {
-  background: rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-}
-
-/* Responsive design */
-@media (max-width: 968px) {
-  .bookingContent {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .doctorsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .title {
-    font-size: 2.25rem;
-  }
-  
-  .formRow {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .navbarSpacer {
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: 2rem;
-  }
-  
-  .content {
-    padding: 0 1rem 2rem;
-  }
-  
-  .bookingSection {
-    padding: 1.5rem;
-  }
-  
-  .navbarSpacer {
-    height: 60px;
-  }
-}
-
-/* Add these styles to your existing CSS file */
-
-/* Form animations */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.inputGroup {
-  position: relative;
-  margin-bottom: 1.5rem;
-}
-
-.formInput {
-  width: 100%;
-  padding: 1rem 0;
-  border: none;
-  border-bottom: 2px solid #e2e8f0;
-  background: transparent;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  color: #1e293b;
-}
-
-.formInput:focus {
-  outline: none;
-  border-bottom-color: #2563eb;
 }
 
 .formInput.error {
@@ -701,23 +480,27 @@
   position: absolute;
   top: 1rem;
   left: 0;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left top;
+  font-size: 1rem;
 }
 
 .formInput:focus ~ .formLabel,
 .formInput:not(:placeholder-shown) ~ .formLabel {
   top: -0.5rem;
-  left: 0;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   color: #2563eb;
-  transform: translateY(-100%) scale(0.9);
+  font-weight: 500;
 }
 
 .formInput.error ~ .formLabel {
   color: #ef4444;
+}
+
+.formInput:disabled ~ .formLabel {
+  opacity: 0.6;
 }
 
 .formUnderline {
@@ -727,7 +510,7 @@
   width: 0;
   height: 2px;
   background: linear-gradient(90deg, #2563eb, #10b981);
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .formInput:focus ~ .formUnderline {
@@ -741,21 +524,81 @@
 
 .errorText {
   position: absolute;
-  bottom: -1.25rem;
+  bottom: -1.4rem;
   left: 0;
   font-size: 0.75rem;
   color: #ef4444;
-}
-
-/* Submit message (success/error) - inline, non-blocking */
-.submitMessage {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 1rem;
+  gap: 0.25rem;
+}
+
+.errorText::before {
+  content: '⚠';
+  font-size: 0.9rem;
+}
+
+/* ============================================================================
+   SELECT DROPDOWN
+   ============================================================================ */
+
+select.formInput {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23334155' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.5rem center;
+  background-size: 1.2em;
+  padding-right: 2.5rem;
+  cursor: pointer;
+  padding-top: 1.25rem;
+}
+
+select.formInput:disabled {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Fix for select label positioning when value is selected */
+.formSelect.hasValue ~ .formLabel,
+.formSelect:focus ~ .formLabel {
+  top: -0.5rem;
+  font-size: 0.8rem;
+  color: #2563eb;
+  font-weight: 500;
+}
+
+.formSelect.error ~ .formLabel {
+  color: #ef4444;
+}
+
+.formSelect:disabled ~ .formLabel {
+  opacity: 0.6;
+}
+
+/* Required asterisk */
+.required {
+  color: #ef4444;
+  margin-left: 2px;
+}
+
+.formSelect.hasValue ~ .formLabel .required,
+.formSelect:focus ~ .formLabel .required {
+  color: #ef4444;
+}
+
+/* ============================================================================
+   SUBMIT MESSAGE
+   ============================================================================ */
+
+.submitMessage {
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 500;
+  line-height: 1.5;
 }
 
 .submitMessageSuccess {
@@ -770,50 +613,28 @@
   color: #b91c1c;
 }
 
-.dark .submitMessageSuccess {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #6ee7b7;
-}
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
 
-.dark .submitMessageError {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
-}
-
-/* Loading spinner */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid transparent;
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Enhanced button animations */
 .submitButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.75rem;
   background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
   color: white;
   border: none;
-  padding: 1rem 2rem;
+  padding: 1.1rem 2.5rem;
   border-radius: 50px;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-top: 1rem;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
 }
 
 .submitButton::before {
@@ -832,12 +653,23 @@
 }
 
 .submitButton:hover:not(:disabled) {
-  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+  transform: translateY(-2px);
+}
+
+.submitButton:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .submitButton:disabled {
   background: #94a3b8;
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+.submitButton:focus-visible {
+  outline: 3px solid white;
+  outline-offset: 3px;
 }
 
 .submitButton svg {
@@ -846,55 +678,413 @@
   transition: transform 0.3s ease;
 }
 
-.submitButton:hover svg {
-  transform: translateX(3px);
+.submitButton:hover:not(:disabled) svg {
+  transform: translateX(4px);
 }
 
-/* Enhanced select styling */
-select.formInput {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.5rem center;
-  background-size: 1em;
-  padding-right: 2.5rem;
+/* ============================================================================
+   LOADING SPINNER
+   ============================================================================ */
+
+.spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top: 3px solid white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-/* Enhanced transitions for form elements */
-.formInput, .formLabel, .formUnderline {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
-/* Pulse animation for required fields */
-@keyframes pulse {
-  0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+/* ============================================================================
+   DOCTOR SUMMARY & DETAILS
+   ============================================================================ */
+
+.selectedDoctorSummary {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  background: rgba(var(--background-end-rgb), 0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--foreground-muted-rgb), 0.1);
 }
 
-.formInput:required:not(:placeholder-shown):invalid {
-  animation: pulse 2s infinite;
+.summaryImage {
+  flex-shrink: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Enhanced focus states */
-.formInput:focus {
-  transform: translateY(-2px);
+.summaryImage img,
+.image {
+  display: block;
+  border-radius: 12px;
 }
 
-/* Dark mode support for form elements */
+.summaryInfo h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 0.25rem 0;
+  color: rgb(var(--foreground-rgb));
+}
+
+.summaryInfo p {
+  margin: 0 0 0.75rem 0;
+  color: rgb(var(--foreground-muted-rgb));
+}
+
+.availableText {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.unavailableText {
+  color: #ef4444;
+  font-weight: 600;
+}
+
+.doctorDetails {
+  background: rgba(var(--background-end-rgb), 0.05);
+  padding: 2rem;
+  border-radius: 16px;
+  border: 1px solid rgba(var(--foreground-muted-rgb), 0.1);
+  position: sticky;
+  top: 2rem;
+}
+
+.doctorDetails h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: rgb(var(--foreground-rgb));
+}
+
+.doctorBio {
+  color: rgb(var(--foreground-muted-rgb));
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(var(--foreground-muted-rgb), 0.15);
+  gap: 1rem;
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+}
+
+.detailLabel {
+  font-weight: 600;
+  color: rgb(var(--foreground-rgb));
+  flex-shrink: 0;
+}
+
+.detailValue {
+  color: rgb(var(--foreground-muted-rgb));
+  text-align: right;
+}
+
+/* ============================================================================
+   SUCCESS ANIMATION
+   ============================================================================ */
+
+.successAnimation {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.successContent {
+  background: white;
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  animation: scaleIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.successContent h3 {
+  margin: 1rem 0 0.5rem;
+  font-size: 1.5rem;
+  color: #1e293b;
+}
+
+.successContent p {
+  color: #64748b;
+  font-size: 0.95rem;
+}
+
+.checkmark {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto;
+}
+
+.checkmarkCircle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #10b981;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmarkCheck {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: #10b981;
+  stroke-width: 3;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ============================================================================
+   DARK MODE
+   ============================================================================ */
+
+.dark .bookingSection {
+  background: rgba(var(--background-start-rgb), 0.95);
+}
+
+.dark .doctorCard {
+  background: rgba(var(--background-start-rgb), 0.8);
+  border: 1px solid rgba(var(--foreground-muted-rgb), 0.1);
+}
+
 .dark .formInput {
   color: rgb(var(--foreground-rgb));
   border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
 }
-  
+
 .dark .formLabel {
   color: rgb(var(--foreground-muted-rgb));
 }
-  
+
 .dark .formInput:focus ~ .formLabel {
-  color: #2563eb;
+  color: #60a5fa;
 }
-  
+
 .dark select.formInput {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(var(--foreground-rgb))' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.dark .formSelect.hasValue ~ .formLabel,
+.dark .formSelect:focus ~ .formLabel {
+  color: #60a5fa;
+}
+
+.dark .submitMessageSuccess {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+.dark .submitMessageError {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.dark .selectedDoctorSummary,
+.dark .doctorDetails {
+  background: rgba(var(--background-end-rgb), 0.1);
+  border-color: rgba(var(--foreground-muted-rgb), 0.2);
+}
+
+.dark .successContent {
+  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .successContent h3 {
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .backButton {
+  background: rgba(var(--foreground-muted-rgb), 0.1);
+  color: rgb(var(--foreground-rgb));
+}
+
+.dark .backButton:hover {
+  background: rgba(var(--foreground-muted-rgb), 0.2);
+}
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 968px) {
+  .bookingContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  
+  .doctorDetails {
+    position: static;
+  }
+  
+  .doctorsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .titleMain {
+    font-size: 2.25rem;
+  }
+  
+  .titleSuffix {
+    font-size: 1rem;
+  }
+  
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .navbarSpacer {
+    height: 70px;
+  }
+  
+  .bookingHeader {
+    padding-top: 3rem;
+  }
+  
+  .backButton {
+    position: static;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+  }
+  
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .titleMain {
+    font-size: 1.85rem;
+  }
+  
+  .titlePrefix {
+    font-size: 0.9rem;
+  }
+  
+  .content {
+    padding: 0 1rem 2rem;
+  }
+  
+  .bookingSection {
+    padding: 1.5rem;
+  }
+  
+  .navbarSpacer {
+    height: 60px;
+  }
+  
+  .doctorsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .submitButton {
+    padding: 1rem 2rem;
+    font-size: 0.95rem;
+  }
+  
+  .successContent {
+    margin: 1rem;
+    padding: 2rem 1.5rem;
+  }
+}
+
+/* ============================================================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .container,
+  .container *,
+  .doctorCard,
+  .formInput,
+  .submitButton,
+  .backButton,
+  .selectButton {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .circleElement {
+    animation: none;
+  }
+  
+  .checkmarkCircle,
+  .checkmarkCheck {
+    animation: none;
+  }
+  
+  .successContent {
+    animation: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .doctorCard {
+    border: 2px solid currentColor;
+  }
+  
+  .formInput {
+    border-bottom-width: 3px;
+  }
+  
+  .submitButton,
+  .selectButton,
+  .backButton {
+    border: 2px solid currentColor;
+  }
 }
