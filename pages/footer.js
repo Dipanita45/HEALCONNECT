@@ -106,7 +106,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/open-source#contributors" className={styles.footerLink}>
+                <Link href="/contributors" className={styles.footerLink}>
                   <FaUsers className={styles.linkIcon} />
                   Contributors
                 </Link>

@@ -43,6 +43,7 @@ const publicPages = [
   "/terms",
   "/how-it-works",
   "/open-source",
+  "/contributors",
   "/support",
   "/appointments",
   "/monitoring",
