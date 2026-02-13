@@ -257,6 +257,10 @@
   color: #1e293b;
 }
 
+.formInput option{
+  color:black;
+}
+
 .dark .formInput {
   color: #f1f5f9;
   border-bottom-color: #334155;

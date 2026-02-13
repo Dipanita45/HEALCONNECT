@@ -31,24 +31,24 @@ export default function Layout({ children }) {
     if (!mounted || isUserLoading) return; // Wait for auth to load
 
     // SECURITY: userRole comes from Firebase Auth + Firestore (verified in userInfo.js)
-const publicPages = [
-  "/",
-  "/login",
-  "/signup",
-  "/signup-test",
-  "/faq",
-  "/contact",
-  "/about",
-  "/privacy",
-  "/terms",
-  "/how-it-works",
-  "/open-source",
-  "/support",
-  "/appointments",
-  "/monitoring",
-  "/prescriptions",
-  "/feedback"
-];
+    const publicPages = [
+      "/",
+      "/login",
+      "/signup",
+      "/signup-test",
+      "/faq",
+      "/contact",
+      "/about",
+      "/privacy",
+      "/terms",
+      "/how-it-works",
+      "/open-source",
+      "/support",
+      "/appointments",
+      "/monitoring",
+      "/prescriptions",
+      "/feedback"
+    ];
 
     const currentPath = pathname || "";
 
@@ -56,6 +56,33 @@ const publicPages = [
     if (!userRole && !publicPages.includes(currentPath)) {
       router.replace("/login");
       return;
+    }
+
+    // 🛡️ RBAC: Role-Based Access Control
+    if (userRole) {
+      // Protect Admin Routes
+      if (currentPath.startsWith("/admin") && userType !== "admin") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "patient") router.replace("/patient/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Doctor Routes
+      if (currentPath.startsWith("/doctor") && userType !== "doctor") {
+        if (userType === "patient") router.replace("/patient/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Patient Routes
+      if (currentPath.startsWith("/patient") && userType !== "patient") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
     }
 
     // Redirect logged-in users from login page

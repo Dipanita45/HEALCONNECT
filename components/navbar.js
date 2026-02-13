@@ -109,7 +109,7 @@ export default function Navbar() {
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8">
+        <div className="hidden lg:flex items-center justify-center flex-grow gap-x-2 xl:gap-x-8">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -124,11 +124,11 @@ export default function Navbar() {
         </div>
 
         {/* Right side - Auth buttons + Theme Toggle + Hamburger */}
-        <div className="flex items-center gap-4 md:gap-6 ml-4 md:ml-6">
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
           {/* Auth buttons - hidden on small screens, shown in mobile menu */}
           <div className="hidden sm:flex items-center">
             {user || currentUser ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
                 <button
                   onClick={handleDashboardRedirect}
                   className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
@@ -153,7 +153,7 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center pl-4 border-l border-gray-700">
+          <div className="flex items-center pl-2 lg:pl-2 xl:pl-4 border-l border-gray-700">
             <ThemeToggle />
           </div>
 
