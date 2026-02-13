@@ -108,6 +108,16 @@ export default function Navbar() {
 
   const isAuthenticated = Boolean(user || currentUser)
 
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/prescriptions', label: 'Prescriptions' },
+    { href: '/appointments', label: 'Appointments' },
+    { href: '/monitoring', label: 'Monitoring' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/support', label: 'Support', icon: true },
+  ]
+
   return (
     <nav 
       className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}
@@ -184,7 +194,7 @@ export default function Navbar() {
             <ThemeToggle />
           </div>
 
-          {/* Mobile menu button */}
+          {/* Hamburger Menu Button - visible below 768px */}
           <button
             className={`${styles.menuButton} lg:hidden ${isMenuOpen ? styles.menuOpen : ''} ml-2`}
             onClick={toggleMenu}
@@ -192,9 +202,9 @@ export default function Navbar() {
             aria-expanded={isMenuOpen}
             aria-controls="mobile-menu"
           >
-            <span></span>
-            <span></span>
-            <span></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
           </button>
         </div>
       </div>

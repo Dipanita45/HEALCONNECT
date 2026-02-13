@@ -14,7 +14,7 @@ import {
   FaEnvelope,
   FaHeadset,
   FaDiscord,
-  FaDownload
+  FaLinkedin
 } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
@@ -136,6 +136,12 @@ export default function Footer() {
                   Contact Support
                 </Link>
               </li>
+              <li>
+                <Link href="/feedback" className={styles.footerLink}>
+                  <FaEnvelope className={styles.linkIcon} />
+                  Feedback
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -163,17 +169,16 @@ export default function Footer() {
                 <FaDiscord />
                 <span className={styles.socialTooltip}>Join our Discord</span>
               </a>
-              {/* PWA Install Button */}
-              {showInstallButton && (
-                <button 
-                  onClick={handleInstall} 
-                  className={styles.pwaInstallButton}
-                  aria-label="Install HEALCONNECT App"
-                >
-                  <FaDownload className={styles.installIcon} />
-                  <span>Install App</span>
-                </button>
-              )}
+              <a
+                href="https://www.linkedin.com/in/dipanita-mondal-6a9257306/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin />
+                <span className={styles.socialTooltip}>Connect on LinkedIn</span>
+              </a>
             </div>
             <p className={styles.feedbackText}>
               Have feedback or ideas? Reach out — we had love to hear from you!

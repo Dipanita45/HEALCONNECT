@@ -1,6 +1,5 @@
 /* Navbar Base Styles */
 .navbar {
-
   position: fixed;
 
   top: 0;
@@ -9,7 +8,7 @@
 
   width: 100%;
 
-  background: #050a15;
+  background: #15050e;
 
   padding: 1rem 0;
 
@@ -22,25 +21,19 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
   overflow: visible;
-
 }
-
-
 
 :global(.light) .navbar {
 
-  background: #ffffff;
+  background: #F8FAFC;
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
 
 }
 
-
-
 .navbar.scrolled {
-
   padding: 0.6rem 0;
 
   background: rgba(5, 10, 21, 0.95);
@@ -50,20 +43,15 @@
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
 
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-
 }
-
-
 
 :global(.light) .navbar.scrolled {
 
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(248, 250, 252, 0.92);
 
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-
-}
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
 
 /* Logo Styles */
 .logoContainer {
@@ -80,11 +68,9 @@
   padding: 0 1rem;
 
   overflow: visible;
-
 }
 
 .logo {
-
   display: flex;
 
   align-items: center;
@@ -94,15 +80,10 @@
   gap: 12px;
 
   transition: transform 0.3s ease;
-
 }
 
-
-
 .logo:hover {
-
   transform: scale(1.02);
-
 }
 
 .logo:focus-visible {
@@ -112,7 +93,6 @@
 }
 
 .logoIcon {
-
   position: relative;
 
   width: 38px;
@@ -134,66 +114,42 @@
   overflow: hidden;
 
   transition: all 0.3s ease;
-
 }
 
-
-
 @media (max-width: 400px) {
-
   .logoIcon {
-
     width: 30px;
 
     height: 30px;
-
   }
-
 }
 
-
-
 .logoIcon::before {
-
-  content: '';
+  content: "";
 
   position: absolute;
 
   inset: 0;
 
   background: linear-gradient(45deg,
-
       transparent 40%,
 
       rgba(255, 255, 255, 0.3),
-
       transparent 60%);
 
   animation: shine 3s infinite linear;
-
 }
-
-
 
 @keyframes shine {
-
   0% {
-
     transform: translateX(-100%);
-
   }
   100% {
-
     transform: translateX(100%);
-
   }
-
 }
 
-
-
 .crossSymbol {
-
   position: relative;
 
   width: 50%;
@@ -207,27 +163,18 @@
   justify-content: center;
 
   transition: all 0.3s ease;
-
 }
 
-
-
 .crossLine1,
-
 .crossLine2 {
-
   position: absolute;
 
   background-color: white;
 
   border-radius: 2px;
-
 }
 
-
-
 .crossLine1 {
-
   width: 100%;
 
   height: 20%;
@@ -239,13 +186,9 @@
   transform: translate(-50%, -50%);
 
   animation: pulse 2s infinite;
-
 }
 
-
-
 .crossLine2 {
-
   width: 20%;
 
   height: 100%;
@@ -257,29 +200,19 @@
   transform: translate(-50%, -50%);
 
   animation: pulse 2s infinite 0.5s;
-
 }
-
-
 
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
-
   }
   50% {
-
     opacity: 0.7;
-
   }
-
 }
 
-
-
 .logoText {
-
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 
   font-weight: 700;
 
@@ -298,36 +231,22 @@
   letter-spacing: -0.02em;
 
   text-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
-
 }
-
-
 
 @media (max-width: 420px) {
-
   .logoText {
-
     font-size: 1.05rem;
-
   }
-
 }
 
-
-
 @media (min-width: 768px) {
-
   .logoText {
-
     font-size: 1.5rem;
-
   }
-
 }
 
 /* Desktop Navigation Links */
 .navLink {
-
   position: relative;
 
   padding: 0.5rem 1rem;
@@ -349,7 +268,6 @@
   gap: 0.5rem;
 
   border-radius: 0.5rem;
-
 }
 
 :global(.light) .navLink {
@@ -366,23 +284,24 @@
 }
 
 .supportIcon {
-
   font-size: 1rem;
 
   color: #667eea;
 
   transition: all 0.3s ease;
-
 }
 
-
+/* Compact support icon for tablet/small desktop */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .supportIcon {
+    font-size: 0.85rem;
+  }
+}
 
 .navLink:hover .supportIcon {
-
   color: #818cf8;
 
   transform: scale(1.1);
-
 }
 
 .linkText {
@@ -390,10 +309,7 @@
   z-index: 1;
 }
 
-
-
 .linkHoverEffect {
-
   position: absolute;
 
   bottom: -4px;
@@ -413,27 +329,21 @@
   opacity: 0;
 
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-
 }
-
-
 
 .navLink:hover .linkHoverEffect,
 .navLink.active .linkHoverEffect {
   opacity: 1;
 
   transform: translateX(-50%) translateY(0);
-
 }
 
 .navLink.active {
   color: #10b981 !important;
-
 }
 
 /* Auth Buttons */
 .loginButton {
-
   padding: 0.35rem 0.8rem;
 
   background: #2563eb;
@@ -444,7 +354,7 @@
   border: none;
   text-decoration: none;
 
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 
   font-weight: 600;
 
@@ -458,44 +368,36 @@
   overflow: hidden;
 }
 
-
-
 @media (min-width: 420px) {
-
   .loginButton {
-
     padding: 0.5rem 1.25rem;
 
     font-size: 0.85rem;
-
   }
-
 }
 
-
-
 @media (min-width: 768px) {
-
   .loginButton {
-
     padding: 0.6rem 1.8rem;
 
     font-size: 0.95rem;
-
   }
-
 }
 
-
+/* Compact login button for tablet/small desktop */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .loginButton {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
+  }
+}
 
 .loginButton:hover {
-
   background: #1d4ed8;
 
   transform: translateY(-2px);
 
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-
 }
 
 .loginButton:focus-visible {
@@ -505,21 +407,19 @@
 
 :global(.light) .loginButton {
 
-  background: #2563eb;
+  background: #0F172A;
 
-  color: #ffffff;
+  color: #F8FAFC;
 
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
 
 }
 
-
-
 :global(.light) .loginButton:hover {
 
-  background: #1d4ed8;
+  background: #1e293b;
 
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
 
 }
 
@@ -772,6 +672,7 @@
   .logo {
     transition: none;
   }
+}
 
   .logoIcon::before,
   .crossLine1,
@@ -788,6 +689,7 @@
     box-shadow: none;
     border-bottom: 1px solid #000;
   }
+}
 
   .menuButton,
   .loginButton,
@@ -796,4 +698,7 @@
     display: none;
   }
 
+.mobileAuthButtonDanger:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
 }

@@ -218,13 +218,35 @@
   background: white;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
+
+  /* animation prep */
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transform: translateY(0);
 }
 
+
 .step:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
 }
+
+.stepIcon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  transition: transform 0.4s ease;
+}
+
+.step:hover .stepIcon {
+  transform: scale(1.1);
+}
+
+.step:hover img,
+.step:hover svg,
+.step:hover div:first-child {
+  transform: scale(1.1);
+  transition: transform 0.4s ease;
+}
+
 
 .stepNumber {
   position: absolute;
@@ -241,12 +263,14 @@
   justify-content: center;
   font-weight: 700;
   font-size: 14px;
+
+  transition: transform 0.3s ease;
 }
 
-.stepIcon {
-  font-size: 48px;
-  margin-bottom: 16px;
+.step:hover .stepNumber {
+  transform: translateX(-50%) scale(1.1);
 }
+
 
 .step h3 {
   margin: 0 0 12px 0;
