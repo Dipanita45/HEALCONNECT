@@ -47,11 +47,11 @@
 
 :global(.light) .navbar {
 
-  background: #ffffff;
+  background: #F8FAFC;
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
 
 }
 
@@ -75,11 +75,13 @@
 
 :global(.light) .navbar.scrolled {
 
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(248, 250, 252, 0.92);
 
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(12px);
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
+
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 
 }
 
@@ -490,7 +492,13 @@
 
 :global(.light) .navLink {
 
-  color: #1e293b;
+  color: #0F172A;
+
+}
+
+:global(.light) .navLink:hover {
+
+  color: #2563eb;
 
 }
 
@@ -682,11 +690,11 @@
 
 :global(.light) .loginButton {
 
-  background: #2563eb;
+  background: #0F172A;
 
-  color: #ffffff;
+  color: #F8FAFC;
 
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
 
 }
 
@@ -694,9 +702,9 @@
 
 :global(.light) .loginButton:hover {
 
-  background: #1d4ed8;
+  background: #1e293b;
 
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
 
 }
 
@@ -738,9 +746,9 @@
 
   :global(.light) .navLinks {
 
-    background: #ffffff;
+    background: #F8FAFC;
 
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    box-shadow: -10px 0 30px rgba(15, 23, 42, 0.08);
 
   }
 
@@ -814,7 +822,7 @@
 
   :global(.light) .menuButton span {
 
-    background: #1e293b;
+    background: #0F172A;
 
   }
 

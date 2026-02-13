@@ -116,20 +116,27 @@ export default function Navbar() {
         <ThemeToggle />
       </div>
 
-      {/* Mobile Menu Button */}
-      <button
-        className="lg:hidden flex flex-col gap-1"
-        onClick={() => setIsMenuOpen(!isMenuOpen)}
-      >
-        <span className="w-6 h-0.5 bg-white"></span>
-        <span className="w-6 h-0.5 bg-white"></span>
-        <span className="w-6 h-0.5 bg-white"></span>
-      </button>
+      {/* Mobile Menu Button + Theme Toggle */}
+      <div className="lg:hidden flex items-center gap-2">
+        <ThemeToggle />
+        <button
+          className="flex flex-col gap-1.5"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+        </button>
+      </div>
     </div>
 
     {/* Mobile Menu */}
     {isMenuOpen && (
-      <div className="lg:hidden bg-[#0f172a] px-6 py-6 space-y-4">
+      <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
         {[
           { href: '/', label: 'Home' },
           { href: '/prescriptions', label: 'Prescriptions' },
@@ -142,7 +149,11 @@ export default function Navbar() {
           <Link
             key={link.href}
             href={link.href}
-            className="block text-white py-2 border-b border-gray-700"
+            className="block py-2 border-b transition-colors"
+            style={{
+              color: 'var(--mobile-menu-text, white)',
+              borderColor: 'var(--mobile-menu-border, #374151)'
+            }}
             onClick={() => setIsMenuOpen(false)}
           >
             {link.label}
@@ -173,10 +184,6 @@ export default function Navbar() {
               Login
             </button>
           )}
-
-          <div className="pt-2">
-            <ThemeToggle />
-          </div>
         </div>
       </div>
     )}
