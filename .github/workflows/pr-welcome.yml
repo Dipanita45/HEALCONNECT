@@ -1,0 +1,23 @@
+name: Welcome New Contributors
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pr-message: |
+            ### Welcome to HEALCONNECT! 🏥
+            Thanks for opening your first pull request! We're excited to have you on board.
+
+            Please make sure you've:
+            - [ ] Linked this PR to an issue (if applicable)
+            - [ ] Followed the [Contributing Guidelines](https://github.com/Dipanita45/HEALCONNECT/blob/main/contributing.md)
+            - [ ] Tested your changes locally
+
+            A reviewer will take a look shortly. Happy coding! 🚀

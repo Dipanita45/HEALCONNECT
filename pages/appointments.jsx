@@ -1,12 +1,12 @@
 
-import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './Appointments.module.css';
+import { onAuthStateChanged } from "firebase/auth";
+import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { auth } from "../lib/firebase";
-import { signInAnonymously, onAuthStateChanged } from "firebase/auth";
+import styles from './Appointments.module.css';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -214,6 +214,9 @@ const filterTimesByAvailability = (times, doctor, date) => {
 };
 
 export default function Appointments() {
+  const { user, currentUser } = useContext(UserContext);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     date: '',
@@ -222,14 +225,27 @@ export default function Appointments() {
     reason: ''
   });
 
+  // Pre-fill user data when available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        name: currentUser.name || ''
+      }));
+    }
+  }, [currentUser]);
+
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
   const [formErrors, setFormErrors] = useState({});
-
   const [bookedTimes, setBookedTimes] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen to auth state
+ useEffect(() => {
+  const unsub = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+  });
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("AUTH USER:", user);
@@ -237,6 +253,7 @@ export default function Appointments() {
 
     return () => unsub();
   }, []);
+
 
   useEffect(() => {
     if (formData.date && formData.doctor) {
@@ -247,7 +264,7 @@ export default function Appointments() {
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    
+
     // Clear error when user starts typing
     if (formErrors[name]) {
       setFormErrors({ ...formErrors, [name]: '' });
@@ -257,19 +274,34 @@ export default function Appointments() {
 
   const validateForm = () => {
     const errors = {};
-    
+
     if (!formData.name.trim()) errors.name = 'Name is required';
     if (!formData.date) errors.date = 'Date is required';
     if (!formData.time) errors.time = 'Time is required';
     if (!formData.reason.trim()) errors.reason = 'Reason is required';
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleDoctorSelect = (doctor) => {
+    // Security check: must be logged in to book
+    if (!user && !localStorage.getItem('userType')) {
+      // Store intended doctor selection if possible, or just redirect
+      const confirmLogin = window.confirm("You must be logged in to book an appointment. Proceed to login?");
+      if (confirmLogin) {
+        router.push('/login');
+      }
+      return;
+    }
+
     setSelectedDoctor(doctor);
-    setFormData({ ...formData, doctor: doctor.name });
+    setFormData(prev => ({
+      ...prev,
+      doctor: doctor.name,
+      // Ensure name is pre-filled if available (redundant safety)
+      name: currentUser?.name || prev.name
+    }));
     setStep(2);
   };
 
@@ -278,7 +310,7 @@ export default function Appointments() {
     setStep(1);
     setFormErrors({});
   };
-
+ 
  const isSlotAlreadyBooked = async () => {
   const q = query(
     collection(db, "appointments"),
@@ -287,12 +319,12 @@ export default function Appointments() {
     where("time", "==", formData.time)
   );
 
-  const snapshot = await getDocs(q);
-  return !snapshot.empty;
-};
+    const snapshot = await getDocs(q);
+    return !snapshot.empty;
+  };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
   if (!validateForm()) return;
   setIsSubmitting(true);
@@ -369,7 +401,7 @@ const handleSubmit = async (e) => {
     <div className={styles.container}>
       {/* Navbar spacer to prevent content from hiding behind fixed navbar */}
       <div className={styles.navbarSpacer}></div>
-      
+
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement}></div>
@@ -404,11 +436,11 @@ const handleSubmit = async (e) => {
               exit="hidden"
               variants={staggerChildren}
             >
-              <motion.div 
+              <motion.div
                 className={styles.titleContainer}
                 variants={fadeInUp}
               >
-                <motion.h2 
+                <motion.h2
                   className={styles.sectionTitle}
                   variants={fadeInUp}
                   initial="hidden"
@@ -417,13 +449,13 @@ const handleSubmit = async (e) => {
                   <span className={styles.titlePrefix}>Meet</span>
                   <span className={styles.titleMain}>Our Specialist Doctors</span>
                 </motion.h2>
-                <motion.div 
+                <motion.div
                   className={styles.titleUnderline}
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 ></motion.div>
-                <motion.p 
+                <motion.p
                   className={styles.sectionSubtitle}
                   variants={fadeInUp}
                   initial="hidden"
@@ -433,11 +465,11 @@ const handleSubmit = async (e) => {
                   Choose from our team of board-certified healthcare professionals
                 </motion.p>
               </motion.div>
-              
+
               <div className={styles.doctorsGrid}>
                 {doctors.map((doctor) => (
-                  <motion.div 
-                    key={doctor.id} 
+                  <motion.div
+                    key={doctor.id}
                     className={styles.doctorCard}
                     variants={fadeInUp}
                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
@@ -445,9 +477,9 @@ const handleSubmit = async (e) => {
                     onClick={() => handleDoctorSelect(doctor)}
                   >
                     <div className={styles.doctorImage}>
-                      <Image 
-                        src={doctor.image} 
-                        alt={doctor.name} 
+                      <Image
+                        src={doctor.image}
+                        alt={doctor.name}
                         width={200}
                         height={200}
                         className={styles.image}
@@ -468,7 +500,7 @@ const handleSubmit = async (e) => {
                         {doctor.available ? `Next available: ${doctor.nextAvailable}` : `Available: ${doctor.nextAvailable}`}
                       </p>
                     </div>
-                    <motion.button 
+                    <motion.button
                       className={styles.selectButton}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
@@ -489,14 +521,14 @@ const handleSubmit = async (e) => {
               variants={scaleIn}
             >
               <div className={styles.bookingHeader}>
-                <motion.button 
-                  onClick={handleBackToDoctors} 
+                <motion.button
+                  onClick={handleBackToDoctors}
                   className={styles.backButton}
                   whileHover={{ x: -5 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   Back to Doctors
                 </motion.button>
@@ -505,8 +537,8 @@ const handleSubmit = async (e) => {
               </div>
 
               <div className={styles.bookingContent}>
-                <motion.form 
-                  onSubmit={handleSubmit} 
+                <motion.form
+                  onSubmit={handleSubmit}
                   className={styles.form}
                   variants={staggerChildren}
                   initial="hidden"
@@ -531,24 +563,28 @@ const handleSubmit = async (e) => {
                       <div className={styles.formUnderline}></div>
                       {formErrors.name && <span className={styles.errorText}>{formErrors.name}</span>}
                     </div>
-                    
+
                     <div className={styles.inputGroup}>
-                      <input
-                        type="date"
-                        name="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                        required
-                        className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
-                        min={new Date().toISOString().split('T')[0]}
-                        placeholder=" "
-                      />
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      required
+                      min={new Date().toISOString().split('T')[0]}
+                      className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
+                      style={{
+                        paddingRight: "42px",
+                        colorScheme: "light"
+                      }}
+                    />
+
+
                       <label className={styles.formLabel}>Appointment Date</label>
                       <div className={styles.formUnderline}></div>
                       {formErrors.date && <span className={styles.errorText}>{formErrors.date}</span>}
                     </div>
                   </motion.div>
-                  
                   <motion.div 
                     className={styles.formRow}
                     variants={formItemVariants}
@@ -580,7 +616,7 @@ const handleSubmit = async (e) => {
                       <div className={styles.formUnderline}></div>
                       {formErrors.time && <span className={styles.errorText}>{formErrors.time}</span>}
                     </div>
-                    
+
                     <div className={styles.inputGroup}>
                       <input
                         type="text"
@@ -596,16 +632,16 @@ const handleSubmit = async (e) => {
                       {formErrors.reason && <span className={styles.errorText}>{formErrors.reason}</span>}
                     </div>
                   </motion.div>
-                  
-                  <motion.div 
+
+                  <motion.div
                     className={styles.selectedDoctorSummary}
                     variants={formItemVariants}
                   >
                     <div className={styles.summaryImage}>
-                      <Image 
-                        src={selectedDoctor.image} 
+                      <Image
+                        src={selectedDoctor.image}
                         alt={selectedDoctor.name}
-                        width={120} 
+                        width={120}
                         height={120}
                         className={styles.image}
                       />
@@ -620,9 +656,9 @@ const handleSubmit = async (e) => {
                       </div>
                     </div>
                   </motion.div>
-                  
-                  <motion.button 
-                    type="submit" 
+
+                  <motion.button
+                    type="submit"
                     className={styles.submitButton}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -635,15 +671,15 @@ const handleSubmit = async (e) => {
                       <>
                         Confirm Appointment
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </>
                     )}
                   </motion.button>
                 </motion.form>
-                
-                <motion.div 
+
+                <motion.div
                   className={styles.doctorDetails}
                   variants={fadeInUp}
                   initial="hidden"
@@ -652,28 +688,28 @@ const handleSubmit = async (e) => {
                 >
                   <h3>About Dr. {selectedDoctor.name.split(' ')[1]}</h3>
                   <p className={styles.doctorBio}>
-                    {selectedDoctor.name} is a renowned {selectedDoctor.specialty.toLowerCase()} with over {selectedDoctor.experience} of experience. 
-                    Specializing in patient-centered care, Dr. {selectedDoctor.name.split(' ')[1]} has helped thousands of patients 
+                    {selectedDoctor.name} is a renowned {selectedDoctor.specialty.toLowerCase()} with over {selectedDoctor.experience} of experience.
+                    Specializing in patient-centered care, Dr. {selectedDoctor.name.split(' ')[1]} has helped thousands of patients
                     achieve better health outcomes.
                   </p>
-                  
+
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Specialty:</span>
                     <span className={styles.detailValue}>{selectedDoctor.specialty}</span>
                   </div>
-                  
+
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Experience:</span>
                     <span className={styles.detailValue}>{selectedDoctor.experience}</span>
                   </div>
-                  
+
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Rating:</span>
                     <span className={styles.detailValue}>
                       <span className={styles.stars}>★★★★★</span> {selectedDoctor.rating} ({selectedDoctor.reviews} reviews)
                     </span>
                   </div>
-                  
+
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Next Available:</span>
                     <span className={styles.detailValue}>{selectedDoctor.nextAvailable}</span>
@@ -689,8 +725,8 @@ const handleSubmit = async (e) => {
       <div id="booking-success" className={styles.successAnimation}>
         <div className={styles.successContent}>
           <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-            <circle className={styles.checkmarkCircle} cx="26" cy="26" r="25" fill="none"/>
-            <path className={styles.checkmarkCheck} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            <circle className={styles.checkmarkCircle} cx="26" cy="26" r="25" fill="none" />
+            <path className={styles.checkmarkCheck} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
           </svg>
           <h3>Appointment Booked Successfully!</h3>
         </div>

@@ -1,0 +1,126 @@
+/* Wrapper section to center the card */
+.feedbackSection {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  background: transparent;
+}
+
+/* Card container */
+.card {
+  width: 100%;
+  max-width: 520px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 23, 42, 0.95),
+    rgba(2, 6, 23, 0.95)
+  );
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  box-shadow:
+    0 20px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(6px);
+  animation: fadeUp 0.6s ease;
+}
+
+/* Heading */
+.heading {
+  text-align: center;
+  color: #e5e7eb;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.subheading {
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+/* Form layout */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+/* Inputs */
+.input,
+.textarea {
+  width: 100%;
+  background: rgba(2, 6, 23, 0.9);
+  color: #e5e7eb;
+  border: 1px solid #334155;
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  transition: all 0.25s ease;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: #64748b;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
+}
+
+/* Textarea */
+.textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+/* Submit button */
+.button {
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, #2563eb, #22c55e);
+  color: #020617;
+  border: none;
+  border-radius: 999px;
+  padding: 0.9rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 10px 25px rgba(34, 197, 94, 0.25);
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 35px rgba(34, 197, 94, 0.35);
+}
+
+.button:active {
+  transform: translateY(0);
+}
+
+/* Success message */
+.success {
+  text-align: center;
+  color: #22c55e;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+/* Animation */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
