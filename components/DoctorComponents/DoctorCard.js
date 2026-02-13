@@ -1,37 +1,62 @@
-import React from 'react'
-import { FaUser, FaAngleRight} from 'react-icons/fa';
+import React from 'react';
+import { FaUser, FaEnvelope, FaIdBadge, FaUserShield } from 'react-icons/fa';
 
-export default function DoctorCard({name, speciality, email, uid, userRole}) {
+/**
+ * DoctorCard Component
+ * Displays a doctor's information in a card format.
+ * @param {object} props
+ * @param {object} props.doctor - The doctor object containing name, speciality, email, uid.
+ * @param {boolean} [props.showDistance] - Whether to show distance (if available).
+ */
+export default function DoctorCard({ doctor, showDistance }) {
+  const { name, speciality, email, uid, role, distance } = doctor || {};
 
   return (
-    <>
-      <td className="px-2 py-3">
-        <div className="flex items-center text-sm">
-          <div className="flex justify-center items-center w-10 h-10 mr-4 bg-gray-100 rounded-full transition-all duration-300 transform group-hover:rotate-12">
-            <FaUser className="text-blue-500" size={26}/>
-            <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-4">
-  {/* content */}
-</div>
-          </div>
-          <div>
-            <p className="font-semibold">{name}</p>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              {speciality}
-            </p>
-          </div>
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
+      {/* Header with Avatar and Name */}
+      <div className="flex items-center mb-3">
+        <div className="flex justify-center items-center w-12 h-12 mr-4 bg-blue-100 dark:bg-blue-900 rounded-full">
+          <FaUser className="text-blue-500 dark:text-blue-300" size={24} />
         </div>
-      </td>
-      <td><p className={` ${userRole === 'Admin' ? 'text-green-500' : 'text-blue-500'}`}>{userRole}</p></td>
-      <td className="px-4 py-3 text-sm">{uid}</td>
-      <td className="px-4 py-3 text-xs">
-        <span className="px-2 py-1 font-semibold leading-tight rounded-full text-gray-600 dark:text-gray-400">
-          {email}
-        </span>
-      </td>
-      <td className="pl-4">View</td>
-      <td>
-      <FaAngleRight size={22}/>
-      </td>
-      </>
+        <div>
+          <p className="font-semibold text-gray-800 dark:text-white text-lg">{name || 'N/A'}</p>
+          <p className="text-sm text-blue-600 dark:text-blue-400">{speciality || 'General'}</p>
+        </div>
+      </div>
+
+      {/* Details */}
+      <div className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+        {role && (
+          <div className="flex items-center gap-2">
+            <FaUserShield className={role === 'admin' ? 'text-green-500' : 'text-blue-500'} />
+            <span className="capitalize">{role}</span>
+          </div>
+        )}
+        {uid && (
+          <div className="flex items-center gap-2">
+            <FaIdBadge />
+            <span className="truncate" title={uid}>{uid.substring(0, 12)}...</span>
+          </div>
+        )}
+        {email && (
+          <div className="flex items-center gap-2">
+            <FaEnvelope />
+            <span className="truncate" title={email}>{email}</span>
+          </div>
+        )}
+        {showDistance && distance !== undefined && (
+          <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
+            <span>📍 {distance.toFixed(1)} km away</span>
+          </div>
+        )}
+      </div>
+
+      {/* Action */}
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+        <button className="w-full text-center text-blue-600 dark:text-blue-400 font-medium hover:underline">
+          View Profile
+        </button>
+      </div>
+    </div>
   );
 }

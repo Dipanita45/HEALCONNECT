@@ -2,22 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-
-function getUserType() {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("userType");
-  }
-  return null;
-}
+import { useUserData } from "@lib/userInfo";
 
 export default function Layout({ children }) {
   const router = useRouter();
   const pathname = router.pathname;
+  const { userRole, isUserLoading } = useUserData(); // SECURITY: Use Firebase-verified role
   const [isOffline, setIsOffline] = useState(false);
-  const [mounted, setMounted] = useState(false); // Track client mounting
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true); // Now safe to access window
+    setMounted(true);
     setIsOffline(!navigator.onLine);
 
     const handleOnline = () => setIsOffline(false);
@@ -33,35 +28,53 @@ export default function Layout({ children }) {
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
+    if (!mounted || isUserLoading) return; // Wait for auth to load
 
-    const userType = getUserType();
-    const publicPages = ["/", "/login", "/signup", "/signup-test", "/faq", "/contact", "/about", "/privacy", "/terms", "/how-it-works", "/open-source", "/support", "/appointments", "/monitoring", "/prescriptions"];
+    // SECURITY: userRole comes from Firebase Auth + Firestore (verified in userInfo.js)
+const publicPages = [
+  "/",
+  "/login",
+  "/signup",
+  "/signup-test",
+  "/faq",
+  "/contact",
+  "/about",
+  "/privacy",
+  "/terms",
+  "/how-it-works",
+  "/open-source",
+  "/support",
+  "/appointments",
+  "/monitoring",
+  "/prescriptions",
+  "/feedback"
+];
 
-    // Convert pathname to string for comparison
     const currentPath = pathname || "";
 
     // Redirect if not logged in and trying to access protected pages
-    if (!userType && !publicPages.includes(currentPath)) {
+    if (!userRole && !publicPages.includes(currentPath)) {
       router.replace("/login");
       return;
     }
 
     // Redirect logged-in users from login page
-    if (userType && currentPath === "/login") {
-      if (userType === "doctor") router.replace("/doctor/dashboard");
-      if (userType === "patient") router.replace("/patient/dashboard");
+    if (userRole && currentPath === "/login") {
+      if (userRole === "doctor") router.replace("/doctor/dashboard");
+      if (userRole === "patient") router.replace("/patient/dashboard");
+      if (userRole === "admin") router.replace("/admin/dashboard");
       return;
     }
 
     // Redirect from root if logged in
-    if (userType && currentPath === "/") {
-      if (userType === "doctor") router.replace("/doctor/dashboard");
-      if (userType === "patient") router.replace("/patient/dashboard");
+    if (userRole && currentPath === "/") {
+      if (userRole === "doctor") router.replace("/doctor/dashboard");
+      if (userRole === "patient") router.replace("/patient/dashboard");
+      if (userRole === "admin") router.replace("/admin/dashboard");
     }
-  }, [mounted, router, pathname]); // Add pathname to dependencies
+  }, [mounted, isUserLoading, userRole, router, pathname]);
 
-  if (!mounted) return null; // Prevent server/client mismatch
+  if (!mounted) return null;
 
   return (
     <>
@@ -70,7 +83,6 @@ export default function Layout({ children }) {
           You are offline – showing last cached data.
         </div>
       )}
-      {/* Wrap children in a provider or pass offline data if needed */}
       <div className="min-h-screen">{children}</div>
     </>
   );
