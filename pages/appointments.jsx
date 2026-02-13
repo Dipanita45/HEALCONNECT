@@ -214,6 +214,9 @@ const filterTimesByAvailability = (times, doctor, date) => {
 };
 
 export default function Appointments() {
+  const { user, currentUser } = useContext(UserContext);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     date: '',
@@ -221,6 +224,16 @@ export default function Appointments() {
     doctor: '',
     reason: ''
   });
+
+  // Pre-fill user data when available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        name: currentUser.name || ''
+      }));
+    }
+  }, [currentUser]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
@@ -272,8 +285,23 @@ export default function Appointments() {
     };
 
     const handleDoctorSelect = (doctor) => {
+      // Security check: must be logged in to book
+      if (!user && !localStorage.getItem('userType')) {
+        // Store intended doctor selection if possible, or just redirect
+        const confirmLogin = window.confirm("You must be logged in to book an appointment. Proceed to login?");
+        if (confirmLogin) {
+          router.push('/login');
+        }
+        return;
+      }
+
       setSelectedDoctor(doctor);
-      setFormData({ ...formData, doctor: doctor.name });
+      setFormData(prev => ({
+        ...prev,
+        doctor: doctor.name,
+        // Ensure name is pre-filled if available (redundant safety)
+        name: currentUser?.name || prev.name
+      }));
       setStep(2);
     };
 

@@ -139,13 +139,11 @@
 
   inset: 0;
 
-  background: linear-gradient(
-    45deg,
-    transparent 40%,
+  background: linear-gradient(45deg,
+      transparent 40%,
 
-    rgba(255, 255, 255, 0.3),
-    transparent 60%
-  );
+      rgba(255, 255, 255, 0.3),
+      transparent 60%);
 
   animation: shine 3s infinite linear;
 }
@@ -214,6 +212,7 @@
 }
 
 @keyframes pulse {
+
   0%,
   100% {
     opacity: 1;
@@ -258,6 +257,13 @@
   }
 }
 
+/* Compact logo for tablet/small desktop */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .logoText {
+    font-size: 1.3rem;
+  }
+}
+
 .navLinks {
   display: flex;
 
@@ -290,12 +296,28 @@
   border-radius: 0.5rem;
 }
 
+/* Compact nav links for tablet/small desktop (1024px - 1280px) */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .navLink {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.85rem;
+    gap: 0.35rem;
+  }
+}
+
 .supportIcon {
   font-size: 1rem;
 
   color: #667eea;
 
   transition: all 0.3s ease;
+}
+
+/* Compact support icon for tablet/small desktop */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .supportIcon {
+    font-size: 0.85rem;
+  }
 }
 
 .navLink:hover .supportIcon {
@@ -378,7 +400,7 @@
     flex-shrink: 0;
   }
 
-  .rightSection > * {
+  .rightSection>* {
     flex-shrink: 0;
   }
 }
@@ -418,6 +440,14 @@
     padding: 0.6rem 1.8rem;
 
     font-size: 0.95rem;
+  }
+}
+
+/* Compact login button for tablet/small desktop */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .loginButton {
+    padding: 0.45rem 1rem;
+    font-size: 0.8rem;
   }
 }
 
@@ -504,8 +534,8 @@
   transform: translateY(-7px) rotate(-45deg);
 }
 
-/* Hide hamburger on desktop (768px and above) */
-@media (min-width: 768px) {
+/* Hide hamburger on desktop (1024px and above) */
+@media (min-width: 1024px) {
   .menuButton {
     display: none;
   }
@@ -534,7 +564,7 @@
 }
 
 /* Hide overlay on desktop */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .overlay {
     display: none;
   }
@@ -578,7 +608,7 @@
 }
 
 /* Hide mobile menu on desktop */
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .mobileMenu {
     display: none;
   }

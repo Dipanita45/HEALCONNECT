@@ -58,6 +58,33 @@ const publicPages = [
       return;
     }
 
+    // 🛡️ RBAC: Role-Based Access Control
+    if (userType) {
+      // Protect Admin Routes
+      if (currentPath.startsWith("/admin") && userType !== "admin") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "patient") router.replace("/patient/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Doctor Routes
+      if (currentPath.startsWith("/doctor") && userType !== "doctor") {
+        if (userType === "patient") router.replace("/patient/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Patient Routes
+      if (currentPath.startsWith("/patient") && userType !== "patient") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
+    }
+
     // Redirect logged-in users from login page
     if (userRole && currentPath === "/login") {
       if (userRole === "doctor") router.replace("/doctor/dashboard");
