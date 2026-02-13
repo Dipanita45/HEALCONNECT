@@ -47,10 +47,38 @@ export default function Layout({ children }) {
       return;
     }
 
+    // 🛡️ RBAC: Role-Based Access Control
+    if (userType) {
+      // Protect Admin Routes
+      if (currentPath.startsWith("/admin") && userType !== "admin") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "patient") router.replace("/patient/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Doctor Routes
+      if (currentPath.startsWith("/doctor") && userType !== "doctor") {
+        if (userType === "patient") router.replace("/patient/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
+
+      // Protect Patient Routes
+      if (currentPath.startsWith("/patient") && userType !== "patient") {
+        if (userType === "doctor") router.replace("/doctor/dashboard");
+        else if (userType === "admin") router.replace("/admin/dashboard");
+        else router.replace("/login");
+        return;
+      }
+    }
+
     // Redirect logged-in users from login page
     if (userType && currentPath === "/login") {
       if (userType === "doctor") router.replace("/doctor/dashboard");
       if (userType === "patient") router.replace("/patient/dashboard");
+      else if (userType === "admin") router.replace("/admin/dashboard");
       return;
     }
 
@@ -58,6 +86,7 @@ export default function Layout({ children }) {
     if (userType && currentPath === "/") {
       if (userType === "doctor") router.replace("/doctor/dashboard");
       if (userType === "patient") router.replace("/patient/dashboard");
+      if (userType === "admin") router.replace("/admin/dashboard");
     }
   }, [mounted, router, pathname]); // Add pathname to dependencies
 
