@@ -173,31 +173,56 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`${styles.overlay} ${isMenuOpen ? styles.overlayVisible : ''}`}
-        onClick={closeMenu}
-        aria-hidden="true"
-      />
+      {/* Mobile Menu Button + Theme Toggle */}
+      <div className="lg:hidden flex items-center gap-2">
+        <ThemeToggle />
+        <button
+          className="flex flex-col gap-1.5"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+        </button>
+      </div>
+    </div>
 
-      {/* Mobile Menu Panel */}
-      <div
-        id="mobile-menu"
-        className={`${styles.mobileMenu} ${isMenuOpen ? styles.mobileMenuOpen : ''}`}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Navigation menu"
-      >
-        <div className={styles.mobileMenuContent}>
-          {/* Mobile Navigation Links */}
-          <nav className={styles.mobileNav}>
-            {navLinks.map((link, index) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`${styles.mobileNavLink} ${router.pathname === link.href ? styles.mobileNavLinkActive : ''}`}
-                onClick={closeMenu}
-                style={{ animationDelay: `${index * 50}ms` }}
+    {/* Mobile Menu */}
+    {isMenuOpen && (
+      <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
+        {[
+          { href: '/', label: 'Home' },
+          { href: '/prescriptions', label: 'Prescriptions' },
+          { href: '/appointments', label: 'Appointments' },
+          { href: '/monitoring', label: 'Monitoring' },
+          { href: '/faq', label: 'FAQ' },
+          { href: '/contact', label: 'Contact' },
+          { href: '/support', label: 'Support' },
+        ].map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="block py-2 border-b transition-colors"
+            style={{
+              color: 'var(--mobile-menu-text, white)',
+              borderColor: 'var(--mobile-menu-border, #374151)'
+            }}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        <div className="pt-4 space-y-3">
+          {user || currentUser ? (
+            <>
+              <button
+                onClick={handleDashboardRedirect}
+                className="w-full py-2 bg-green-600 text-white rounded-md"
               >
                 {link.icon && <FaHeadset className={styles.supportIcon} />}
                 <span>{link.label}</span>
@@ -229,8 +254,15 @@ export default function Navbar() {
               >
                 Login
               </button>
-            )}
-          </div>
+            </>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className="w-full py-2 bg-blue-600 text-white rounded-md"
+            >
+              Login
+            </button>
+          )}
         </div>
       </div>
     </nav>

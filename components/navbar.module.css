@@ -23,11 +23,13 @@
 }
 
 :global(.light) .navbar {
-  background: #ffffff;
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  background: #F8FAFC;
 
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+
 }
 
 .navbar.scrolled {
@@ -43,11 +45,15 @@
 }
 
 :global(.light) .navbar.scrolled {
-  background: rgba(255, 255, 255, 0.9);
 
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+  background: rgba(248, 250, 252, 0.92);
 
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(12px);
+
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.06);
+
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+
 }
 
 .container {
@@ -327,7 +333,15 @@
 }
 
 :global(.light) .navLink {
-  color: #1e293b;
+
+  color: #0F172A;
+
+}
+
+:global(.light) .navLink:hover {
+
+  color: #2563eb;
+
 }
 
 .navLink:hover {
@@ -460,17 +474,21 @@
 }
 
 :global(.light) .loginButton {
-  background: #2563eb;
 
-  color: #ffffff;
+  background: #0F172A;
 
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.15);
+  color: #F8FAFC;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
+
 }
 
 :global(.light) .loginButton:hover {
-  background: #1d4ed8;
 
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
+  background: #1e293b;
+
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+
 }
 
 /* ================================
@@ -494,9 +512,59 @@
   gap: 5px;
 }
 
-.menuButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
+@media (max-width: 1024px) {
+
+  .navLinks {
+
+    position: fixed;
+
+    top: 0;
+
+    right: -100%;
+
+    width: 280px;
+
+    height: 100vh;
+
+    background: #050a15;
+
+    flex-direction: column;
+
+    padding: 6rem 2rem;
+
+    gap: 1.5rem;
+
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+    z-index: 1001;
+
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+
+    align-items: flex-start;
+
+  }
+
+
+
+  :global(.light) .navLinks {
+
+    background: #F8FAFC;
+
+    box-shadow: -10px 0 30px rgba(15, 23, 42, 0.08);
+
+  }
+
+
+
+  .navLinks.navOpen {
+
+    right: 0;
+
+  }
+
+
+
+  .navLink {
 
 :global(.light) .menuButton:hover {
   background: rgba(0, 0, 0, 0.05);
@@ -558,10 +626,17 @@
     visibility 0.3s ease;
 }
 
-.overlayVisible {
-  opacity: 1;
-  visibility: visible;
-}
+  :global(.light) .menuButton span {
+
+    background: #0F172A;
+
+  }
+
+
+
+  .menuButton.menuOpen span:nth-child(1) {
+
+    transform: translateY(8px) rotate(45deg);
 
 /* Hide overlay on desktop */
 @media (min-width: 1024px) {
