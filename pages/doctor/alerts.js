@@ -10,17 +10,12 @@ export default function AlertsPage() {
 
     useEffect(() => {
         if (typeof window !== "undefined") {
-            const role = localStorage.getItem("userType");
-            if (!role) {
-                router.push("/login");
-            } else if (role !== "doctor") {
-                router.push(`/${role}/dashboard`);
-            } else {
-                const id = localStorage.getItem("userId") || localStorage.getItem("username");
-                setDoctorId(id);
-            }
+            // SECURITY: Role is already verified by layout.js using Firebase Auth
+            // This only fetches doctor ID for the alert system  
+            const id = localStorage.getItem("userId") || localStorage.getItem("username");
+            setDoctorId(id);
         }
-    }, [router]);
+    }, []);
 
     return (
         <AuthCheck>
