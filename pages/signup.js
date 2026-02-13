@@ -136,10 +136,12 @@ export default function SignupPage() {
     }
 
     if (!formData.email.trim()) {
-      newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
+     newErrors.email = "Email is required";
+    } 
+    else if (!/^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(formData.email.trim())) {
+     newErrors.email = "Email must be in format username@gmail.com only";
     }
+
 
     if (!formData.password) {
       newErrors.password = "Password is required";
@@ -155,6 +157,8 @@ export default function SignupPage() {
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
+    } else if (!/^[A-Za-z\s]+$/.test(formData.fullName.trim())) {
+      newErrors.fullName = "Full name must contain only alphabets (no numbers or special characters)";
     }
 
     if (!formData.phone.trim()) {
@@ -249,22 +253,6 @@ export default function SignupPage() {
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUserData));
       
-      // Update React state for immediate UI update
-      setUser({ uid: newUser.id });
-      setUserRole(newUser.role);
-      setCurrentUser({ 
-        name: newUser.fullName, // Use fullName instead of username
-        email: newUser.email,
-        number: newUser.phone, // Map phone to number
-        role: newUser.role,
-        username: newUser.username,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        gender: newUser.gender,
-        adminCode: newUser.adminCode,
-        id: newUser.id
-      });
 
       // Show success message and redirect
       setTimeout(() => {
