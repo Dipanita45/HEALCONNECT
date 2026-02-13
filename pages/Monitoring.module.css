@@ -50,6 +50,22 @@
   animation-delay: -14s;
 }
 
+@keyframes borderGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.0);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(59, 130, 246, 0.0);
+  }
+}
+
+.historyCard:hover {
+  animation: borderGlow 1.5s ease-in-out;
+}
+
 @keyframes float {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg);
@@ -409,16 +425,27 @@
 }
 
 .historyCard {
-  background: rgb(var(--background-start-rgb));
+  background: var(--card-bg, #ffffff);
+  border: 1px solid rgba(59, 130, 246, 0.15); /* subtle border */
   border-radius: 12px;
-  padding: 1.5rem;
-  transition: all 0.3s ease;
+  padding: 18px;
+  margin-bottom: 16px;
+  transition: 
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
 }
 
-.historyCard:hover {
-  transform: translateX(5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+.historyCard:hover,
+.historyCard:focus-within {
+  border-color: #3b82f6; /* theme primary blue */
+  box-shadow: 
+    0 0 0 1px rgba(59, 130, 246, 0.2),
+    0 8px 24px rgba(59, 130, 246, 0.15);
+  transform: translateY(-2px);
 }
+
 
 .historyDate {
   font-weight: 600;
