@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { UserContext } from '@lib/context'
 import { useRouter } from 'next/router'
 import { FaHeadset } from 'react-icons/fa'
@@ -13,6 +13,25 @@ export default function Navbar() {
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
+  // Close menu on route change
+  useEffect(() => {
+    const handleRouteChange = () => setIsMenuOpen(false)
+    router.events.on('routeChangeStart', handleRouteChange)
+    return () => router.events.off('routeChangeStart', handleRouteChange)
+  }, [router.events])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10
@@ -21,6 +40,14 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev)
+  }, [])
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false)
   }, [])
 
   const handleLogout = () => {
@@ -40,80 +67,110 @@ export default function Navbar() {
 
     // Redirect to login
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleLoginRedirect = () => {
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleDashboardRedirect = () => {
     if (userRole) {
       router.push(`/${userRole}/dashboard`)
-      setIsMenuOpen(false)
+      closeMenu()
     }
   }
 
- return (
-  <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''}`}>
-    <div className="max-w-[1440px] mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-12 h-16">
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/prescriptions', label: 'Prescriptions' },
+    { href: '/appointments', label: 'Appointments' },
+    { href: '/monitoring', label: 'Monitoring' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/support', label: 'Support', icon: true },
+  ]
 
-      {/* Logo */}
-      <Link href="/" className="flex items-center gap-2">
-        <span className={styles.logoText}>HEALCONNECT</span>
-      </Link>
-
-      {/* Desktop Navigation */}
-      <div className="hidden lg:flex items-center gap-8">
-        {[
-          { href: '/', label: 'Home' },
-          { href: '/prescriptions', label: 'Prescriptions' },
-          { href: '/appointments', label: 'Appointments' },
-          { href: '/monitoring', label: 'Monitoring' },
-          { href: '/faq', label: 'FAQ' },
-          { href: '/contact', label: 'Contact' },
-          { href: '/support', label: 'Support' },
-        ].map((link) => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`${styles.navLink} ${
-              router.pathname === link.href ? styles.active : ''
-            }`}
-          >
-            {link.label}
+  return (
+    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}>
+      <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
+        {/* Logo/Brand */}
+        <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
+          <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
+            <div className={styles.logoIcon}>
+              <div className={styles.crossSymbol}>
+                <div className={styles.crossLine1}></div>
+                <div className={styles.crossLine2}></div>
+              </div>
+            </div>
+            <span className={styles.logoText}>HEALCONNECT</span>
           </Link>
-        ))}
-      </div>
+        </div>
 
-      {/* Right Side */}
-      <div className="hidden lg:flex items-center gap-4">
-        {user || currentUser ? (
-          <>
-            <button
-              onClick={handleDashboardRedirect}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+        {/* Desktop Navigation Links */}
+        <div className="hidden md:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`${styles.navLink} ${router.pathname === link.href ? styles.active : ''}`}
             >
-              Dashboard
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition"
-            >
-              Logout
-            </button>
-          </>
-        ) : (
+              {link.icon && <FaHeadset className={styles.supportIcon} />}
+              <span className={styles.linkText}>{link.label}</span>
+              <div className={styles.linkHoverEffect}></div>
+            </Link>
+          ))}
+        </div>
+
+        {/* Right side - Auth buttons + Theme Toggle + Hamburger */}
+        <div className="flex items-center gap-4 md:gap-6 ml-4 md:ml-6">
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
+            {user || currentUser ? (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+                >
+                  <span>Dashboard</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
+                >
+                  <span>Logout</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleLoginRedirect}
+                className={styles.loginButton}
+              >
+                <span>Login</span>
+                <div className={styles.buttonPulse}></div>
+              </button>
+            )}
+          </div>
+
+          <div className="flex items-center pl-4 border-l border-gray-700">
+            <ThemeToggle />
+          </div>
+
+          {/* Hamburger Menu Button - visible below 768px */}
           <button
-            onClick={handleLoginRedirect}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            type="button"
           >
-            Login
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
           </button>
-        )}
-
-        <ThemeToggle />
+        </div>
       </div>
 
       {/* Mobile Menu Button + Theme Toggle */}
@@ -167,13 +224,35 @@ export default function Navbar() {
                 onClick={handleDashboardRedirect}
                 className="w-full py-2 bg-green-600 text-white rounded-md"
               >
-                Dashboard
-              </button>
+                {link.icon && <FaHeadset className={styles.supportIcon} />}
+                <span>{link.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Mobile Auth Buttons */}
+          <div className={styles.mobileAuthSection}>
+            {user || currentUser ? (
+              <>
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
               <button
-                onClick={handleLogout}
-                className="w-full py-2 bg-red-600 text-white rounded-md"
+                onClick={handleLoginRedirect}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
               >
-                Logout
+                Login
               </button>
             </>
           ) : (
@@ -186,8 +265,6 @@ export default function Navbar() {
           )}
         </div>
       </div>
-    )}
-  </nav>
-)
-
+    </nav>
+  )
 }
