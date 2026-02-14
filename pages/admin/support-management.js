@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
+import {
   FaTicketAlt, FaUsers, FaClock, FaCheckCircle, FaExclamationTriangle,
   FaFilter, FaSearch, FaDownload, FaEye, FaReply, FaArchive, FaTrash,
   FaUserPlus, FaChartLine, FaBell, FaCog, FaSignOutAlt, FaHeadset,
@@ -32,7 +32,7 @@ const AdminSupportManagement = () => {
     // Subscribe to real-time ticket updates
     const unsubscribe = getSupportTickets((updatedTickets) => {
       setTickets(updatedTickets);
-      
+
       // Update statistics
       const stats = {
         total: updatedTickets.length,
@@ -46,7 +46,7 @@ const AdminSupportManagement = () => {
           return ticketDate.toDateString() === today.toDateString();
         }).length
       };
-      
+
       setSystemStats(prev => ({
         ...prev,
         ...stats,
@@ -54,7 +54,7 @@ const AdminSupportManagement = () => {
         satisfactionRate: '94%', // Calculate from actual data if needed
         activeAgents: agents.filter(a => a.status === 'online').length
       }));
-    });
+    }, null, 'admin');
 
     // Cleanup on unmount
     return () => {
@@ -75,7 +75,7 @@ const AdminSupportManagement = () => {
   const unreadNotifications = notifications.filter(n => !n.read).length;
 
   const handleNotificationClick = (notificationId) => {
-    setNotifications(prev => 
+    setNotifications(prev =>
       prev.map(n => n.id === notificationId ? { ...n, read: true } : n)
     );
   };
@@ -107,7 +107,7 @@ const AdminSupportManagement = () => {
     const now = new Date();
     const date = timestamp?.toDate ? timestamp.toDate() : new Date(timestamp);
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return 'Just now';
     if (diffInHours < 24) return `${diffInHours}h ago`;
     if (diffInHours < 48) return 'Yesterday';
@@ -141,7 +141,7 @@ const AdminSupportManagement = () => {
       console.log('AdminDashboard: Calling addTicketMessage with:', messageData);
       const result = await addTicketMessage(selectedTicket.id, messageData);
       console.log('AdminDashboard: addTicketMessage result:', result);
-      
+
       if (result.success) {
         // Update ticket status to in_progress if it was open
         if (selectedTicket.status === 'open') {
@@ -156,7 +156,7 @@ const AdminSupportManagement = () => {
         setShowReplyModal(false);
         setReplyMessage('');
         setSelectedTicket(null);
-        
+
         // Show success notification
         alert('Reply sent successfully!');
       } else {
@@ -176,7 +176,7 @@ const AdminSupportManagement = () => {
 
     try {
       console.log('AdminDashboard: Closing ticket:', ticket.id);
-      
+
       // Add closing message
       const closingMessage = {
         type: 'agent',
@@ -189,14 +189,14 @@ const AdminSupportManagement = () => {
       };
 
       const messageResult = await addTicketMessage(ticket.id, closingMessage);
-      
+
       if (messageResult.success) {
         // Update ticket status to resolved
         const statusResult = await updateTicketStatus(ticket.id, 'resolved', {
           name: 'Support Agent',
           avatar: '👨‍⚕️'
         });
-        
+
         if (statusResult.success) {
           alert(`Ticket ${ticket.id} has been successfully closed.`);
         } else {
@@ -291,7 +291,7 @@ const AdminSupportManagement = () => {
             </button>
           </div>
         </div>
-        
+
         <div className={styles.ticketsGrid}>
           {tickets.length === 0 ? (
             <div className={styles.emptyState}>
@@ -323,9 +323,9 @@ const AdminSupportManagement = () => {
                     </span>
                   </div>
                 </div>
-                
+
                 <h4 className={styles.ticketSubject}>{ticket.subject || 'No Subject'}</h4>
-                
+
                 <div className={styles.ticketUser}>
                   <span className={styles.userAvatar}>{ticket.user?.avatar || '👤'}</span>
                   <div>
@@ -333,7 +333,7 @@ const AdminSupportManagement = () => {
                     <div className={styles.userEmail}>{ticket.user?.email || 'No Email'}</div>
                   </div>
                 </div>
-                
+
                 <div className={styles.ticketFooter}>
                   <div className={styles.tags}>
                     {(ticket.tags || []).map((tag, index) => (
@@ -349,22 +349,22 @@ const AdminSupportManagement = () => {
                     </div>
                   )}
                 </div>
-                
+
                 <div className={styles.ticketActions}>
-                  <button 
+                  <button
                     onClick={() => handleViewDetails(ticket)}
                     className={styles.viewBtn}
                   >
                     <FaEye /> View
                   </button>
-                  <button 
+                  <button
                     onClick={() => handleReplyClick(ticket)}
                     className={styles.replyBtn}
                   >
                     <FaReply /> Reply
                   </button>
                   {ticket.status !== 'resolved' && (
-                    <button 
+                    <button
                       onClick={() => handleCloseTicket(ticket)}
                       className={styles.closeBtn}
                     >
@@ -376,10 +376,10 @@ const AdminSupportManagement = () => {
             ))
           )}
         </div>
-        
+
         {tickets.length > 6 && (
           <div className={styles.viewAllContainer}>
-            <button 
+            <button
               onClick={() => setActiveView('dashboard')}
               className={styles.viewAllBtn}
             >
@@ -570,7 +570,7 @@ const AdminSupportManagement = () => {
     <div className={styles.notificationsView}>
       <div className={styles.header}>
         <h2>Notifications</h2>
-        <button 
+        <button
           onClick={markAllNotificationsRead}
           className={styles.markReadBtn}
         >
