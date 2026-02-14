@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { UserContext } from '@lib/context'
 import { useRouter } from 'next/router'
 import { FaHeadset } from 'react-icons/fa'
@@ -13,6 +13,25 @@ export default function Navbar() {
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
+  // Close menu on route change
+  useEffect(() => {
+    const handleRouteChange = () => setIsMenuOpen(false)
+    router.events.on('routeChangeStart', handleRouteChange)
+    return () => router.events.off('routeChangeStart', handleRouteChange)
+  }, [router.events])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
+
   useEffect(() => {
     const handleScroll = () => {
       const isScrolled = window.scrollY > 10
@@ -21,6 +40,14 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev)
+  }, [])
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false)
   }, [])
 
   const handleLogout = () => {
@@ -40,20 +67,30 @@ export default function Navbar() {
 
     // Redirect to login
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleLoginRedirect = () => {
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleDashboardRedirect = () => {
     if (userRole) {
       router.push(`/${userRole}/dashboard`)
-      setIsMenuOpen(false)
+      closeMenu()
     }
   }
+
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/prescriptions', label: 'Prescriptions' },
+    { href: '/appointments', label: 'Appointments' },
+    { href: '/monitoring', label: 'Monitoring' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/support', label: 'Support', icon: true },
+  ]
 
   return (
     <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}>
@@ -71,72 +108,27 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links - Centered with proper gaps */}
-        <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
-          <Link
-            href="/"
-            className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Home</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/prescriptions"
-            className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Prescriptions</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/appointments"
-            className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Appointments</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/monitoring"
-            className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Monitoring</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/faq"
-            className={`${styles.navLink} ${router.pathname === '/faq' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>FAQ</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/contact"
-            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Contact</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
-          <Link
-            href="/support"
-            className={`${styles.navLink} ${router.pathname === '/support' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <FaHeadset className={styles.supportIcon} />
-            <span className={styles.linkText}>Support</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
+        {/* Desktop Navigation Links */}
+        <div className="hidden lg:flex items-center justify-center flex-grow gap-x-2 xl:gap-x-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`${styles.navLink} ${router.pathname === link.href ? styles.active : ''}`}
+            >
+              {link.icon && <FaHeadset className={styles.supportIcon} />}
+              <span className={styles.linkText}>{link.label}</span>
+              <div className={styles.linkHoverEffect}></div>
+            </Link>
+          ))}
         </div>
 
-        {/* Right side - Auth buttons + Theme Toggle */}
-        <div className="flex items-center gap-6 ml-6">
-          <div className="flex items-center">
+        {/* Right side - Auth buttons + Theme Toggle + Hamburger */}
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
             {user || currentUser ? (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
                 <button
                   onClick={handleDashboardRedirect}
                   className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
@@ -161,30 +153,118 @@ export default function Navbar() {
             )}
           </div>
 
-          <div className="flex items-center pl-4 border-l border-gray-700">
+          <div className="flex items-center pl-2 lg:pl-2 xl:pl-4 border-l border-gray-700">
             <ThemeToggle />
           </div>
 
-          {/* Mobile menu button */}
+          {/* Hamburger Menu Button - visible below 768px */}
           <button
-            className={`${styles.menuButton} lg:hidden ${isMenuOpen ? styles.menuOpen : ''} ml-2`}
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
+            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''}`}
+            onClick={toggleMenu}
+            aria-label={isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            type="button"
           >
-            <span></span>
-            <span></span>
-            <span></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
           </button>
         </div>
       </div>
 
-      {/* Mobile menu overlay */}
-      {isMenuOpen && (
-        <div
-          className={`${styles.overlay} ${isMenuOpen ? styles.show : ''}`}
-          onClick={() => setIsMenuOpen(false)}
-        ></div>
-      )}
+      {/* Mobile Menu Button + Theme Toggle */}
+      <div className="lg:hidden flex items-center gap-2">
+        <ThemeToggle />
+        <button
+          className="flex flex-col gap-1.5"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+        </button>
+      </div>
+    </div>
+
+    {/* Mobile Menu */}
+    {isMenuOpen && (
+      <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
+        {[
+          { href: '/', label: 'Home' },
+          { href: '/prescriptions', label: 'Prescriptions' },
+          { href: '/appointments', label: 'Appointments' },
+          { href: '/monitoring', label: 'Monitoring' },
+          { href: '/faq', label: 'FAQ' },
+          { href: '/contact', label: 'Contact' },
+          { href: '/support', label: 'Support' },
+        ].map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="block py-2 border-b transition-colors"
+            style={{
+              color: 'var(--mobile-menu-text, white)',
+              borderColor: 'var(--mobile-menu-border, #374151)'
+            }}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {link.label}
+          </Link>
+        ))}
+
+        <div className="pt-4 space-y-3">
+          {user || currentUser ? (
+            <>
+              <button
+                onClick={handleDashboardRedirect}
+                className="w-full py-2 bg-green-600 text-white rounded-md"
+              >
+                {link.icon && <FaHeadset className={styles.supportIcon} />}
+                <span>{link.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Mobile Auth Buttons */}
+          <div className={styles.mobileAuthSection}>
+            {user || currentUser ? (
+              <>
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleLoginRedirect}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+              >
+                Login
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className="w-full py-2 bg-blue-600 text-white rounded-md"
+            >
+              Login
+            </button>
+          )}
+        </div>
+      </div>
     </nav>
   )
 }

@@ -1,21 +1,13 @@
 name: 🐞 Bug Report
-description: Report a bug to help us improve
+description: Report a bug for Apertre'26
 title: "[Bug]: "
-labels: bug
-assignees: ''
-
+labels: ["apertre3.0", "bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug!
-
-  - type: input
-    id: environment
-    attributes:
-      label: Environment
-      description: OS, browser, or device info
-      placeholder: "e.g., Windows 11, Chrome 115"
+        # 🚨 Apertre'26 Rule:
+        **You MUST select ONE difficulty tag (`easy`, `medium`, or `hard`) after creating this issue.**
 
   - type: textarea
     id: description
@@ -23,7 +15,8 @@ body:
       label: Bug Description
       description: What happened? What did you expect?
       placeholder: Describe the issue clearly...
-      value: ""
+    validations:
+      required: true
 
   - type: textarea
     id: steps
@@ -33,5 +26,22 @@ body:
       placeholder: |
         1. Go to '...'
         2. Click on '...'
-        3. Scroll down to '...'
-        4. See error
+        3. See error
+    validations:
+      required: true
+      
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+    validations:
+      required: true
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Mandatory for UI bugs!
+    validations:
+      required: false
