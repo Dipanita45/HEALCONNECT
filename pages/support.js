@@ -41,32 +41,29 @@ const Support = () => {
 
   window.open(gmailUrl, '_blank');
 };
-
+//2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
 
   const features = [
     {
       icon: FaRobot,
       title: 'AI-Powered Support',
       description: 'Get instant answers to common questions with our intelligent AI assistant.',
-      color: '#667eea'
+      color: '#667eea',
+      image: '/support_images/support_images/istockphoto.webp'
     },
     {
       icon: FaTicketAlt,
       title: 'Ticket Management',
       description: 'Track and manage support tickets with priority levels and status updates.',
-      color: '#22c55e'
-    },
-    {
-      icon: FaUsers,
-      title: 'Live Agent Support',
-      description: 'Connect with human support agents for complex issues and personalized help.',
-      color: '#f59e0b'
+      color: '#22c55e',
+      image: '/support_images/support_images/images.jpg'
     },
     {
       icon: FaClock,
       title: '24/7 Availability',
       description: 'Round-the-clock support for urgent medical and technical issues.',
-      color: '#ef4444'
+      color: '#ef4444',
+      image: '/support_images/support_images/best-support-ticket-system.png'   
     }
   ];
 
@@ -179,7 +176,6 @@ const Support = () => {
 
           <div className={styles.featuresGrid}>
             {features.map((feature, index) => {
-              const Icon = feature.icon;
               return (
                 <motion.div
                   key={feature.title}
@@ -189,11 +185,8 @@ const Support = () => {
                   transition={{ delay: index * 0.1 }}
                   className={styles.featureCard}
                 >
-                  <div
-                    className={styles.featureIcon}
-                    style={{ background: `${feature.color}20`, color: feature.color }}
-                  >
-                    <Icon size={32} />
+                  <div className={styles.featureImage}>
+                    <img src={feature.image} alt={feature.title} />
                   </div>
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
