@@ -242,6 +242,10 @@ export default function Appointments() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Listen to auth state
+ useEffect(() => {
+  const unsub = onAuthStateChanged(auth, (user) => {
+    console.log("AUTH USER:", user);
+  });
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("AUTH USER:", user);
@@ -319,6 +323,148 @@ export default function Appointments() {
         where("time", "==", formData.time)
       );
 
+    return () => unsub();
+  }, []);
+
+
+  useEffect(() => {
+    if (formData.date && formData.doctor) {
+      fetchBookedSlots(formData.date, formData.doctor);
+    }
+  }, [formData.date, formData.doctor]);
+
+  const handleChange = e => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    
+    // Clear error when user starts typing
+    if (formErrors[name]) {
+      setFormErrors({ ...formErrors, [name]: '' });
+    }
+    
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!formData.date) errors.date = 'Date is required';
+    if (!formData.time) errors.time = 'Time is required';
+    if (!formData.reason.trim()) errors.reason = 'Reason is required';
+    
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleDoctorSelect = (doctor) => {
+    setSelectedDoctor(doctor);
+    setFormData({ ...formData, doctor: doctor.name });
+    setStep(2);
+  };
+
+  const handleBackToDoctors = () => {
+    setSelectedDoctor(null);
+    setStep(1);
+    setFormErrors({});
+  };
+
+ const isSlotAlreadyBooked = async () => {
+  const q = query(
+    collection(db, "appointments"),
+    where("date", "==", formData.date),
+    where("doctorName", "==", formData.doctor),
+    where("time", "==", formData.time)
+  );
+
+  const snapshot = await getDocs(q);
+  return !snapshot.empty;
+};
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (!validateForm()) return;
+  setIsSubmitting(true);
+
+  const alreadyBooked = await isSlotAlreadyBooked();
+
+  if (alreadyBooked) {
+    alert("This time slot is already booked. Please choose another.");
+    setIsSubmitting(false);
+    return;
+  }
+
+  // 👉 IMPORTANT: save appointment
+  await addDoc(collection(db, "appointments"), {
+    name: formData.name,
+    date: formData.date,
+    time: formData.time,
+    doctorName: formData.doctor,
+    reason: formData.reason,
+    createdAt: new Date()
+  });
+
+  const successElement = document.getElementById("booking-success");
+  successElement.style.display = "flex";
+
+  setTimeout(() => {
+    successElement.style.display = "none";
+    alert("Appointment booked successfully!");
+
+    setFormData({
+      name: "",
+      date: "",
+      time: "",
+      doctor: "",
+      reason: ""
+    });
+
+    setStep(1);
+    setSelectedDoctor(null);
+    setFormErrors({});
+    setBookedTimes([]);
+    setIsSubmitting(false);
+  }, 2000);
+};
+
+  const fetchBookedSlots = async (date, doctor) => {
+  if (!date || !doctor) return;
+
+  try {
+    const q = query(
+      collection(db, "appointments"),
+      where("date", "==", date),
+      where("doctorName", "==", doctor)
+    );
+
+    const snapshot = await getDocs(q);
+    const times = snapshot.docs.map(doc => doc.data().time);
+
+    setBookedTimes(times);
+  } catch (error) {
+    console.error("Error fetching booked slots:", error);
+  }
+};
+
+
+   const availableTimes = [
+    "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", 
+    "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM", 
+    "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", 
+    "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM"
+  ];
+
+  return (
+    <div className={styles.container}>
+      {/* Navbar spacer to prevent content from hiding behind fixed navbar */}
+      <div className={styles.navbarSpacer}></div>
+      
+      {/* Animated background elements */}
+      <div className={styles.backgroundElements}>
+        <div className={styles.circleElement}></div>
+        <div className={styles.circleElement}></div>
+        <div className={styles.circleElement}></div>
+      </div>
       const snapshot = await getDocs(q);
       return !snapshot.empty;
     };
