@@ -1,186 +1,189 @@
-// import { auth, db } from '@lib/firebase';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+} from 'firebase/auth';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { toast } from 'react-hot-toast';
 import { FaSpinner } from 'react-icons/fa';
+import { auth, db } from '../../lib/firebase'; // adjust path if needed
 
 export default function PatientEmailLogin() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isSignUp, setIsSignUp] = useState(false);
-  const [patientInfo, setPatientInfo] = useState({
-    name: '',
-    phone: '',
-    age: ''
-  });
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    
-    if (!email || !password) {
-      setError('Email and password are required');
-      return;
-    }
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
 
+  const handleLogin = async (data) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      
-      // Check if user exists in patients collection
-      const patientDoc = await getDoc(doc(db, 'patients', user.uid));
-      
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
+      const patientDoc = await getDoc(doc(db, 'patients', userCredential.user.uid));
+
       if (!patientDoc.exists()) {
-        setError('Patient account not found. Please contact admin.');
+        setError('Patient account not found. Contact admin.');
         await auth.signOut();
         return;
       }
 
       toast.success('Login successful!');
-    } catch (error) {
-      console.error('Login error:', error);
-      setError(error.message);
-      toast.error(error.message);
+    } catch (err) {
+      setError(err.message);
+      toast.error(err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSignUp = async (e) => {
-    e.preventDefault();
-    
-    if (!email || !password || !patientInfo.name || !patientInfo.phone) {
-      setError('All fields are required for registration');
-      return;
-    }
-
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-
+  const handleSignUp = async (data) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        data.email,
+        data.password
+      );
+
       const user = userCredential.user;
 
-      // Create patient document
       const patientData = {
         uid: user.uid,
-        email: email,
-        first: patientInfo.name.split(' ')[0] || '',
-        last: patientInfo.name.split(' ').slice(1).join(' ') || '',
-        number: patientInfo.phone,
-        age: patientInfo.age,
+        email: data.email,
+        first: data.name?.split(' ')[0] || '',
+        last: data.name?.split(' ').slice(1).join(' ') || '',
+        number: data.phone,
+        age: data.age,
         role: 'patient',
         createdAt: new Date(),
         updatedAt: new Date(),
-        // Default values
         city: 'Not specified',
         state: 'Not specified',
         address: 'Not specified',
         gender: 'not-specified',
-        bloodGroup: 'Not specified'
+        bloodGroup: 'Not specified',
       };
 
       await setDoc(doc(db, 'patients', user.uid), patientData);
+
       toast.success('Account created successfully!');
-    } catch (error) {
-      console.error('Registration error:', error);
-      setError(error.message);
-      toast.error(error.message);
+      setIsSignUp(false);
+      reset();
+    } catch (err) {
+      setError(err.message);
+      toast.error(err.message);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex w-full pt-2 px-4 md:py-4 flex-col justify-between">
-      <h1 className="text-center font-extrabold text-gray6 dark:text-gray2 select-none text-2xl sm:text-4xl">
+    <div className="flex w-full pt-2 px-4 md:py-4 flex-col">
+      <h1 className="text-center font-extrabold text-2xl sm:text-4xl">
         Patient {isSignUp ? 'Registration' : 'Login'}
       </h1>
-      
-      <p className="text-center text-gray-500 mb-4">
-        {isSignUp 
-          ? 'Create your patient account with email and password' 
-          : 'Login with your registered email and password'
-        }
-      </p>
 
       {error && (
-        <div className="my-2 text-sm w-full border-red-500 border text-center border-solid text-red-500 py-2">
+        <div className="my-2 text-sm border border-red-500 text-center text-red-500 py-2">
           {error}
         </div>
       )}
 
-      <form onSubmit={isSignUp ? handleSignUp : handleLogin} className="space-y-4">
+      <form
+        onSubmit={handleSubmit(isSignUp ? handleSignUp : handleLogin)}
+        className="space-y-4"
+      >
         {isSignUp && (
           <>
             <input
-              type="text"
-              value={patientInfo.name}
-              onChange={(e) => setPatientInfo({...patientInfo, name: e.target.value})}
               placeholder="Full Name"
               className="input-field"
-              required
+              {...register('name', { required: 'Name required' })}
             />
+            {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+
             <input
-              type="tel"
-              value={patientInfo.phone}
-              onChange={(e) => setPatientInfo({...patientInfo, phone: e.target.value})}
               placeholder="Phone Number"
               className="input-field"
-              required
+              {...register('phone', {
+                required: 'Phone required',
+                pattern: {
+                  value: /^[6-9]\d{9}$/,
+                  message: 'Enter valid Indian phone number',
+                },
+              })}
             />
+            {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
+
             <input
               type="number"
-              value={patientInfo.age}
-              onChange={(e) => setPatientInfo({...patientInfo, age: e.target.value})}
               placeholder="Age"
               className="input-field"
-              min="1"
-              max="120"
-              required
+              {...register('age', {
+                required: 'Age required',
+                min: 1,
+                max: 120,
+              })}
             />
           </>
         )}
 
         <input
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email Address"
+          placeholder="Email"
           className="input-field"
-          required
+          {...register('email', {
+            required: 'Email required',
+            pattern: {
+              value: /^\S+@\S+\.\S+$/,
+              message: 'Invalid email',
+            },
+          })}
         />
+
+        {errors.email && <p className="text-red-500">{errors.email.message}</p>}
 
         <input
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           className="input-field"
-          minLength="6"
-          required
+          {...register('password', {
+            required: 'Password required',
+            minLength: {
+              value: 6,
+              message: 'Minimum 6 characters',
+            },
+          })}
         />
+
+        {errors.password && (
+          <p className="text-red-500">{errors.password.message}</p>
+        )}
 
         <button
           type="submit"
           disabled={isLoading}
-          className="bg-blue-500 hover:bg-blue-700 flex justify-center items-center text-center text-white font-bold py-2 px-4 w-full focus:outline-none focus:shadow-outline"
+          className="bg-blue-500 hover:bg-blue-700 flex justify-center items-center text-white font-bold py-2 px-4 w-full"
         >
-          {isLoading && <FaSpinner className="animate-spin text-white mr-2" size={18} />}
-          {!isLoading && (
-            <span className="text-white cursor-pointer">
-              {isSignUp ? 'Create Account' : 'Login'}
-            </span>
+          {isLoading ? (
+            <FaSpinner className="animate-spin mr-2" size={18} />
+          ) : (
+            <span>{isSignUp ? 'Create Account' : 'Login'}</span>
           )}
         </button>
       </form>
@@ -191,24 +194,14 @@ export default function PatientEmailLogin() {
           onClick={() => {
             setIsSignUp(!isSignUp);
             setError(null);
-            setEmail('');
-            setPassword('');
-            setPatientInfo({ name: '', phone: '', age: '' });
+            reset();
           }}
-          className="text-blue-500 hover:text-blue-700 underline"
+          className="text-blue-500 underline"
         >
-          {isSignUp 
-            ? 'Already have an account? Login here' 
-            : "Don't have an account? Register here"
-          }
+          {isSignUp
+            ? 'Already have an account? Login'
+            : "Don't have an account? Register"}
         </button>
-      </div>
-
-      <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
-        <p className="text-xs text-yellow-800 dark:text-yellow-200">
-          <strong>Note:</strong> This email-based authentication is an alternative to phone authentication 
-          to avoid Firebase billing requirements. All features remain the same.
-        </p>
       </div>
     </div>
   );
