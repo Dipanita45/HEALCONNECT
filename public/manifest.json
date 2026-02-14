@@ -1,0 +1,141 @@
+{
+  "name": "HEALCONNECT - Healthcare Management",
+  "short_name": "HEALCONNECT",
+  "description": "Your complete healthcare management system - Monitor vitals, manage appointments, and access emergency contacts offline",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["health", "medical", "productivity"],
+  "icons": [
+    {
+      "src": "/Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Logo1.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo1.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    },
+    {
+      "src": "/Logo1.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Patient Dashboard",
+      "short_name": "Dashboard",
+      "description": "View patient dashboard and vitals",
+      "url": "/patient/dashboard",
+      "icons": [
+        {
+          "src": "/dashboard.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Emergency Contacts",
+      "short_name": "Emergency",
+      "description": "Access emergency contacts",
+      "url": "/emergency",
+      "icons": [
+        {
+          "src": "/Icons/info.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Book Appointment",
+      "short_name": "Book",
+      "description": "Schedule new appointment",
+      "url": "/appointment",
+      "icons": [
+        {
+          "src": "/form.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Patient Dashboard View"
+    },
+    {
+      "src": "/screenshot2.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Doctor Dashboard View"
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "protocol_handlers": [
+    {
+      "protocol": "web+healconnect",
+      "url": "/handle-protocol?type=%s"
+    }
+  ],
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "medical_reports",
+          "accept": [".pdf", ".jpg", ".png"]
+        }
+      ]
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { UserContext } from '../../lib/context';
 import {
   FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot,
   FaTicketAlt, FaClock, FaCheckCircle, FaExclamationTriangle,
@@ -8,15 +7,15 @@ import {
 } from 'react-icons/fa';
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
 import styles from './SupportWidget.module.css';
+import { useTheme } from '@/context/ThemeContext';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
 
 const SupportWidget = () => {
-  const { user: currentUserData, userRole } = useContext(UserContext); // Assuming context provides these
-  // Fallback for user data if context structure is different
-  const currentUser = currentUserData || { uid: null, email: 'guest@example.com', displayName: 'Guest' };
-  const [isOpen, setIsOpen] = useState(false);
+  const { isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen } = useTheme();
+  const isOpen = supportWidgetOpen;
+  const setIsOpen = setSupportWidgetOpen;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -33,7 +32,7 @@ const SupportWidget = () => {
   const [processedMessageIds, setProcessedMessageIds] = useState(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const [isMinimized, setIsMinimized] = useState(false);
+  // const [isMinimized, setIsMinimized] = useState(false);
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
@@ -53,6 +52,7 @@ const SupportWidget = () => {
       inputRef.current?.focus();
     }
   }, [isOpen, isMinimized]);
+
 
   // Keyboard navigation handler
   useEffect(() => {
@@ -573,46 +573,47 @@ const SupportWidget = () => {
         aria-live="polite"
         ref={chatContainerRef}
       >
-        {/* Header */}
-        <div className={styles.header}>
-          <div className={styles.headerLeft}>
-            <FaHeadset className={styles.headerIcon} aria-hidden="true" />
-            <div>
-              <h3>HealConnect Support</h3>
-              <span className={styles.status}>
-                <span className={styles.onlineDot}></span>
-                Online - AI Assistant
-              </span>
-            </div>
-          </div>
-          <div className={styles.headerActions}>
-            <button
-              onClick={() => setIsMinimized(!isMinimized)}
-              className={styles.minimizeBtn}
-              aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
-              aria-expanded={!isMinimized}
-            >
-              {isMinimized ? '□' : '−'}
-            </button>
-            <button
-              onClick={() => setIsOpen(false)}
-              className={styles.closeBtn}
-              aria-label="Close support chat"
-            >
-              <FaTimes />
-            </button>
-          </div>
-        </div>
+
 
         {!isMinimized && (
           <>
+            {/* Header */}
+            <div className={styles.header}>
+              <div className={styles.headerLeft}>
+                <FaHeadset className={styles.headerIcon} aria-hidden="true" />
+                <div>
+                  <h3>HealConnect Support</h3>
+                  <span className={styles.status}>
+                    <span className={styles.onlineDot}></span>
+                    Online - AI Assistant
+                  </span>
+                </div>
+              </div>
+              <div className={styles.headerActions}>
+                <button
+                  onClick={() => setIsMinimized(!isMinimized)}
+                  className={styles.minimizeBtn}
+                  aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
+                  aria-expanded={!isMinimized}
+                >
+                  {isMinimized ? '□' : '−'}
+                </button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className={styles.closeBtn}
+                  aria-label="Close support chat"
+                >
+                  <FaTimes />
+                </button>
+              </div>
+            </div>
             {/* Messages Area */}
             <div className={styles.messagesArea}>
               {messages.length === 0 && (
                 <div className={styles.welcomeMessage}>
                   <FaRobot className={styles.welcomeIcon} />
                   <h4>Welcome to HealConnect Support!</h4>
-                  <p>I'm your AI assistant. How can I help you today?</p>
+                  <p>I&apos;m your AI assistant. How can I help you today&lsquo;</p>
                   <div className={styles.quickActions}>
                     <button onClick={() => handleSuggestionClick('I need to schedule an appointment')}>
                       📅 Schedule Appointment

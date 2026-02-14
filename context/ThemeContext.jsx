@@ -7,7 +7,8 @@ const ThemeContext = createContext()
 export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState('light')
   const [mounted, setMounted] = useState(false)
-
+  const [isMinimized, setIsMinimized] = useState(false)
+  const [supportWidgetOpen, setSupportWidgetOpen] = useState(false)
   useEffect(() => {
     setMounted(true)
     const savedTheme = localStorage.getItem('theme')
@@ -18,13 +19,15 @@ export function ThemeProvider({ children }) {
   useEffect(() => {
     if (mounted) {
       const root = document.documentElement
-      
+
       if (theme === 'dark') {
         root.classList.add('dark')
+        root.classList.remove('light')
       } else {
         root.classList.remove('dark')
+        root.classList.add('light')
       }
-      
+
       // Force immediate reflow to ensure theme applies
       root.style.colorScheme = theme
       localStorage.setItem('theme', theme)
@@ -41,7 +44,7 @@ export function ThemeProvider({ children }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen }}>
       {children}
     </ThemeContext.Provider>
   )
