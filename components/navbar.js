@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect, useContext, useCallback } from 'react'
 import { UserContext } from '@lib/context'
 import { useRouter } from 'next/router'
 import { FaHeadset } from 'react-icons/fa'
@@ -14,6 +14,25 @@ export default function Navbar() {
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
+  // Close menu on route change
+  useEffect(() => {
+    const handleRouteChange = () => setIsMenuOpen(false)
+    router.events.on('routeChangeStart', handleRouteChange)
+    return () => router.events.off('routeChangeStart', handleRouteChange)
+  }, [router.events])
+
+  // Prevent body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMenuOpen])
+
   useEffect(() => {
     const handleScroll = () => {
       // Logic for background styling (Existing behavior)
@@ -23,6 +42,14 @@ export default function Navbar() {
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  const toggleMenu = useCallback(() => {
+    setIsMenuOpen(prev => !prev)
+  }, [])
+
+  const closeMenu = useCallback(() => {
+    setIsMenuOpen(false)
   }, [])
 
   const handleLogout = () => {
@@ -37,18 +64,18 @@ export default function Navbar() {
     }
 
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleLoginRedirect = () => {
     router.push('/login')
-    setIsMenuOpen(false)
+    closeMenu()
   }
 
   const handleDashboardRedirect = () => {
     if (userRole) {
       router.push(`/${userRole}/dashboard`)
-      setIsMenuOpen(false)
+      closeMenu()
     }
   }
 
@@ -134,7 +161,11 @@ export default function Navbar() {
           <Link
             key={link.href}
             href={link.href}
-            className="block text-white py-2 border-b border-gray-700"
+            className="block py-2 border-b transition-colors"
+            style={{
+              color: 'var(--mobile-menu-text, white)',
+              borderColor: 'var(--mobile-menu-border, #374151)'
+            }}
             onClick={() => setIsMenuOpen(false)}
           >
             {link.label}
@@ -148,13 +179,35 @@ export default function Navbar() {
                 onClick={handleDashboardRedirect}
                 className="w-full py-2 bg-green-600 text-white rounded-md"
               >
-                Dashboard
-              </button>
+                {link.icon && <FaHeadset className={styles.supportIcon} />}
+                <span>{link.label}</span>
+              </Link>
+            ))}
+          </nav>
+
+          {/* Mobile Auth Buttons */}
+          <div className={styles.mobileAuthSection}>
+            {user || currentUser ? (
+              <>
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
               <button
-                onClick={handleLogout}
-                className="w-full py-2 bg-red-600 text-white rounded-md"
+                onClick={handleLoginRedirect}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
               >
-                Logout
+                Login
               </button>
             </>
           ) : (
@@ -165,14 +218,8 @@ export default function Navbar() {
               Login
             </button>
           )}
-
-          <div className="pt-2">
-            <ThemeToggle />
-          </div>
         </div>
       </div>
-    )}
-  </nav>
-)
-
+    </nav>
+  )
 }
