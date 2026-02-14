@@ -95,7 +95,7 @@ const doctors = [
     id: 3,
     name: "Dr. Emily Rodriguez",
     specialty: "Pediatrician",
-    image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1673865641073-4479f93a7776?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     available: true,
     nextAvailable: "Today, 5:30 PM",
     experience: "10 years",
@@ -155,6 +155,9 @@ const filterTimesByAvailability = (times, doctor, date) => {
 };
 
 export default function Appointments() {
+  const { user, currentUser } = useContext(UserContext);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     name: '',
     date: '',
@@ -162,6 +165,16 @@ export default function Appointments() {
     doctor: '',
     reason: ''
   });
+
+  // Pre-fill user data when available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        name: currentUser.name || ''
+      }));
+    }
+  }, [currentUser]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1);
@@ -423,6 +436,6 @@ export default function Appointments() {
           <h3>Appointment Booked Successfully!</h3>
         </div>
       </div>
-    </div>
-  );
+    );
+  })
 }
