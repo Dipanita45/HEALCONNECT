@@ -1,0 +1,23 @@
+name: Auto Comment on Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Thanks for opening this issue! 🚀  
+
+            **Please adhere to Apertre'26 Rules:**
+            1.  **Do NOT create a PR until this issue is assigned to you.**
+            2.  Include `apertre3.0` tag.
+            3.  Provide ONE Difficulty Tag (`easy`/`medium`/`hard`).
+            4.  Include screenshots if it's UI-related.
+
+            A mentor will review and assign this issue soon.

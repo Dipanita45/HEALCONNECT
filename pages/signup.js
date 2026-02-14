@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
+import { hashPassword } from "@lib/authUtils";
 import Link from "next/link";
 import styles from "./signup.module.css";
 
@@ -33,7 +34,7 @@ export default function SignupPage() {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem("theme");
       const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
+
       // Default to light mode unless explicitly saved as dark
       if (savedTheme === "dark") {
         setDarkMode(true);
@@ -52,7 +53,7 @@ export default function SignupPage() {
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    
+
     if (newDarkMode) {
       document.documentElement.classList.add("dark");
       if (typeof window !== 'undefined') {
@@ -72,12 +73,12 @@ export default function SignupPage() {
       ...prev,
       [name]: value
     }));
-    
+
     // Check password strength when password changes
     if (name === 'password') {
       checkPasswordStrength(value);
     }
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -182,7 +183,7 @@ export default function SignupPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -194,11 +195,11 @@ export default function SignupPage() {
       if (typeof window === 'undefined') {
         throw new Error("Signup is only available on client side");
       }
-      
+
       const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      
+
       // Check if username or email already exists
-      const userExists = existingUsers.some(user => 
+      const userExists = existingUsers.some(user =>
         user.username === formData.username || user.email === formData.email
       );
 
@@ -211,11 +212,13 @@ export default function SignupPage() {
       }
 
       // Create new user object
+      const hashedPassword = await hashPassword(formData.password);
+
       const newUser = {
         id: Date.now().toString(),
         username: formData.username,
         email: formData.email,
-        password: formData.password, // In production, this should be hashed
+        password: hashedPassword, // Store SHA-256 hash instead of plain text
         role: formData.role,
         fullName: formData.fullName,
         phone: formData.phone,
@@ -232,7 +235,7 @@ export default function SignupPage() {
       // Auto-login after successful signup
       localStorage.setItem('userType', newUser.role);
       localStorage.setItem('username', newUser.username);
-      
+
       // Set currentUser in localStorage for persistence
       const currentUserData = {
         name: newUser.fullName,
@@ -248,11 +251,11 @@ export default function SignupPage() {
         id: newUser.id
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUserData));
-      
+
       // Update React state for immediate UI update
       setUser({ uid: newUser.id });
       setUserRole(newUser.role);
-      setCurrentUser({ 
+      setCurrentUser({
         name: newUser.fullName, // Use fullName instead of username
         email: newUser.email,
         number: newUser.phone, // Map phone to number
@@ -296,27 +299,27 @@ export default function SignupPage() {
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
@@ -676,7 +679,7 @@ export default function SignupPage() {
                   {errors.password}
                 </div>
               )}
-              
+
               {/* Password Strength Indicator */}
               {formData.password && (
                 <div style={{ marginTop: "8px" }}>
@@ -823,14 +826,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "doctor" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
+                    background: formData.role === "doctor"
+                      ? (darkMode ? "#1565c0" : "#1976d2")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "doctor" 
-                      ? "white" 
+                    color: formData.role === "doctor"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "doctor" 
-                      ? "none" 
+                    border: formData.role === "doctor"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -860,14 +863,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "patient" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
+                    background: formData.role === "patient"
+                      ? (darkMode ? "#1565c0" : "#1976d2")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "patient" 
-                      ? "white" 
+                    color: formData.role === "patient"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "patient" 
-                      ? "none" 
+                    border: formData.role === "patient"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -897,14 +900,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "admin" 
-                      ? (darkMode ? "#b91c1c" : "#dc2626") 
+                    background: formData.role === "admin"
+                      ? (darkMode ? "#b91c1c" : "#dc2626")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "admin" 
-                      ? "white" 
+                    color: formData.role === "admin"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "admin" 
-                      ? "none" 
+                    border: formData.role === "admin"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -941,7 +944,7 @@ export default function SignupPage() {
                   color: darkMode ? "#fca5a5" : "#991b1b",
                   lineHeight: "1.4",
                 }}>
-                  Admin access provides full system control including user management, 
+                  Admin access provides full system control including user management,
                   support system oversight, and platform settings.
                 </div>
               )}

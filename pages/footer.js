@@ -13,7 +13,8 @@ import {
   FaFileContract,
   FaEnvelope,
   FaHeadset,
-  FaDiscord
+  FaDiscord,
+  FaLinkedin
 } from 'react-icons/fa';
 import { IoMdMail } from 'react-icons/io';
 import styles from './footer.module.css';
@@ -21,10 +22,39 @@ import styles from './footer.module.css';
 export default function Footer() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [isVisible, setIsVisible] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  const [showInstallButton, setShowInstallButton] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
+    
+    // Check if PWA can be installed
+    const checkInstallPrompt = () => {
+      const handleBeforeInstallPrompt = (e) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setShowInstallButton(true);
+      };
+      
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+    
+    checkInstallPrompt();
   }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+    
+    try {
+      const result = await deferredPrompt.prompt();
+      if (result.outcome === 'accepted') {
+        setShowInstallButton(false);
+        setDeferredPrompt(null);
+      }
+    } catch (error) {
+      console.error('Install error:', error);
+    }
+  };
 
   return (
     <footer className={styles.footer}>
@@ -106,6 +136,12 @@ export default function Footer() {
                   Contact Support
                 </Link>
               </li>
+              <li>
+                <Link href="/feedback" className={styles.footerLink}>
+                  <FaEnvelope className={styles.linkIcon} />
+                  Feedback
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -132,6 +168,16 @@ export default function Footer() {
               >
                 <FaDiscord />
                 <span className={styles.socialTooltip}>Join our Discord</span>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/dipanita-mondal-6a9257306/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={styles.socialLink}
+                aria-label="LinkedIn"
+              >
+                <FaLinkedin />
+                <span className={styles.socialTooltip}>Connect on LinkedIn</span>
               </a>
             </div>
             <p className={styles.feedbackText}>
