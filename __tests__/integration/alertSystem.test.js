@@ -106,7 +106,7 @@ describe('Alert System Integration', () => {
     expect(result.checked).toBe(true);
     expect(result.alerts).toHaveLength(1);
     expect(result.alerts[0].patientName).toBe('Unknown Patient');
-    expect(result.alerts[0].doctorId).toBeUndefined();
+    expect(result.alerts[0].doctorId).toBe('unassigned');
   });
 
   test('generates warning alerts for borderline values', async () => {
