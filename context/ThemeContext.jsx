@@ -22,8 +22,10 @@ export function ThemeProvider({ children }) {
 
       if (theme === 'dark') {
         root.classList.add('dark')
+        root.classList.remove('light')
       } else {
         root.classList.remove('dark')
+        root.classList.add('light')
       }
 
       // Force immediate reflow to ensure theme applies
