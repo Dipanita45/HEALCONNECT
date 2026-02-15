@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { FaWifiSlash, FaHeartbeat, FaPhoneAlt, FaPills, FaSync, FaExclamationTriangle } from 'react-icons/fa'
+import { FaHeartbeat, FaPhoneAlt, FaPills, FaSync, FaExclamationTriangle } from 'react-icons/fa'
+import { MdWifiOff } from 'react-icons/md'
 import { offlineManager } from '@/lib/offlineDataManager'
 
 export default function OfflineFallback() {
@@ -46,7 +47,7 @@ export default function OfflineFallback() {
           {/* Offline Icon */}
           <div className="mb-6">
             <div className="mx-auto w-20 h-20 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center">
-              <FaWifiSlash className="text-3xl text-orange-600 dark:text-orange-400 animate-pulse" />
+              <MdWifiOff className="text-3xl text-orange-600 dark:text-orange-400 animate-pulse" />
             </div>
           </div>
 
@@ -109,7 +110,7 @@ export default function OfflineFallback() {
               </button>
             ) : (
               <div className="w-full bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 px-6 py-3 rounded-lg font-medium flex items-center justify-center space-x-2">
-                <FaWifiSlash />
+                <MdWifiOff />
                 <span>Waiting for Connection</span>
               </div>
             )}
