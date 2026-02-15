@@ -564,7 +564,7 @@
 
 
 
-  .navLink {
+}
 
 :global(.light) .menuButton:hover {
   background: rgba(0, 0, 0, 0.05);
@@ -626,17 +626,18 @@
     visibility 0.3s ease;
 }
 
-  :global(.light) .menuButton span {
+:global(.light) .menuButton span {
 
-    background: #0F172A;
+  background: #0F172A;
 
-  }
+}
 
 
 
-  .menuButton.menuOpen span:nth-child(1) {
+.menuButton.menuOpen span:nth-child(1) {
 
-    transform: translateY(8px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
+}
 
 /* Hide overlay on desktop */
 @media (min-width: 1024px) {

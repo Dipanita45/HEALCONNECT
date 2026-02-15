@@ -3,11 +3,11 @@ import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { auth } from "../lib/firebase";
-import styles from './Appointments.module.css';
+import styles from "./Appointments.module.css";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,17 +16,17 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const staggerChildren = {
   visible: {
     transition: {
-      staggerChildren: 0.1
-    }
-  }
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 const formItemVariants = {
@@ -36,9 +36,9 @@ const formItemVariants = {
     x: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 const scaleIn = {
@@ -48,9 +48,9 @@ const scaleIn = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut"
-    }
-  }
+      ease: "easeOut",
+    },
+  },
 };
 
 // Sample doctor data
@@ -59,7 +59,8 @@ const doctors = [
     id: 1,
     name: "Dr. Sarah Johnson",
     specialty: "Cardiologist",
-    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: true,
     nextAvailable: "Today, 3:00 PM",
     experience: "12 years",
@@ -77,7 +78,8 @@ const doctors = [
     id: 2,
     name: "Dr. Michael Chen",
     specialty: "Neurologist",
-    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image:
+      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: false,
     nextAvailable: "Tomorrow, 10:00 AM",
     experience: "8 years",
@@ -95,7 +97,8 @@ const doctors = [
     id: 3,
     name: "Dr. Emily Rodriguez",
     specialty: "Pediatrician",
-    image: "https://images.unsplash.com/photo-1673865641073-4479f93a7776?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    image:
+      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: true,
     nextAvailable: "Today, 5:30 PM",
     experience: "10 years",
@@ -113,7 +116,8 @@ const doctors = [
     id: 4,
     name: "Dr. James Wilson",
     specialty: "Orthopedic Surgeon",
-    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image:
+      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: true,
     nextAvailable: "Today, 1:00 PM",
     experience: "15 years",
@@ -135,6 +139,7 @@ const getDayFromDate = (date) => {
     .toLowerCase();
 };
 
+// AFTER — safe guard on empty/invalid date
 const filterTimesByAvailability = (times, doctor, date) => {
   if (!doctor || !date) return times;
   const day = getDayFromDate(date);
@@ -155,26 +160,13 @@ const filterTimesByAvailability = (times, doctor, date) => {
 };
 
 export default function Appointments() {
-  const { user, currentUser } = useContext(UserContext);
-  const router = useRouter();
-
   const [formData, setFormData] = useState({
-    name: '',
-    date: '',
-    time: '',
-    doctor: '',
-    reason: ''
+    name: "",
+    date: "",
+    time: "",
+    doctor: "",
+    reason: "",
   });
-
-  // Pre-fill user data when available
-  useEffect(() => {
-    if (currentUser) {
-      setFormData(prev => ({
-        ...prev,
-        name: currentUser.name || ''
-      }));
-    }
-  }, [currentUser]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1);
@@ -436,6 +428,6 @@ export default function Appointments() {
           <h3>Appointment Booked Successfully!</h3>
         </div>
       </div>
-    );
-  })
+    </div>
+  );
 }

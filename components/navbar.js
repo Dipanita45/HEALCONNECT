@@ -201,18 +201,18 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Auth Buttons */}
-          <div className={styles.mobileAuthSection}>
+          <div className="pt-4 space-y-3 border-t border-gray-700">
             {user || currentUser ? (
               <>
                 <button
                   onClick={handleDashboardRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                  className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={handleLogout}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
+                  className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
                 >
                   Logout
                 </button>
@@ -220,21 +220,14 @@ export default function Navbar() {
             ) : (
               <button
                 onClick={handleLoginRedirect}
-                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
                 Login
               </button>
-            </>
-          ) : (
-            <button
-              onClick={handleLoginRedirect}
-              className="w-full py-2 bg-blue-600 text-white rounded-md"
-            >
-              Login
-            </button>
-          )}
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   )
 }
