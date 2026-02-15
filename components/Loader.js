@@ -50,6 +50,7 @@ export default function Loader({
       <main className={baseWrapper}>
         <div className="relative">
           <FaCheckCircle
+            data-testid="FaCheckCircle"
             className={`${commonBase} ${currentColors.success} transform transition-all duration-500 ease-out scale-110 drop-shadow-lg`}
             size={size}
           />
@@ -65,6 +66,7 @@ export default function Loader({
       <main className={baseWrapper}>
         <div className="relative">
           <FaTimesCircle
+            data-testid="FaTimesCircle"
             className={`${commonBase} ${currentColors.error} transform transition-all duration-500 ease-out animate-pulse drop-shadow-lg`}
             size={size}
           />
@@ -78,20 +80,30 @@ export default function Loader({
 
   // Icon selection
   let Icon = FaSpinner;
-  if (variant === 'stethoscope') Icon = FaStethoscope;
-  if (variant === 'heartbeat') Icon = FaHeartbeat;
-  if (variant === 'syringe') Icon = FaSyringe;
+  let iconTestId = 'FaSpinner';
+  if (variant === 'stethoscope') {
+    Icon = FaStethoscope;
+    iconTestId = 'FaStethoscope';
+  }
+  if (variant === 'heartbeat') {
+    Icon = FaHeartbeat;
+    iconTestId = 'FaHeartbeat';
+  }
+  if (variant === 'syringe') {
+    Icon = FaSyringe;
+    iconTestId = 'FaSyringe';
+  }
 
   return (
     <main className={baseWrapper}>
       <div className="relative">
-        <Icon className={commonClasses} size={size} />
+        <Icon data-testid={iconTestId} className={commonClasses} size={size} />
         
         {/* Enhanced visual effects for dark theme */}
         {darkMode && (
           <>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full animate-pulse blur-xl" style={{ width: size * 1.5, height: size * 1.5, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
-            <div className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 rounded-full animate-spin" style={{ width: size * 2, height: size * 2, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', animationDuration: '3s' }} />
+            <div data-testid="dark-gradient" className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full animate-pulse blur-xl" style={{ width: size * 1.5, height: size * 1.5, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />
+            <div data-testid="dark-gradient" className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 rounded-full animate-spin" style={{ width: size * 2, height: size * 2, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', animationDuration: '3s' }} />
           </>
         )}
         
