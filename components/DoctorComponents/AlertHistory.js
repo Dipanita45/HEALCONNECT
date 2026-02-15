@@ -18,11 +18,22 @@ export default function AlertHistory({ doctorId }) {
         setLoading(true);
 
         try {
-            let q = query(
-                collection(db, 'alerts'),
-                where('doctorId', '==', doctorId),
-                orderBy('createdAt', 'desc')
-            );
+            // Check if we want global/unassigned alerts
+            let q;
+
+            if (doctorId === 'unassigned') {
+                q = query(
+                    collection(db, 'alerts'),
+                    where('isGlobal', '==', true),
+                    orderBy('createdAt', 'desc')
+                );
+            } else {
+                q = query(
+                    collection(db, 'alerts'),
+                    where('doctorId', '==', doctorId),
+                    orderBy('createdAt', 'desc')
+                );
+            }
 
             // Apply date filter
             if (dateFilter !== 'all') {
@@ -99,9 +110,16 @@ export default function AlertHistory({ doctorId }) {
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                     <FaHistory className="text-blue-500" size={24} />
-                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        Alert History
-                    </h2>
+                    <div>
+                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                            Alert History
+                        </h2>
+                        {doctorId === 'unassigned' && (
+                            <span className="text-sm bg-red-100 text-red-700 px-2 py-0.5 rounded-full border border-red-200">
+                                🚨 Unassigned / Emergency
+                            </span>
+                        )}
+                    </div>
                 </div>
 
                 <div className="flex items-center gap-2">

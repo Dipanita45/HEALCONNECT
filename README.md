@@ -22,6 +22,20 @@
 
 ---
 
+## 🌟 Open Source Participation
+
+This project proudly participates in the following open-source programs:
+
+| Program | Program Name | Status |
+|---------|--------------|--------|
+| ❄️ | **Social Winter of Code (SWOC)** | Active |
+| 🌍 | **Open Source Community Group (OSCG)** | Active |
+| 🚀 | **Apertre 3.0** | Active |
+
+> 💡 We warmly welcome contributors from all the above programs.  
+Please check open issues and follow the contribution guidelines before submitting a PR.
+
+
 ## 🚀 Key Features
 
 - 🔐 **Secure Auth:** Multi-role Firebase Authentication (Admin, Doctor, Patient).
