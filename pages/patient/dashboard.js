@@ -4,7 +4,8 @@ import { UserContext } from "@lib/context";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
-import { FaEdit, FaSpinner, FaUserMd, FaSearch, FaWifiSlash, FaSync, FaHeartbeat } from "react-icons/fa";
+import { FaEdit, FaSpinner, FaUserMd, FaSearch, FaSync, FaHeartbeat } from "react-icons/fa";
+import { MdWifiOff } from "react-icons/md";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import OfflineDashboard from "@/components/OfflineDashboard";
 
@@ -49,7 +50,7 @@ export default function Dashboard(params) {
                     {/* Offline Status Indicator */}
                     {!isOnline && (
                         <div className="bg-orange-600 text-white rounded-lg p-3 mb-4 flex items-center space-x-3">
-                            <FaWifiSlash className="animate-pulse" />
+                            <MdWifiOff className="animate-pulse" />
                             <div>
                                 <p className="font-semibold">Offline Mode</p>
                                 <p className="text-sm opacity-90">{unsyncedCount} items pending sync</p>
