@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot,
@@ -324,7 +324,7 @@ const SupportWidget = () => {
           setIsProcessing(false);
         }
       }
-    });
+    }, currentUser.uid, userRole);
 
     return () => {
       console.log('SupportWidget: Cleaning up ticket subscription');
@@ -430,10 +430,11 @@ const SupportWidget = () => {
         category: ticketData.category,
         priority: ticketData.priority,
         description: ticketData.description,
+        userId: currentUser.uid, // Add security context
         user: {
-          name: 'Current User', // In production, get from auth context
-          email: 'user@example.com', // In production, get from auth context
-          avatar: '👤'
+          name: currentUser.displayName || 'Current User',
+          email: currentUser.email || 'user@example.com',
+          avatar: currentUser.photoURL || '👤'
         },
         messages: messages,
         tags: ticketData.tags || []
