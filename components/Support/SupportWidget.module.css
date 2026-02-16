@@ -1,7 +1,7 @@
 /* Support Widget Styles */
 .supportWidget {
   position: fixed !important;
-  bottom: 80px !important;
+  bottom: 65px !important;
   right: 32px !important;
   width: 380px;
   height: 600px;
@@ -22,7 +22,7 @@
 /* Floating Button */
 .widgetButton {
   position: fixed !important;
-  bottom: 80px !important;
+  bottom: 65px !important;
   right: 32px !important;
   width: 60px;
   height: 60px;
