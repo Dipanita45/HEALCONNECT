@@ -10,7 +10,7 @@ const nextConfig = {
       },
     ],
   },
+  basePath: "/HEALCONNECT",
 }
 
-base:"/HEALCONNECT/",
 module.exports = nextConfig
