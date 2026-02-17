@@ -56,7 +56,7 @@ const AdminSupportManagement = () => {
         satisfactionRate: '94%', // Calculate from actual data if needed
         activeAgents: agents.filter(a => a.status === 'online').length
       }));
-    });
+    }, null, 'admin');
 
     // Cleanup on unmount
     return () => {
