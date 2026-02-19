@@ -1,4 +1,5 @@
 import Head from "next/head"
+import Image from "next/image";
 import { useEffect } from "react";
 import Footer from "./footer";
 
@@ -9,16 +10,16 @@ export default function Home() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         console.log(entry)
-        if(entry.isIntersecting){
+        if (entry.isIntersecting) {
           entry.target.classList.add("show")
-        }else{
+        } else {
           entry.target.classList.remove("show")
         }
       });
-})
-const hiddenElements = document.querySelectorAll(".animation");
-hiddenElements.forEach((el) => observer.observe(el));
-  },[])
+    })
+    const hiddenElements = document.querySelectorAll(".animation");
+    hiddenElements.forEach((el) => observer.observe(el));
+  }, [])
 
   return (
     <div>
@@ -48,18 +49,18 @@ hiddenElements.forEach((el) => observer.observe(el));
             <div className="basis-1/2">
               <div className=" flex flex-col w-auto h-full justify-center">
                 <div className="mx-auto my-auto object-center sm:w-4/6 w-3/4 h-full">
-                  <img src="https://firebasestorage.googleapis.com/v0/b/health-monitoring-system-7885c.appspot.com/o/Images%2Fdashboard.svg?alt=media&token=cc76d1e6-55bf-42f0-8c75-07fff53993bf" alt="Image" />
+                  <Image src="https://firebasestorage.googleapis.com/v0/b/health-monitoring-system-7885c.appspot.com/o/Images%2Fdashboard.svg?alt=media&token=cc76d1e6-55bf-42f0-8c75-07fff53993bf" alt="Image" width={500} height={500} className="w-full h-auto" />
                 </div>
               </div>
             </div>
           </div>
           <div className="text-center mt-16 snap-proximity">
-              <a href="" className="no-underline">
-                <h2 className="animation bg-red-500 inline-block text-gray1 px-6 py-4 text-base md:text-4xl shadow-xl">
-                  {"Today's "}Healthcare  
-                </h2>
-                <span className="animate-bounce text-5xl block mt-12 mb-6">👇</span>
-              </a>
+            <a href="" className="no-underline">
+              <h2 className="animation bg-red-500 inline-block text-gray1 px-6 py-4 text-base md:text-4xl shadow-xl">
+                {"Today's "}Healthcare
+              </h2>
+              <span className="animate-bounce text-5xl block mt-12 mb-6">👇</span>
+            </a>
           </div>
         </section>
 
@@ -88,26 +89,26 @@ hiddenElements.forEach((el) => observer.observe(el));
               Solution
             </h1>
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 text-center w-3/4 mx-auto">
-            This system will let the organization meet their requirement of measuring patient
+              This system will let the organization meet their requirement of measuring patient
               <span className="text-yellow-600 font-display animate-pulse"> health parameters </span>and make this data is available and accessible to doctors remotely<span className="text-orange-600 font-display animate-pulse"> anytime anywhere</span>.</p>
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
-            This system will let the organization manage their<span className="text-blue-500 font-display animate-pulse"> doctors and patients </span>data and maintains security end to end.</p>
+              This system will let the organization manage their<span className="text-blue-500 font-display animate-pulse"> doctors and patients </span>data and maintains security end to end.</p>
             <a className="animate-bounce no-underline block mt-12 md:text-xl text-base" href="">
               How you get monitored? 🧐
             </a>
           </section>
         </div>
-        
+
         <div className="h-screen flex flex-col justify-center bg-gray-100 dark:bg-gray-900">
           <section className=" animation container md:w-1/2 text-center place-content-center prose dark:prose-invert md:prose-lg lg:prose-lg sm:prose-sm">
             <h1 className=" animation bg-gradient-to-r from-blue-600 to-blue-300 inline-block px-6 py-3 text-lg md:text-2xl shadow-lg mb-12">
               Our Kit :
             </h1>
             <p className=" animation py-2 text-md:text-2xl text-gray5 dark:text-gray3 text-center w-3/4 mx-auto">
-            This system is established with a health monitoring Kit which enables the doctors to measure
+              This system is established with a health monitoring Kit which enables the doctors to measure
               <span className="text-blue-600 font-display animate-pulse"> body temperature, heart rate and pulse rate </span>in a single device.</p>
             <p className=" animation py-2 text-lg md:text-2xl text-gray5 dark:text-gray3 w-3/4 mx-auto">
-            The parameter measured using the kit is shown to appropriate doctor through the website. The<span className="text-green-600 font-display animate-pulse"> doctor as well as patient </span>can monitor the information by visiting to the website.</p>
+              The parameter measured using the kit is shown to appropriate doctor through the website. The<span className="text-green-600 font-display animate-pulse"> doctor as well as patient </span>can monitor the information by visiting to the website.</p>
             <a className="animate-bounce no-underline block mt-12 md:text-xl text-base" href="">
               How you get monitored? 🧐
             </a>

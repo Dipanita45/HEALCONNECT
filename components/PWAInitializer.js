@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { FaWifi, FaWifiSlash, FaDownload, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa'
+import { FaWifi, FaDownload, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa'
 
 export default function PWAInitializer() {
   const [pwaSupported, setPwaSupported] = useState(false)
