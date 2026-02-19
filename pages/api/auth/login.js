@@ -16,8 +16,19 @@ export default async function handler(req, res) {
     const emailQuery = query(usersRef, where("email", "==", email));
     const emailSnapshot = await getDocs(emailQuery);
 
+<<<<<<< HEAD
     if (emailSnapshot.empty) {
       return res.status(401).json({ message: "Invalid credentials" });
+=======
+    const userDoc = !usernameSnapshot.empty ? usernameSnapshot.docs[0] :
+      !emailSnapshot.empty ? emailSnapshot.docs[0] : null;
+
+    if (!userDoc) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid credentials'
+      });
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
     }
 
     const userDoc = emailSnapshot.docs[0];

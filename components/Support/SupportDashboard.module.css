@@ -44,7 +44,8 @@
   gap: 12px;
 }
 
-.createTicketBtn, .exportBtn {
+.createTicketBtn,
+.exportBtn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -602,7 +603,9 @@
   cursor: pointer;
 }
 
-.replyBtn, .archiveBtn, .deleteBtn {
+.replyBtn,
+.archiveBtn,
+.deleteBtn {
   display: flex;
   align-items: center;
   gap: 6px;
@@ -647,7 +650,7 @@
   .ticketsContainer.hasDetail {
     grid-template-columns: 1fr;
   }
-  
+
   .ticketDetail {
     position: static;
     max-height: none;
@@ -658,47 +661,47 @@
   .dashboard {
     padding: 16px;
   }
-  
+
   .header {
     flex-direction: column;
     gap: 16px;
     align-items: stretch;
   }
-  
+
   .headerActions {
     justify-content: flex-start;
   }
-  
+
   .statsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .controls {
     flex-direction: column;
     align-items: stretch;
   }
-  
+
   .searchBox {
     max-width: none;
   }
-  
+
   .filters {
     overflow-x: auto;
     padding-bottom: 8px;
   }
-  
+
   .ticketHeader {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .ticketFooter {
     flex-direction: column;
     align-items: flex-start;
     gap: 8px;
   }
-  
+
   .actions {
     flex-wrap: wrap;
   }

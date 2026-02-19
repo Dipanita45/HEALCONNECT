@@ -21,7 +21,7 @@ async function handler(req, res) {
 
 async function getAlert(id, res) {
   const result = await dbOperations.getById(Collections.ALERTS, id);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, data: result.data });
   } else {
@@ -37,7 +37,7 @@ async function acknowledgeAlert(id, data, res) {
   };
 
   const result = await dbOperations.update(Collections.ALERTS, id, updateData);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, message: 'Alert acknowledged' });
   } else {
@@ -47,7 +47,7 @@ async function acknowledgeAlert(id, data, res) {
 
 async function deleteAlert(id, res) {
   const result = await dbOperations.delete(Collections.ALERTS, id);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, message: 'Alert deleted' });
   } else {

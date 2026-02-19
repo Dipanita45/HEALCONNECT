@@ -84,7 +84,8 @@
   flex-wrap: wrap;
 }
 
-.dashboardBtn, .chatBtn {
+.dashboardBtn,
+.chatBtn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -626,48 +627,54 @@
   .container {
     padding: 0 16px;
   }
-  
+
   .hero {
     padding: 60px 0 40px;
   }
-  
+
   .heroContent {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .heroText h1 {
     font-size: 36px;
   }
-  
+
   .heroText p {
     font-size: 18px;
   }
-  
+
   .heroActions {
     flex-direction: column;
   }
-  
-  .dashboardBtn, .chatBtn {
+
+  .dashboardBtn,
+  .chatBtn {
     justify-content: center;
   }
-  
+
   .heroStats {
     grid-template-columns: 1fr;
   }
-  
+
   .sectionHeader h2 {
     font-size: 28px;
   }
-  
+
   .sectionHeader p {
     font-size: 16px;
   }
+<<<<<<< HEAD
   
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
+=======
+
+  .featuresGrid,
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
   .channelsGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
@@ -693,15 +700,15 @@
   .channelsGrid > :nth-child(5) {
     grid-column: 2 / span 2;
   }
-  
+
   .stepsContainer {
     grid-template-columns: 1fr;
   }
-  
+
   .stepConnector {
     display: none;
   }
-  
+
   .emergencyCard {
     padding: 32px 24px;
   }
@@ -711,19 +718,19 @@
   .heroText h1 {
     font-size: 28px;
   }
-  
+
   .heroText p {
     font-size: 16px;
   }
-  
+
   .statNumber {
     font-size: 24px;
   }
-  
+
   .sectionHeader h2 {
     font-size: 24px;
   }
-  
+
   .featureCard,
   .step {
     padding: 24px 20px;

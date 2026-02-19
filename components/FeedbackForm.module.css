@@ -12,6 +12,7 @@
 .card {
   width: 100%;
   max-width: 520px;
+<<<<<<< HEAD
   background: white;
   border-radius: 16px;
   padding: 2.5rem 2rem;
@@ -26,6 +27,13 @@
     rgba(15, 23, 42, 0.95),
     rgba(2, 6, 23, 0.95)
   );
+=======
+  background: linear-gradient(180deg,
+      rgba(15, 23, 42, 0.95),
+      rgba(2, 6, 23, 0.95));
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
   border: 1px solid rgba(51, 65, 85, 0.6);
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.45),
@@ -155,6 +163,7 @@
     opacity: 0;
     transform: translateY(16px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

@@ -12,28 +12,28 @@ export default function Dashboard(props) {
         <h1 className="prose lg:prose-xl font-bold md:ml-4 dark:text-gray1">Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-4 md:px-4 gap-4 ">
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-                <FaUsers className='text-blue-500 dark:text-gray-100' size={36} />
+            <FaUsers className='text-blue-500 dark:text-gray-100' size={36} />
             <div className="text-right">
               <p className="text-2xl">01</p>
               <p>Total Patients</p>
             </div>
           </div>
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-                <FaFileAlt className='stroke-current text-blue-500 dark:text-gray-100 ' size={36} />
+            <FaFileAlt className='stroke-current text-blue-500 dark:text-gray-100 ' size={36} />
             <div className="text-right">
               <p className="text-2xl">02</p>
               <p>Total Reports</p>
             </div>
           </div>
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-                <FaBell className='stroke-current text-blue-500 dark:text-gray-100' size={36} />
+            <FaBell className='stroke-current text-blue-500 dark:text-gray-100' size={36} />
             <div className="text-right">
               <p className="text-2xl">03</p>
               <p>Appointments</p>
             </div>
           </div>
           <Link href="/admin/support-management" className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-green-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <FaHeadset className='text-green-500 dark:text-gray-100' size={36} />
+            <FaHeadset className='text-green-500 dark:text-gray-100' size={36} />
             <div className="text-right">
               <p className="text-2xl">24</p>
               <p>Support Tickets</p>
@@ -160,7 +160,7 @@ export default function Dashboard(props) {
                     <td className="px-4 py-3">
                       <div className="flex items-center text-sm">
                         <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <Image
+                          <Image
                             className="object-cover w-full h-full rounded-full"
                             src="/hacker.png"
                             alt=""
@@ -194,7 +194,7 @@ export default function Dashboard(props) {
                     <td className="px-4 py-3">
                       <div className="flex items-center text-sm">
                         <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <Image
+                          <Image
                             className="object-cover w-full h-full rounded-full"
                             src="/hacker.png"
                             alt=""
@@ -228,7 +228,7 @@ export default function Dashboard(props) {
                     <td className="px-4 py-3">
                       <div className="flex items-center text-sm">
                         <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <Image
+                          <Image
                             className="object-cover w-full h-full rounded-full"
                             src="/hacker.png"
                             alt=""
@@ -262,7 +262,7 @@ export default function Dashboard(props) {
                     <td className="px-4 py-3">
                       <div className="flex items-center text-sm">
                         <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                        <Image
+                          <Image
                             className="object-cover w-full h-full rounded-full"
                             src="/hacker.png"
                             alt=""
@@ -309,7 +309,7 @@ export default function Dashboard(props) {
                         className="px-3 py-1 rounded-md rounded-l-lg focus:outline-none focus:shadow-outline-purple"
                         aria-label="Previous"
                       >
-                      <FaAngleLeft size={16}/>
+                        <FaAngleLeft size={16} />
                       </button>
                     </li>
                     <li>
@@ -350,7 +350,7 @@ export default function Dashboard(props) {
                         className="px-3 py-1 rounded-md rounded-r-lg focus:outline-none focus:shadow-outline-purple"
                         aria-label="Next"
                       >
-                          <FaAngleRight size={16}/>
+                        <FaAngleRight size={16} />
                       </button>
                     </li>
                   </ul>

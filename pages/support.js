@@ -32,17 +32,23 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
   }, []);
 
   const handleSendEmail = () => {
-  const email = 'support@healconnect.com';
-  const subject = encodeURIComponent('HealConnect Support Request');
-  const body = encodeURIComponent(
-    'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
-  );
+    const email = 'support@healconnect.com';
+    const subject = encodeURIComponent('HealConnect Support Request');
+    const body = encodeURIComponent(
+      'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
+    );
 
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
+<<<<<<< HEAD
   window.open(gmailUrl, '_blank');
 };
 //2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
+=======
+    window.open(gmailUrl, '_blank');
+  };
+
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
 
   const features = [
     {
@@ -374,6 +380,10 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
                 className={styles.channelBtn}
                 onClick={handleSendEmail}
               >
+<<<<<<< HEAD
+=======
+                <FaEnvelope style={{ marginRight: '6px' }} />
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                 Send Email
               </button>
 

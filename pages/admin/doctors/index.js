@@ -25,9 +25,9 @@ export default function Doctors(props) {
           </h1>
           <div className="md:mx-4">
 
-           <AddDoctor />
+            <AddDoctor />
 
-           </div>
+          </div>
         </div>
 
         {/* Doctors List */}
@@ -52,22 +52,22 @@ export default function Doctors(props) {
                   {(loading) && (
                     <tbody>
                       <tr>
-                      <td></td>
-                      <td></td>
-                      <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40}/></td>
-                    </tr>
+                        <td></td>
+                        <td></td>
+                        <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40} /></td>
+                      </tr>
                     </tbody>
-                  )}  
+                  )}
 
-                    {(!loading) && (
+                  {(!loading) && (
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       {doctors.map(doctor => (
-                         <tr key={doctor.id} onClick={() => router.push(`/admin/doctors/${doctor.uid}`)} className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
-                        <DoctorCard name={doctor.name} speciality={doctor.speciality} email={doctor.email} uid={doctor.uid} userRole={doctor.role} />
+                        <tr key={doctor.id} onClick={() => router.push(`/admin/doctors/${doctor.uid}`)} className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
+                          <DoctorCard name={doctor.name} speciality={doctor.speciality} email={doctor.email} uid={doctor.uid} userRole={doctor.role} />
                         </tr>
-                        ))}
+                      ))}
                     </tbody>
-                   )}
+                  )}
                 </table>
               </div>
             </div>

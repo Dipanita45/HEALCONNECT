@@ -1,16 +1,16 @@
 import React from 'react';
 import styles from './Button.module.css';
 
-const Button = ({ 
-  children, 
-  variant = 'primary', 
-  size = 'medium', 
-  disabled = false, 
+const Button = ({
+  children,
+  variant = 'primary',
+  size = 'medium',
+  disabled = false,
   loading = false,
-  onClick, 
+  onClick,
   type = 'button',
   className = '',
-  ...props 
+  ...props
 }) => {
   const buttonClasses = [
     styles.button,

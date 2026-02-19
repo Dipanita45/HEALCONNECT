@@ -9,7 +9,11 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en",
-  "categories": ["health", "medical", "productivity"],
+  "categories": [
+    "health",
+    "medical",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "/Logo.png",
@@ -133,7 +137,11 @@
       "files": [
         {
           "name": "medical_reports",
-          "accept": [".pdf", ".jpg", ".png"]
+          "accept": [
+            ".pdf",
+            ".jpg",
+            ".png"
+          ]
         }
       ]
     }

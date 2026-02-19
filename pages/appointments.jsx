@@ -570,12 +570,18 @@ export default function Appointments() {
                         value={formData.date}
                         onChange={handleChange}
                         required
+<<<<<<< HEAD
                         min={new Date().toISOString().split('T')[0]}
                         className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
                         style={{
                           paddingRight: "42px",
                           colorScheme: "light"
                         }}
+=======
+                        min={new Date().toISOString().split("T")[0]}
+                        className={`${styles.formInput} ${formErrors.date ? styles.error : ""}`}
+
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                       />
 
 

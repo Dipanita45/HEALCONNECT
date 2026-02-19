@@ -212,8 +212,8 @@ export default function AlertNotifications({ doctorId, doctorName }) {
                                                         onClick={() => handleAcknowledge(alert.id)}
                                                         disabled={acknowledging === alert.id}
                                                         className={`text-xs px-3 py-1 rounded-full font-medium transition-colors ${acknowledging === alert.id
-                                                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                                                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                                                            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                                            : 'bg-blue-500 text-white hover:bg-blue-600'
                                                             }`}
                                                     >
                                                         {acknowledging === alert.id ? 'Acknowledging...' : 'Acknowledge'}

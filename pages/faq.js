@@ -60,14 +60,14 @@ const FAQ = () => {
         <meta name="description" content="Frequently asked questions about HEALCONNECT" />
       </Head>
 
-  {/* Animated background elements */}
+      {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement}></div>
         <div className={styles.circleElement}></div>
         <div className={styles.circleElement}></div>
       </div>
 
-{/* Navbar spacer */}
+      {/* Navbar spacer */}
       <div className={styles.navbarSpacer}></div>
 
       <motion.div
@@ -106,7 +106,7 @@ const FAQ = () => {
               transition={{ duration: 0.3, delay: faqs.indexOf(faq) * 0.1 }}
               whileHover={{ y: -3 }}
             >
-              <button 
+              <button
                 id={`faq-question-${index}`}
                 className={styles.faqQuestion}
                 onClick={() => toggleFAQ(index)}
@@ -130,7 +130,7 @@ const FAQ = () => {
 
               <AnimatePresence>
                 {activeIndex === index && (
-                  <motion.div 
+                  <motion.div
                     id={`faq-answer-${index}`}
                     role="region"
                     aria-labelledby={`faq-question-${index}`}
