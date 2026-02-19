@@ -80,8 +80,8 @@ export default function Problem({ scrollToSection }) {
             </div>
           </div>
 
-          <div 
-            className={`${styles.thoughtBubble} bg-white dark:bg-gray-800`} 
+          <div
+            className={`${styles.thoughtBubble} bg-white dark:bg-gray-800`}
             onClick={() => scrollToSection('solution')}
           >
             <span className=" text-black font-medium text-slate-700 dark:text-gray-300">How can we solve these challenges?</span>

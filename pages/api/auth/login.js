@@ -38,7 +38,7 @@ async function loginUser(req, res) {
     ]);
 
     const userDoc = !usernameSnapshot.empty ? usernameSnapshot.docs[0] :
-                   !emailSnapshot.empty ? emailSnapshot.docs[0] : null;
+      !emailSnapshot.empty ? emailSnapshot.docs[0] : null;
 
     if (!userDoc) {
       return res.status(401).json({

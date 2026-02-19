@@ -17,7 +17,7 @@ export default function OfflineDashboard({ patientId }) {
 
     loadOfflineData()
     updateStorageInfo()
-    
+
     const interval = setInterval(() => {
       updateStorageInfo()
     }, 30000) // Update storage info every 30 seconds
@@ -27,7 +27,7 @@ export default function OfflineDashboard({ patientId }) {
 
   useEffect(() => {
     setIsOnline(navigator.onLine)
-    
+
     let isMounted = true
 
     const handleOnline = () => {
@@ -37,7 +37,7 @@ export default function OfflineDashboard({ patientId }) {
         syncData()
       }
     }
-    
+
     const handleOffline = () => {
       if (isMounted) {
         setIsOnline(false)
@@ -51,7 +51,7 @@ export default function OfflineDashboard({ patientId }) {
       try {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 3000)
-        
+
         await fetch(window.location.origin + '/manifest.json', {
           method: 'HEAD',
           mode: 'no-cors',
@@ -116,10 +116,10 @@ export default function OfflineDashboard({ patientId }) {
       // This would sync with your backend API
       // For now, we'll just mark items as synced
       const unsyncedData = await offlineManager.getUnsyncedData()
-      
+
       // Simulate sync process
       await new Promise(resolve => setTimeout(resolve, 2000))
-      
+
       setSyncStatus('synced')
       setTimeout(() => setSyncStatus('online'), 1000)
     } catch (error) {
@@ -155,12 +155,11 @@ export default function OfflineDashboard({ patientId }) {
             </div>
           </div>
           <div className="text-right">
-            <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${
-              syncStatus === 'offline' ? 'bg-white/20' :
-              syncStatus === 'syncing' ? 'bg-yellow-400 text-gray-900' :
-              syncStatus === 'synced' ? 'bg-green-400 text-gray-900' :
-              'bg-red-400 text-white'
-            }`}>
+            <div className={`flex items-center space-x-2 px-3 py-1 rounded-full text-sm font-medium ${syncStatus === 'offline' ? 'bg-white/20' :
+                syncStatus === 'syncing' ? 'bg-yellow-400 text-gray-900' :
+                  syncStatus === 'synced' ? 'bg-green-400 text-gray-900' :
+                    'bg-red-400 text-white'
+              }`}>
               {syncStatus === 'offline' && <MdWifiOff />}
               {syncStatus === 'syncing' && <FaSync className="animate-spin" />}
               {syncStatus === 'synced' && <FaSync />}
@@ -247,11 +246,10 @@ export default function OfflineDashboard({ patientId }) {
                         <p className="text-sm text-gray-600 dark:text-gray-400">{contact.relationship}</p>
                         <p className="text-sm font-medium text-blue-600 dark:text-blue-400">{contact.phone}</p>
                       </div>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        contact.priority === 1 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
-                        contact.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
-                        'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-                      }`}>
+                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${contact.priority === 1 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300' :
+                          contact.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300' :
+                            'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
+                        }`}>
                         {contact.priority === 1 ? 'Primary' : contact.priority === 2 ? 'Secondary' : 'Other'}
                       </div>
                     </div>
@@ -281,12 +279,11 @@ export default function OfflineDashboard({ patientId }) {
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                  <div 
-                    className={`h-2 rounded-full transition-all duration-300 ${
-                      parseFloat(storageInfo.percentageUsed) < 50 ? 'bg-green-600' :
-                      parseFloat(storageInfo.percentageUsed) < 80 ? 'bg-yellow-600' :
-                      'bg-red-600'
-                    }`}
+                  <div
+                    className={`h-2 rounded-full transition-all duration-300 ${parseFloat(storageInfo.percentageUsed) < 50 ? 'bg-green-600' :
+                        parseFloat(storageInfo.percentageUsed) < 80 ? 'bg-yellow-600' :
+                          'bg-red-600'
+                      }`}
                     style={{ width: `${Math.min(parseFloat(storageInfo.percentageUsed), 100)}%` }}
                   />
                 </div>
@@ -346,7 +343,7 @@ export default function OfflineDashboard({ patientId }) {
                   <span>{syncStatus === 'syncing' ? 'Syncing...' : 'Sync Now'}</span>
                 </button>
               )}
-              
+
               <button
                 onClick={loadOfflineData}
                 className="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"

@@ -565,7 +565,7 @@ export default function Appointments() {
                         required
                         min={new Date().toISOString().split("T")[0]}
                         className={`${styles.formInput} ${formErrors.date ? styles.error : ""}`}
-                        
+
                       />
 
                       <label className={styles.formLabel}>
@@ -592,19 +592,19 @@ export default function Appointments() {
                         className={`${styles.formInput} ${formErrors.time ? styles.error : ''}`}
                       >
                         <option value="">Select Time</option>
-                          {filterTimesByAvailability(
-                              availableTimes,
-                               selectedDoctor,
-                             formData.date
-                            ).map(time => (
-                            <option
+                        {filterTimesByAvailability(
+                          availableTimes,
+                          selectedDoctor,
+                          formData.date
+                        ).map(time => (
+                          <option
                             key={time}
-                             value={time}
+                            value={time}
                             disabled={bookedTimes.includes(time)}
                           >
-                          {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
-                           </option>
-                       ))}
+                            {time} {bookedTimes.includes(time) ? "(Booked)" : ""}
+                          </option>
+                        ))}
                       </select>
                       <label className={styles.formLabel}>Preferred Time</label>
                       <div className={styles.formUnderline}></div>

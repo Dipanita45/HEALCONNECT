@@ -31,16 +31,16 @@ const Support = () => {
   }, []);
 
   const handleSendEmail = () => {
-  const email = 'support@healconnect.com';
-  const subject = encodeURIComponent('HealConnect Support Request');
-  const body = encodeURIComponent(
-    'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
-  );
+    const email = 'support@healconnect.com';
+    const subject = encodeURIComponent('HealConnect Support Request');
+    const body = encodeURIComponent(
+      'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
+    );
 
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
-  window.open(gmailUrl, '_blank');
-};
+    window.open(gmailUrl, '_blank');
+  };
 
 
   const features = [
@@ -330,12 +330,12 @@ const Support = () => {
                 <span>✓ 24h response</span>
               </div>
               <button
-  className={styles.channelBtn}
-  onClick={handleSendEmail}
->
-  <FaEnvelope style={{ marginRight: '6px' }} />
-  Send Email
-</button>
+                className={styles.channelBtn}
+                onClick={handleSendEmail}
+              >
+                <FaEnvelope style={{ marginRight: '6px' }} />
+                Send Email
+              </button>
 
             </motion.div>
           </div>

@@ -31,7 +31,7 @@ export default function Add(props) {
 
   const addPatient = async (e) => {
     e.preventDefault();
-    
+
     //   Check if patient number already exists
     const docRef = doc(db, "patients", `+91${number}`);
     const docSnap = await getDoc(docRef);
@@ -47,22 +47,22 @@ export default function Add(props) {
     const aadharField = await getDocs(aadharQuery);
 
 
-    if(!aadhar || !first || !middle || !last || !city || !address ){
+    if (!aadhar || !first || !middle || !last || !city || !address) {
       toast.error('All (*) fields are required!')
-    }else if( docSnap.exists() || docField.size > 0 ){
+    } else if (docSnap.exists() || docField.size > 0) {
       toast.error('Patient phone number already exists!')
-    }else if(aadharField.size > 0){
+    } else if (aadharField.size > 0) {
       toast.error('Aadhar number already exists!')
-    }else{
-    setLoading(true)
-    const docRef = doc(db, "patients", `+91${number}`);
-    await setDoc(docRef, {role: 'patient', aadhar: aadhar, pan: pan, name: first+middle+last, firstName: first, middleName: middle, lastName: last, age: age, gender: gender, maritalStatus: marital, address: address, state: state, city: city, pin: pin, number: `+91${number}`, landline: landline, bloodGroup: blood, height: height, weight: weight}
+    } else {
+      setLoading(true)
+      const docRef = doc(db, "patients", `+91${number}`);
+      await setDoc(docRef, { role: 'patient', aadhar: aadhar, pan: pan, name: first + middle + last, firstName: first, middleName: middle, lastName: last, age: age, gender: gender, maritalStatus: marital, address: address, state: state, city: city, pin: pin, number: `+91${number}`, landline: landline, bloodGroup: blood, height: height, weight: weight }
       ).then(() => setLoading(false))
-      .catch((error) => toast.error(error.message))
-      .finally(() => {
-        toast.success('Patient Created!')
-        router.push('patients');
-      })
+        .catch((error) => toast.error(error.message))
+        .finally(() => {
+          toast.success('Patient Created!')
+          router.push('patients');
+        })
     }
   }
 
@@ -76,16 +76,16 @@ export default function Add(props) {
           <div className="flex md:flex-row flex-col">
             <div className="md:w-3/4 md:mx-4 overflow-hidden rounded-lg shadow-xs bg-white dark:bg-gray-800">
               <div className="w-full overflow-x-auto p-2 md:p-4">
-              <form className="w-full" onSubmit={addPatient}>
-              <h1 className=" text-blue-400">Unique ID:</h1>
-              <Divider />
-              <div className="flex flex-wrap -mx-3">
+                <form className="w-full" onSubmit={addPatient}>
+                  <h1 className=" text-blue-400">Unique ID:</h1>
+                  <Divider />
+                  <div className="flex flex-wrap -mx-3">
                     <div className="w-full md:w-5/12 px-3 mb-6 md:mb-0">
-                    <FormInput  className="input-field" label="Aadhar ID" id="grid-first-name" type="number" placeholder="0123 4567 8999" pattern="^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$" required={true} onChange={(e) => setAadhar(e.target.value)}/>
+                      <FormInput className="input-field" label="Aadhar ID" id="grid-first-name" type="number" placeholder="0123 4567 8999" pattern="^[2-9]{1}[0-9]{3}\\s[0-9]{4}\\s[0-9]{4}$" required={true} onChange={(e) => setAadhar(e.target.value)} />
                     </div>
                     <div className=" text-center md:pt-8 w-full md:w-2/12 px-3 mb-6 md:mb-0 text-gray6 dark:text-gray1"><h2>OR</h2></div>
                     <div className="w-full md:w-5/12 px-3">
-                    <FormInput  className="input-field" label="PAN ID" id="grid-last-name" type="number" placeholder="ABC000826D" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required={false} onChange={(e) => setPan(e.target.value)}/>
+                      <FormInput className="input-field" label="PAN ID" id="grid-last-name" type="number" placeholder="ABC000826D" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required={false} onChange={(e) => setPan(e.target.value)} />
                     </div>
                   </div>
                   <p className={`text-red-500 text-xs italic ${aadhar.length != 12 ? "block" : "hidden"}`}>Aadhar number should be 12 digits long!</p>
@@ -93,26 +93,26 @@ export default function Add(props) {
                   <Divider />
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className=" w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormInput label="First Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setFirst(e.target.value)} className=" input-field" id="grid-first-name" type="text" placeholder="Kumar"/>
+                      <FormInput label="First Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setFirst(e.target.value)} className=" input-field" id="grid-first-name" type="text" placeholder="Kumar" />
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Middle Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setMiddle(e.target.value)} className=" input-field" id="grid-middle-name" type="text" placeholder="Raosaheb"/>
+                      <FormInput label="Middle Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setMiddle(e.target.value)} className=" input-field" id="grid-middle-name" type="text" placeholder="Raosaheb" />
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Last Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setLast(e.target.value)} className=" input-field" id="grid-last-name" type="text" placeholder="Pandule"/>
+                      <FormInput label="Last Name" required={true} pattern="[A-Za-z ]{1,32}" onChange={(e) => setLast(e.target.value)} className=" input-field" id="grid-last-name" type="text" placeholder="Pandule" />
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-6">
                     <div className=" w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormInput label="Age" required={true} onChange={(e) => setAge(e.target.value)} className=" input-field" id="grid-first-name" type="text" placeholder="22"/>
+                      <FormInput label="Age" required={true} onChange={(e) => setAge(e.target.value)} className=" input-field" id="grid-first-name" type="text" placeholder="22" />
                     </div>
                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormDropdown label="Gender" options={[{value: 'Select'}, {value: 'Male'}, {value: 'Female'}]} onSelect={(e) => setGender(e.target.value)} />
+                      <FormDropdown label="Gender" options={[{ value: 'Select' }, { value: 'Male' }, { value: 'Female' }]} onSelect={(e) => setGender(e.target.value)} />
                     </div>
                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormDropdown label="Marital Status" options={[{value: 'Select'}, {value: 'Single'}, {value: 'Married'}]} onSelect={(e) => setMarital(e.target.value)}/>
+                      <FormDropdown label="Marital Status" options={[{ value: 'Select' }, { value: 'Single' }, { value: 'Married' }]} onSelect={(e) => setMarital(e.target.value)} />
                     </div>
-                    </div>
+                  </div>
                   <h1 className=" text-blue-400">Patient{"'"}s Address:</h1>
                   <Divider />
                   <div className="flex flex-wrap -mx-3 mb-6">
@@ -120,19 +120,19 @@ export default function Add(props) {
                       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
                         Address
                       </label>
-                      <input className="input-field" id="grid-password" type="text" pattern="[A-Za-z0-9'\.\-\s\,]" placeholder="Address" onChange={(e) => setAddress(e.target.value)}/>
+                      <input className="input-field" id="grid-password" type="text" pattern="[A-Za-z0-9'\.\-\s\,]" placeholder="Address" onChange={(e) => setAddress(e.target.value)} />
                       <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you{"'"}d like</p>
                     </div>
                   </div>
                   <div className="flex flex-wrap -mx-3 mb-6">
-                  <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                    <FormDropdown label="State" value="Maharashtra" options={[{value: 'Select'},{value: 'Maharashtra'}]} onSelect={(e) => setState(e.target.value)}/>
+                    <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                      <FormDropdown label="State" value="Maharashtra" options={[{ value: 'Select' }, { value: 'Maharashtra' }]} onSelect={(e) => setState(e.target.value)} />
                     </div>
                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormDropdown label="City" value="Pune" options={[{value: 'Select'},{value: 'Pune'}]} onSelect={(e) => setCity(e.target.value)} />
+                      <FormDropdown label="City" value="Pune" options={[{ value: 'Select' }, { value: 'Pune' }]} onSelect={(e) => setCity(e.target.value)} />
                     </div>
                     <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormInput label="PIN Code" required={true} pattern="[0-9]{5}" onChange={(e) => setPin(e.target.value)} className=" input-field" id="grid-first-name" type="number" placeholder="411046"/>
+                      <FormInput label="PIN Code" required={true} pattern="[0-9]{5}" onChange={(e) => setPin(e.target.value)} className=" input-field" id="grid-first-name" type="number" placeholder="411046" />
                     </div>
                   </div>
                   <h1 className=" text-blue-400">Contact Details:</h1>
@@ -143,27 +143,27 @@ export default function Add(props) {
                     </div>
                     <div className=" text-center md:pt-8 w-full md:w-2/12 px-3 mb-6 md:mb-0 text-gray6 dark:text-gray1"><h2>OR</h2></div>
                     <div className="w-full md:w-5/12 px-3">
-                      <FormInput label="Landline No" required={false} pattern="/(7|8|9)\d{9}/" onChange={(e) => setLandline(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="0000000"/>
+                      <FormInput label="Landline No" required={false} pattern="/(7|8|9)\d{9}/" onChange={(e) => setLandline(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="0000000" />
                     </div>
                   </div>
                   <h1 className=" text-blue-400">Body Measurements:</h1>
                   <Divider />
                   <div className="flex flex-row flex-wrap -mx-3 mb-6">
                     <div className=" w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                      <FormInput label="Blood Group" required={false} pattern="(A|B|AB|O)[+-]" onChange={(e) => setBlood(e.target.value)} className="input-field" id="grid-first-name" type="text" placeholder="B+"/>
+                      <FormInput label="Blood Group" required={false} pattern="(A|B|AB|O)[+-]" onChange={(e) => setBlood(e.target.value)} className="input-field" id="grid-first-name" type="text" placeholder="B+" />
                     </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Height" required={false} pattern="[0-9]{3}" onChange={(e) => setHeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="185"/>
-                      </div>
+                      <FormInput label="Height" required={false} pattern="[0-9]{3}" onChange={(e) => setHeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="185" />
+                    </div>
                     <div className=" w-full md:w-1/3 px-3">
-                      <FormInput label="Weight" required={false} pattern="[0-9]{3}" onChange={(e) => setWeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="90"/>
+                      <FormInput label="Weight" required={false} pattern="[0-9]{3}" onChange={(e) => setWeight(e.target.value)} className="input-field" id="grid-first-name" type="number" placeholder="90" />
                     </div>
                   </div>
                   <button type="submit" className=" px-6 w-full h-10 flex justify-center text-gray1 py-2 duration-300 relative after:absolute after:top-0 after:right-full bg-green-500 after:z-10 after:w-full after:h-full overflow-hidden hover:after:translate-x-full after:duration-300 hover:text-slate-900">
-                  {loading && (
-          <FaSpinner className=" animate-spin text-white" size={22} />
-        )}
-        {!loading && <span className="text-gray1 cursor-pointer">Add</span>}
+                    {loading && (
+                      <FaSpinner className=" animate-spin text-white" size={22} />
+                    )}
+                    {!loading && <span className="text-gray1 cursor-pointer">Add</span>}
                   </button>
                 </form>
               </div>
@@ -179,21 +179,21 @@ export default function Add(props) {
 const Divider = () => <hr className=" mb-6 my-2 bg-gray-200 dark:bg-gray-800 border border-blue-400 dark:border-blue-400 rounded-full " />;
 
 export const FormInput = (props) => {
-  const { label, ref, type, onChange, id, className, placeholder, pattern, required} = props;
+  const { label, ref, type, onChange, id, className, placeholder, pattern, required } = props;
   return (
     <div>
-        <label
-          className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >{label}<span className="text-red-500">*</span>
-        </label>
-        <input required={required} pattern={pattern} onChange={onChange} className={className} id={id} type={type} placeholder={placeholder}/>
-      </div>
+      <label
+        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >{label}<span className="text-red-500">*</span>
+      </label>
+      <input required={required} pattern={pattern} onChange={onChange} className={className} id={id} type={type} placeholder={placeholder} />
+    </div>
   );
 }
 
-export const FormDropdown = (props) =>{
-  const { label, options, onSelect} = props;
+export const FormDropdown = (props) => {
+  const { label, options, onSelect } = props;
   return (
-      <div>
+    <div>
       <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" >{label}<span className="text-red-500">*</span>
       </label>
       <div className="relative">
@@ -206,37 +206,37 @@ export const FormDropdown = (props) =>{
           <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
         </div>
       </div>
-      </div>
+    </div>
   );
 }
 
 export const FormInstructions = (props) => {
   return (
     <div className=" w-full md:w-1/4 md:my-0 my-4 overflow-hidden rounded-lg shadow-xs bg-blue-200">
-    <div className="w-full flex flex-col overflow-x-auto p-2 md:p-4">
-      <div className=" flex flex-row justify-center mt-12">
-      <Image alt="Form" className=" w-2/3" src="/form.svg" width="211" height="211"/>
+      <div className="w-full flex flex-col overflow-x-auto p-2 md:p-4">
+        <div className=" flex flex-row justify-center mt-12">
+          <Image alt="Form" className=" w-2/3" src="/form.svg" width="211" height="211" />
+        </div>
+        <h2 className="text-center pt-8">INSTRUCTIONS FOR FILLING FORM</h2>
+        <article className="mt-14">
+          <div className=" w-full flex flex-row pt-4">
+            <FaDotCircle size={16} className=" pt-1 mt-1 mr-2" />
+            <p>Form to be filled in English only.</p>
+          </div>
+          <div className=" w-full flex flex-row pt-4">
+            <FaDotCircle size={16} className=" pt-1 mt-1 mr-2" />
+            <p>Fields marked by asterisk (*) are mandatory.</p>
+          </div>
+          <div className=" w-full flex flex-row pt-4">
+            <FaDotCircle size={16} className=" w-14 pt-1 mt-1 mr-2" />
+            <p>Each box, wherever provided, should contain only one character (alphabet /number / punctuation sign) leaving a blank box after each word.</p>
+          </div>
+          <div className=" w-full flex flex-row pt-4">
+            <FaDotCircle size={16} className=" w-24 pt-1 mt-1 mr-2" />
+            <p>Those already allotted a ten-digit alphanumeric PAN shall not apply again as having or using more than one PAN is illegal. However, request for a new PAN card with the same PAN or/and changes or correction in PAN data can be made by filling up the form for {"'"}Request for New PAN Card or/and Changes or Correction in PAN Data{"'"}.</p>
+          </div>
+        </article>
       </div>
-      <h2 className="text-center pt-8">INSTRUCTIONS FOR FILLING FORM</h2>
-      <article className="mt-14">
-      <div className=" w-full flex flex-row pt-4">
-      <FaDotCircle size={16} className=" pt-1 mt-1 mr-2" />
-      <p>Form to be filled in English only.</p>
-      </div>
-      <div className=" w-full flex flex-row pt-4">
-      <FaDotCircle size={16} className=" pt-1 mt-1 mr-2" />
-      <p>Fields marked by asterisk (*) are mandatory.</p>
-      </div>
-      <div className=" w-full flex flex-row pt-4">
-      <FaDotCircle size={16} className=" w-14 pt-1 mt-1 mr-2" />
-      <p>Each box, wherever provided, should contain only one character (alphabet /number / punctuation sign) leaving a blank box after each word.</p>
-      </div>
-      <div className=" w-full flex flex-row pt-4">
-      <FaDotCircle size={16} className=" w-24 pt-1 mt-1 mr-2" />
-      <p>Those already allotted a ten-digit alphanumeric PAN shall not apply again as having or using more than one PAN is illegal. However, request for a new PAN card with the same PAN or/and changes or correction in PAN data can be made by filling up the form for {"'"}Request for New PAN Card or/and Changes or Correction in PAN Data{"'"}.</p>
-      </div>
-      </article>
     </div>
-  </div>
   );
 }

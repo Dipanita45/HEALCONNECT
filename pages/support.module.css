@@ -63,7 +63,8 @@
   flex-wrap: wrap;
 }
 
-.dashboardBtn, .chatBtn {
+.dashboardBtn,
+.chatBtn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -468,57 +469,58 @@
   .container {
     padding: 0 16px;
   }
-  
+
   .hero {
     padding: 60px 0 40px;
   }
-  
+
   .heroContent {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .heroText h1 {
     font-size: 36px;
   }
-  
+
   .heroText p {
     font-size: 18px;
   }
-  
+
   .heroActions {
     flex-direction: column;
   }
-  
-  .dashboardBtn, .chatBtn {
+
+  .dashboardBtn,
+  .chatBtn {
     justify-content: center;
   }
-  
+
   .heroStats {
     grid-template-columns: 1fr;
   }
-  
+
   .sectionHeader h2 {
     font-size: 28px;
   }
-  
+
   .sectionHeader p {
     font-size: 16px;
   }
-  
+
   .featuresGrid,
   .channelsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .stepsContainer {
     grid-template-columns: 1fr;
   }
-  
+
   .stepConnector {
     display: none;
   }
-  
+
   .emergencyCard {
     padding: 32px 24px;
   }
@@ -528,19 +530,19 @@
   .heroText h1 {
     font-size: 28px;
   }
-  
+
   .heroText p {
     font-size: 16px;
   }
-  
+
   .statNumber {
     font-size: 24px;
   }
-  
+
   .sectionHeader h2 {
     font-size: 24px;
   }
-  
+
   .featureCard,
   .step,
   .channelCard {

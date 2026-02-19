@@ -54,9 +54,11 @@
   0% {
     box-shadow: 0 0 0 rgba(59, 130, 246, 0.0);
   }
+
   50% {
     box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
   }
+
   100% {
     box-shadow: 0 0 0 rgba(59, 130, 246, 0.0);
   }
@@ -67,12 +69,16 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   33% {
     transform: translate(30px, -30px) rotate(60deg);
   }
+
   66% {
     transform: translate(-20px, 20px) rotate(-30deg);
   }
@@ -108,6 +114,7 @@
     transform: translateX(100%);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -220,9 +227,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
   }
@@ -332,8 +342,8 @@
   transition: all 0.3s ease;
 }
 
-.formInput:focus ~ .formLabel,
-.formInput:not(:placeholder-shown) ~ .formLabel {
+.formInput:focus~.formLabel,
+.formInput:not(:placeholder-shown)~.formLabel {
   top: -0.5rem;
   left: 0;
   font-size: 0.875rem;
@@ -350,7 +360,7 @@
   transition: width 0.3s ease;
 }
 
-.formInput:focus ~ .formUnderline {
+.formInput:focus~.formUnderline {
   width: 100%;
 }
 
@@ -405,8 +415,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* History Section Styles */
@@ -426,11 +441,12 @@
 
 .historyCard {
   background: var(--card-bg, #ffffff);
-  border: 1px solid rgba(59, 130, 246, 0.15); /* subtle border */
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  /* subtle border */
   border-radius: 12px;
   padding: 18px;
   margin-bottom: 16px;
-  transition: 
+  transition:
     border-color 0.3s ease,
     box-shadow 0.3s ease,
     transform 0.3s ease;
@@ -439,8 +455,9 @@
 
 .historyCard:hover,
 .historyCard:focus-within {
-  border-color: #3b82f6; /* theme primary blue */
-  box-shadow: 
+  border-color: #3b82f6;
+  /* theme primary blue */
+  box-shadow:
     0 0 0 1px rgba(59, 130, 246, 0.2),
     0 8px 24px rgba(59, 130, 246, 0.15);
   transform: translateY(-2px);
@@ -537,28 +554,28 @@
   .title {
     font-size: 2.25rem;
   }
-  
+
   .navbarSpacer {
     height: 70px;
   }
-  
+
   .content {
     padding: 0 1rem 2rem;
   }
-  
+
   .sectionHeader {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .liveDataGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .formGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .historyData {
     grid-template-columns: 1fr;
   }
@@ -568,11 +585,11 @@
   .title {
     font-size: 2rem;
   }
-  
+
   .navbarSpacer {
     height: 60px;
   }
-  
+
   .liveDataValue {
     font-size: 2rem;
   }

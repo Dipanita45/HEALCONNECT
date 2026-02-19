@@ -114,8 +114,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Dark mode support */
@@ -125,16 +130,16 @@
     color: #e5e7eb;
     border-color: #4b5563;
   }
-  
+
   .secondary:hover:not(:disabled) {
     background: #4b5563;
     color: #f3f4f6;
   }
-  
+
   .ghost {
     color: #e5e7eb;
   }
-  
+
   .ghost:hover:not(:disabled) {
     background: #374151;
   }

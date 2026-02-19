@@ -26,9 +26,9 @@ function MyApp({ Component, pageProps }) {
   // Detect dark mode
   useEffect(() => {
     const checkDarkMode = () => {
-      const isDark = document.documentElement.classList.contains('dark') || 
-                   window.matchMedia('(prefers-color-scheme: dark)').matches ||
-                   localStorage.getItem('theme') === 'dark'
+      const isDark = document.documentElement.classList.contains('dark') ||
+        window.matchMedia('(prefers-color-scheme: dark)').matches ||
+        localStorage.getItem('theme') === 'dark'
       setIsDarkMode(isDark)
     }
 
