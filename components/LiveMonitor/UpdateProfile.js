@@ -40,8 +40,15 @@ export default function UpdateProfile(){
     // Get the file
     const extension = file.type.split('/')[1];
 
+    // Determine uid safely
+    const uid = (user && user.uid) || (typeof window !== 'undefined' && auth && auth.currentUser && auth.currentUser.uid) || null;
+    if (!uid) {
+      toast.error('You must be signed in to upload a profile image.');
+      return;
+    }
+
     // Makes reference to the storage bucket location
-    const fileRef = ref(storage, `profiles/${auth.currentUser.uid}/${Date.now()}.${extension}`);
+    const fileRef = ref(storage, `profiles/${uid}/${Date.now()}.${extension}`);
     setUploading(true);
 
     // Starts the upload
@@ -63,7 +70,13 @@ export default function UpdateProfile(){
   };
   
   async function writeDoctor(){
-    const userRef = doc(db, 'users', auth.currentUser.uid)
+    const uid = (user && user.uid) || (typeof window !== 'undefined' && auth && auth.currentUser && auth.currentUser.uid) || null;
+    if (!uid) {
+      toast.error('Not authenticated — cannot update profile');
+      return;
+    }
+
+    const userRef = doc(db, 'users', uid)
     await updateDoc(userRef, {name: name, img: downloadURL, speciality: speciality, number: number, address: address})
   }
 
