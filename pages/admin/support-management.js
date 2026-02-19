@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaTicketAlt, FaUsers, FaClock, FaCheckCircle, FaExclamationTriangle,
   FaFilter, FaSearch, FaDownload, FaEye, FaReply, FaArchive, FaTrash,
-  FaUserPlus, FaChartLine, FaBell, FaCog, FaSignOutAlt, FaHeadset,
-  FaRobot, FaPhone, FaEnvelope, FaCalendarAlt, FaTrendingUp, FaTimes, FaPaperPlane
+  FaUserPlus, FaBell, FaCog, FaSignOutAlt, FaHeadset,
+  FaRobot, FaPhone, FaEnvelope, FaCalendarAlt, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
+import { MdShowChart } from 'react-icons/md';
 import { getSupportTickets, subscribeToTickets, getTicketStats, addTicketMessage, updateTicketStatus } from '../../lib/ticketSync';
 import logger from '../../lib/logger';
 import styles from './support-management.module.css';
@@ -55,7 +56,7 @@ const AdminSupportManagement = () => {
         satisfactionRate: '94%', // Calculate from actual data if needed
         activeAgents: agents.filter(a => a.status === 'online').length
       }));
-    });
+    }, null, 'admin');
 
     // Cleanup on unmount
     return () => {
@@ -545,7 +546,7 @@ const AdminSupportManagement = () => {
         <div className={styles.chartCard}>
           <h3>Ticket Volume Trend</h3>
           <div className={styles.chartPlaceholder}>
-            <FaTrendingUp className={styles.chartIcon} />
+            <MdShowChart className={styles.chartIcon} />
             <p>Interactive chart showing ticket volume over time</p>
           </div>
         </div>
