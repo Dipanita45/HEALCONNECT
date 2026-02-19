@@ -1,15 +1,15 @@
 import React from 'react';
-import { FaUser, FaEnvelope, FaIdBadge, FaUserShield } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaIdBadge, FaUserShield, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
 
 /**
  * DoctorCard Component
  * Displays a doctor's information in a card format.
  * @param {object} props
- * @param {object} props.doctor - The doctor object containing name, speciality, email, uid.
+ * @param {object} props.doctor - The doctor object containing name, speciality, email, uid, number, address.
  * @param {boolean} [props.showDistance] - Whether to show distance (if available).
  */
 export default function DoctorCard({ doctor, showDistance }) {
-  const { name, speciality, email, uid, role, distance } = doctor || {};
+  const { name, speciality, email, uid, role, distance, number, address } = doctor || {};
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300 border border-gray-200 dark:border-gray-700">
@@ -32,21 +32,34 @@ export default function DoctorCard({ doctor, showDistance }) {
             <span className="capitalize">{role}</span>
           </div>
         )}
-        {uid && (
-          <div className="flex items-center gap-2">
-            <FaIdBadge />
-            <span className="truncate" title={uid}>{uid.substring(0, 12)}...</span>
-          </div>
-        )}
         {email && (
           <div className="flex items-center gap-2">
-            <FaEnvelope />
+            <FaEnvelope className="shrink-0" />
             <span className="truncate" title={email}>{email}</span>
+          </div>
+        )}
+        {number && (
+          <div className="flex items-center gap-2">
+            <FaPhone className="shrink-0" />
+            <span>{number}</span>
+          </div>
+        )}
+        {address && (
+          <div className="flex items-start gap-2">
+            <FaMapMarkerAlt className="shrink-0 mt-0.5" />
+            <span className="line-clamp-2" title={address}>{address}</span>
           </div>
         )}
         {showDistance && distance !== undefined && (
           <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
-            <span>📍 {distance.toFixed(1)} km away</span>
+            <FaMapMarkerAlt className="shrink-0" />
+            <span>{distance.toFixed(1)} km away</span>
+          </div>
+        )}
+        {uid && (
+          <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500">
+            <FaIdBadge className="shrink-0" />
+            <span className="truncate" title={uid}>{uid.substring(0, 12)}...</span>
           </div>
         )}
       </div>
