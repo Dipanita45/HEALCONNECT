@@ -336,6 +336,7 @@ export default function SignupPage() {
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleDarkMode}
+        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         style={{
           position: "fixed",
           top: "15px",
@@ -643,6 +644,7 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
@@ -770,6 +772,7 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
