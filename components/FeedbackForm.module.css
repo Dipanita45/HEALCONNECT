@@ -5,6 +5,7 @@
   align-items: center;
   justify-content: center;
   padding: 4rem 1rem;
+  margin-top: 10vh;
   background: transparent;
 }
 
@@ -23,6 +24,7 @@
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
   animation: fadeUp 0.6s ease;
 }
