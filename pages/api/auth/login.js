@@ -1,138 +1,63 @@
-import Joi from 'joi';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { db } from '../../../lib/firebase';
-import { collection, query, where, getDocs, updateDoc, doc } from 'firebase/firestore';
-import { withErrorHandling, withMethods, validate, rateLimit, compose } from '../../../lib/api/middleware';
+import { db } from "../../../lib/firebase";
+import { query, collection, where, getDocs } from "firebase/firestore";
+import bcrypt from "bcryptjs";
+import { sign } from "jsonwebtoken";
+import cookie from "cookie";
 
-// Login validation schema
-const loginSchema = Joi.object({
-  username: Joi.string().required(),
-  password: Joi.string().required(),
-  rememberMe: Joi.boolean().default(false)
-});
-
-async function handler(req, res) {
-  const { method } = req;
-
-  switch (method) {
-    case 'POST':
-      return await loginUser(req, res);
-    default:
-      return res.status(405).json({ success: false, message: 'Method not allowed' });
+export default async function handler(req, res) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Method not allowed" });
   }
-}
-
-async function loginUser(req, res) {
-  const { username, password, rememberMe } = req.body;
 
   try {
-    // Find user by username or email
-    const usersRef = collection(db, 'users');
-    const usernameQuery = query(usersRef, where('username', '==', username));
-    const emailQuery = query(usersRef, where('email', '==', username));
+    const { email, password } = req.body;
 
-    const [usernameSnapshot, emailSnapshot] = await Promise.all([
-      getDocs(usernameQuery),
-      getDocs(emailQuery)
-    ]);
+    const usersRef = collection(db, "users");
+    const emailQuery = query(usersRef, where("email", "==", email));
+    const emailSnapshot = await getDocs(emailQuery);
 
-    const userDoc = !usernameSnapshot.empty ? usernameSnapshot.docs[0] :
-      !emailSnapshot.empty ? emailSnapshot.docs[0] : null;
-
-    if (!userDoc) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
+    if (emailSnapshot.empty) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const userData = userDoc.data();
+    const userDoc = emailSnapshot.docs[0];
+    const user = userDoc.data();
+    const userId = userDoc.id;
 
-    // Check if account is locked
-    if (userData.lockedUntil && userData.lockedUntil.toDate() > new Date()) {
-      const remainingTime = Math.ceil((userData.lockedUntil.toDate() - new Date()) / 1000 / 60);
-      return res.status(423).json({
-        success: false,
-        message: `Account is temporarily locked. Try again in ${remainingTime} minutes.`
-      });
+    if (!user.password) {
+      return res.status(401).json({ message: "Invalid credentials or account requires password reset" });
     }
 
-    // Verify password
-    const isValidPassword = await bcrypt.compare(password, userData.password);
-    if (!isValidPassword) {
-      // Increment login attempts
-      const newAttempts = (userData.loginAttempts || 0) + 1;
-      const updateData = { loginAttempts: newAttempts };
-
-      // Lock account after 5 failed attempts
-      if (newAttempts >= 5) {
-        updateData.lockedUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
-        updateData.loginAttempts = 0;
-      }
-
-      await updateDoc(doc(db, 'users', userDoc.id), updateData);
-
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Reset login attempts on successful login
-    await updateDoc(doc(db, 'users', userDoc.id), {
-      loginAttempts: 0,
-      lockedUntil: null,
-      lastLogin: new Date()
+    // Generate JWT
+    const token = sign(
+      { userId, email: user.email, role: user.role, username: user.username, fullName: user.fullName }, 
+      process.env.JWT_SECRET || "default_development_secret_change_me", 
+      { expiresIn: "7d" }
+    );
+
+    // Set HTTP-only cookie
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== "development",
+        maxAge: 60 * 60 * 24 * 7, // 1 week
+        sameSite: "strict",
+        path: "/",
+      })
+    );
+
+    return res.status(200).json({ 
+      message: "Logged in successfully",
+      user: { id: userId, email: user.email, role: user.role, fullName: user.fullName, username: user.username, phone: user.phone || '' }
     });
-
-    // Generate JWT token
-    const tokenPayload = {
-      uid: userDoc.id,
-      username: userData.username,
-      email: userData.email,
-      role: userData.role
-    };
-
-    const expiresIn = rememberMe ? '30d' : '24h';
-    const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || 'fallback-secret-key', {
-      expiresIn
-    });
-
-    // Set HTTP-only cookie for security
-    res.setHeader('Set-Cookie', [
-      `auth-token=${token}; HttpOnly; Secure; SameSite=Strict; Max-Age=${rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60}; Path=/`,
-      `user-role=${userData.role}; Secure; SameSite=Strict; Max-Age=${rememberMe ? 30 * 24 * 60 * 60 : 24 * 60 * 60}; Path=/`
-    ]);
-
-    res.status(200).json({
-      success: true,
-      message: 'Login successful',
-      user: {
-        id: userDoc.id,
-        username: userData.username,
-        email: userData.email,
-        role: userData.role,
-        fullName: userData.fullName,
-        phone: userData.phone,
-        age: userData.age,
-        gender: userData.gender
-      },
-      token: token // Also return token for client-side storage if needed
-    });
-
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Internal server error'
-    });
+    console.error("Login Error:", error);
+    return res.status(500).json({ message: "Internal server error" });
   }
 }
-
-export default compose(
-  withErrorHandling,
-  withMethods(['POST']),
-  rateLimit('auth'), // Rate limiting for auth endpoints
-  validate(loginSchema)
-)(handler);

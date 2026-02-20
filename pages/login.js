@@ -1,9 +1,11 @@
 // pages/login.js
 import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@lib/firebase";
+import { auth, db } from "@lib/firebase";
 import { UserContext } from "@lib/context";
+import { updateUserState } from "@lib/authUtils";
 import { useTheme } from "@/context/ThemeContext";
 import styles from "./login.module.css";
 
@@ -33,51 +35,36 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Call our custom login API endpoint
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: email, // API accepts username or email
-          password: password,
-          rememberMe: false
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 423) {
-          setError(data.message || "Account is temporarily locked. Please try again later.");
-        } else if (response.status === 429) {
-          setError(`Too many login attempts. Please try again in ${data.retryAfter} seconds.`);
-        } else {
-          setError(data.message || "Invalid email or password. Please try again.");
-        }
-        setLoading(false);
+        setError(data.message || "Invalid credentials. Please try again.");
         return;
       }
 
-      // Success - store token and user data
-      if (data.token) {
-        localStorage.setItem('auth-token', data.token);
-      }
+      const userData = data.user;
+      const userRole = userData.role || 'patient';
 
-      localStorage.setItem('userType', data.user.role);
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-
-      // Update React context
-      setUser({ uid: data.user.id });
-      setUserRole(data.user.role);
-      setCurrentUser(data.user);
+      // Update React Context
+      updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
+        uid: userData.id,
+        email: userData.email,
+        ...userData,
+      });
 
       // Navigate to the appropriate dashboard
-      router.push(`/${data.user.role}/dashboard`);
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Network error. Please check your connection and try again.");
+      router.push(`/${userRole}/dashboard`);
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);
     }

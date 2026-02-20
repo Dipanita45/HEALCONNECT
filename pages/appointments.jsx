@@ -1,11 +1,12 @@
+
 import { db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
-import { AnimatePresence, motion } from "framer-motion";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from 'framer-motion';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { auth } from "../lib/firebase";
-import styles from "./Appointments.module.css";
+import styles from './Appointments.module.css';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -14,17 +15,17 @@ const fadeInUp = {
     y: 0,
     transition: {
       duration: 0.6,
-      ease: "easeOut",
-    },
-  },
+      ease: "easeOut"
+    }
+  }
 };
 
 const staggerChildren = {
   visible: {
     transition: {
-      staggerChildren: 0.1,
-    },
-  },
+      staggerChildren: 0.1
+    }
+  }
 };
 
 const formItemVariants = {
@@ -34,9 +35,9 @@ const formItemVariants = {
     x: 0,
     transition: {
       duration: 0.5,
-      ease: "easeOut",
-    },
-  },
+      ease: "easeOut"
+    }
+  }
 };
 
 const scaleIn = {
@@ -46,9 +47,9 @@ const scaleIn = {
     scale: 1,
     transition: {
       duration: 0.5,
-      ease: "easeOut",
-    },
-  },
+      ease: "easeOut"
+    }
+  }
 };
 
 // Sample doctor data
@@ -57,8 +58,7 @@ const doctors = [
     id: 1,
     name: "Dr. Sarah Johnson",
     specialty: "Cardiologist",
-    image:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: true,
     nextAvailable: "Today, 3:00 PM",
     experience: "12 years",
@@ -67,48 +67,56 @@ const doctors = [
     availability: {
       monday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "17:00" },
+        { start: "13:00", end: "17:00" }
       ],
       tuesday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "17:00" },
+        { start: "13:00", end: "17:00" }
       ],
-      wednesday: [{ start: "09:00", end: "12:00" }],
-      thursday: [{ start: "13:00", end: "17:00" }],
+      wednesday: [
+        { start: "09:00", end: "12:00" }
+      ],
+      thursday: [
+        { start: "13:00", end: "17:00" }
+      ],
       friday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "17:00" },
-      ],
-    },
+        { start: "13:00", end: "17:00" }
+      ]
+    }
   },
   {
     id: 2,
     name: "Dr. Michael Chen",
     specialty: "Neurologist",
-    image:
-      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: false,
     nextAvailable: "Tomorrow, 10:00 AM",
     experience: "8 years",
     rating: 4.6,
     reviews: 98,
     availability: {
-      monday: [{ start: "10:00", end: "14:00" }],
+      monday: [
+        { start: "10:00", end: "14:00" }
+      ],
       tuesday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "16:00" },
+        { start: "13:00", end: "16:00" }
       ],
       wednesday: [],
-      thursday: [{ start: "09:00", end: "12:00" }],
-      friday: [{ start: "13:00", end: "17:00" }],
-    },
+      thursday: [
+        { start: "09:00", end: "12:00" }
+      ],
+      friday: [
+        { start: "13:00", end: "17:00" }
+      ]
+    }
   },
   {
     id: 3,
     name: "Dr. Emily Rodriguez",
     specialty: "Pediatrician",
-    image:
-      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1673865641073-4479f93a7776?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     available: true,
     nextAvailable: "Today, 5:30 PM",
     experience: "10 years",
@@ -117,26 +125,27 @@ const doctors = [
     availability: {
       monday: [
         { start: "08:00", end: "12:00" },
-        { start: "13:00", end: "15:00" },
+        { start: "13:00", end: "15:00" }
       ],
-      tuesday: [{ start: "10:00", end: "14:00" }],
+      tuesday: [
+        { start: "10:00", end: "14:00" }
+      ],
       wednesday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "17:00" },
+        { start: "13:00", end: "17:00" }
       ],
       thursday: [],
       friday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "16:00" },
-      ],
-    },
+        { start: "13:00", end: "16:00" }
+      ]
+    }
   },
   {
     id: 4,
     name: "Dr. James Wilson",
     specialty: "Orthopedic Surgeon",
-    image:
-      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
+    image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80",
     available: true,
     nextAvailable: "Today, 1:00 PM",
     experience: "15 years",
@@ -145,17 +154,23 @@ const doctors = [
     availability: {
       monday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "17:00" },
+        { start: "13:00", end: "17:00" }
       ],
-      tuesday: [{ start: "09:00", end: "12:00" }],
-      wednesday: [{ start: "13:00", end: "17:00" }],
+      tuesday: [
+        { start: "09:00", end: "12:00" }
+      ],
+      wednesday: [
+        { start: "13:00", end: "17:00" }
+      ],
       thursday: [
         { start: "09:00", end: "12:00" },
-        { start: "13:00", end: "16:00" },
+        { start: "13:00", end: "16:00" }
       ],
-      friday: [{ start: "10:00", end: "14:00" }],
-    },
-  },
+      friday: [
+        { start: "10:00", end: "14:00" }
+      ]
+    }
+  }
 ];
 
 const getDayFromDate = (date) => {
@@ -164,17 +179,8 @@ const getDayFromDate = (date) => {
     .toLowerCase();
 };
 
-// AFTER — safe guard on empty/invalid date
 const filterTimesByAvailability = (times, doctor, date) => {
-  // No doctor selected yet → show nothing
-  if (!doctor) return times;
-
-  // No date selected yet → show all times as a preview
-  if (!date) return times;
-
-  // Guard against invalid date strings
-  const parsed = new Date(date);
-  if (isNaN(parsed.getTime())) return times;
+  if (!doctor || !date) return times;
 
   const day = getDayFromDate(date);
   const windows = doctor.availability?.[day];
@@ -191,24 +197,43 @@ const filterTimesByAvailability = (times, doctor, date) => {
 
     const timeInMinutes = hours * 60 + (minutes || 0);
 
+    // ✅ check against ANY availability window
     return windows.some(({ start, end }) => {
       const [sh, sm] = start.split(":").map(Number);
       const [eh, em] = end.split(":").map(Number);
+
       const startMinutes = sh * 60 + sm;
       const endMinutes = eh * 60 + em;
-      return timeInMinutes >= startMinutes && timeInMinutes <= endMinutes;
+
+      return (
+        timeInMinutes >= startMinutes &&
+        timeInMinutes <= endMinutes
+      );
     });
   });
 };
 
 export default function Appointments() {
+  const { user, currentUser } = useContext(UserContext);
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
-    name: "",
-    date: "",
-    time: "",
-    doctor: "",
-    reason: "",
+    name: '',
+    date: '',
+    time: '',
+    doctor: '',
+    reason: ''
   });
+
+  // Pre-fill user data when available
+  useEffect(() => {
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        name: currentUser.name || ''
+      }));
+    }
+  }, [currentUser]);
 
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [step, setStep] = useState(1); // 1: select doctor, 2: book appointment
@@ -221,9 +246,9 @@ export default function Appointments() {
     const unsub = onAuthStateChanged(auth, (user) => {
       console.log("AUTH USER:", user);
     });
-
     return () => unsub();
   }, []);
+
 
   useEffect(() => {
     if (formData.date && formData.doctor) {
@@ -231,31 +256,47 @@ export default function Appointments() {
     }
   }, [formData.date, formData.doctor]);
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
     // Clear error when user starts typing
     if (formErrors[name]) {
-      setFormErrors({ ...formErrors, [name]: "" });
+      setFormErrors({ ...formErrors, [name]: '' });
     }
+
   };
 
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.name.trim()) errors.name = "Name is required";
-    if (!formData.date) errors.date = "Date is required";
-    if (!formData.time) errors.time = "Time is required";
-    if (!formData.reason.trim()) errors.reason = "Reason is required";
+    if (!formData.name.trim()) errors.name = 'Name is required';
+    if (!formData.date) errors.date = 'Date is required';
+    if (!formData.time) errors.time = 'Time is required';
+    if (!formData.reason.trim()) errors.reason = 'Reason is required';
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
   const handleDoctorSelect = (doctor) => {
+    // Security check: must be logged in to book
+    if (!user && !localStorage.getItem('userType')) {
+      // Store intended doctor selection if possible, or just redirect
+      const confirmLogin = window.confirm("You must be logged in to book an appointment. Proceed to login?");
+      if (confirmLogin) {
+        router.push('/login');
+      }
+      return;
+    }
+
     setSelectedDoctor(doctor);
-    setFormData({ ...formData, doctor: doctor.name });
+    setFormData(prev => ({
+      ...prev,
+      doctor: doctor.name,
+      // Ensure name is pre-filled if available (redundant safety)
+      name: currentUser?.name || prev.name
+    }));
     setStep(2);
   };
 
@@ -270,7 +311,7 @@ export default function Appointments() {
       collection(db, "appointments"),
       where("date", "==", formData.date),
       where("doctorName", "==", formData.doctor),
-      where("time", "==", formData.time),
+      where("time", "==", formData.time)
     );
 
     const snapshot = await getDocs(q);
@@ -298,7 +339,7 @@ export default function Appointments() {
       time: formData.time,
       doctorName: formData.doctor,
       reason: formData.reason,
-      createdAt: new Date(),
+      createdAt: new Date()
     });
 
     const successElement = document.getElementById("booking-success");
@@ -313,7 +354,7 @@ export default function Appointments() {
         date: "",
         time: "",
         doctor: "",
-        reason: "",
+        reason: ""
       });
 
       setStep(1);
@@ -331,11 +372,11 @@ export default function Appointments() {
       const q = query(
         collection(db, "appointments"),
         where("date", "==", date),
-        where("doctorName", "==", doctor),
+        where("doctorName", "==", doctor)
       );
 
       const snapshot = await getDocs(q);
-      const times = snapshot.docs.map((doc) => doc.data().time);
+      const times = snapshot.docs.map(doc => doc.data().time);
 
       setBookedTimes(times);
     } catch (error) {
@@ -343,23 +384,12 @@ export default function Appointments() {
     }
   };
 
+
   const availableTimes = [
-    "9:00 AM",
-    "9:30 AM",
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-    "11:30 AM",
-    "1:00 PM",
-    "1:30 PM",
-    "2:00 PM",
-    "2:30 PM",
-    "3:00 PM",
-    "3:30 PM",
-    "4:00 PM",
-    "4:30 PM",
-    "5:00 PM",
-    "5:30 PM",
+    "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM",
+    "11:00 AM", "11:30 AM", "1:00 PM", "1:30 PM",
+    "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM",
+    "4:00 PM", "4:30 PM", "5:00 PM", "5:30 PM"
   ];
 
   return (
@@ -401,7 +431,10 @@ export default function Appointments() {
               exit="hidden"
               variants={staggerChildren}
             >
-              <motion.div className={styles.titleContainer} variants={fadeInUp}>
+              <motion.div
+                className={styles.titleContainer}
+                variants={fadeInUp}
+              >
                 <motion.h2
                   className={styles.sectionTitle}
                   variants={fadeInUp}
@@ -409,9 +442,7 @@ export default function Appointments() {
                   animate="visible"
                 >
                   <span className={styles.titlePrefix}>Meet</span>
-                  <span className={styles.titleMain}>
-                    Our Specialist Doctors
-                  </span>
+                  <span className={styles.titleMain}>Our Specialist Doctors</span>
                 </motion.h2>
                 <motion.div
                   className={styles.titleUnderline}
@@ -426,8 +457,7 @@ export default function Appointments() {
                   animate="visible"
                   transition={{ delay: 0.2 }}
                 >
-                  Choose from our team of board-certified healthcare
-                  professionals
+                  Choose from our team of board-certified healthcare professionals
                 </motion.p>
               </motion.div>
 
@@ -449,10 +479,8 @@ export default function Appointments() {
                         height={200}
                         className={styles.image}
                       />
-                      <div
-                        className={`${styles.availability} ${doctor.available ? styles.available : styles.unavailable}`}
-                      >
-                        {doctor.available ? "Available" : "Unavailable"}
+                      <div className={`${styles.availability} ${doctor.available ? styles.available : styles.unavailable}`}>
+                        {doctor.available ? 'Available' : 'Unavailable'}
                       </div>
                     </div>
                     <div className={styles.doctorInfo}>
@@ -460,17 +488,11 @@ export default function Appointments() {
                       <p className={styles.specialty}>{doctor.specialty}</p>
                       <div className={styles.rating}>
                         <span className={styles.stars}>★★★★★</span>
-                        <span className={styles.ratingText}>
-                          {doctor.rating} ({doctor.reviews} reviews)
-                        </span>
+                        <span className={styles.ratingText}>{doctor.rating} ({doctor.reviews} reviews)</span>
                       </div>
-                      <p className={styles.experience}>
-                        {doctor.experience} experience
-                      </p>
+                      <p className={styles.experience}>{doctor.experience} experience</p>
                       <p className={styles.nextAvailable}>
-                        {doctor.available
-                          ? `Next available: ${doctor.nextAvailable}`
-                          : `Available: ${doctor.nextAvailable}`}
+                        {doctor.available ? `Next available: ${doctor.nextAvailable}` : `Available: ${doctor.nextAvailable}`}
                       </p>
                     </div>
                     <motion.button
@@ -478,7 +500,7 @@ export default function Appointments() {
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      {doctor.available ? "Select Doctor" : "View Profile"}
+                      {doctor.available ? 'Select Doctor' : 'View Profile'}
                     </motion.button>
                   </motion.div>
                 ))}
@@ -500,27 +522,13 @@ export default function Appointments() {
                   whileHover={{ x: -5 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M15 18L9 12L15 6"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   Back to Doctors
                 </motion.button>
-                <h2 className={styles.sectionTitle}>
-                  Book with {selectedDoctor.name}
-                </h2>
-                <p className={styles.selectedDoctorSpecialty}>
-                  {selectedDoctor.specialty}
-                </p>
+                <h2 className={styles.sectionTitle}>Book with {selectedDoctor.name}</h2>
+                <p className={styles.selectedDoctorSpecialty}>{selectedDoctor.specialty}</p>
               </div>
 
               <div className={styles.bookingContent}>
@@ -531,6 +539,7 @@ export default function Appointments() {
                   initial="hidden"
                   animate="visible"
                 >
+
                   <motion.div
                     className={styles.formRow}
                     variants={formItemVariants}
@@ -542,18 +551,12 @@ export default function Appointments() {
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        className={`${styles.formInput} ${formErrors.name ? styles.error : ""}`}
+                        className={`${styles.formInput} ${formErrors.name ? styles.error : ''}`}
                         placeholder=" "
                       />
-                      <label className={styles.formLabel}>
-                        Patient Full Name
-                      </label>
+                      <label className={styles.formLabel}>Patient Full Name</label>
                       <div className={styles.formUnderline}></div>
-                      {formErrors.name && (
-                        <span className={styles.errorText}>
-                          {formErrors.name}
-                        </span>
-                      )}
+                      {formErrors.name && <span className={styles.errorText}>{formErrors.name}</span>}
                     </div>
 
                     <div className={styles.inputGroup}>
@@ -563,20 +566,18 @@ export default function Appointments() {
                         value={formData.date}
                         onChange={handleChange}
                         required
-                        min={new Date().toISOString().split("T")[0]}
-                        className={`${styles.formInput} ${formErrors.date ? styles.error : ""}`}
-
+                        min={new Date().toISOString().split('T')[0]}
+                        className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
+                        style={{
+                          paddingRight: "42px",
+                          colorScheme: "light"
+                        }}
                       />
 
-                      <label className={styles.formLabel}>
-                        Appointment Date
-                      </label>
+
+                      <label className={styles.formLabel}>Appointment Date</label>
                       <div className={styles.formUnderline}></div>
-                      {formErrors.date && (
-                        <span className={styles.errorText}>
-                          {formErrors.date}
-                        </span>
-                      )}
+                      {formErrors.date && <span className={styles.errorText}>{formErrors.date}</span>}
                     </div>
                   </motion.div>
                   <motion.div
@@ -618,18 +619,12 @@ export default function Appointments() {
                         value={formData.reason}
                         onChange={handleChange}
                         required
-                        className={`${styles.formInput} ${formErrors.reason ? styles.error : ""}`}
+                        className={`${styles.formInput} ${formErrors.reason ? styles.error : ''}`}
                         placeholder=" "
                       />
-                      <label className={styles.formLabel}>
-                        Reason for Visit
-                      </label>
+                      <label className={styles.formLabel}>Reason for Visit</label>
                       <div className={styles.formUnderline}></div>
-                      {formErrors.reason && (
-                        <span className={styles.errorText}>
-                          {formErrors.reason}
-                        </span>
-                      )}
+                      {formErrors.reason && <span className={styles.errorText}>{formErrors.reason}</span>}
                     </div>
                   </motion.div>
 
@@ -650,17 +645,8 @@ export default function Appointments() {
                       <h4>{selectedDoctor.name}</h4>
                       <p>{selectedDoctor.specialty}</p>
                       <div className={styles.availability}>
-                        Status:{" "}
-                        <span
-                          className={
-                            selectedDoctor.available
-                              ? styles.availableText
-                              : styles.unavailableText
-                          }
-                        >
-                          {selectedDoctor.available
-                            ? "Available"
-                            : "Unavailable"}
+                        Status: <span className={selectedDoctor.available ? styles.availableText : styles.unavailableText}>
+                          {selectedDoctor.available ? 'Available' : 'Unavailable'}
                         </span>
                       </div>
                     </div>
@@ -679,25 +665,9 @@ export default function Appointments() {
                     ) : (
                       <>
                         Confirm Appointment
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M5 12H19"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                          <path
-                            d="M12 5L19 12L12 19"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 12H19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M12 5L19 12L12 19" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </>
                     )}
@@ -711,43 +681,33 @@ export default function Appointments() {
                   animate="visible"
                   transition={{ delay: 0.3 }}
                 >
-                  <h3>About Dr. {selectedDoctor.name.split(" ")[1]}</h3>
+                  <h3>About Dr. {selectedDoctor.name.split(' ')[1]}</h3>
                   <p className={styles.doctorBio}>
-                    {selectedDoctor.name} is a renowned{" "}
-                    {selectedDoctor.specialty.toLowerCase()} with over{" "}
-                    {selectedDoctor.experience} of experience. Specializing in
-                    patient-centered care, Dr.{" "}
-                    {selectedDoctor.name.split(" ")[1]} has helped thousands of
-                    patients achieve better health outcomes.
+                    {selectedDoctor.name} is a renowned {selectedDoctor.specialty.toLowerCase()} with over {selectedDoctor.experience} of experience.
+                    Specializing in patient-centered care, Dr. {selectedDoctor.name.split(' ')[1]} has helped thousands of patients
+                    achieve better health outcomes.
                   </p>
 
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Specialty:</span>
-                    <span className={styles.detailValue}>
-                      {selectedDoctor.specialty}
-                    </span>
+                    <span className={styles.detailValue}>{selectedDoctor.specialty}</span>
                   </div>
 
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Experience:</span>
-                    <span className={styles.detailValue}>
-                      {selectedDoctor.experience}
-                    </span>
+                    <span className={styles.detailValue}>{selectedDoctor.experience}</span>
                   </div>
 
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Rating:</span>
                     <span className={styles.detailValue}>
-                      <span className={styles.stars}>★★★★★</span>{" "}
-                      {selectedDoctor.rating} ({selectedDoctor.reviews} reviews)
+                      <span className={styles.stars}>★★★★★</span> {selectedDoctor.rating} ({selectedDoctor.reviews} reviews)
                     </span>
                   </div>
 
                   <div className={styles.detailItem}>
                     <span className={styles.detailLabel}>Next Available:</span>
-                    <span className={styles.detailValue}>
-                      {selectedDoctor.nextAvailable}
-                    </span>
+                    <span className={styles.detailValue}>{selectedDoctor.nextAvailable}</span>
                   </div>
                 </motion.div>
               </div>
@@ -759,23 +719,9 @@ export default function Appointments() {
       {/* Success Animation */}
       <div id="booking-success" className={styles.successAnimation}>
         <div className={styles.successContent}>
-          <svg
-            className={styles.checkmark}
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 52 52"
-          >
-            <circle
-              className={styles.checkmarkCircle}
-              cx="26"
-              cy="26"
-              r="25"
-              fill="none"
-            />
-            <path
-              className={styles.checkmarkCheck}
-              fill="none"
-              d="M14.1 27.2l7.1 7.2 16.7-16.8"
-            />
+          <svg className={styles.checkmark} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle className={styles.checkmarkCircle} cx="26" cy="26" r="25" fill="none" />
+            <path className={styles.checkmarkCheck} fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
           </svg>
           <h3>Appointment Booked Successfully!</h3>
         </div>

@@ -50,10 +50,17 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
+
+    // Call server-side logout to clear cookie
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
 
     // Clear React state immediately for UI update
     setUser(null)
@@ -190,60 +197,52 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
-          {[
-            { href: '/', label: 'Home' },
-            { href: '/prescriptions', label: 'Prescriptions' },
-            { href: '/appointments', label: 'Appointments' },
-            { href: '/monitoring', label: 'Monitoring' },
-            { href: '/faq', label: 'FAQ' },
-            { href: '/contact', label: 'Contact' },
-            { href: '/support', label: 'Support' },
-          ].map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block py-2 border-b transition-colors"
-              style={{
-                color: 'var(--mobile-menu-text, white)',
-                borderColor: 'var(--mobile-menu-border, #374151)'
-              }}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.label}
-            </Link>
-          ))}
+    {/* Mobile Menu */}
+    {isMenuOpen && (
+      <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
+        {navLinks.map((link) => (
+          <Link
+            key={link.href}
+            href={link.href}
+            className="block py-2 border-b transition-colors"
+            style={{
+              color: 'var(--mobile-menu-text, white)',
+              borderColor: 'var(--mobile-menu-border, #374151)'
+            }}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            {link.icon && <FaHeadset className={styles.supportIcon} />}
+            <span className={styles.linkText}>{link.label}</span>
+          </Link>
+        ))}
 
-          {/* Mobile Auth Buttons */}
-          <div className="pt-4 space-y-3 border-t border-gray-700">
-            {user || currentUser ? (
-              <>
-                <button
-                  onClick={handleDashboardRedirect}
-                  className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
+        <div className="pt-4 space-y-3">
+          {user || currentUser ? (
+            <>
               <button
-                onClick={handleLoginRedirect}
-                className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                onClick={handleDashboardRedirect}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-green-600 text-white rounded-md`}
               >
-                Login
+                Dashboard
               </button>
-            )}
-          </div>
+              <button
+                onClick={handleLogout}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger} w-full py-2 bg-red-600 text-white rounded-md`}
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={handleLoginRedirect}
+              className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-blue-600 text-white rounded-md`}
+            >
+              Login
+            </button>
+          )}
         </div>
-      )}
+      </div>
+    )}
     </nav>
   )
 }
