@@ -5,7 +5,7 @@ import { FaUser, FaEnvelope, FaIdBadge, FaUserShield, FaPhone, FaMapMarkerAlt } 
  * DoctorCard Component
  * Displays a doctor's information in a card format.
  * @param {object} props
- * @param {object} props.doctor - The doctor object containing name, speciality, email, uid, number, address.
+ * @param {object} props.doctor - The doctor object with properties: name, speciality, email, uid, role, number, address, and optionally distance.
  * @param {boolean} [props.showDistance] - Whether to show distance (if available).
  */
 export default function DoctorCard({ doctor, showDistance }) {
