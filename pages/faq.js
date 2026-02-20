@@ -97,7 +97,7 @@ const FAQ = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          {faqs.map((faq) => (
+          {faqs.map((faq, index) => (
             <motion.div
               key={faq.question}
               className={styles.faqItem}

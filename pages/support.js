@@ -271,9 +271,9 @@ const Support = () => {
               <h3>AI Assistant</h3>
               <p>Instant answers to common questions 24/7</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Available 24/7</span>
-                <span>✓ Instant responses</span>
-                <span>✓ Free to use</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Available 24/7</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Instant responses</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Free to use</span>
               </div>
               <button className={styles.channelBtn}>Start Chat</button>
             </motion.div>
@@ -289,9 +289,9 @@ const Support = () => {
               <h3>Support Tickets</h3>
               <p>Detailed assistance for complex issues</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Track progress</span>
-                <span>✓ Priority handling</span>
-                <span>✓ Email updates</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Track progress</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Priority handling</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Email updates</span>
               </div>
               <button className={styles.channelBtn}>Create Ticket</button>
             </motion.div>
@@ -307,9 +307,9 @@ const Support = () => {
               <h3>Phone Support</h3>
               <p>Speak directly with our support team</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Personal assistance</span>
-                <span>✓ Complex issues</span>
-                <span>✓ Emergency support</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Personal assistance</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Complex issues</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Emergency support</span>
               </div>
               <button className={styles.channelBtn}>Call Now</button>
             </motion.div>
@@ -325,15 +325,14 @@ const Support = () => {
               <h3>Email Support</h3>
               <p>Detailed written assistance</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Detailed responses</span>
-                <span>✓ Documentation</span>
-                <span>✓ 24h response</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Detailed responses</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Documentation</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ 24h response</span>
               </div>
               <button
                 className={styles.channelBtn}
                 onClick={handleSendEmail}
               >
-                <FaEnvelope style={{ marginRight: '6px' }} />
                 Send Email
               </button>
 

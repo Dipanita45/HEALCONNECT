@@ -22,7 +22,7 @@
 /* Floating Button */
 .widgetButton {
   position: fixed !important;
-  bottom: 65px !important;
+  bottom: 75px !important;
   right: 32px !important;
   width: 60px;
   height: 60px;
@@ -145,7 +145,7 @@
 .messagesArea {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 0 20px 20px;
   background: #f8fafc;
 }
 
@@ -171,6 +171,9 @@
   text-align: center;
   padding: 40px 20px;
   color: #64748b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .welcomeIcon {
@@ -195,6 +198,7 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
 .quickActions button {
@@ -476,7 +480,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 24px;
   padding: 8px 12px;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .attachBtn,
@@ -507,7 +511,7 @@
   background: none;
   outline: none;
   font-size: 14px;
-  padding: 4px 8px;
+  padding: 4px 0px 4px 8px;
 }
 
 .messageInput::placeholder {
@@ -526,6 +530,7 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  padding: 0 7px;
 }
 
 .sendBtn:hover:not(:disabled) {

@@ -259,7 +259,7 @@ export default function Contact() {
           transition={{ duration: 0.8 }}
         >
           <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative container mx-auto px-6 py-20 mt-10">
+          <div className="relative container mx-auto px-6 py-20 mt-12">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -458,7 +458,7 @@ export default function Contact() {
               className="lg:col-span-2"
             >
               <div className="bg-blue-100/70 dark:bg-gray-800 rounded-2xl shadow-xl p-8 border-2 border-blue-300/80 dark:border-gray-700">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-3">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                     Send Us a Message
                   </h2>
@@ -474,7 +474,7 @@ export default function Contact() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Category Selection */}
-                  <div>
+                  <div className="mb-10">
                     <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
                       What can we help you with?
                     </label>
@@ -789,7 +789,7 @@ export default function Contact() {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <div className="px-4 pb-3 text-sm text-gray-600 dark:text-gray-400">
+                            <div className="px-4 pb-3 pt-3 text-sm text-gray-600 dark:text-gray-400">
                               {faq.answer}
                             </div>
                           </motion.div>

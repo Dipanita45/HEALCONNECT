@@ -33,7 +33,7 @@
 
 .heroContent {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto 0;
   padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -350,7 +350,7 @@
 .channelCard {
   background: #f8fafc;
   border-radius: 16px;
-  padding: 32px;
+  padding: 25px 30px;
   text-align: center;
   transition: all 0.3s ease;
   border: 2px solid transparent;
@@ -364,7 +364,7 @@
 
 .channelIcon {
   font-size: 48px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .channelCard h3 {

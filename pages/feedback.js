@@ -5,7 +5,6 @@ export default function Feedback() {
   return (
     <>
       <FeedbackForm />
-      <Footer />
     </>
   );
 }

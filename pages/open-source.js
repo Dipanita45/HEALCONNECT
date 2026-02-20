@@ -195,7 +195,7 @@ export default function OpenSource() {
           }
         `}</style>
 
-        <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
+        <div className="container mx-auto px-6 py-16 mt-20 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
             initial="hidden"
@@ -293,7 +293,7 @@ export default function OpenSource() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
             viewport={{ once: true }}
-            className="max-w-6xl mx-auto mb-16"
+            className="max-w-6xl mx-auto mb-16 py-10"
           >
             <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
               Why Open Source?
@@ -328,7 +328,7 @@ export default function OpenSource() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.6 }}
             viewport={{ once: true }}
-            className="max-w-6xl mx-auto mb-16"
+            className="max-w-6xl mx-auto mb-20"
           >
             <h2 className="text-3xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">
               How You Can Contribute
