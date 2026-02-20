@@ -564,7 +564,7 @@
 
 
 
-  .navLink {
+}
 
 :global(.light) .menuButton:hover {
   background: rgba(0, 0, 0, 0.05);
@@ -626,17 +626,18 @@
     visibility 0.3s ease;
 }
 
-  :global(.light) .menuButton span {
+:global(.light) .menuButton span {
 
-    background: #0F172A;
+  background: #0F172A;
 
-  }
+}
 
 
 
-  .menuButton.menuOpen span:nth-child(1) {
+.menuButton.menuOpen span:nth-child(1) {
 
-    transform: translateY(8px) rotate(45deg);
+  transform: translateY(8px) rotate(45deg);
+}
 
 /* Hide overlay on desktop */
 @media (min-width: 1024px) {
@@ -793,12 +794,17 @@
   transform: translateY(-1px);
 }
 
-.mobileAuthButtonDanger {
-  background: #dc2626;
-  color: #ffffff;
+
+/* --- Active State: Persistence Logic --- */
+
+/* This ensures that when a link is active, the dot stays visible */
+.active .linkHoverEffect {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  background: #10b981; /* Matches your brand green */
 }
 
-.mobileAuthButtonDanger:hover {
-  background: #b91c1c;
-  transform: translateY(-1px);
+/* Optional: add a slight glow to the active link text */
+.active .linkText {
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
 }
