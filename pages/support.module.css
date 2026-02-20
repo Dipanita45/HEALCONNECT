@@ -54,7 +54,7 @@
 
 .heroContent {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto 0;
   padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -419,7 +419,7 @@
 .channelCard {
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-radius: 16px;
-  padding: 32px 32px 32px 32px;
+  padding: 25px 30px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border: 2px solid transparent;
@@ -464,47 +464,7 @@
 
 .channelIcon {
   font-size: 48px;
-  margin: 0 auto 20px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.aiIcon {
-  font-size: 48px;
-  color: #667eea;
-}
-
-.liveIcon {
-  font-size: 48px;
-  color: #0284c7;
-}
-
-.channelCard:hover .channelIcon {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.badgeNew {
-  display: block;
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: -16px;
-  margin-bottom: 20px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: white;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
-  animation: pulse 2s ease-in-out infinite;
-  position: relative;
-  z-index: 1;
-  text-align: center;
+  margin-bottom: 10px;
 }
 
 .channelCard h3 {

@@ -68,6 +68,7 @@
   padding: 2rem 1.5rem 4rem;
   position: relative;
   z-index: 1;
+  margin-top: 50px;
 }
 
 .header {
@@ -187,7 +188,7 @@
 .answerContent {
   display: flex;
   gap: 1rem;
-  padding: 0 1.5rem 1.5rem;
+  padding: 1rem 1.5rem 1.5rem;
   color: rgb(var(--foreground-muted-rgb));
   line-height: 1.6;
 }
@@ -217,6 +218,9 @@
 .helpContent {
   max-width: 500px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .helpIcon {

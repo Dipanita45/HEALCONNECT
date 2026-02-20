@@ -450,7 +450,7 @@ export default function Appointments() {
                 <motion.div
                   className={styles.titleUnderline}
                   initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
+                  animate={{ width: "50%" }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 ></motion.div>
                 <motion.p

@@ -6,6 +6,7 @@
   overflow: hidden;
   overflow-x: hidden;
   /* prevent horizontal scroll */
+  margin-top: 50px;
 }
 
 .container.dark {
@@ -165,7 +166,7 @@
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 1.5rem 3rem;
 }
@@ -561,6 +562,7 @@
 /* ============== */
 
 @media (max-width: 768px) {
+  
   .container {
     padding: 1.5rem 1rem;
     min-height: auto;
@@ -615,6 +617,7 @@
 }
 
 @media (max-width: 480px) {
+
   .title {
     font-size: 2.1rem;
   }
