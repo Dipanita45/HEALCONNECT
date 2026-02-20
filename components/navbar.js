@@ -50,10 +50,17 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
+
+    // Call server-side logout to clear cookie
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
 
     // Clear React state immediately for UI update
     setUser(null)
@@ -189,20 +196,11 @@ export default function Navbar() {
             style={{ background: 'var(--hamburger-color, white)' }}></span>
         </button>
       </div>
-    </div>
 
     {/* Mobile Menu */}
     {isMenuOpen && (
       <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
-        {[
-          { href: '/', label: 'Home' },
-          { href: '/prescriptions', label: 'Prescriptions' },
-          { href: '/appointments', label: 'Appointments' },
-          { href: '/monitoring', label: 'Monitoring' },
-          { href: '/faq', label: 'FAQ' },
-          { href: '/contact', label: 'Contact' },
-          { href: '/support', label: 'Support' },
-        ].map((link) => (
+        {navLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
@@ -213,7 +211,8 @@ export default function Navbar() {
             }}
             onClick={() => setIsMenuOpen(false)}
           >
-            {link.label}
+            {link.icon && <FaHeadset className={styles.supportIcon} />}
+            <span className={styles.linkText}>{link.label}</span>
           </Link>
         ))}
 
@@ -222,49 +221,28 @@ export default function Navbar() {
             <>
               <button
                 onClick={handleDashboardRedirect}
-                className="w-full py-2 bg-green-600 text-white rounded-md"
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-green-600 text-white rounded-md`}
               >
-                {link.icon && <FaHeadset className={styles.supportIcon} />}
-                <span>{link.label}</span>
-              </Link>
-            ))}
-          </nav>
-
-          {/* Mobile Auth Buttons */}
-          <div className={styles.mobileAuthSection}>
-            {user || currentUser ? (
-              <>
-                <button
-                  onClick={handleDashboardRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
+                Dashboard
+              </button>
               <button
-                onClick={handleLoginRedirect}
-                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                onClick={handleLogout}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger} w-full py-2 bg-red-600 text-white rounded-md`}
               >
-                Login
+                Logout
               </button>
             </>
           ) : (
             <button
               onClick={handleLoginRedirect}
-              className="w-full py-2 bg-blue-600 text-white rounded-md"
+              className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-blue-600 text-white rounded-md`}
             >
               Login
             </button>
           )}
         </div>
       </div>
+    )}
     </nav>
   )
 }
