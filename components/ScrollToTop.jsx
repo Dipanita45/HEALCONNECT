@@ -45,7 +45,7 @@ export default function ScrollToTop() {
           strokeLinejoin="round" 
           viewBox="0 0 24 24"
         >
-          <path d="M7 14l5-5 5 5-5M12 19V5" />
+          <path d="M7 14 l5 -5 5 5 -5 M12 19 V5" />
         </svg>
       </div>
     </button>
