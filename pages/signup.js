@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
+import { hashPassword } from "@lib/authUtils";
 import Link from "next/link";
 import styles from "./signup.module.css";
 
@@ -33,7 +34,7 @@ export default function SignupPage() {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem("theme");
       const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
+
       // Default to light mode unless explicitly saved as dark
       if (savedTheme === "dark") {
         setDarkMode(true);
@@ -52,7 +53,7 @@ export default function SignupPage() {
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    
+
     if (newDarkMode) {
       document.documentElement.classList.add("dark");
       if (typeof window !== 'undefined') {
@@ -72,12 +73,12 @@ export default function SignupPage() {
       ...prev,
       [name]: value
     }));
-    
+
     // Check password strength when password changes
     if (name === 'password') {
       checkPasswordStrength(value);
     }
-    
+
     // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -128,23 +129,35 @@ export default function SignupPage() {
   const validateForm = () => {
     const newErrors = {};
 
-    // Basic validation
+    // Username validation
     if (!formData.username.trim()) {
       newErrors.username = "Username is required";
     } else if (formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
+    } else if (formData.username.length > 50) {
+      newErrors.username = "Username must not exceed 50 characters";
+    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
+      newErrors.username = "Username can only contain letters, numbers, and underscores";
     }
 
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email is invalid";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+    } else if (formData.email.length > 254) {
+      newErrors.email = "Email address is too long";
     }
 
+    // Password validation - enhanced security requirements
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+    } else if (formData.password.length > 128) {
+      newErrors.password = "Password must not exceed 128 characters";
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(formData.password)) {
+      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
     }
 
     if (!formData.confirmPassword) {
@@ -153,18 +166,27 @@ export default function SignupPage() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
+    // Full name validation
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
+    } else if (formData.fullName.length < 2) {
+      newErrors.fullName = "Full name must be at least 2 characters";
+    } else if (formData.fullName.length > 100) {
+      newErrors.fullName = "Full name must not exceed 100 characters";
+    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.fullName)) {
+      newErrors.fullName = "Full name can only contain letters, spaces, hyphens, and apostrophes";
     }
 
+    // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone = "Please enter a valid 10-digit phone number";
+    } else if (!/^[0-9+\s-]{10,15}$/.test(formData.phone.replace(/\s/g, ''))) {
+      newErrors.phone = "Please enter a valid phone number (10-15 digits)";
     }
 
+    // Age validation
     if (!formData.age || formData.age < 1 || formData.age > 120) {
-      newErrors.age = "Please enter a valid age";
+      newErrors.age = "Please enter a valid age between 1 and 120";
     }
 
     // Admin code validation
@@ -182,99 +204,88 @@ export default function SignupPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
+    setErrors({});
 
     try {
-      // Get existing users from localStorage (client-side only)
-      if (typeof window === 'undefined') {
-        throw new Error("Signup is only available on client side");
-      }
-      
-      const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
-      
-      // Check if username or email already exists
-      const userExists = existingUsers.some(user => 
-        user.username === formData.username || user.email === formData.email
-      );
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: formData.username,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+          role: formData.role,
+          fullName: formData.fullName,
+          phone: formData.phone,
+          age: formData.age,
+          gender: formData.gender,
+          adminCode: formData.role === 'admin' ? formData.adminCode : undefined
+        }),
+      });
 
-      if (userExists) {
-        setErrors({
-          submit: "Username or email already exists. Please use different credentials."
-        });
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setErrors({
+            submit: data.message || "Username or email already exists."
+          });
+        } else if (response.status === 429) {
+          setErrors({
+            submit: `Too many signup attempts. Please try again in ${data.retryAfter} seconds.`
+          });
+        } else if (response.status === 400) {
+          // Handle validation errors
+          const validationErrors = {};
+          if (data.details) {
+            data.details.forEach(detail => {
+              // Map validation errors to form fields
+              if (detail.path && detail.path[0]) {
+                validationErrors[detail.path[0]] = detail.message;
+              } else {
+                validationErrors.submit = detail.message;
+              }
+            });
+          }
+          setErrors(validationErrors);
+        } else {
+          setErrors({
+            submit: data.message || "An error occurred during signup."
+          });
+        }
         setIsSubmitting(false);
         return;
       }
 
-      // Create new user object
-      const newUser = {
-        id: Date.now().toString(),
-        username: formData.username,
-        email: formData.email,
-        password: formData.password, // In production, this should be hashed
-        role: formData.role,
-        fullName: formData.fullName,
-        phone: formData.phone,
-        age: formData.age,
-        gender: formData.gender,
-        adminCode: formData.role === "admin" ? formData.adminCode : undefined,
-        createdAt: new Date().toISOString()
-      };
+      // Success - auto-login with the returned token
+      if (data.token) {
+        localStorage.setItem('auth-token', data.token);
+        localStorage.setItem('userType', data.user.role);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
 
-      // Save to localStorage (in production, this would be saved to a database)
-      existingUsers.push(newUser);
-      localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
-
-      // Auto-login after successful signup
-      localStorage.setItem('userType', newUser.role);
-      localStorage.setItem('username', newUser.username);
-      
-      // Set currentUser in localStorage for persistence
-      const currentUserData = {
-        name: newUser.fullName,
-        email: newUser.email,
-        number: newUser.phone,
-        role: newUser.role,
-        username: newUser.username,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        gender: newUser.gender,
-        adminCode: newUser.adminCode,
-        id: newUser.id
-      };
-      localStorage.setItem('currentUser', JSON.stringify(currentUserData));
-      
-      // Update React state for immediate UI update
-      setUser({ uid: newUser.id });
-      setUserRole(newUser.role);
-      setCurrentUser({ 
-        name: newUser.fullName, // Use fullName instead of username
-        email: newUser.email,
-        number: newUser.phone, // Map phone to number
-        role: newUser.role,
-        username: newUser.username,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        gender: newUser.gender,
-        adminCode: newUser.adminCode,
-        id: newUser.id
-      });
-
+        // Update React state
+        setUser({ uid: data.user.id });
+        setUserRole(data.user.role);
+        setCurrentUser(data.user);
+      }
       // Show success message and redirect
       setTimeout(() => {
-        router.push(`/${newUser.role}/dashboard`);
+        router.push(`/${data.user.role}/dashboard`);
       }, 500);
 
     } catch (error) {
       console.error('Signup error:', error);
       setErrors({
-        submit: "An error occurred during signup. Please try again."
+        submit: "Network error. Please check your connection and try again."
       });
     } finally {
       setIsSubmitting(false);
@@ -296,27 +307,27 @@ export default function SignupPage() {
       {/* Animated background elements */}
       <div className={styles.backgroundElements}>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
         <div className={styles.circleElement} style={{
-          background: darkMode 
+          background: darkMode
             ? "linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)"
             : "linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%)"
         }}></div>
@@ -325,6 +336,7 @@ export default function SignupPage() {
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleDarkMode}
+        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         style={{
           position: "fixed",
           top: "15px",
@@ -632,6 +644,7 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
@@ -676,7 +689,7 @@ export default function SignupPage() {
                   {errors.password}
                 </div>
               )}
-              
+
               {/* Password Strength Indicator */}
               {formData.password && (
                 <div style={{ marginTop: "8px" }}>
@@ -759,6 +772,7 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
@@ -823,14 +837,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "doctor" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
+                    background: formData.role === "doctor"
+                      ? (darkMode ? "#1565c0" : "#1976d2")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "doctor" 
-                      ? "white" 
+                    color: formData.role === "doctor"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "doctor" 
-                      ? "none" 
+                    border: formData.role === "doctor"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -860,14 +874,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "patient" 
-                      ? (darkMode ? "#1565c0" : "#1976d2") 
+                    background: formData.role === "patient"
+                      ? (darkMode ? "#1565c0" : "#1976d2")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "patient" 
-                      ? "white" 
+                    color: formData.role === "patient"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "patient" 
-                      ? "none" 
+                    border: formData.role === "patient"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -897,14 +911,14 @@ export default function SignupPage() {
                   style={{
                     flex: 1,
                     padding: "10px",
-                    background: formData.role === "admin" 
-                      ? (darkMode ? "#b91c1c" : "#dc2626") 
+                    background: formData.role === "admin"
+                      ? (darkMode ? "#b91c1c" : "#dc2626")
                       : (darkMode ? "#2d3748" : "#f7fafc"),
-                    color: formData.role === "admin" 
-                      ? "white" 
+                    color: formData.role === "admin"
+                      ? "white"
                       : (darkMode ? "#e2e8f0" : "#4a5568"),
-                    border: formData.role === "admin" 
-                      ? "none" 
+                    border: formData.role === "admin"
+                      ? "none"
                       : (darkMode ? "1px solid #4a5568" : "1px solid #e2e8f0"),
                     borderRadius: "6px",
                     cursor: "pointer",
@@ -941,7 +955,7 @@ export default function SignupPage() {
                   color: darkMode ? "#fca5a5" : "#991b1b",
                   lineHeight: "1.4",
                 }}>
-                  Admin access provides full system control including user management, 
+                  Admin access provides full system control including user management,
                   support system oversight, and platform settings.
                 </div>
               )}

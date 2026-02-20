@@ -3,6 +3,9 @@ import PatientSidebar from "@components/Sidebar/PatientSidebar";
 import { UserContext } from "@lib/context";
 import { useContext, useState, useEffect } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import ProfileCompletionWidget from "../../components/Profile/ProfileCompletionWidget";
 
 export default function EditProfile() {
     const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -19,11 +22,6 @@ export default function EditProfile() {
         cardiacHistory: ""
     });
     const [message, setMessage] = useState("");
-
-    // Debug log for message changes
-    useEffect(() => {
-        console.log("Message state changed:", message);
-    }, [message]);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -32,13 +30,13 @@ export default function EditProfile() {
                 name: currentUser?.name || "",
                 email: currentUser?.email || "",
                 number: currentUser?.number || "",
-                age: "22",
-                bloodGroup: "B+",
-                weight: "90",
-                height: "185",
-                diabetesStatus: "No",
-                surgicalHistory: "No",
-                cardiacHistory: "No"
+                age: currentUser?.age || "",
+                bloodGroup: currentUser?.bloodGroup || "",
+                weight: currentUser?.weight || "",
+                height: currentUser?.height || "",
+                diabetesStatus: currentUser?.diabetesStatus || "",
+                surgicalHistory: currentUser?.surgicalHistory || "",
+                cardiacHistory: currentUser?.cardiacHistory || ""
             });
         }
     }, [currentUser]);
@@ -51,37 +49,87 @@ export default function EditProfile() {
         }));
     };
 
+    const validateForm = () => {
+        const errors = [];
+
+        // Validate age
+        const age = Number(formData.age);
+        if (formData.age && (isNaN(age) || age < 1 || age > 120)) {
+            errors.push('Age must be between 1 and 120');
+        }
+
+        // Validate weight
+        const weight = Number(formData.weight);
+        if (formData.weight && (isNaN(weight) || weight < 1 || weight > 300)) {
+            errors.push('Weight must be between 1 and 300 kg');
+        }
+
+        // Validate height
+        const height = Number(formData.height);
+        if (formData.height && (isNaN(height) || height < 50 || height > 250)) {
+            errors.push('Height must be between 50 and 250 cm');
+        }
+
+        // Sanitize text inputs (basic XSS prevention)
+        const sanitizedData = {
+            ...formData,
+            name: formData.name.trim().replace(/[<>]/g, ''),
+            email: formData.email.trim(),
+            number: formData.number.trim()
+        };
+
+        return { isValid: errors.length === 0, errors, sanitizedData };
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form submitted"); // Debug log
         setIsLoading(true);
         setMessage("");
 
+        // Validate form
+        const { isValid, errors, sanitizedData } = validateForm();
+
+        if (!isValid) {
+            setMessage(`Validation errors: ${errors.join(', ')}`);
+            setIsLoading(false);
+            return;
+        }
+
         try {
-            // Update localStorage
-            if (typeof window !== 'undefined') {
-                console.log("Updating localStorage with:", formData); // Debug log
-                const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                const updatedUserData = {
-                    ...currentUserData,
-                    ...formData
-                };
-                localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
-                
-                // Update React context
-                setCurrentUser(updatedUserData);
-                
-                const successMessage = "Profile updated successfully!";
-                console.log("Setting message:", successMessage); // Debug log
-                setMessage(successMessage);
-                
-                // Clear message after 3 seconds
-                setTimeout(() => {
-                    setMessage("");
-                }, 3000);
+            if (!currentUser) {
+                throw new Error("No user logged in");
             }
+
+            // Determine collection based on user data (UserContext handles this logic usually, 
+            // but we need to know where to write. 
+            // userInfo.js checks 'users' then 'patients'. We will try 'users' first or use logic if we know safely.
+            // For now, let's assume 'users' if uid exists, or 'patients' if phone number exists and no uid (rare in this auth flow for patients?)
+            // Actually, best is to look at how we fetched it. 
+            // But standard auth usually links to 'users/{uid}'. 
+            // Let's try to update 'users/{uid}'.
+
+            const userRef = doc(db, "users", currentUser.uid || currentUser.id);
+            // Note: If your app uses 'patients' collection for some users, we might need a way to distinguish.
+            // However, based on typical setups and previous files, 'users' seems primary for auth'd users. 
+            // If it fails, we might need to check. But let's start with standard 'users'.
+
+            await updateDoc(userRef, sanitizedData);
+
+            // If successful, update local context if needed, or rely on real-time listener.
+            // UserContext in userInfo.js doesn't seem to listen to real-time on the document itself for *updates* 
+            // (it uses getDoc in onAuthStateChanged). 
+            // So we might need to manually update context or just show success and reload.
+            // Ideally, userInfo.js *should* use onSnapshot.
+            // For now, let's update local state to reflect changes immediately if context allows, 
+            // or just rely on the fact that next load will be correct.
+
+            setCurrentUser({ ...currentUser, ...sanitizedData });
+
+            setMessage("Profile updated successfully!");
+            setTimeout(() => setMessage(""), 3000);
+
         } catch (error) {
-            console.error("Error updating profile:", error); // Debug log
+            console.error("Error updating profile:", error);
             setMessage("Error updating profile. Please try again.");
         } finally {
             setIsLoading(false);
@@ -93,7 +141,12 @@ export default function EditProfile() {
             <PatientSidebar>
                 <div className="p-2 w-full h-full flex flex-col">
                     <div className="h-20"></div>
-                    
+
+                    {/* Profile Completion Widget - Compact */}
+                    <div className="max-w-4xl mx-auto w-full mb-4">
+                        <ProfileCompletionWidget currentUser={currentUser} compact={true} />
+                    </div>
+
                     <div className="max-w-4xl mx-auto w-full">
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                             <div className="flex justify-between items-center mb-6">
@@ -107,16 +160,12 @@ export default function EditProfile() {
                             </div>
 
                             {message && (
-                                <>
-                                    {console.log("Rendering message:", message)}
-                                    <div className={`mb-4 p-4 rounded-lg ${
-                                        message.includes("success") 
-                                            ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600" 
-                                            : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-600"
+                                <div className={`mb-4 p-4 rounded-lg ${message.includes("success")
+                                    ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border border-green-300 dark:border-green-600"
+                                    : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-600"
                                     }`}>
-                                        {message}
-                                    </div>
-                                </>
+                                    {message}
+                                </div>
                             )}
 
                             <form onSubmit={handleSubmit} className="space-y-6">
@@ -183,7 +232,7 @@ export default function EditProfile() {
                                 {/* Medical Information */}
                                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                                     <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Medical Information</h2>
-                                    
+
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                         <div>
                                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">

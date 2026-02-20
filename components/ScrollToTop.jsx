@@ -23,7 +23,7 @@ export default function ScrollToTop() {
     <button
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className={`fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full shadow-xl
+      className={`fixed bottom-32 right-8 z-40 w-12 h-12 rounded-full shadow-xl
         bg-gradient-to-r from-blue-600 to-purple-600 
         hover:from-blue-700 hover:to-purple-700
         dark:from-blue-500 dark:to-purple-500 
@@ -45,7 +45,7 @@ export default function ScrollToTop() {
           strokeLinejoin="round" 
           viewBox="0 0 24 24"
         >
-          <path d="M7 14l5-5 5 5-5M12 19V5" />
+          <path d="M7 14 l5 -5 5 5 -5 M12 19 V5" />
         </svg>
       </div>
     </button>
