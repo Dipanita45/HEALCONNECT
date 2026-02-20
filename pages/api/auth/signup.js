@@ -44,7 +44,7 @@ const signupSchema = Joi.object({
   gender: Joi.string().valid('male', 'female', 'other').default('male'),
   adminCode: Joi.string().when('role', {
     is: 'admin',
-    then: Joi.string().valid('HEALCONNECT2024').required(),
+    then: Joi.string().valid(process.env.ADMIN_ACCESS_CODE || 'HEALCONNECT2024').required(),
     otherwise: Joi.forbidden()
   })
 });
