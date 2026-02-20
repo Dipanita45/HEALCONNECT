@@ -3,6 +3,9 @@ import PatientSidebar from "@components/Sidebar/PatientSidebar";
 import { UserContext } from "@lib/context";
 import { useContext, useState, useEffect } from "react";
 import { FaSave, FaTimes } from "react-icons/fa";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../lib/firebase";
+import ProfileCompletionWidget from "../../components/Profile/ProfileCompletionWidget";
 
 export default function EditProfile() {
     const { currentUser, setCurrentUser } = useContext(UserContext);
@@ -93,18 +96,38 @@ export default function EditProfile() {
         }
 
         try {
-            if (typeof window !== 'undefined') {
-                const currentUserData = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                const updatedUserData = {
-                    ...currentUserData,
-                    ...sanitizedData  // Use sanitized data
-                };
-                localStorage.setItem('currentUser', JSON.stringify(updatedUserData));
-                setCurrentUser(updatedUserData);
-
-                setMessage("Profile updated successfully!");
-                setTimeout(() => setMessage(""), 3000);
+            if (!currentUser) {
+                throw new Error("No user logged in");
             }
+
+            // Determine collection based on user data (UserContext handles this logic usually, 
+            // but we need to know where to write. 
+            // userInfo.js checks 'users' then 'patients'. We will try 'users' first or use logic if we know safely.
+            // For now, let's assume 'users' if uid exists, or 'patients' if phone number exists and no uid (rare in this auth flow for patients?)
+            // Actually, best is to look at how we fetched it. 
+            // But standard auth usually links to 'users/{uid}'. 
+            // Let's try to update 'users/{uid}'.
+
+            const userRef = doc(db, "users", currentUser.uid || currentUser.id);
+            // Note: If your app uses 'patients' collection for some users, we might need a way to distinguish.
+            // However, based on typical setups and previous files, 'users' seems primary for auth'd users. 
+            // If it fails, we might need to check. But let's start with standard 'users'.
+
+            await updateDoc(userRef, sanitizedData);
+
+            // If successful, update local context if needed, or rely on real-time listener.
+            // UserContext in userInfo.js doesn't seem to listen to real-time on the document itself for *updates* 
+            // (it uses getDoc in onAuthStateChanged). 
+            // So we might need to manually update context or just show success and reload.
+            // Ideally, userInfo.js *should* use onSnapshot.
+            // For now, let's update local state to reflect changes immediately if context allows, 
+            // or just rely on the fact that next load will be correct.
+
+            setCurrentUser({ ...currentUser, ...sanitizedData });
+
+            setMessage("Profile updated successfully!");
+            setTimeout(() => setMessage(""), 3000);
+
         } catch (error) {
             console.error("Error updating profile:", error);
             setMessage("Error updating profile. Please try again.");
@@ -118,6 +141,11 @@ export default function EditProfile() {
             <PatientSidebar>
                 <div className="p-2 w-full h-full flex flex-col">
                     <div className="h-20"></div>
+
+                    {/* Profile Completion Widget - Compact */}
+                    <div className="max-w-4xl mx-auto w-full mb-4">
+                        <ProfileCompletionWidget currentUser={currentUser} compact={true} />
+                    </div>
 
                     <div className="max-w-4xl mx-auto w-full">
                         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">

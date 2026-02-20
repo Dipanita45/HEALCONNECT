@@ -193,8 +193,8 @@ export default function Footer() {
                   placeholder="Your email address" 
                   className={styles.subscriptionInput}
                 />
-                <button type="submit" className={styles.subscriptionButton}>
-                  <FaHeart />
+                <button type="submit" className={styles.subscriptionButton} aria-label="Subscribe">
+                  <FaHeart aria-hidden="true" />
                 </button>
               </form>
             </div>

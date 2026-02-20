@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { FaHeartbeat, FaPhoneAlt, FaUserMd, FaPills, FaWifiSlash, FaSync, FaExclamationTriangle } from 'react-icons/fa'
+import { FaHeartbeat, FaPhoneAlt, FaUserMd, FaPills, FaSync, FaExclamationTriangle } from 'react-icons/fa'
+import { MdWifiOff } from 'react-icons/md'
 import { offlineManager } from '@/lib/offlineDataManager'
 
 export default function OfflineDashboard({ patientId }) {
@@ -147,7 +148,7 @@ export default function OfflineDashboard({ patientId }) {
       <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white rounded-lg shadow-lg p-6 mb-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <FaWifiSlash className="text-3xl animate-pulse" />
+            <MdWifiOff className="text-3xl animate-pulse" />
             <div>
               <h1 className="text-2xl font-bold">Offline Mode</h1>
               <p className="text-orange-100">Critical healthcare data is available offline</p>
@@ -160,7 +161,7 @@ export default function OfflineDashboard({ patientId }) {
               syncStatus === 'synced' ? 'bg-green-400 text-gray-900' :
               'bg-red-400 text-white'
             }`}>
-              {syncStatus === 'offline' && <FaWifiSlash />}
+              {syncStatus === 'offline' && <MdWifiOff />}
               {syncStatus === 'syncing' && <FaSync className="animate-spin" />}
               {syncStatus === 'synced' && <FaSync />}
               {syncStatus === 'sync-error' && <FaExclamationTriangle />}
