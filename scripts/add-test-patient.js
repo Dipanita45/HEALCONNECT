@@ -1,6 +1,6 @@
 // Test script to add a patient for testing purposes
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDBKubwqUBiiOrapLr-_Rr_dA24Z_fw7yU",
@@ -61,6 +61,21 @@ async function addTestPatient() {
   try {
     const docRef = doc(db, "patients", `+91${phoneNumber}`);
     await setDoc(docRef, patientData);
+
+    // Automatically create vitals subcollection
+    const vitalsRef = collection(db, "patients", `+91${phoneNumber}`, "vitals");
+
+    await addDoc(vitalsRef, {
+      heartRate: 72,
+      bloodPressure: "120/80",
+      oxygenLevel: 98,
+      temperature: 98.6,
+      recordedAt: serverTimestamp(),
+      recordedBy: "system"
+    });
+
+    console.log("🩺 Default vitals record created successfully!");
+
     console.log("✅ Test patient added successfully!");
     console.log(`📱 Phone number: +91${phoneNumber}`);
     console.log("🔑 Add this as a test number in Firebase Console");
