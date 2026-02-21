@@ -789,7 +789,11 @@
     background: #2563eb;
     color: #ffffff;
   }
-
+}
+.navHidden {
+  transform: translateY(-100%);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
   .mobileAuthButtonPrimary:hover {
     background: #1d4ed8;
