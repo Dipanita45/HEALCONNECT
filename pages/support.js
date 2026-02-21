@@ -18,7 +18,8 @@ const Support = () => {
     activeAgents: 0
   });
 
-  const { setIsMinimized, setSupportWidgetOpen } = useTheme();
+  
+const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
 
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
@@ -275,7 +276,11 @@ const Support = () => {
                 <span>✓ Instant responses</span>
                 <span>✓ Free to use</span>
               </div>
-              <button className={styles.channelBtn}>Start Chat</button>
+              <button className={styles.channelBtn} 
+              onClick={() => {
+              setIsMinimized(false);
+              setSupportWidgetOpen(true);
+              }}>Start Chat</button>
             </motion.div>
 
             <motion.div
@@ -293,7 +298,13 @@ const Support = () => {
                 <span>✓ Priority handling</span>
                 <span>✓ Email updates</span>
               </div>
-              <button className={styles.channelBtn}>Create Ticket</button>
+              <button className={styles.channelBtn} 
+              onClick={() => {
+              setSupportWidgetOpen(true);
+              setIsMinimized(true);
+              setShowTicketModal(true);
+              }}
+              >Create Ticket</button>
             </motion.div>
 
             <motion.div
@@ -311,7 +322,7 @@ const Support = () => {
                 <span>✓ Complex issues</span>
                 <span>✓ Emergency support</span>
               </div>
-              <button className={styles.channelBtn}>Call Now</button>
+              <button className={styles.channelBtn} onClick={() => window.open('tel:+18001234567')} >Call Now</button>
             </motion.div>
 
             <motion.div
