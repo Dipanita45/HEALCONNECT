@@ -172,13 +172,9 @@ export default function HowItWorks() {
           </motion.header>
 
           {/* Steps Section */}
-          <div className="max-w-7xl mx-auto mb-24 px-4">
-            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
-              How It Works
-            </h2>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 relative">
-              {steps.map((step, index) => (
+          <div className="max-w-6xl mx-auto mb-16">
+            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 items-stretch">  
+              {steps.map((step) => (
                 <motion.div
                   key={step.title}
                   initial={{ opacity: 0, y: 30 }}
