@@ -772,6 +772,7 @@
     border-top-color: rgba(0, 0, 0, 0.1);
   }
 
+
   .mobileAuthButton {
     width: 100%;
     padding: 14px 20px;
@@ -788,6 +789,7 @@
     background: #2563eb;
     color: #ffffff;
   }
+
 
   .mobileAuthButtonPrimary:hover {
     background: #1d4ed8;

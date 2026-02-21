@@ -1,10 +1,9 @@
 import FeedbackForm from "../components/FeedbackForm";
-import Footer from "./footer";
 
 export default function Feedback() {
   return (
-    <>
+    <div className="pt-20">
       <FeedbackForm />
-    </>
+    </div>
   );
 }
