@@ -172,9 +172,9 @@ export default function SignupPage() {
     if (formData.role === "admin") {
       if (!formData.adminCode.trim()) {
         newErrors.adminCode = "Admin code is required for admin registration";
-      } else if (formData.adminCode !== "HEALCONNECT2024") {
-        newErrors.adminCode = "Invalid admin code. Please contact system administrator.";
       }
+      // Note: Admin code value validation is handled securely on the backend
+      // to prevent exposure in the frontend bundle.
     }
 
     setErrors(newErrors);
