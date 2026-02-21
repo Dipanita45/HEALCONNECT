@@ -54,7 +54,10 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const handleStart = () => setIsRouteLoading(true)
-    const handleEnd = () => setIsRouteLoading(false)
+    const handleEnd = () => {
+      setIsRouteLoading(false)
+      window.scrollTo(0, 0)
+    }
 
     router.events.on('routeChangeStart', handleStart)
     router.events.on('routeChangeComplete', handleEnd)
