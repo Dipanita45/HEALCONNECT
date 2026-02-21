@@ -12,35 +12,49 @@
 .card {
   width: 100%;
   max-width: 520px;
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  animation: fadeUp 0.6s ease;
+}
+
+:global(.dark) .card {
   background: linear-gradient(
     180deg,
     rgba(15, 23, 42, 0.95),
     rgba(2, 6, 23, 0.95)
   );
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
   border: 1px solid rgba(51, 65, 85, 0.6);
   box-shadow:
     0 20px 40px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.03);
   backdrop-filter: blur(6px);
-  animation: fadeUp 0.6s ease;
 }
 
 /* Heading */
 .heading {
   text-align: center;
-  color: #e5e7eb;
+  color: #1f2937;
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
 }
 
+:global(.dark) .heading {
+  color: #e5e7eb;
+}
+
 .subheading {
   text-align: center;
-  color: #94a3b8;
+  color: #6b7280;
   font-size: 0.95rem;
   margin-bottom: 2rem;
+}
+
+:global(.dark) .subheading {
+  color: #94a3b8;
 }
 
 /* Form layout */
@@ -54,17 +68,29 @@
 .input,
 .textarea {
   width: 100%;
-  background: rgba(2, 6, 23, 0.9);
-  color: #e5e7eb;
-  border: 1px solid #334155;
+  background: #f9fafb;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
   border-radius: 10px;
   padding: 0.85rem 1rem;
   font-size: 0.95rem;
   transition: all 0.25s ease;
 }
 
+:global(.dark) .input,
+:global(.dark) .textarea {
+  background: rgba(2, 6, 23, 0.9);
+  color: #e5e7eb;
+  border: 1px solid #334155;
+}
+
 .input::placeholder,
 .textarea::placeholder {
+  color: #9ca3af;
+}
+
+:global(.dark) .input::placeholder,
+:global(.dark) .textarea::placeholder {
   color: #64748b;
 }
 
@@ -85,7 +111,7 @@
 .button {
   margin-top: 0.5rem;
   background: linear-gradient(135deg, #2563eb, #22c55e);
-  color: #020617;
+  color: #ffffff;
   border: none;
   border-radius: 999px;
   padding: 0.9rem;
@@ -94,6 +120,10 @@
   cursor: pointer;
   transition: all 0.25s ease;
   box-shadow: 0 10px 25px rgba(34, 197, 94, 0.25);
+}
+
+:global(.dark) .button {
+  color: #020617;
 }
 
 .button:hover {
@@ -108,9 +138,13 @@
 /* Success message */
 .success {
   text-align: center;
-  color: #22c55e;
+  color: #16a34a;
   font-size: 1.1rem;
   margin-top: 1rem;
+}
+
+:global(.dark) .success {
+  color: #22c55e;
 }
 
 /* Animation */
