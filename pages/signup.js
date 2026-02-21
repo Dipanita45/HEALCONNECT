@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
-import { hashPassword } from "@lib/authUtils";
+// import { hashPassword } from "@lib/authUtils"; // REMOVED
 import Link from "next/link";
 import styles from "./signup.module.css";
 
@@ -191,66 +191,25 @@ export default function SignupPage() {
     setIsSubmitting(true);
 
     try {
-      // Get existing users from localStorage (client-side only)
-      if (typeof window === 'undefined') {
-        throw new Error("Signup is only available on client side");
-      }
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
 
-      const existingUsers = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+      const data = await response.json();
 
-      // Check if username or email already exists
-      const userExists = existingUsers.some(user =>
-        user.username === formData.username || user.email === formData.email
-      );
-
-      if (userExists) {
+      if (!response.ok) {
         setErrors({
-          submit: "Username or email already exists. Please use different credentials."
+          submit: data.message || "Registration failed. Please try again."
         });
         setIsSubmitting(false);
         return;
       }
 
-      // Create new user object
-      const hashedPassword = await hashPassword(formData.password);
-
-      const newUser = {
-        id: Date.now().toString(),
-        username: formData.username,
-        email: formData.email,
-        password: hashedPassword, // Store SHA-256 hash instead of plain text
-        role: formData.role,
-        fullName: formData.fullName,
-        phone: formData.phone,
-        age: formData.age,
-        gender: formData.gender,
-        adminCode: formData.role === "admin" ? formData.adminCode : undefined,
-        createdAt: new Date().toISOString()
-      };
-
-      // Save to localStorage (in production, this would be saved to a database)
-      existingUsers.push(newUser);
-      localStorage.setItem('registeredUsers', JSON.stringify(existingUsers));
-
-      // Auto-login after successful signup
-      localStorage.setItem('userType', newUser.role);
-      localStorage.setItem('username', newUser.username);
-
-      // Set currentUser in localStorage for persistence
-      const currentUserData = {
-        name: newUser.fullName,
-        email: newUser.email,
-        number: newUser.phone,
-        role: newUser.role,
-        username: newUser.username,
-        fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        gender: newUser.gender,
-        adminCode: newUser.adminCode,
-        id: newUser.id
-      };
-      localStorage.setItem('currentUser', JSON.stringify(currentUserData));
+      const newUser = data.user;
 
       // Update React state for immediate UI update
       setUser({ uid: newUser.id });
@@ -258,14 +217,14 @@ export default function SignupPage() {
       setCurrentUser({
         name: newUser.fullName, // Use fullName instead of username
         email: newUser.email,
-        number: newUser.phone, // Map phone to number
+        number: formData.phone, // Map phone to number
         role: newUser.role,
         username: newUser.username,
         fullName: newUser.fullName,
-        phone: newUser.phone,
-        age: newUser.age,
-        gender: newUser.gender,
-        adminCode: newUser.adminCode,
+        phone: formData.phone,
+        age: formData.age,
+        gender: formData.gender,
+        adminCode: formData.adminCode,
         id: newUser.id
       });
 

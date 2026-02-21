@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot,
@@ -31,6 +31,10 @@ const SupportWidget = () => {
   // Track processed message IDs to prevent duplicates
   const [processedMessageIds, setProcessedMessageIds] = useState(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Initialize currentUser and userRole as null to avoid undefined errors
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   // const [isMinimized, setIsMinimized] = useState(false);
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
@@ -324,7 +328,7 @@ const SupportWidget = () => {
           setIsProcessing(false);
         }
       }
-    });
+    }, currentUser?.uid, userRole);
 
     return () => {
       console.log('SupportWidget: Cleaning up ticket subscription');
@@ -425,15 +429,28 @@ const SupportWidget = () => {
 
   const createTicket = async () => {
     try {
+      // Guard against null currentUser
+      if (!currentUser || !currentUser.uid) {
+        const errorMessage = {
+          id: Date.now(),
+          type: 'system',
+          text: 'Error: You must be logged in to create a support ticket. Please log in first.',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+        return;
+      }
+
       const ticketPayload = {
         subject: ticketData.subject,
         category: ticketData.category,
         priority: ticketData.priority,
         description: ticketData.description,
+        userId: currentUser.uid, // Add security context
         user: {
-          name: 'Current User', // In production, get from auth context
-          email: 'user@example.com', // In production, get from auth context
-          avatar: '👤'
+          name: currentUser.displayName || 'Current User',
+          email: currentUser.email || 'user@example.com',
+          avatar: currentUser.photoURL || '👤'
         },
         messages: messages,
         tags: ticketData.tags || []

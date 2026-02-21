@@ -35,40 +35,36 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Sign in with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Fetch user profile from Firestore
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
+      const data = await response.json();
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        const userRole = userData.role || 'patient';
-
-        // Update React Context
-        updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          ...userData,
-        });
-
-        // Navigate to the appropriate dashboard
-        router.push(`/${userRole}/dashboard`);
-      } else {
-        // User exists in Auth but not Firestore - edge case
-        setError("User profile not found. Please contact support.");
+      if (!response.ok) {
+        setError(data.message || "Invalid credentials. Please try again.");
+        return;
       }
+
+      const userData = data.user;
+      const userRole = userData.role || 'patient';
+
+      // Update React Context
+      updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
+        uid: userData.id,
+        email: userData.email,
+        ...userData,
+      });
+
+      // Navigate to the appropriate dashboard
+      router.push(`/${userRole}/dashboard`);
     } catch (err) {
       console.error("Login error:", err);
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError("Invalid email or password. Please try again.");
-      } else if (err.code === 'auth/invalid-email') {
-        setError("Please enter a valid email address.");
-      } else {
-        setError("An error occurred during login. Please try again.");
-      }
+      setError("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);
     }

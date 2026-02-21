@@ -166,12 +166,31 @@
   padding: 32px 24px;
   border-radius: 16px;
   background: #f8fafc;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.featureCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
 }
 
 .featureCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25), 0 0 40px rgba(102, 126, 234, 0.1);
+}
+
+.featureCard:hover::before {
+  opacity: 1;
 }
 
 .featureIcon {
@@ -183,6 +202,14 @@
   justify-content: center;
   margin: 0 auto 24px auto;
   font-size: 32px;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  z-index: 1;
+}
+
+.featureCard:hover .featureIcon {
+  transform: scale(1.15) rotate(8deg);
+  filter: brightness(1.2);
 }
 
 .featureCard h3 {

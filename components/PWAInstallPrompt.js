@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { FaDownload, FaTimes, FaCheckCircle, FaWifi, FaWifiSlash } from 'react-icons/fa'
+import { FaDownload, FaTimes, FaCheckCircle, FaWifi } from 'react-icons/fa'
+import { MdWifiOff } from 'react-icons/md'
 
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null)
@@ -163,7 +164,7 @@ export default function PWAInstallPrompt() {
       {!isOnline && (
         <div className="fixed top-4 left-4 right-4 z-40">
           <div className="bg-red-600 text-white rounded-lg shadow-lg p-3 flex items-center space-x-3">
-            <FaWifiSlash className="text-lg animate-pulse" />
+            <MdWifiOff className="text-lg animate-pulse" />
             <div>
               <p className="font-semibold text-sm">You're offline</p>
               <p className="text-xs opacity-90">Critical data is still available</p>

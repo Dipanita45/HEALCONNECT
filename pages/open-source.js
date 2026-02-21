@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { motion } from "framer-motion";
-import { FaGithub, FaCode, FaUsers, FaStar, FaRocket, FaHeart, FaExternalLinkAlt, FaBook, FaBug, FaLightbulb } from "react-icons/fa";
+import { FaGithub, FaCode, FaUsers, FaStar, FaRocket, FaHeart, FaExternalLinkAlt, FaBook, FaBug, FaLightbulb, FaCodeBranch, FaExclamationCircle } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
 import { useState, useEffect } from "react";
 
@@ -17,13 +17,45 @@ const fadeInUp = {
 };
 
 export default function OpenSource() {
+  const [repoStats, setRepoStats] = useState({
+    stars: 0,
+    forks: 0,
+    issues: 0,
+    prs: 0
+  });
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchContributors();
+    fetchRepoStats();
   }, []);
+
+  const fetchRepoStats = async () => {
+    try {
+      const [repoRes, prRes] = await Promise.all([
+        fetch('https://api.github.com/repos/Dipanita45/HEALCONNECT'),
+        fetch('https://api.github.com/search/issues?q=repo:Dipanita45/HEALCONNECT+type:pr+state:open')
+      ]);
+
+      if (!repoRes.ok || !prRes.ok) throw new Error('Failed to fetch repo stats');
+
+      const repoData = await repoRes.json();
+      const prData = await prRes.json();
+
+      setRepoStats({
+        stars: repoData.stargazers_count,
+        forks: repoData.forks_count,
+        issues: repoData.open_issues_count - prData.total_count,
+        prs: prData.total_count
+      });
+    } catch (err) {
+      console.error('Error fetching repo stats:', err);
+      // Fallback data
+      setRepoStats({ stars: 12, forks: 5, issues: 8, prs: 2 });
+    }
+  };
 
   const fetchContributors = async () => {
     try {
@@ -108,7 +140,7 @@ export default function OpenSource() {
       <main className="bg-white dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-100 relative overflow-hidden">
         {/* Background with animated bubbles */}
         <div className="absolute inset-0 w-full h-full overflow-hidden" style={{ zIndex: 0 }}>
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '300px',
@@ -121,7 +153,7 @@ export default function OpenSource() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '200px',
@@ -134,7 +166,7 @@ export default function OpenSource() {
               zIndex: 0
             }}
           />
-          <div 
+          <div
             className="absolute rounded-full"
             style={{
               width: '150px',
@@ -148,7 +180,7 @@ export default function OpenSource() {
             }}
           />
         </div>
-        
+
         <style jsx>{`
           @keyframes float {
             0%, 100% {
@@ -162,7 +194,7 @@ export default function OpenSource() {
             }
           }
         `}</style>
-        
+
         <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
@@ -224,6 +256,37 @@ export default function OpenSource() {
               </motion.a>
             </div>
           </motion.section>
+
+          {/* Repository Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16 px-4"
+          >
+            {[
+              { label: "Stars", value: repoStats.stars, icon: <FaStar className="text-4xl text-yellow-500" /> },
+              { label: "Forks", value: repoStats.forks, icon: <FaCodeBranch className="text-4xl text-blue-500" /> },
+              { label: "Open Issues", value: repoStats.issues, icon: <FaExclamationCircle className="text-4xl text-red-500" /> },
+              { label: "Active PRs", value: repoStats.prs, icon: <FaCode className="text-4xl text-green-500" /> }
+            ].map((stat, index) => (
+              <div
+                key={index}
+                className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 flex flex-col items-center justify-center transform hover:scale-105 transition-transform duration-300"
+              >
+                <div className="mb-3">
+                  {stat.icon}
+                </div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">
+                  {stat.value}
+                </div>
+                <div className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                  {stat.label}
+                </div>
+              </div>
+            ))}
+          </motion.div>
 
           <motion.section
             initial={{ opacity: 0, y: 30 }}
@@ -297,12 +360,11 @@ export default function OpenSource() {
                     {contribution.icon}
                   </div>
                   <div>
-                    <h3 className={`font-bold text-lg mb-2 ${
-                      contribution.color === 'blue' ? 'text-blue-800 dark:text-blue-200' : ''
-                    }${contribution.color === 'red' ? 'text-red-800 dark:text-red-200' : ''
-                    }${contribution.color === 'green' ? 'text-green-800 dark:text-green-200' : ''
-                    }${contribution.color === 'yellow' ? 'text-yellow-800 dark:text-yellow-200' : ''
-                    }`}>
+                    <h3 className={`font-bold text-lg mb-2 ${contribution.color === 'blue' ? 'text-blue-800 dark:text-blue-200' : ''
+                      }${contribution.color === 'red' ? 'text-red-800 dark:text-red-200' : ''
+                      }${contribution.color === 'green' ? 'text-green-800 dark:text-green-200' : ''
+                      }${contribution.color === 'yellow' ? 'text-yellow-800 dark:text-yellow-200' : ''
+                      }`}>
                       {contribution.title}
                     </h3>
                     <p className="text-gray-600 dark:text-gray-300 text-sm">

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 
 export default function SignIn() {
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [confirmation, setConfirmation] = useState(null);
+  const router = useRouter();
 
   // Initialize recaptcha once on mount
   useEffect(() => {
@@ -70,7 +72,7 @@ export default function SignIn() {
     try {
       await confirmation.confirm(otp);
       alert('Login successful!');
-      // TODO: redirect user based on your app logic
+      router.push('/patient');
     } catch (error) {
       alert('Incorrect OTP: ' + error.message);
     }

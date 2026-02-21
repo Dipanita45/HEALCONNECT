@@ -259,7 +259,7 @@ export default function Navbar() {
                 className={`${styles.mobileButton} ${styles.loginButtonMobile}`}
                 aria-label="Login to your account"
               >
-                Login
+                Logout
               </button>
             )}
 
