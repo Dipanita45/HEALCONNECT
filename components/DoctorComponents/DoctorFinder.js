@@ -1,16 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@lib/firebase';
-import { 
-  getCurrentLocation, 
-  sortDoctorsByDistance, 
-  formatDistance 
-} from '@lib/locationUtils';
-import { FaSearch, FaUserMd, FaMapMarkerAlt, FaPhone, FaEnvelope, FaSpinner, FaLocationArrow } from 'react-icons/fa';
+import { getCurrentLocation, sortDoctorsByDistance } from '@lib/locationUtils';
+import { FaSearch, FaUserMd, FaMapMarkerAlt, FaSpinner, FaLocationArrow } from 'react-icons/fa';
 import { toast } from 'react-hot-toast';
 import DoctorCard from './DoctorCard';
-
-// Remove unused Image import if not using <Image />
 
 export default function DoctorFinder() {
   const [doctors, setDoctors] = useState([]);
@@ -145,7 +139,7 @@ export default function DoctorFinder() {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="w-full p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
           <FaUserMd className="mr-2 text-blue-500" />
@@ -154,7 +148,71 @@ export default function DoctorFinder() {
 
         {/* Search and Filter Section */}
         <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
-          {/* ... all your filter/search JSX ... */}
+          {/* Name / Speciality search */}
+          <div className="md:col-span-2 relative">
+            <FaSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by name or speciality..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          {/* Location filter */}
+          <div className="relative">
+            <FaMapMarkerAlt className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <select
+              value={locationFilter}
+              onChange={(e) => setLocationFilter(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+            >
+              <option value="">All Locations</option>
+              {availableLocations.map((loc) => (
+                <option key={loc} value={loc}>{loc}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Speciality filter */}
+          <div className="relative">
+            <FaUserMd className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <select
+              value={specialityFilter}
+              onChange={(e) => setSpecialityFilter(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none"
+            >
+              <option value="">All Specialities</option>
+              {availableSpecialities.map((spec) => (
+                <option key={spec} value={spec}>{spec}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Action buttons */}
+          <div className="flex gap-2">
+            <button
+              onClick={getUserLocation}
+              disabled={locationLoading}
+              title="Sort by distance from my location"
+              className="flex-1 flex items-center justify-center gap-1 px-3 py-2 bg-blue-500 hover:bg-blue-600 disabled:opacity-60 text-white rounded-lg transition-colors text-sm font-medium"
+            >
+              {locationLoading ? (
+                <FaSpinner className="animate-spin" />
+              ) : (
+                <FaLocationArrow />
+              )}
+              <span className="hidden sm:inline">Near Me</span>
+            </button>
+            <button
+              onClick={clearFilters}
+              title="Clear all filters"
+              className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-sm font-medium"
+            >
+              Clear
+            </button>
+          </div>
         </div>
 
         {/* Results Count and Sort Info */}
@@ -192,5 +250,3 @@ export default function DoctorFinder() {
     </div>
   );
 }
-
-// Your DoctorCard component stays the same
