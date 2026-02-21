@@ -166,8 +166,8 @@ export default function Navbar() {
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+        </div>
 
-        {/* Right side - Auth buttons + Theme Toggle + Hamburger */}
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
           {/* Auth buttons - hidden on small screens, shown in mobile menu */}
           <div className="hidden sm:flex items-center">
@@ -224,23 +224,6 @@ export default function Navbar() {
             {isMenuOpen ? 'Close' : 'Menu'}
           </button>
         </div>
-      </div>
-
-      {/* Mobile Menu Button + Theme Toggle */}
-      <div className="lg:hidden flex items-center gap-2">
-        <ThemeToggle />
-        <button
-          className="flex flex-col gap-1.5"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-        </button>
       </div>
 
       {/* Mobile Menu */}
