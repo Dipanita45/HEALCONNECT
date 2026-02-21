@@ -339,7 +339,10 @@ export default function Appointments() {
       time: formData.time,
       doctorName: formData.doctor,
       reason: formData.reason,
-      createdAt: new Date()
+      createdAt: new Date(),
+      status: 'scheduled',
+      patientId: currentUser?.id || null,
+      patientEmail: currentUser?.email || null
     });
 
     const successElement = document.getElementById("booking-success");

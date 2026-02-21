@@ -132,7 +132,17 @@ export default function AdminAppointments() {
                       <td className="px-4 py-2">{a.doctorName}</td>
                       <td className="px-4 py-2">{a.date}</td>
                       <td className="px-4 py-2">{a.time}</td>
-                      <td className="px-4 py-2">{a.status}</td>
+                      <td className="px-4 py-2">
+                        {a.status === 'scheduled' || !a.status ? <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded text-xs font-semibold">Scheduled</span> : null}
+                        {a.status === 'cancelled' ? (
+                           <div className="flex flex-col">
+                             <span className="text-red-600 bg-red-100 px-2 py-1 rounded text-xs w-max font-semibold">Cancelled</span>
+                             {a.cancellationReason && <span className="text-xs text-gray-500 mt-1">Reason: {a.cancellationReason}</span>}
+                           </div>
+                        ) : null}
+                        {a.status === 'rescheduled' ? <span className="text-purple-600 bg-purple-100 px-2 py-1 rounded text-xs font-semibold">Rescheduled</span> : null}
+                        {a.status === 'completed' ? <span className="text-green-600 bg-green-100 px-2 py-1 rounded text-xs font-semibold">Completed</span> : null}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
