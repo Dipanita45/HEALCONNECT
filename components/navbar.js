@@ -160,6 +160,55 @@ export default function Navbar() {
             )}
           </div>
 
+
+          <Link
+            href="/contact"
+            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className={styles.linkText}>Contact</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          {user || currentUser ? (
+            <div className="hidden lg:flex items-center gap-2">
+              <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
+              <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md">Logout</button>
+            </div>
+          ) : (
+            <div className="hidden lg:flex">
+              <button onClick={handleLoginRedirect} className="px-4 py-2 bg-blue-600 text-white rounded-md">Login</button>
+            </div>
+          )}
+          <button onClick={toggleMenu} className="lg:hidden p-2 rounded-md border border-gray-200">
+            {isMenuOpen ? 'Close' : 'Menu'}
+          </button>
+        </div>
+      </div>
+
+      {isMenuOpen && (
+        <div className="lg:hidden absolute left-0 right-0 top-full bg-gray-800 text-white z-40">
+          <div className="p-4 space-y-3">
+            <Link href="/" onClick={closeMenu} className="block py-2">Home</Link>
+            <Link href="/prescriptions" onClick={closeMenu} className="block py-2">Prescriptions</Link>
+            <Link href="/appointments" onClick={closeMenu} className="block py-2">Appointments</Link>
+            <Link href="/monitoring" onClick={closeMenu} className="block py-2">Monitoring</Link>
+            <Link href="/contact" onClick={closeMenu} className="block py-2">Contact</Link>
+            <div className="pt-4 border-t border-gray-700">
+              {user || currentUser ? (
+                <>
+                  <button onClick={handleDashboardRedirect} className="w-full py-2 bg-green-600 text-white rounded-md">Dashboard</button>
+                  <button onClick={handleLogout} className="w-full py-2 bg-red-600 text-white rounded-md mt-2">Logout</button>
+                </>
+              ) : (
+                <button onClick={handleLoginRedirect} className="w-full py-2 bg-blue-600 text-white rounded-md">Login</button>
+              )}
+            </div>
+          </div>
+
           <div className="flex items-center pl-2 lg:pl-2 xl:pl-4 border-l border-gray-700">
             <ThemeToggle />
           </div>
@@ -240,6 +289,7 @@ export default function Navbar() {
               Login
             </button>
           )}
+
         </div>
       </div>
     )}
