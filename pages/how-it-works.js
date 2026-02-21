@@ -194,32 +194,23 @@ export default function HowItWorks() {
                   )}
 
                   {/* Step Card */}
-                  <div
-                    className={`flex flex-col items-center text-center p-6 border-2 rounded-2xl shadow-lg w-full h-full max-w-xs transition-all duration-300 ease-in-out 
-          ${step.color === "blue"
-                        ? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800"
-                        : step.color === "green"
-                          ? "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800"
-                          : step.color === "red"
-                            ? "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800"
-                            : step.color === "purple"
-                              ? "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800"
-                              : "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800"
-                      }`}
-                  >
+                  <div className={`
+                    ${step.color === 'blue' ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' : ''}
+                    ${step.color === 'green' ? 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800' : ''}
+                    ${step.color === 'red' ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800' : ''}
+                    ${step.color === 'purple' ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800' : ''}
+                    ${step.color === 'indigo' ? 'bg-indigo-100 dark:bg-indigo-900/30 border-indigo-300 dark:border-indigo-700' : ''}
+                    p-6 rounded-xl border-2 shadow-md hover:shadow-xl transition-all duration-300 ease-out relative z-10 text-center flex flex-col justify-between h-full 
+                  `}>
                     {/* Step Number */}
-                    <div
-                      className={`flex items-center justify-center w-14 h-14 rounded-full text-xl font-bold mb-4 shadow-md ${step.color === "blue"
-                        ? "bg-blue-600 dark:bg-blue-400 text-white"
-                        : step.color === "green"
-                          ? "bg-green-600 dark:bg-green-400 text-white"
-                          : step.color === "red"
-                            ? "bg-red-600 dark:bg-red-400 text-white"
-                            : step.color === "purple"
-                              ? "bg-purple-600 dark:bg-purple-400 text-white"
-                              : "bg-indigo-600 dark:bg-indigo-400 text-white"
-                        }`}
-                    >
+                    <div className={`
+                      ${step.color === 'blue' ? 'bg-blue-600 dark:bg-blue-400 text-white' : ''}
+                      ${step.color === 'green' ? 'bg-green-600 dark:bg-green-400 text-white' : ''}
+                      ${step.color === 'red' ? 'bg-red-600 dark:bg-red-400 text-white' : ''}
+                      ${step.color === 'purple' ? 'bg-purple-600 dark:bg-purple-400 text-white' : ''}
+                      ${step.color === 'indigo' ? 'bg-indigo-900 dark:bg-indigo-400 text-white' : ''}
+                      w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-4
+                    `}>
                       {step.number}
                     </div>
 
