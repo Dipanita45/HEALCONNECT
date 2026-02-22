@@ -2,7 +2,6 @@
 import { collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useState } from "react";
