@@ -1,9 +1,11 @@
 // pages/login.js
 import React, { useState, useContext } from "react";
 import { useRouter } from "next/router";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@lib/firebase";
+import { auth, db } from "@lib/firebase";
 import { UserContext } from "@lib/context";
+import { updateUserState } from "@lib/authUtils";
 import { useTheme } from "@/context/ThemeContext";
 import styles from "./login.module.css";
 
@@ -33,51 +35,36 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Call our custom login API endpoint
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: email, // API accepts username or email
-          password: password,
-          rememberMe: false
-        }),
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 423) {
-          setError(data.message || "Account is temporarily locked. Please try again later.");
-        } else if (response.status === 429) {
-          setError(`Too many login attempts. Please try again in ${data.retryAfter} seconds.`);
-        } else {
-          setError(data.message || "Invalid email or password. Please try again.");
-        }
-        setLoading(false);
+        setError(data.message || "Invalid credentials. Please try again.");
         return;
       }
 
-      // Success - store token and user data
-      if (data.token) {
-        localStorage.setItem('auth-token', data.token);
-      }
+      const userData = data.user;
+      const userRole = userData.role || 'patient';
 
-      localStorage.setItem('userType', data.user.role);
-      localStorage.setItem('currentUser', JSON.stringify(data.user));
-
-      // Update React context
-      setUser({ uid: data.user.id });
-      setUserRole(data.user.role);
-      setCurrentUser(data.user);
+      // Update React Context
+      updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
+        uid: userData.id,
+        email: userData.email,
+        ...userData,
+      });
 
       // Navigate to the appropriate dashboard
-      router.push(`/${data.user.role}/dashboard`);
-    } catch (error) {
-      console.error("Login error:", error);
-      setError("Network error. Please check your connection and try again.");
+      router.push(`/${userRole}/dashboard`);
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -100,13 +87,12 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: "calc(100vh - 80px)",
+      minHeight: "100vh",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
       padding: "20px",
-      marginTop: "0px",
       overflow: "hidden",
       position: "relative",
     }}>
@@ -124,7 +110,6 @@ export default function LoginPage() {
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleTheme}
-        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         style={{
           position: "fixed",
           top: "15px",
@@ -246,7 +231,6 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute", right: "10px", top: "50%", transform: "translateY(-50%)",
                     background: "none", border: "none", cursor: "pointer",
@@ -255,9 +239,9 @@ export default function LoginPage() {
                   }}
                 >
                   {showPassword ? (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
                   ) : (
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   )}
                 </button>
               </div>
@@ -323,7 +307,6 @@ export default function LoginPage() {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
               <h3 style={{ margin: 0, fontSize: "18px", fontWeight: "600", color: darkMode ? "#ffffff" : "#2d3748" }}>Reset Password</h3>
               <button onClick={() => { setShowForgotPassword(false); setForgotEmail(""); setForgotMessage(""); }}
-                aria-label="Close modal"
                 style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: darkMode ? "#a0aec0" : "#718096" }}>×</button>
             </div>
             <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: darkMode ? "#a0aec0" : "#718096", lineHeight: "1.5" }}>

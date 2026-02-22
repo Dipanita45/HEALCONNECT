@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle,
-  FaRobot, FaPhone, FaEnvelope
+  FaRobot, FaPhone, FaEnvelope, FaComments
 } from 'react-icons/fa';
 import SupportWidget from '../components/Support/SupportWidget';
 import SupportDashboard from '../components/Support/SupportDashboard';
@@ -18,7 +18,8 @@ const Support = () => {
     activeAgents: 0
   });
 
-  const { setIsMinimized, setSupportWidgetOpen } = useTheme();
+  
+const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
 
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
@@ -41,32 +42,29 @@ const Support = () => {
 
   window.open(gmailUrl, '_blank');
 };
-
+//2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
 
   const features = [
     {
       icon: FaRobot,
       title: 'AI-Powered Support',
       description: 'Get instant answers to common questions with our intelligent AI assistant.',
-      color: '#667eea'
+      color: '#667eea',
+      image: '/support_images/support_images/istockphoto.webp'
     },
     {
       icon: FaTicketAlt,
       title: 'Ticket Management',
       description: 'Track and manage support tickets with priority levels and status updates.',
-      color: '#22c55e'
-    },
-    {
-      icon: FaUsers,
-      title: 'Live Agent Support',
-      description: 'Connect with human support agents for complex issues and personalized help.',
-      color: '#f59e0b'
+      color: '#22c55e',
+      image: '/support_images/support_images/images.jpg'
     },
     {
       icon: FaClock,
       title: '24/7 Availability',
       description: 'Round-the-clock support for urgent medical and technical issues.',
-      color: '#ef4444'
+      color: '#ef4444',
+      image: '/support_images/support_images/best-support-ticket-system.png'   
     }
   ];
 
@@ -179,7 +177,6 @@ const Support = () => {
 
           <div className={styles.featuresGrid}>
             {features.map((feature, index) => {
-              const Icon = feature.icon;
               return (
                 <motion.div
                   key={feature.title}
@@ -190,11 +187,8 @@ const Support = () => {
                   transition={{ delay: index * 0.1 }}
                   className={styles.featureCard}
                 >
-                  <div
-                    className={styles.featureIcon}
-                    style={{ background: `${feature.color}20`, color: feature.color }}
-                  >
-                    <Icon size={32} />
+                  <div className={styles.featureImage}>
+                    <img src={feature.image} alt={feature.title} />
                   </div>
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
@@ -267,15 +261,24 @@ const Support = () => {
               viewport={{ once: true }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}>🤖</div>
+              <div className={styles.channelIcon}>
+                <FaRobot className={styles.aiIcon} />
+              </div>
+              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+                AI Assistant
+              </div>
               <h3>AI Assistant</h3>
-              <p>Instant answers to common questions 24/7</p>
+              <p>Instant answers to questions 24/7</p>
               <div className={styles.channelFeatures}>
                 <span>✓ Available 24/7</span>
                 <span>✓ Instant responses</span>
                 <span>✓ Free to use</span>
               </div>
-              <button className={styles.channelBtn}>Start Chat</button>
+              <button className={styles.channelBtn} 
+              onClick={() => {
+              setIsMinimized(false);
+              setSupportWidgetOpen(true);
+              }}>Start Chat</button>
             </motion.div>
 
             <motion.div
@@ -285,7 +288,10 @@ const Support = () => {
               transition={{ delay: 0.1 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}>🎫</div>
+              <div className={styles.channelIcon}><FaTicketAlt style={{ fontSize: '48px', color: '#22c55e' }} /></div>
+              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)'}}>
+                Support Tickets
+              </div>
               <h3>Support Tickets</h3>
               <p>Detailed assistance for complex issues</p>
               <div className={styles.channelFeatures}>
@@ -293,7 +299,13 @@ const Support = () => {
                 <span>✓ Priority handling</span>
                 <span>✓ Email updates</span>
               </div>
-              <button className={styles.channelBtn}>Create Ticket</button>
+              <button className={styles.channelBtn} 
+              onClick={() => {
+              setSupportWidgetOpen(true);
+              setIsMinimized(true);
+              setShowTicketModal(true);
+              }}
+              >Create Ticket</button>
             </motion.div>
 
             <motion.div
@@ -303,7 +315,10 @@ const Support = () => {
               transition={{ delay: 0.2 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}>📞</div>
+              <div className={styles.channelIcon}><FaPhone style={{ fontSize: '48px', color: '#f59e0b' }} /></div>
+              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)'}}>
+                Phone Support
+              </div>
               <h3>Phone Support</h3>
               <p>Speak directly with our support team</p>
               <div className={styles.channelFeatures}>
@@ -311,7 +326,7 @@ const Support = () => {
                 <span>✓ Complex issues</span>
                 <span>✓ Emergency support</span>
               </div>
-              <button className={styles.channelBtn}>Call Now</button>
+              <button className={styles.channelBtn} onClick={() => window.open('tel:+18001234567')} >Call Now</button>
             </motion.div>
 
             <motion.div
@@ -319,9 +334,35 @@ const Support = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
+              className={`${styles.channelCard} ${styles.liveAgentCard}`}
+            >
+              <div className={styles.channelIcon}>
+                <FaUsers className={styles.liveIcon} />
+              </div>
+              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'}}>
+                Live Agent Support
+              </div>
+              <h3>Live Agent Support</h3>
+              <p>Real-time chat with our support agents</p>
+              <div className={styles.channelFeatures}>
+                <span>✓ Instant connection</span>
+                <span>✓ Expert guidance</span>
+                <span>✓ Videos & screen sharing</span>
+              </div>
+              <button className={`${styles.channelBtn} ${styles.liveAgentBtn}`}>Connect Now</button>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}>📧</div>
+              <div className={styles.channelIcon}><FaEnvelope style={{ fontSize: '48px', color: '#ef4444' }} /></div>
+              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)'}}>
+                Email Support
+              </div>
               <h3>Email Support</h3>
               <p>Detailed written assistance</p>
               <div className={styles.channelFeatures}>
@@ -330,12 +371,11 @@ const Support = () => {
                 <span>✓ 24h response</span>
               </div>
               <button
-  className={styles.channelBtn}
-  onClick={handleSendEmail}
->
-  <FaEnvelope style={{ marginRight: '6px' }} />
-  Send Email
-</button>
+                className={styles.channelBtn}
+                onClick={handleSendEmail}
+              >
+                Send Email
+              </button>
 
             </motion.div>
           </div>
