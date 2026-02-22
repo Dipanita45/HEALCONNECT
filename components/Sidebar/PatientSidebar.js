@@ -60,6 +60,16 @@ export default function PatientSidebar({ children }) {
 
     {
 
+      href: '/patient/appointments',
+
+      title: 'My Appointments',
+
+      icon: <FaFileAlt size={28}/>,
+
+    },
+
+    {
+
       href: '/patient/reports',
 
       title: 'Your Reports',

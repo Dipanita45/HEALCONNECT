@@ -68,12 +68,16 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   33% {
     transform: translate(30px, -30px) rotate(60deg);
   }
+
   66% {
     transform: translate(-20px, 20px) rotate(-30deg);
   }
@@ -103,4 +107,18 @@
 .dark .signupContent {
   background: #1b263b;
   border: 1px solid #2d3748;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
