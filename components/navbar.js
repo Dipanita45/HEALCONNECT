@@ -12,6 +12,7 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
   const [prevScrollPos, setPrevScrollPos] = useState(0)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
 
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
@@ -67,6 +68,7 @@ export default function Navbar() {
   }, [])
 
   const handleLogout = async () => {
+    setIsLoggingOut(true)
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
@@ -88,6 +90,7 @@ export default function Navbar() {
       window.firebaseAuth.signOut()
     }
 
+    setIsLoggingOut(false)
     // Redirect to login
     router.push('/login')
     closeMenu()
@@ -181,9 +184,11 @@ export default function Navbar() {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
+                  disabled={isLoggingOut}
+                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700 disabled:opacity-50 flex items-center gap-2`}
                 >
-                  <span>Logout</span>
+                  {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                  <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </div>
             ) : (
@@ -213,7 +218,10 @@ export default function Navbar() {
           {user || currentUser ? (
             <div className="hidden lg:flex items-center gap-2">
               <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
-              <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md">Logout</button>
+              <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
+                {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
+              </button>
             </div>
           ) : (
             <div className="hidden lg:flex">
