@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { UserContext } from "@lib/context";
-import { hashPassword } from "@lib/authUtils";
+// import { hashPassword } from "@lib/authUtils"; // REMOVED
 import Link from "next/link";
 import styles from "./signup.module.css";
 
@@ -129,35 +129,23 @@ export default function SignupPage() {
   const validateForm = () => {
     const newErrors = {};
 
-    // Username validation
+    // Basic validation
     if (!formData.username.trim()) {
       newErrors.username = "Username is required";
     } else if (formData.username.length < 3) {
       newErrors.username = "Username must be at least 3 characters";
-    } else if (formData.username.length > 50) {
-      newErrors.username = "Username must not exceed 50 characters";
-    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-      newErrors.username = "Username can only contain letters, numbers, and underscores";
     }
 
-    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Please enter a valid email address";
-    } else if (formData.email.length > 254) {
-      newErrors.email = "Email address is too long";
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = "Email is invalid";
     }
 
-    // Password validation - enhanced security requirements
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      newErrors.password = "Password must be at least 8 characters";
-    } else if (formData.password.length > 128) {
-      newErrors.password = "Password must not exceed 128 characters";
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/.test(formData.password)) {
-      newErrors.password = "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     if (!formData.confirmPassword) {
@@ -166,36 +154,27 @@ export default function SignupPage() {
       newErrors.confirmPassword = "Passwords do not match";
     }
 
-    // Full name validation
     if (!formData.fullName.trim()) {
       newErrors.fullName = "Full name is required";
-    } else if (formData.fullName.length < 2) {
-      newErrors.fullName = "Full name must be at least 2 characters";
-    } else if (formData.fullName.length > 100) {
-      newErrors.fullName = "Full name must not exceed 100 characters";
-    } else if (!/^[a-zA-Z\s'-]+$/.test(formData.fullName)) {
-      newErrors.fullName = "Full name can only contain letters, spaces, hyphens, and apostrophes";
     }
 
-    // Phone validation
     if (!formData.phone.trim()) {
       newErrors.phone = "Phone number is required";
-    } else if (!/^[0-9+\s-]{10,15}$/.test(formData.phone.replace(/\s/g, ''))) {
-      newErrors.phone = "Please enter a valid phone number (10-15 digits)";
+    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ''))) {
+      newErrors.phone = "Please enter a valid 10-digit phone number";
     }
 
-    // Age validation
     if (!formData.age || formData.age < 1 || formData.age > 120) {
-      newErrors.age = "Please enter a valid age between 1 and 120";
+      newErrors.age = "Please enter a valid age";
     }
 
     // Admin code validation
     if (formData.role === "admin") {
       if (!formData.adminCode.trim()) {
         newErrors.adminCode = "Admin code is required for admin registration";
-      } else if (formData.adminCode !== "HEALCONNECT2024") {
-        newErrors.adminCode = "Invalid admin code. Please contact system administrator.";
       }
+      // Note: Admin code value validation is handled securely on the backend
+      // to prevent exposure in the frontend bundle.
     }
 
     setErrors(newErrors);
@@ -210,82 +189,54 @@ export default function SignupPage() {
     }
 
     setIsSubmitting(true);
-    setErrors({});
 
     try {
-      const response = await fetch('/api/auth/signup', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          username: formData.username,
-          email: formData.email,
-          password: formData.password,
-          confirmPassword: formData.confirmPassword,
-          role: formData.role,
-          fullName: formData.fullName,
-          phone: formData.phone,
-          age: formData.age,
-          gender: formData.gender,
-          adminCode: formData.role === 'admin' ? formData.adminCode : undefined
-        }),
+        body: JSON.stringify(formData),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        if (response.status === 409) {
-          setErrors({
-            submit: data.message || "Username or email already exists."
-          });
-        } else if (response.status === 429) {
-          setErrors({
-            submit: `Too many signup attempts. Please try again in ${data.retryAfter} seconds.`
-          });
-        } else if (response.status === 400) {
-          // Handle validation errors
-          const validationErrors = {};
-          if (data.details) {
-            data.details.forEach(detail => {
-              // Map validation errors to form fields
-              if (detail.path && detail.path[0]) {
-                validationErrors[detail.path[0]] = detail.message;
-              } else {
-                validationErrors.submit = detail.message;
-              }
-            });
-          }
-          setErrors(validationErrors);
-        } else {
-          setErrors({
-            submit: data.message || "An error occurred during signup."
-          });
-        }
+        setErrors({
+          submit: data.message || "Registration failed. Please try again."
+        });
         setIsSubmitting(false);
         return;
       }
 
-      // Success - auto-login with the returned token
-      if (data.token) {
-        localStorage.setItem('auth-token', data.token);
-        localStorage.setItem('userType', data.user.role);
-        localStorage.setItem('currentUser', JSON.stringify(data.user));
+      const newUser = data.user;
 
-        // Update React state
-        setUser({ uid: data.user.id });
-        setUserRole(data.user.role);
-        setCurrentUser(data.user);
-      }
+      // Update React state for immediate UI update
+      setUser({ uid: newUser.id });
+      setUserRole(newUser.role);
+      setCurrentUser({
+        name: newUser.fullName, // Use fullName instead of username
+        email: newUser.email,
+        number: formData.phone, // Map phone to number
+        role: newUser.role,
+        username: newUser.username,
+        fullName: newUser.fullName,
+        phone: formData.phone,
+        age: formData.age,
+        gender: formData.gender,
+        adminCode: formData.adminCode,
+        id: newUser.id
+      });
+
       // Show success message and redirect
       setTimeout(() => {
-        router.push(`/${data.user.role}/dashboard`);
+        router.push(`/${newUser.role}/dashboard`);
       }, 500);
 
     } catch (error) {
       console.error('Signup error:', error);
       setErrors({
-        submit: "Network error. Please check your connection and try again."
+        submit: "An error occurred during signup. Please try again."
       });
     } finally {
       setIsSubmitting(false);
@@ -336,7 +287,6 @@ export default function SignupPage() {
       {/* Dark Mode Toggle */}
       <button
         onClick={toggleDarkMode}
-        aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
         style={{
           position: "fixed",
           top: "15px",
@@ -644,7 +594,6 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
@@ -772,7 +721,6 @@ export default function SignupPage() {
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                   style={{
                     position: "absolute",
                     right: "10px",
@@ -1037,8 +985,18 @@ export default function SignupPage() {
                 fontWeight: "600",
                 marginBottom: "16px",
                 opacity: isSubmitting ? 0.7 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
               }}
             >
+              {isSubmitting && (
+                <svg className={styles.spinner} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "18px", height: "18px" }}>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style={{ opacity: 0.75 }}></path>
+                </svg>
+              )}
               {isSubmitting ? "Creating Account..." : "SIGN UP"}
             </button>
 

@@ -10,7 +10,10 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  
+  const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
+  const [prevScrollPos, setPrevScrollPos] = useState(0)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
@@ -35,14 +38,26 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Logic for background styling (Existing behavior)
-      const isScrolled = window.scrollY > 10
+      const currentScrollPos = window.scrollY
+
+      // 1. Logic for background styling (Existing behavior)
+      const isScrolled = currentScrollPos > 10
       setScrolled(isScrolled)
+
+      // 2. Logic for Smart Navbar (Hide on scroll down, Show on scroll up)
+      if (currentScrollPos < 10) {
+        setVisible(true) // Always show at the top
+      } else {
+        // Show if scrolling up, hide if scrolling down
+        setVisible(prevScrollPos > currentScrollPos)
+      }
+
+      setPrevScrollPos(currentScrollPos)
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [prevScrollPos])
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev)
@@ -52,17 +67,31 @@ export default function Navbar() {
     setIsMenuOpen(false)
   }, [])
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+    // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
+
+    // Call server-side logout to clear cookie
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (e) {
+      console.error(e);
+    }
+
+    // Clear React state immediately for UI update
     setUser(null)
     setUserRole(null)
     setCurrentUser(null)
 
+    // Clear any Firebase auth state if available
     if (typeof window !== 'undefined' && window.firebaseAuth) {
       window.firebaseAuth.signOut()
     }
 
+    setIsLoggingOut(false)
+    // Redirect to login
     router.push('/login')
     closeMenu()
   }
@@ -79,11 +108,22 @@ export default function Navbar() {
     }
   }
 
+  const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/prescriptions', label: 'Prescriptions' },
+    { href: '/appointments', label: 'Appointments' },
+    { href: '/monitoring', label: 'Monitoring' },
+    { href: '/faq', label: 'FAQ' },
+    { href: '/contact', label: 'Contact' },
+    { href: '/support', label: 'Support', icon: true },
+  ]
+
   return (
-    <nav 
+    <nav
       className={`
         ${styles.navbar} 
         ${scrolled ? styles.scrolled : ''} 
+        ${!visible ? styles.navHidden : ''} 
         h-20
       `}
     >
@@ -101,7 +141,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links - Active State Highlighting Only */}
+        {/* Navigation Links - Centered with Active State Highlighting */}
         <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
           <Link
             href="/"
@@ -129,15 +169,39 @@ export default function Navbar() {
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
+        </div>
 
-          <Link
-            href="/monitoring"
-            className={`${styles.navLink} ${router.pathname === '/monitoring' ? styles.active : ''}`}
-            onClick={() => setIsMenuOpen(false)}
-          >
-            <span className={styles.linkText}>Monitoring</span>
-            <div className={styles.linkHoverEffect}></div>
-          </Link>
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
+            {user || currentUser ? (
+              <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
+                <button
+                  onClick={handleDashboardRedirect}
+                  className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
+                >
+                  <span>Dashboard</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  disabled={isLoggingOut}
+                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700 disabled:opacity-50 flex items-center gap-2`}
+                >
+                  {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                  <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleLoginRedirect}
+                className={styles.loginButton}
+              >
+                <span>Login</span>
+                <div className={styles.buttonPulse}></div>
+              </button>
+            )}
+          </div>
+
 
           <Link
             href="/contact"
@@ -154,7 +218,10 @@ export default function Navbar() {
           {user || currentUser ? (
             <div className="hidden lg:flex items-center gap-2">
               <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
-              <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md">Logout</button>
+              <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
+                {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
+              </button>
             </div>
           ) : (
             <div className="hidden lg:flex">
@@ -167,24 +234,50 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden absolute left-0 right-0 top-full bg-gray-800 text-white z-40">
-          <div className="p-4 space-y-3">
-            <Link href="/" onClick={closeMenu} className="block py-2">Home</Link>
-            <Link href="/prescriptions" onClick={closeMenu} className="block py-2">Prescriptions</Link>
-            <Link href="/appointments" onClick={closeMenu} className="block py-2">Appointments</Link>
-            <Link href="/monitoring" onClick={closeMenu} className="block py-2">Monitoring</Link>
-            <Link href="/contact" onClick={closeMenu} className="block py-2">Contact</Link>
-            <div className="pt-4 border-t border-gray-700">
-              {user || currentUser ? (
-                <>
-                  <button onClick={handleDashboardRedirect} className="w-full py-2 bg-green-600 text-white rounded-md">Dashboard</button>
-                  <button onClick={handleLogout} className="w-full py-2 bg-red-600 text-white rounded-md mt-2">Logout</button>
-                </>
-              ) : (
-                <button onClick={handleLoginRedirect} className="w-full py-2 bg-blue-600 text-white rounded-md">Login</button>
-              )}
-            </div>
+        <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block py-2 border-b transition-colors"
+              style={{
+                color: 'var(--mobile-menu-text, white)',
+                borderColor: 'var(--mobile-menu-border, #374151)'
+              }}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {link.icon && <FaHeadset className={styles.supportIcon} />}
+              <span className={styles.linkText}>{link.label}</span>
+            </Link>
+          ))}
+
+          {/* Mobile Auth Buttons */}
+          <div className="pt-4 space-y-3 border-t border-gray-700">
+            {user || currentUser ? (
+              <>
+                <button
+                  onClick={handleDashboardRedirect}
+                  className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleLoginRedirect}
+                className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       )}
