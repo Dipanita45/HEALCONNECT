@@ -42,9 +42,9 @@ export default function Problem({ scrollToSection }) {
             The Healthcare Challenge
           </span>
 
-          <div className="bg-cyan-50/30 text-black dark:bg-gray-800 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-8 sm:mb-10 w-full max-w-2xl border border-cyan-200/50 dark:border-gray-700">
+          <div className="bg-cyan-50/30 text-slate-800 dark:bg-gray-800 dark:text-gray-200 rounded-2xl p-6 sm:p-8 lg:p-10 shadow-xl shadow-blue-500/5 dark:shadow-blue-500/10 mb-8 sm:mb-10 w-full max-w-2xl border border-cyan-200/50 dark:border-gray-700">
 
-            <div className="flex gap-4 mb-6 p-4 rounded-xl text text-black bg-blue-50/50 hover:bg-blue-100/50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors border border-blue-100/50 dark:border-gray-600">
+            <div className="flex gap-4 mb-6 p-4 rounded-xl bg-blue-50/50 hover:bg-blue-100/50 dark:bg-gray-800 dark:hover:bg-gray-700/50 transition-colors border border-blue-100/50 dark:border-gray-600">  
               <div className="text-xl sm:text-2xl">⏱️</div>
               <div>
                 <h3 className=" text-lg sm:text-xl font-medium text-slate-800 dark:text-gray-200 mb-2">Time-Critical Decisions</h3>
@@ -84,7 +84,7 @@ export default function Problem({ scrollToSection }) {
             className={`${styles.thoughtBubble} bg-white dark:bg-gray-800`}
             onClick={() => scrollToSection('solution')}
           >
-            <span className=" text-black font-medium text-slate-700 dark:text-gray-300">How can we solve these challenges?</span>
+            <span className="font-medium text-slate-700 dark:text-gray-300">How can we solve these challenges?</span>
           </div>
         </div>
       </section>

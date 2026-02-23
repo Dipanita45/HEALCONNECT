@@ -28,6 +28,17 @@ export default function PatientSidebar({ children }) {
       icon: <FaUserMd size={28} />,
     },
     {
+
+      href: '/patient/appointments',
+
+      title: 'My Appointments',
+
+      icon: <FaFileAlt size={28}/>,
+
+    },
+
+    {
+
       href: '/patient/reports',
       title: 'Your Reports',
       icon: <FaFileAlt size={28} />,

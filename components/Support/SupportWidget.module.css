@@ -519,28 +519,30 @@
 }
 
 .sendBtn {
-  background: #667eea;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   color: white;
-  width: 32px;
-  height: 32px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  padding: 0 7px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .sendBtn:hover:not(:disabled) {
-  background: #5a67d8;
-  transform: scale(1.05);
+  transform: translateY(-1px) scale(1.05);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
 .sendBtn:disabled {
   background: #cbd5e1;
   cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
 }
 
 .inputActions {

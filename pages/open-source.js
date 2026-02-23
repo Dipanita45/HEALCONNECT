@@ -25,6 +25,7 @@ export default function OpenSource() {
   });
   const [contributors, setContributors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function OpenSource() {
 
   const fetchRepoStats = async () => {
     try {
+      setStatsLoading(true);
       const [repoRes, prRes] = await Promise.all([
         fetch('https://api.github.com/repos/Dipanita45/HEALCONNECT'),
         fetch('https://api.github.com/search/issues?q=repo:Dipanita45/HEALCONNECT+type:pr+state:open')
@@ -54,6 +56,8 @@ export default function OpenSource() {
       console.error('Error fetching repo stats:', err);
       // Fallback data
       setRepoStats({ stars: 12, forks: 5, issues: 8, prs: 2 });
+    } finally {
+      setStatsLoading(false);
     }
   };
 
@@ -266,10 +270,10 @@ export default function OpenSource() {
             className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16 px-4"
           >
             {[
-              { label: "Stars", value: repoStats.stars, icon: <FaStar className="text-4xl text-yellow-500" /> },
-              { label: "Forks", value: repoStats.forks, icon: <FaCodeBranch className="text-4xl text-blue-500" /> },
-              { label: "Open Issues", value: repoStats.issues, icon: <FaExclamationCircle className="text-4xl text-red-500" /> },
-              { label: "Active PRs", value: repoStats.prs, icon: <FaCode className="text-4xl text-green-500" /> }
+              { label: "Stars", value: statsLoading ? "..." : repoStats.stars, icon: <FaStar className="text-4xl text-yellow-500" /> },
+              { label: "Forks", value: statsLoading ? "..." : repoStats.forks, icon: <FaCodeBranch className="text-4xl text-blue-500" /> },
+              { label: "Open Issues", value: statsLoading ? "..." : repoStats.issues, icon: <FaExclamationCircle className="text-4xl text-red-500" /> },
+              { label: "Active PRs", value: statsLoading ? "..." : repoStats.prs, icon: <FaCode className="text-4xl text-green-500" /> }
             ].map((stat, index) => (
               <div
                 key={index}

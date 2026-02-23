@@ -172,9 +172,9 @@ export default function SignupPage() {
     if (formData.role === "admin") {
       if (!formData.adminCode.trim()) {
         newErrors.adminCode = "Admin code is required for admin registration";
-      } else if (formData.adminCode !== "HEALCONNECT2024") {
-        newErrors.adminCode = "Invalid admin code. Please contact system administrator.";
       }
+      // Note: Admin code value validation is handled securely on the backend
+      // to prevent exposure in the frontend bundle.
     }
 
     setErrors(newErrors);
@@ -985,8 +985,18 @@ export default function SignupPage() {
                 fontWeight: "600",
                 marginBottom: "16px",
                 opacity: isSubmitting ? 0.7 : 1,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px"
               }}
             >
+              {isSubmitting && (
+                <svg className={styles.spinner} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "18px", height: "18px" }}>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style={{ opacity: 0.75 }}></path>
+                </svg>
+              )}
               {isSubmitting ? "Creating Account..." : "SIGN UP"}
             </button>
 

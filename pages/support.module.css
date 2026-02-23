@@ -5,6 +5,27 @@
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
+/* Animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
@@ -164,12 +185,14 @@
 
 .featureCard {
   text-align: center;
-  padding: 32px 24px;
+  padding: 0;
   border-radius: 16px;
   background: #f8fafc;
   transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   position: relative;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .featureCard::before {
@@ -213,15 +236,40 @@
   filter: brightness(1.2);
 }
 
+.featureImage {
+  width: calc(100% + 0px);
+  height: 200px;
+  border-radius: 0;
+  overflow: hidden;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.featureImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  background: white;
+}
+
+.featureCard:hover .featureImage img {
+  transform: scale(1.05);
+}
+
 .featureCard h3 {
-  margin: 0 0 16px 0;
+  margin: 24px 24px 16px 24px;
   font-size: 20px;
   font-weight: 600;
   color: #1e293b;
 }
 
 .featureCard p {
-  margin: 0;
+  margin: 0 24px 24px 24px;
+  padding-bottom: 0;
   color: #64748b;
   line-height: 1.6;
 }
@@ -343,72 +391,222 @@
 
 .channelsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 40px;
+}
+
+/* First row (3 cards) */
+.channelsGrid > :nth-child(1) {
+  grid-column: 1 / span 2;
+}
+
+.channelsGrid > :nth-child(2) {
+  grid-column: 3 / span 2;
+}
+
+.channelsGrid > :nth-child(3) {
+  grid-column: 5 / span 2;
+}
+
+/* Second row (centered 2 cards) */
+.channelsGrid > :nth-child(4) {
+  grid-column: 2 / span 2;
+}
+
+.channelsGrid > :nth-child(5) {
+  grid-column: 4 / span 2;
 }
 
 .channelCard {
-  background: #f8fafc;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-radius: 16px;
-  padding: 25px 30px;
+  padding: 32px 32px 32px 32px;
   text-align: center;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.channelCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  transition: left 0.4s ease;
+  border-radius: 16px;
+  z-index: 0;
+}
+
+.channelCard:hover::before {
+  left: 0;
 }
 
 .channelCard:hover {
-  transform: translateY(-4px);
-  border-color: #667eea;
-  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.15);
+  transform: translateY(-8px);
+  border-color: #0284c7;
+  box-shadow: 0 20px 50px rgba(2, 132, 199, 0.25), 0 0 50px rgba(2, 132, 199, 0.15);
+}
+
+.liveAgentCard {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  position: relative;
+}
+
+.liveAgentCard:hover {
+  border-color: #0284c7;
+  box-shadow: 0 20px 50px rgba(2, 132, 199, 0.25), 0 0 50px rgba(2, 132, 199, 0.15);
 }
 
 .channelIcon {
   font-size: 48px;
-  margin-bottom: 10px;
+  margin: 0 auto 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.aiIcon {
+  font-size: 48px;
+  color: #667eea;
+}
+
+.liveIcon {
+  font-size: 48px;
+  color: #0284c7;
+}
+
+.channelCard:hover .channelIcon {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.badgeNew {
+  display: block;
+  width: calc(100% - 32px);
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: -16px;
+  margin-bottom: 20px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: white;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
+  animation: pulse 2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
+  text-align: center;
 }
 
 .channelCard h3 {
-  margin: 0 0 12px 0;
+  margin: 0 0 8px 0;
   font-size: 20px;
   font-weight: 600;
   color: #1e293b;
+  position: relative;
+  z-index: 1;
 }
 
 .channelCard p {
   margin: 0 0 20px 0;
   color: #64748b;
   line-height: 1.5;
+  position: relative;
+  z-index: 1;
 }
 
 .channelFeatures {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 24px;
   text-align: left;
+  position: relative;
+  z-index: 1;
+  min-height: 75px;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
 .channelFeatures span {
   font-size: 14px;
   color: #22c55e;
   font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.channelCard:hover .channelFeatures span {
+  color: #16a34a;
+}
+
+:global(.dark) .channelCard:hover .channelFeatures span {
+  color: #86efac;
 }
 
 .channelBtn {
   width: 100%;
-  padding: 12px 20px;
-  background: #667eea;
+  min-width: 160px;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: white;
   border: none;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  margin-top: auto;
+  font-size: 16px;
+}
+
+.channelBtn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+  z-index: -1;
+}
+
+.channelBtn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .channelBtn:hover {
-  background: #5a67d8;
-  transform: translateY(-1px);
+  background: linear-gradient(135deg, #0172a6 0%, #025a82 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
+}
+
+.channelBtn:active {
+  transform: translateY(0);
+}
+
+.liveAgentBtn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+}
+
+.liveAgentBtn:hover {
+  background: linear-gradient(135deg, #0172a6 0%, #025a82 100%);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.4);
 }
 
 /* Emergency Section */
@@ -507,10 +705,35 @@
   .sectionHeader p {
     font-size: 16px;
   }
+  
+  .featuresGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-  .featuresGrid,
   .channelsGrid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+
+  /* Tablet layout (2 columns) */
+  .channelsGrid > :nth-child(1) {
+    grid-column: 1 / span 2;
+  }
+
+  .channelsGrid > :nth-child(2) {
+    grid-column: 3 / span 2;
+  }
+
+  .channelsGrid > :nth-child(3) {
+    grid-column: 1 / span 2;
+  }
+
+  .channelsGrid > :nth-child(4) {
+    grid-column: 3 / span 2;
+  }
+
+  .channelsGrid > :nth-child(5) {
+    grid-column: 2 / span 2;
   }
 
   .stepsContainer {
@@ -544,9 +767,34 @@
   }
 
   .featureCard,
-  .step,
-  .channelCard {
+  .step {
     padding: 24px 20px;
+  }
+
+  .channelCard {
+    padding: 24px;
+  }
+
+  .channelsGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  /* Mobile: single column */
+  .channelsGrid > :nth-child(1),
+  .channelsGrid > :nth-child(2),
+  .channelsGrid > :nth-child(3),
+  .channelsGrid > :nth-child(4),
+  .channelsGrid > :nth-child(5) {
+    grid-column: auto;
+  }
+
+  .badgeNew {
+    width: calc(100% - 24px);
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: -12px;
+    margin-bottom: 16px;
   }
 }
 
@@ -575,7 +823,11 @@
 :global(.dark) .featureCard,
 :global(.dark) .step,
 :global(.dark) .channelCard {
-  background: #334155;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+}
+
+:global(.dark) .liveAgentCard {
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
 }
 
 :global(.dark) .featureCard h3,
@@ -588,6 +840,33 @@
 :global(.dark) .step p,
 :global(.dark) .channelCard p {
   color: #cbd5e1;
+}
+
+:global(.dark) .channelCard:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 20px 50px rgba(56, 189, 248, 0.25), 0 0 50px rgba(56, 189, 248, 0.15);
+}
+
+:global(.dark) .liveAgentCard:hover {
+  border-color: #38bdf8;
+  box-shadow: 0 20px 50px rgba(56, 189, 248, 0.25), 0 0 50px rgba(56, 189, 248, 0.15);
+}
+
+:global(.dark) .channelBtn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+}
+
+:global(.dark) .channelBtn:hover {
+  background: linear-gradient(135deg, #0172a6 0%, #025a82 100%);
+  box-shadow: 0 8px 25px rgba(2, 132, 199, 0.5);
+}
+
+:global(.dark) .liveAgentBtn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+}
+
+:global(.dark) .liveAgentBtn:hover {
+  background: linear-gradient(135deg, #0172a6 0%, #025a82 100%);
 }
 
 :global(.dark) .emergency {

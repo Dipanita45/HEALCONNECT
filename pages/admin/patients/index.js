@@ -3,7 +3,8 @@ import AuthCheck from "@components/Auth/AuthCheck";
 import PatientCard from "@components/PatientComponents/PatientCard";
 import FetchPatients from "@lib/fetchPatients";
 import { useRouter } from "next/router";
-import { FaAngleRight, FaSpinner, FaSearch } from 'react-icons/fa';
+import { FaAngleRight, FaSearch } from 'react-icons/fa';
+import Loader from "@components/Loader";
 
 export default function Patients(prose) {
   const router = useRouter();
@@ -63,9 +64,9 @@ export default function Patients(prose) {
                   {(loading) && (
                     <tbody>
                       <tr>
-                        <td></td>
-                        <td></td>
-                        <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40} /></td>
+                        <td colSpan="5" className="py-20">
+                          <Loader show={true} size={40} />
+                        </td>
                       </tr>
                     </tbody>
                   )}

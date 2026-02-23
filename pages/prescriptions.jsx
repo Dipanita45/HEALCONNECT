@@ -50,6 +50,8 @@ export default function Prescriptions() {
   const [activeTab, setActiveTab] = useState('current');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [summaryById, setSummaryById] = useState({});
+  const [loadingSummaryId, setLoadingSummaryId] = useState(null);
   const { theme } = useTheme();
 
   // Sample initial prescriptions
@@ -198,6 +200,34 @@ export default function Prescriptions() {
     setPrescriptions(prev =>
       prev.map(p => (p.id === id ? { ...p, status: 'completed' } : p))
     )
+  }
+
+  const buildText = p => {
+    return [
+      `Medicine: ${p.medicine || ''}`,
+      `Dosage: ${p.dosage || ''}`,
+      `Frequency: ${p.frequency || ''}`,
+      `Duration: ${p.duration || ''}`,
+      `Notes: ${p.notes || ''}`
+    ].join('\n')
+  }
+
+  const handleGenerateSummary = async p => {
+    try {
+      setLoadingSummaryId(p.id);
+      const r = await fetch('/api/prescriptions/summarize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: buildText(p) })
+      });
+      const j = await r.json();
+      const s = j?.summary || '';
+      setSummaryById(prev => ({ ...prev, [p.id]: s }));
+    } catch (e) {
+      setSummaryById(prev => ({ ...prev, [p.id]: 'Unable to generate summary.' }));
+    } finally {
+      setLoadingSummaryId(null);
+    }
   }
 
   const filteredPrescriptions = prescriptions.filter(p => {
@@ -357,6 +387,14 @@ export default function Prescriptions() {
                             </>
                           )}
                           <button
+                            className={styles.actionButton}
+                            onClick={() => handleGenerateSummary(prescription)}
+                            title="Generate patient summary"
+                            disabled={loadingSummaryId === prescription.id}
+                          >
+                            {loadingSummaryId === prescription.id ? 'Generating…' : 'Patient Summary'}
+                          </button>
+                          <button
                             className={`${styles.actionButton} ${styles.deleteButton}`}
                             onClick={() => handleDelete(prescription.id)}
                             title="Delete"
@@ -412,6 +450,17 @@ export default function Prescriptions() {
                           </div>
                         )}
                       </div>
+
+                      {summaryById[prescription.id] && (
+                        <div className={styles.remindersSection}>
+                          <h4>Patient Summary:</h4>
+                          <div className={styles.remindersList}>
+                            <span className={styles.reminderTime}>
+                              {summaryById[prescription.id]}
+                            </span>
+                          </div>
+                        </div>
+                      )}
 
                       {prescription.status === 'active' &&
                         prescription.reminders && (
