@@ -1,24 +1,32 @@
 import { useState, useEffect } from 'react'
-import { FaHeartbeat, FaPhoneAlt, FaPills, FaSync, FaExclamationTriangle } from 'react-icons/fa'
+import { FaHeartbeat, FaPhoneAlt, FaPills, FaSync } from 'react-icons/fa'
 import { MdWifiOff } from 'react-icons/md'
 import { offlineManager } from '@/lib/offlineDataManager'
 
 export default function OfflineFallback() {
-  const [vitalsCount, setVitalsCount] = useState(0)
-  const [contactsCount, setContactsCount] = useState(0)
-  const [medicationsCount, setMedicationsCount] = useState(0)
-  const [isOnline, setIsOnline] = useState(false)
+  // Consolidated offline counts into a single state object
+  const [offlineCounts, setOfflineCounts] = useState({
+    vitals: 0,
+    contacts: 0,
+    medications: 0
+  })
+  // Initialize online status from navigator.onLine
+  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
     const checkOfflineData = async () => {
       try {
         // Get counts of cached data
         const unsynced = await offlineManager.getUnsyncedData()
-        setVitalsCount(unsynced.vitals.length)
-        setContactsCount(unsynced.contacts.length)
-        setMedicationsCount(unsynced.medications.length)
-      } catch (error) {
-        console.error('Failed to check offline data:', error)
+        setOfflineCounts({
+          vitals: unsynced.vitals.length,
+          contacts: unsynced.contacts.length,
+          medications: unsynced.medications.length
+        })
+      } catch (err) {
+        console.error('Failed to check offline data:', err)
+        setError('Failed to load offline data')
       }
     }
 
@@ -59,6 +67,11 @@ export default function OfflineFallback() {
             No internet connection detected. Critical healthcare data is still available.
           </p>
 
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 mb-4">{error}</p>
+          )}
+
           {/* Available Data Summary */}
           <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 mb-6">
             <h2 className="text-lg font-semibold text-blue-900 dark:text-blue-100 mb-3 flex items-center justify-center space-x-2">
@@ -68,15 +81,15 @@ export default function OfflineFallback() {
             
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{vitalsCount}</div>
+                <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{offlineCounts.vitals}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">Vitals</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-green-600 dark:text-green-400">{contactsCount}</div>
+                <div className="text-2xl font-bold text-green-600 dark:text-green-400">{offlineCounts.contacts}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">Contacts</div>
               </div>
               <div>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{medicationsCount}</div>
+                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400">{offlineCounts.medications}</div>
                 <div className="text-xs text-gray-600 dark:text-gray-400">Medications</div>
               </div>
             </div>
