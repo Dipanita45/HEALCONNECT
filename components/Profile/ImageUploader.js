@@ -1,21 +1,30 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Loader from '../Loader';
 import Image from 'next/image';
+import { auth, storage } from '@lib/firebase'
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
+import toast from 'react-hot-toast'
 
 // Uploads images to Firebase Storage
 export default function ImageUploader() {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [downloadURL, setDownloadURL] = useState(null);
+  const [uploadSucceeded, setUploadSucceeded] = useState(false);
 
   // Creates a Firebase Upload Task
   const uploadFile = async (e) => {
     // Get the file
     const file = Array.from(e.target.files)[0];
     const extension = file.type.split('/')[1];
+    const uid = (auth && auth.currentUser && auth.currentUser.uid) || null;
+    if (!uid) {
+      toast.error('You must be signed in to upload images.');
+      return;
+    }
 
     // Makes reference to the storage bucket location
-    const fileRef = ref(storage, `uploads/${auth.currentUser.uid}/${Date.now()}.${extension}`);
+    const fileRef = ref(storage, `uploads/${uid}/${Date.now()}.${extension}`);
     setUploading(true);
 
     // Starts the upload
@@ -24,7 +33,7 @@ export default function ImageUploader() {
     setDownloadURL(url)
 
     // Listen to updates to upload task
-    task.on(STATE_CHANGED, (snapshot) => {
+    task.on('state_changed', (snapshot) => {
       const pct = ((snapshot.bytesTransferred / snapshot.totalBytes) * 100).toFixed(0);
       setProgress(pct);
     });
@@ -35,12 +44,22 @@ export default function ImageUploader() {
       .then((url) => {
         setDownloadURL(url);
         setUploading(false);
+        setUploadSucceeded(true);
+      })
+      .catch(() => {
+        setUploading(false);
       });
   };
 
+  useEffect(() => {
+    if (!uploadSucceeded) return;
+    const t = setTimeout(() => setUploadSucceeded(false), 1400);
+    return () => clearTimeout(t);
+  }, [uploadSucceeded]);
+
   return (
     <div>
-      <Loader show={uploading} />
+      <Loader show={uploading || uploadSucceeded} variant="syringe" status={uploading ? 'loading' : uploadSucceeded ? 'success' : null} />
       {uploading && <h3>{progress}%</h3>}
 
       <div className=" flex flex-col h-auto w-auto items-center justify-center font-medium group">

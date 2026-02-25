@@ -14,6 +14,12 @@
   --background-start-rgb: 249, 250, 251;
   /* gray-50 */
   --background-end-rgb: 255, 255, 255;
+
+  /* Navbar / hamburger / mobile menu */
+  --hamburger-color: #0F172A;
+  --mobile-menu-bg: #F8FAFC;
+  --mobile-menu-text: #0F172A;
+  --mobile-menu-border: #e2e8f0;
 }
 
 /* ================================
@@ -28,6 +34,12 @@
   /* gray-900 */
   --background-end-rgb: 3, 7, 18;
   /* near-black */
+
+  /* Navbar / hamburger / mobile menu */
+  --hamburger-color: white;
+  --mobile-menu-bg: #0f172a;
+  --mobile-menu-text: white;
+  --mobile-menu-border: #374151;
 }
 
 /* ================================

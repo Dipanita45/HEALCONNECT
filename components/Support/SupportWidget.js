@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaHeadset, FaTimes, FaPaperPlane, FaUser, FaRobot,
@@ -13,13 +13,13 @@ import { useTheme } from '@/context/ThemeContext';
 const localTicketCache = [];
 
 const SupportWidget = () => {
-  const { isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen } = useTheme();
+  const { isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen, showTicketModal, setShowTicketModal } = useTheme();
   const isOpen = supportWidgetOpen;
   const setIsOpen = setSupportWidgetOpen;
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  const [showTicketModal, setShowTicketModal] = useState(false);
+  
   const [currentTicket, setCurrentTicket] = useState(null);
   const [ticketData, setTicketData] = useState({
     subject: '',
@@ -31,6 +31,10 @@ const SupportWidget = () => {
   // Track processed message IDs to prevent duplicates
   const [processedMessageIds, setProcessedMessageIds] = useState(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
+
+  // Initialize currentUser and userRole as null to avoid undefined errors
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
 
   // const [isMinimized, setIsMinimized] = useState(false);
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
@@ -77,6 +81,7 @@ const SupportWidget = () => {
         if (event.key === 'Escape') {
           event.preventDefault();
           setShowTicketModal(false);
+          setSupportWidgetOpen(false);
           inputRef.current?.focus();
         }
         return;
@@ -324,7 +329,7 @@ const SupportWidget = () => {
           setIsProcessing(false);
         }
       }
-    });
+    }, currentUser?.uid, userRole);
 
     return () => {
       console.log('SupportWidget: Cleaning up ticket subscription');
@@ -425,15 +430,28 @@ const SupportWidget = () => {
 
   const createTicket = async () => {
     try {
+      // Guard against null currentUser
+      if (!currentUser || !currentUser.uid) {
+        const errorMessage = {
+          id: Date.now(),
+          type: 'system',
+          text: 'Error: You must be logged in to create a support ticket. Please log in first.',
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+        return;
+      }
+
       const ticketPayload = {
         subject: ticketData.subject,
         category: ticketData.category,
         priority: ticketData.priority,
         description: ticketData.description,
+        userId: currentUser.uid, // Add security context
         user: {
-          name: 'Current User', // In production, get from auth context
-          email: 'user@example.com', // In production, get from auth context
-          avatar: '👤'
+          name: currentUser.displayName || 'Current User',
+          email: currentUser.email || 'user@example.com',
+          avatar: currentUser.photoURL || '👤'
         },
         messages: messages,
         tags: ticketData.tags || []
@@ -552,7 +570,10 @@ const SupportWidget = () => {
     return (
       <motion.button
         className={styles.widgetButton}
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+          setIsMinimized(false);
+        }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -563,6 +584,7 @@ const SupportWidget = () => {
 
   return (
     <>
+      {!showTicketModal && (
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -792,7 +814,12 @@ const SupportWidget = () => {
                     <FaTicketAlt /> Create Ticket
                   </button>
                 )}
-                <button className={styles.callBtn} aria-label="Request phone call" tabIndex={0}>
+                <button 
+                  onClick={() => window.open('tel:+1-800-HEALCONNECT')}
+                  className={styles.callBtn} 
+                  aria-label="Request phone call" 
+                  tabIndex={0}
+                >
                   <FaPhone /> Request Call
                 </button>
               </div>
@@ -800,6 +827,7 @@ const SupportWidget = () => {
           </>
         )}
       </motion.div>
+      )}
 
       {/* Ticket Modal */}
       <AnimatePresence>
@@ -809,7 +837,10 @@ const SupportWidget = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className={styles.modalOverlay}
-            onClick={() => setShowTicketModal(false)}
+            onClick={() => {
+              setShowTicketModal(false);
+              setSupportWidgetOpen(false);
+            }}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -829,7 +860,10 @@ const SupportWidget = () => {
                   Create Support Ticket
                 </h2>
                 <button
-                  onClick={() => setShowTicketModal(false)}
+                  onClick={() => {
+                    setShowTicketModal(false);
+                    setSupportWidgetOpen(false);
+                  }}
                   className={styles.closeModal}
                   aria-label="Close ticket creation modal"
                   tabIndex={0}
@@ -947,7 +981,10 @@ const SupportWidget = () => {
                   <div className={styles.formActions}>
                     <button
                       type="button"
-                      onClick={() => setShowTicketModal(false)}
+                      onClick={() => {
+                        setShowTicketModal(false);
+                        setSupportWidgetOpen(false);
+                      }}
                       className={styles.cancelBtn}
                       aria-label="Cancel ticket creation"
                     >

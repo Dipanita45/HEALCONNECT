@@ -10,7 +10,7 @@
 [![SWOC'26](https://img.shields.io/badge/SWOC-2026-blueviolet?style=flat-square&logo=rocket)](https://socialwinterofcode.com/)
 [![Discord](https://img.shields.io/badge/Discord-7289DA?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/WbvxB2F4G)
 
-[**Live Demo**](healconnect.vercel.app/) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
+[**Live Demo**](https://healconnect.vercel.app/) | [**Report Bug**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Request Feature**](https://github.com/Dipanita45/HEALCONNECT/issues) | [**Join Discord**](https://discord.gg/WbvxB2F4G)
 
 </div>
 
@@ -21,6 +21,20 @@
 **HEALCONNECT** is a professional-grade health monitoring system designed for real-time remote patient care. By bridging the gap between physical sensors and cloud-based dashboards, it allows medical professionals to monitor vital parameters (ECG, Heart Rate, etc.) and manage appointments seamlessly from any location.
 
 ---
+
+## 🌟 Open Source Participation
+
+This project proudly participates in the following open-source programs:
+
+| Program | Program Name | Status |
+|---------|--------------|--------|
+| ❄️ | **Social Winter of Code (SWOC)** | Active |
+| 🌍 | **Open Source Community Group (OSCG)** | Active |
+| 🚀 | **Apertre 3.0** | Active |
+
+> 💡 We warmly welcome contributors from all the above programs.  
+Please check open issues and follow the contribution guidelines before submitting a PR.
+
 
 ## 🚀 Key Features
 

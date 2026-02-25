@@ -170,6 +170,8 @@
   text-align: center;
   margin-bottom: 1rem;
   color: rgb(var(--foreground-rgb)) !important;
+  align-self: center;
+  width: 100%;
 }
 
 .sectionSubtitle {
@@ -299,37 +301,43 @@
   background: linear-gradient(135deg, #1d4ed8 0%, #059669 100%);
 }
 
+/* ─── BOOKING SECTION ─────────────────────────────────────── */
+/* FIX: Removed hardcoded `background: white` — now uses CSS variable */
 .bookingSection {
-  background: white;
+  background: rgb(var(--background-start-rgb));
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(var(--foreground-rgb), 0.08);
 }
 
 .bookingHeader {
   margin-bottom: 2rem;
-  position: relative;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
+/* FIX: Removed hardcoded light-mode colors — now theme-aware */
 .backButton {
-  position: absolute;
-  left: 0;
-  top: 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #f1f5f9;
-  border: none;
+  background: rgba(var(--foreground-rgb), 0.08);
+  color: rgb(var(--foreground-rgb));
+  border: 1px solid rgba(var(--foreground-rgb), 0.12);
   padding: 0.5rem 1rem;
   border-radius: 50px;
   cursor: pointer;
   transition: all 0.3s ease;
   font-weight: 500;
+  margin-bottom: 1.5rem;
+  width: fit-content;
 }
 
 .backButton:hover {
-  background: #e2e8f0;
+  background: rgba(var(--foreground-rgb), 0.15);
 }
 
 .backButton svg {
@@ -337,9 +345,13 @@
   height: 20px;
 }
 
+/* FIX: Removed hardcoded #64748b — now uses CSS variable */
 .selectedDoctorSpecialty {
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   font-size: 1.1rem;
+  text-align: center;
+  align-self: center;
+  width: 100%;
 }
 
 .bookingContent {
@@ -362,348 +374,39 @@
 
 .inputGroup {
   position: relative;
+  margin-bottom: 1.5rem;
 }
 
+/* FIX: Removed hardcoded `color: #1e293b` — now theme-aware */
 .formInput {
   width: 100%;
   padding: 1rem 0;
   border: none;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid rgba(var(--foreground-rgb), 0.15);
   background: transparent;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: rgb(var(--foreground-rgb));
 }
 
 .formInput:focus {
   outline: none;
   border-bottom-color: #2563eb;
-}
-
-.formLabel {
-  position: absolute;
-  top: 1rem;
-  left: 0;
-  color: #64748b;
-  pointer-events: none;
-  transition: all 0.3s ease;
-}
-
-.formInput:focus ~ .formLabel,
-.formInput:not(:placeholder-shown) ~ .formLabel {
-  top: -0.5rem;
-  left: 0;
-  font-size: 0.875rem;
-  color: #2563eb;
-}
-
-.formUnderline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #2563eb, #10b981);
-  transition: width 0.3s ease;
-}
-
-.formInput:focus ~ .formUnderline {
-  width: 100%;
-}
-
-.selectedDoctorSummary {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  margin: 1rem 0;
-}
-
-.summaryImage {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-
-.summaryImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.summaryInfo h4 {
-  margin-bottom: 0.25rem;
-  color: #1e293b;
-}
-
-.summaryInfo p {
-  color: #64748b;
-  margin-bottom: 0.25rem;
-  font-size: 0.9rem;
-}
-
-.availableText {
-  color: #10b981;
-  font-weight: 600;
-}
-
-.unavailableText {
-  color: #ef4444;
-  font-weight: 600;
-}
-
-.submitButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #2563eb 0%, #10b981 100%);
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 1rem;
-}
-
-.submitButton:hover:not(:disabled) {
-  box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
-}
-
-.submitButton:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
-}
-
-.submitButton svg {
-  width: 20px;
-  height: 20px;
-}
-
-.doctorDetails {
-  background: #f8fafc;
-  padding: 1.5rem;
-  border-radius: 12px;
-}
-
-.doctorDetails h3 {
-  margin-bottom: 1rem;
-  color: #1e293b;
-}
-
-.doctorBio {
-  color: #64748b;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.detailItem {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-.detailItem:last-child {
-  border-bottom: none;
-}
-
-.detailLabel {
-  font-weight: 600;
-  color: #374151;
-}
-
-.detailValue {
-  color: #64748b;
-}
-
-.successAnimation {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.7);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-}
-
-.successContent {
-  background: white;
-  padding: 2rem;
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-}
-
-.checkmark {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1rem;
-}
-
-.checkmarkCircle {
-  stroke-dasharray: 166;
-  stroke-dashoffset: 166;
-  stroke-width: 2;
-  stroke-miterlimit: 10;
-  stroke: #10b981;
-  fill: none;
-  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-}
-
-.checkmarkCheck {
-  transform-origin: 50% 50%;
-  stroke-dasharray: 48;
-  stroke-dashoffset: 48;
-  stroke: #10b981;
-  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
-}
-
-@keyframes stroke {
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
-/* Dark mode support */
-.dark .container {
-  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorCard,
-.dark .bookingSection {
-  background: rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorInfo h3 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .formInput {
-  color: rgb(var(--foreground-rgb));
-  border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
-}
-
-.dark .selectedDoctorSummary {
-  background: rgb(var(--background-start-rgb));
-}
-
-.dark .summaryInfo h4 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .doctorDetails {
-  background: rgb(var(--background-start-rgb));
-}
-
-.dark .doctorDetails h3 {
-  color: rgb(var(--foreground-rgb));
-}
-
-.dark .detailLabel {
-  color: rgb(var(--foreground-muted-rgb));
-}
-
-.dark .successContent {
-  background: rgb(var(--background-start-rgb));
-  color: rgb(var(--foreground-rgb));
-}
-
-/* Responsive design */
-@media (max-width: 968px) {
-  .bookingContent {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-  
-  .doctorsGrid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .title {
-    font-size: 2.25rem;
-  }
-  
-  .formRow {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  
-  .navbarSpacer {
-    height: 70px;
-  }
-}
-
-@media (max-width: 480px) {
-  .title {
-    font-size: 2rem;
-  }
-  
-  .content {
-    padding: 0 1rem 2rem;
-  }
-  
-  .bookingSection {
-    padding: 1.5rem;
-  }
-  
-  .navbarSpacer {
-    height: 60px;
-  }
-}
-
-/* Add these styles to your existing CSS file */
-
-/* Form animations */
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.inputGroup {
-  position: relative;
-  margin-bottom: 1.5rem;
-}
-
-.formInput {
-  width: 100%;
-  padding: 1rem 0;
-  border: none;
-  border-bottom: 2px solid #e2e8f0;
-  background: transparent;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  color: #1e293b;
-}
-
-.formInput:focus {
-  outline: none;
-  border-bottom-color: #2563eb;
+  transform: translateY(-2px);
 }
 
 .formInput.error {
   border-bottom-color: #ef4444;
 }
 
+/* FIX: Removed hardcoded #64748b */
 .formLabel {
   position: absolute;
   top: 1rem;
   left: 0;
-  color: #64748b;
+  color: rgb(var(--foreground-muted-rgb));
   pointer-events: none;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: left top;
 }
 
@@ -716,6 +419,8 @@
   transform: translateY(-100%) scale(0.9);
 }
 
+
+
 .formInput.error ~ .formLabel {
   color: #ef4444;
 }
@@ -727,7 +432,7 @@
   width: 0;
   height: 2px;
   background: linear-gradient(90deg, #2563eb, #10b981);
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .formInput:focus ~ .formUnderline {
@@ -747,57 +452,54 @@
   color: #ef4444;
 }
 
-/* Submit message (success/error) - inline, non-blocking */
-.submitMessage {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.875rem;
+/* FIX: Removed hardcoded `background: #f8fafc` — now theme-aware */
+.selectedDoctorSummary {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 1rem;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(var(--foreground-rgb), 0.05);
+  border: 1px solid rgba(var(--foreground-rgb), 0.08);
+  border-radius: 12px;
+  margin: 1rem 0;
 }
 
-.submitMessageSuccess {
-  background: #d1fae5;
-  border: 1px solid #6ee7b7;
-  color: #065f46;
-}
-
-.submitMessageError {
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-  color: #b91c1c;
-}
-
-.dark .submitMessageSuccess {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: rgba(16, 185, 129, 0.4);
-  color: #6ee7b7;
-}
-
-.dark .submitMessageError {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #fca5a5;
-}
-
-/* Loading spinner */
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid transparent;
-  border-top: 2px solid white;
+.summaryImage {
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
-  animation: spin 1s linear infinite;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.summaryImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-/* Enhanced button animations */
+/* FIX: Removed hardcoded #1e293b and #64748b */
+.summaryInfo h4 {
+  margin-bottom: 0.25rem;
+  color: rgb(var(--foreground-rgb));
+}
+
+.summaryInfo p {
+  color: rgb(var(--foreground-muted-rgb));
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.availableText {
+  color: #10b981;
+  font-weight: 600;
+}
+
+.unavailableText {
+  color: #ef4444;
+  font-weight: 600;
+}
+
 .submitButton {
   display: flex;
   align-items: center;
@@ -850,22 +552,155 @@
   transform: translateX(3px);
 }
 
-/* Enhanced select styling */
+/* FIX: Removed hardcoded `background: #f8fafc` and `color: #1e293b` */
+.doctorDetails {
+  background: rgba(var(--foreground-rgb), 0.04);
+  border: 1px solid rgba(var(--foreground-rgb), 0.08);
+  padding: 1.5rem;
+  border-radius: 12px;
+}
+
+/* FIX: Removed hardcoded #1e293b */
+.doctorDetails h3 {
+  margin-bottom: 1rem;
+  color: rgb(var(--foreground-rgb));
+}
+
+/* FIX: Removed hardcoded #64748b */
+.doctorBio {
+  color: rgb(var(--foreground-muted-rgb));
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(var(--foreground-rgb), 0.1);
+}
+
+.detailItem:last-child {
+  border-bottom: none;
+}
+
+/* FIX: Removed hardcoded #374151 */
+.detailLabel {
+  font-weight: 600;
+  color: rgb(var(--foreground-rgb));
+}
+
+/* FIX: Removed hardcoded #64748b */
+.detailValue {
+  color: rgb(var(--foreground-muted-rgb));
+}
+
+/* ─── SELECT DROPDOWN ─────────────────────────────────────── */
 select.formInput {
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 0.5rem center;
   background-size: 1em;
   padding-right: 2.5rem;
+  /* FIX: select needs explicit background in dark mode */
+  background-color: transparent;
 }
 
-/* Enhanced transitions for form elements */
-.formInput, .formLabel, .formUnderline {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* ─── SUCCESS ANIMATION ───────────────────────────────────── */
+.successAnimation {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Pulse animation for required fields */
+/* FIX: Removed hardcoded `background: white` */
+.successContent {
+  background: rgb(var(--background-start-rgb));
+  color: rgb(var(--foreground-rgb));
+  padding: 2rem;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(var(--foreground-rgb), 0.1);
+}
+
+.checkmark {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+}
+
+.checkmarkCircle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #10b981;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmarkCheck {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  stroke: #10b981;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ─── SUBMIT MESSAGE ──────────────────────────────────────── */
+.submitMessage {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1rem;
+}
+
+.submitMessageSuccess {
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  color: #065f46;
+}
+
+.submitMessageError {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+}
+
+/* ─── SPINNER ─────────────────────────────────────────────── */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ─── PULSE ANIMATION ─────────────────────────────────────── */
 @keyframes pulse {
   0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
   70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
@@ -876,25 +711,126 @@ select.formInput {
   animation: pulse 2s infinite;
 }
 
-/* Enhanced focus states */
-.formInput:focus {
-  transform: translateY(-2px);
+/* ─── DARK MODE ───────────────────────────────────────────── */
+/* FIX: Was `.dark .class` which doesn't work in CSS Modules.
+   Must use `:global(.dark) .class` to target body/html class toggle */
+
+:global(.dark) .bookingSection {
+  background: rgb(var(--background-start-rgb));
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
-/* Dark mode support for form elements */
-.dark .formInput {
+:global(.dark) .backButton {
+  background: rgba(255, 255, 255, 0.08);
   color: rgb(var(--foreground-rgb));
-  border-bottom-color: rgba(var(--foreground-muted-rgb), 0.3);
+  border-color: rgba(255, 255, 255, 0.12);
 }
-  
-.dark .formLabel {
-  color: rgb(var(--foreground-muted-rgb));
+
+:global(.dark) .backButton:hover {
+  background: rgba(255, 255, 255, 0.15);
 }
-  
-.dark .formInput:focus ~ .formLabel {
-  color: #2563eb;
+
+:global(.dark) .doctorCard {
+  background: rgb(var(--background-start-rgb));
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
 }
-  
-.dark select.formInput {
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgb(var(--foreground-rgb))' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+
+:global(.dark) .selectedDoctorSummary {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+:global(.dark) .doctorDetails {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+:global(.dark) .detailItem {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+:global(.dark) .formInput {
+  color: rgb(var(--foreground-rgb));
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+
+:global(.dark) .formInput:focus {
+  border-bottom-color: #2563eb;
+}
+
+:global(.dark) select.formInput {
+  background-color: transparent;
+  color: rgb(var(--foreground-rgb));
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+/* Select options need explicit dark background since they ignore CSS vars */
+:global(.dark) select.formInput option {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+:global(.dark) .successContent {
+  background: rgb(var(--background-start-rgb));
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+:global(.dark) .submitMessageSuccess {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+}
+
+:global(.dark) .submitMessageError {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+}
+
+
+
+/* ─── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 968px) {
+  .bookingContent {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .doctorsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    font-size: 2.25rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .navbarSpacer {
+    height: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .content {
+    padding: 0 1rem 2rem;
+  }
+
+  .bookingSection {
+    padding: 1.5rem;
+  }
+
+  .navbarSpacer {
+    height: 60px;
+  }
 }
