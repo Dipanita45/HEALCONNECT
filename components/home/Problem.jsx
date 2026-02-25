@@ -66,7 +66,6 @@ export default function Problem({ scrollToSection }) {
                 </p>
               </div>
             </div>
-            {/* // new clasese added here */}
 
             <div className="flex gap-4 mb-6 p-5 rounded-xl bg-transparent border border-slate-200 dark:border-gray-700 transition-all duration-300 hover:border-blue-500 dark:hover:border-blue-400 hover:shadow-lg hover:-translate-y-1">
               <div className="text-2xl">🔍</div>
