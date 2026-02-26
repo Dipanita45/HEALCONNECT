@@ -10,6 +10,10 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
+  const [prevScrollPos, setPrevScrollPos] = useState(0)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
   const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
   const router = useRouter()
 
@@ -34,13 +38,26 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const isScrolled = window.scrollY > 10
+      const currentScrollPos = window.scrollY
+
+      // 1. Logic for background styling (Existing behavior)
+      const isScrolled = currentScrollPos > 10
       setScrolled(isScrolled)
+
+      // 2. Logic for Smart Navbar (Hide on scroll down, Show on scroll up)
+      if (currentScrollPos < 10) {
+        setVisible(true) // Always show at the top
+      } else {
+        // Show if scrolling up, hide if scrolling down
+        setVisible(prevScrollPos > currentScrollPos)
+      }
+
+      setPrevScrollPos(currentScrollPos)
     }
 
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [prevScrollPos])
 
   const toggleMenu = useCallback(() => {
     setIsMenuOpen(prev => !prev)
@@ -51,6 +68,7 @@ export default function Navbar() {
   }, [])
 
   const handleLogout = async () => {
+    setIsLoggingOut(true)
     // Clear localStorage
     localStorage.removeItem('userType')
     localStorage.removeItem('username')
@@ -72,6 +90,7 @@ export default function Navbar() {
       window.firebaseAuth.signOut()
     }
 
+    setIsLoggingOut(false)
     // Redirect to login
     router.push('/login')
     closeMenu()
@@ -100,7 +119,14 @@ export default function Navbar() {
   ]
 
   return (
-    <nav className={`${styles.navbar} ${scrolled ? styles.scrolled : ''} h-20`}>
+    <nav
+      className={`
+        ${styles.navbar} 
+        ${scrolled ? styles.scrolled : ''} 
+        ${!visible ? styles.navHidden : ''} 
+        h-20
+      `}
+    >
       <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
         {/* Logo/Brand */}
         <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
@@ -115,22 +141,36 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Desktop Navigation Links */}
-        <div className="hidden lg:flex items-center justify-center flex-grow gap-x-2 xl:gap-x-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={`${styles.navLink} ${router.pathname === link.href ? styles.active : ''}`}
-            >
-              {link.icon && <FaHeadset className={styles.supportIcon} />}
-              <span className={styles.linkText}>{link.label}</span>
-              <div className={styles.linkHoverEffect}></div>
-            </Link>
-          ))}
+        {/* Navigation Links - Centered with Active State Highlighting */}
+        <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
+          <Link
+            href="/"
+            className={`${styles.navLink} ${router.pathname === '/' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className={styles.linkText}>Home</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link>
+
+          <Link
+            href="/prescriptions"
+            className={`${styles.navLink} ${router.pathname === '/prescriptions' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className={styles.linkText}>Prescriptions</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link>
+
+          <Link
+            href="/appointments"
+            className={`${styles.navLink} ${router.pathname === '/appointments' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className={styles.linkText}>Appointments</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link>
         </div>
 
-        {/* Right side - Auth buttons + Theme Toggle + Hamburger */}
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
           {/* Auth buttons - hidden on small screens, shown in mobile menu */}
           <div className="hidden sm:flex items-center">
@@ -144,9 +184,11 @@ export default function Navbar() {
                 </button>
                 <button
                   onClick={handleLogout}
-                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700`}
+                  disabled={isLoggingOut}
+                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700 disabled:opacity-50 flex items-center gap-2`}
                 >
-                  <span>Logout</span>
+                  {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                  <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </div>
             ) : (
@@ -176,7 +218,10 @@ export default function Navbar() {
           {user || currentUser ? (
             <div className="hidden lg:flex items-center gap-2">
               <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
-              <button onClick={handleLogout} className="px-4 py-2 bg-red-600 text-white rounded-md">Logout</button>
+              <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
+                {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
+              </button>
             </div>
           ) : (
             <div className="hidden lg:flex">
