@@ -172,8 +172,8 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
-          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
-          <div className="hidden sm:flex items-center">
+          {/* Auth buttons for small-to-medium screens (hidden on large to avoid duplicate) */}
+          <div className="hidden sm:flex lg:hidden items-center">
             {user || currentUser ? (
               <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
                 <button
