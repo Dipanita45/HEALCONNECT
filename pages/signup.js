@@ -250,7 +250,8 @@ export default function SignupPage() {
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
-      padding: "20px",
+      /* ensure the form is pushed down beneath the fixed navbar (h-20 / 80px) */
+      padding: "100px 20px 20px",
       marginTop: "0px",
       overflow: "hidden",
       position: "relative",
