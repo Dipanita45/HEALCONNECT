@@ -335,6 +335,11 @@ const SupportWidget = () => {
     };
   }, [currentTicket, isProcessing]);
 
+  const adjustTextareaHeight = (element) => {
+    element.style.height = 'auto';
+    element.style.height = element.scrollHeight + 'px';
+  };
+
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
 
@@ -740,17 +745,19 @@ const SupportWidget = () => {
                 <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
                   <FaPaperclip />
                 </button>
-                <input
+                <textarea
                   ref={inputRef}
-                  type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    adjustTextareaHeight(e.target);
+                  }}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type your message..."
                   className={styles.messageInput}
                   aria-label="Type your message"
                   aria-describedby="input-help"
-                  autoComplete="off"
+                  rows={1}
                 />
                 <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />
