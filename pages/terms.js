@@ -2,6 +2,7 @@ import Head from "next/head";
 import { motion } from "framer-motion";
 import { FaFileContract, FaGavel, FaBalanceScale, FaExclamationTriangle, FaHeartbeat, FaShieldAlt, FaUserCheck, FaClock, FaInfoCircle, FaLock, FaServer, FaChartLine, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaBell, FaQuestionCircle, FaComments } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
+import { useTheme } from '@/context/ThemeContext';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,6 +17,7 @@ const fadeInUp = {
 };
 
 export default function Terms() {
+  const { setSupportWidgetOpen } = useTheme();
   return (
     <>
       <Head>
@@ -487,8 +489,11 @@ export default function Terms() {
                   <FaComments className="text-3xl mb-3 mx-auto text-blue-600 dark:text-blue-200" />
                   <h4 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">Live Chat</h4>
                   <p className="text-gray-700 dark:text-blue-100 mb-2">Instant help available</p>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
-                    Start Chat
+                  <button 
+                  onClick={() => setSupportWidgetOpen(true)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
+                  >
+                  Start Chat
                   </button>
                 </motion.div>
               </div>
