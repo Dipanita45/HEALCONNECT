@@ -158,3 +158,113 @@
     transform: translateY(0);
   }
 }
+
+/* Modal Overlay */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+/* Success Modal Container */
+.successModal {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+:global(.dark) .successModal {
+  background: #0f172a;
+  border: 1px solid #334155;
+  color: #f8fafc;
+}
+
+.successIcon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem;
+}
+
+.successIcon svg {
+  width: 100%;
+  height: 100%;
+  stroke: #22c55e;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.successModal h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #1e293b;
+}
+
+:global(.dark) .successModal h3 {
+  color: #f1f5f9;
+}
+
+.successModal p {
+  color: #64748b;
+  margin-bottom: 1.5rem;
+}
+
+/* Close button inside modal */
+.closeButton {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 0.6rem 2rem;
+  border-radius: 999px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+:global(.dark) .closeButton {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.closeButton:hover {
+  background: #e2e8f0;
+}
+
+.errorToast {
+  position: fixed;
+  top: 25px;            
+  left: 50%;           
+  transform: translateX(-50%); 
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px; 
+  border: 1px solid #fecaca;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  z-index: 9999; 
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+:global(.dark) .errorToast {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+.errorIcon {
+  font-size: 1.2rem;
+}
