@@ -1,178 +1,137 @@
-import React, { useState } from 'react';
-import Head from 'next/head';
-import { motion, AnimatePresence } from 'framer-motion';
-import styles from './FAQ.module.css';
+import React, { useState } from "react";
+import Head from "next/head";
+import { motion, AnimatePresence } from "framer-motion";
 
-const FAQ = () => {
+const faqData = [
+  {
+    question: "How does HealConnect monitor my health remotely?",
+    answer:
+      "Our health monitoring kit measures vital parameters and sends the data securely to doctors who can access it anytime via the HealConnect platform.",
+  },
+  {
+    question: "What health parameters does the HealConnect kit measure?",
+    answer:
+      "It measures body temperature, heart rate, and pulse rate — all in a single device for convenience and accuracy.",
+  },
+  {
+    question: "Is my personal and health data secure on HealConnect?",
+    answer:
+      "Yes, we maintain end-to-end security protocols to ensure your data is accessible only to authorized doctors and yourself.",
+  },
+  {
+    question: "Can doctors and patients both access the monitoring data?",
+    answer:
+      "Yes, both parties can view health data in real-time through our website for effective monitoring and timely treatment.",
+  },
+  {
+    question: "How quickly can treatment be initiated?",
+    answer:
+      "Real-time monitoring helps doctors act immediately, improving treatment response and outcomes.",
+  },
+  {
+    question: "Who can use the HealConnect system?",
+    answer:
+      "HealConnect is designed for healthcare organizations, doctors, and patients looking for a reliable remote monitoring solution.",
+  },
+];
+
+export default function FAQ() {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
 
   const toggleFAQ = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
   };
 
-  const faqs = [
-    {
-      question: "What is HEALCONNECT?",
-      answer: "HEALCONNECT is a digital healthcare platform that connects patients with doctors for seamless appointment booking, prescription management, and remote health monitoring."
-    },
-    {
-      question: "How do I book an appointment?",
-      answer: "Navigate to the 'Appointments' section, select your preferred doctor, choose an available time slot, and confirm your booking."
-    },
-    {
-      question: "Can I access my prescriptions online?",
-      answer: "Yes! All your prescriptions are stored securely in the 'Prescriptions' section after your doctor issues them."
-    },
-    {
-      question: "Is my health data secure?",
-      answer: "Absolutely. We use end-to-end encryption and comply with HIPAA/GDPR standards to protect your sensitive health information."
-    },
-    {
-      question: "How does remote monitoring work?",
-      answer: "Connect your wearable devices or manually input vitals in the 'Monitoring' section. Your doctor can view this data in real-time during consultations."
-    },
-    {
-      question: "What if I need emergency help?",
-      answer: "HEALCONNECT is not for emergencies. In critical situations, please contact local emergency services immediately."
-    },
-    {
-      question: "Can I share reports with multiple doctors?",
-      answer: "Yes, you can securely share medical reports with any doctor in your network via the 'Share' option in your dashboard."
-    },
-    {
-      question: "How do I reset my password?",
-      answer: "Click 'Forgot Password' on the login page and follow the instructions sent to your registered email."
-    }
-  ];
-
   return (
-    <div className={styles.container}>
+    <>
       <Head>
-        <title>HEALCONNECT - FAQs</title>
-        <meta name="description" content="Frequently asked questions about HEALCONNECT" />
+        <title>FAQ | HealConnect</title>
       </Head>
 
-      {/* Animated background elements */}
-      <div className={styles.backgroundElements}>
-        <div className={styles.circleElement}></div>
-        <div className={styles.circleElement}></div>
-        <div className={styles.circleElement}></div>
-      </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 text-white py-20 px-6">
+        <div className="max-w-4xl mx-auto">
 
-      {/* Navbar spacer */}
-      <div className={styles.navbarSpacer}></div>
-
-      <motion.div
-        className={styles.content}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.header
-          className={styles.header}
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <h1 className={styles.title}>
-            Frequently Asked <span className={styles.titleAccent}>Questions</span>
-          </h1>
-          <p className={styles.subtitle}>
-            Find answers to common questions about our platform
-          </p>
-          <div className={styles.titleUnderline}></div>
-        </motion.header>
-
-        <motion.div
-          className={styles.faqContainer}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-        >
-          {faqs.map((faq) => (
-            <motion.div
-              key={faq.question}
-              className={styles.faqItem}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: faqs.indexOf(faq) * 0.1 }}
-              whileHover={{ y: -3 }}
-            >
-              <button
-                className={styles.faqQuestion}
-                onClick={() => toggleFAQ(faqs.indexOf(faq))}
-                aria-expanded={activeIndex === faqs.indexOf(faq)}
-              >
-                <span className={styles.questionText}>
-                  <span className={styles.questionNumber}>Q{faqs.indexOf(faq) + 1}.</span>
-                  {faq.question}
-                </span>
-                <motion.span
-                  className={styles.chevron}
-                  animate={{ rotate: activeIndex === faqs.indexOf(faq) ? 180 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 9L12 15L18 9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </motion.span>
-              </button>
-
-              <AnimatePresence>
-                {activeIndex === faqs.indexOf(faq) && (
-                  <motion.div
-                    className={styles.faqAnswer}
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <div className={styles.answerContent}>
-                      <span className={styles.answerIcon}>
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                      <p>{faq.answer}</p>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          className={styles.helpSection}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.6 }}
-        >
-          <div className={styles.helpContent}>
-            <div className={styles.helpIcon}>
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M8 14C8 14 9.5 16 12 16C14.5 16 16 14 16 14M12 12H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+          {/* Header */}
+          <div className="text-center mb-16">
+            <div className="inline-block px-4 py-2 bg-blue-600/20 text-blue-400 rounded-full text-sm font-semibold mb-6 backdrop-blur-md">
+              ❓ FAQ
             </div>
-            <h3 className={styles.helpTitle}>Still have questions?</h3>
-            <p className={styles.helpText}>Contact our support team for personalized assistance</p>
+            <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+              Everything you need to know about HealConnect’s remote health monitoring system
+            </p>
+          </div>
+
+          {/* FAQ Cards */}
+          <div className="space-y-6">
+            {faqData.map((item, index) => {
+              const isOpen = activeIndex === index || hoveredIndex === index;
+
+              return (
+                <motion.div
+                  key={index}
+                  className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl overflow-hidden cursor-pointer"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 200 }}
+                  onHoverStart={() => setHoveredIndex(index)}
+                  onHoverEnd={() => setHoveredIndex(null)}
+                  onClick={() => toggleFAQ(index)}
+                >
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 opacity-0 hover:opacity-100 transition duration-500"></div>
+
+                  <div className="relative p-6 z-10">
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-semibold text-white">
+                        {item.question}
+                      </h3>
+
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="w-8 h-8 flex items-center justify-center rounded-full bg-blue-600/20"
+                      >
+                        ↓
+                      </motion.div>
+                    </div>
+
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-slate-300 mt-4 leading-relaxed">
+                            {item.answer}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          {/* Contact Section */}
+          <div className="text-center mt-20">
             <motion.button
-              className={styles.helpButton}
-              onClick={() => window.location.href = '/contact'}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 rounded-xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 transition-all duration-500 shadow-2xl"
+              onClick={() => (window.location.href = "/contact")}
             >
-              Contact Support
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M22 6L12 13L2 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              Still have questions? Contact Support
             </motion.button>
           </div>
-        </motion.div>
-      </motion.div>
-    </div>
+        </div>
+      </div>
+    </>
   );
-};
-
-export default FAQ;
+}

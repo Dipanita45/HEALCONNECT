@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaTicketAlt, FaUsers, FaClock, FaCheckCircle, FaExclamationTriangle,
   FaFilter, FaSearch, FaDownload, FaEye, FaReply, FaArchive, FaTrash,
-  FaUserPlus, FaChartLine, FaBell, FaCog, FaSignOutAlt, FaHeadset,
-  FaRobot, FaPhone, FaEnvelope, FaCalendarAlt, FaTrendingUp, FaTimes, FaPaperPlane
+  FaUserPlus, FaBell, FaCog, FaSignOutAlt, FaHeadset,
+  FaRobot, FaPhone, FaEnvelope, FaCalendarAlt, FaTimes, FaPaperPlane
 } from 'react-icons/fa';
+import { MdShowChart } from 'react-icons/md';
 import { getSupportTickets, subscribeToTickets, getTicketStats, addTicketMessage, updateTicketStatus } from '../../lib/ticketSync';
+import logger from '../../lib/logger';
 import styles from './support-management.module.css';
 
 const AdminSupportManagement = () => {
@@ -54,7 +56,7 @@ const AdminSupportManagement = () => {
         satisfactionRate: '94%', // Calculate from actual data if needed
         activeAgents: agents.filter(a => a.status === 'online').length
       }));
-    });
+    }, null, 'admin');
 
     // Cleanup on unmount
     return () => {
@@ -120,11 +122,27 @@ const AdminSupportManagement = () => {
     setReplyMessage('');
   };
 
+  // Keyboard navigation: Close modal on Escape key
+  useEffect(() => {
+    const handleEscapeKey = (event) => {
+      if (event.key === 'Escape' && showReplyModal) {
+        setShowReplyModal(false);
+      }
+    };
+
+    if (showReplyModal) {
+      document.addEventListener('keydown', handleEscapeKey);
+      return () => {
+        document.removeEventListener('keydown', handleEscapeKey);
+      };
+    }
+  }, [showReplyModal]);
+
   const handleSendReply = async () => {
     if (!replyMessage.trim() || !selectedTicket) return;
 
-    console.log('AdminDashboard: Sending reply to ticket:', selectedTicket.id);
-    console.log('AdminDashboard: Reply message:', replyMessage);
+    logger.debug('AdminDashboard: Sending reply to ticket:', selectedTicket.id);
+    logger.debug('AdminDashboard: Reply message:', replyMessage);
 
     try {
       // Add message to ticket
@@ -138,14 +156,14 @@ const AdminSupportManagement = () => {
         }
       };
 
-      console.log('AdminDashboard: Calling addTicketMessage with:', messageData);
+      logger.debug('AdminDashboard: Calling addTicketMessage with:', messageData);
       const result = await addTicketMessage(selectedTicket.id, messageData);
       console.log('AdminDashboard: addTicketMessage result:', result);
 
       if (result.success) {
         // Update ticket status to in_progress if it was open
         if (selectedTicket.status === 'open') {
-          console.log('AdminDashboard: Updating ticket status to in_progress');
+          logger.debug('AdminDashboard: Updating ticket status to in_progress');
           await updateTicketStatus(selectedTicket.id, 'in_progress', {
             name: 'Support Agent',
             avatar: '👨‍⚕️'
@@ -222,11 +240,19 @@ const AdminSupportManagement = () => {
       <div className={styles.header}>
         <h2>Support Management Dashboard</h2>
         <div className={styles.headerActions}>
-          <button className={styles.exportBtn}>
-            <FaDownload /> Export Report
+          <button
+            className={styles.exportBtn}
+            type="button"
+            aria-label="Export support tickets report"
+          >
+            <FaDownload aria-hidden="true" /> Export Report
           </button>
-          <button className={styles.settingsBtn}>
-            <FaCog /> Settings
+          <button
+            className={styles.settingsBtn}
+            type="button"
+            aria-label="Open settings"
+          >
+            <FaCog aria-hidden="true" /> Settings
           </button>
         </div>
       </div>
@@ -283,11 +309,19 @@ const AdminSupportManagement = () => {
         <div className={styles.dashboardHeader}>
           <h3>Recent Support Tickets</h3>
           <div className={styles.dashboardActions}>
-            <button className={styles.refreshBtn}>
-              <FaClock /> Refresh
+            <button
+              className={styles.refreshBtn}
+              type="button"
+              aria-label="Refresh ticket list"
+            >
+              <FaClock aria-hidden="true" /> Refresh
             </button>
-            <button className={styles.exportBtn}>
-              <FaDownload /> Export
+            <button
+              className={styles.exportBtn}
+              type="button"
+              aria-label="Export tickets to file"
+            >
+              <FaDownload aria-hidden="true" /> Export
             </button>
           </div>
         </div>
@@ -354,21 +388,27 @@ const AdminSupportManagement = () => {
                   <button
                     onClick={() => handleViewDetails(ticket)}
                     className={styles.viewBtn}
+                    type="button"
+                    aria-label={`View details for ticket ${ticket.id}`}
                   >
-                    <FaEye /> View
+                    <FaEye aria-hidden="true" /> View
                   </button>
                   <button
                     onClick={() => handleReplyClick(ticket)}
                     className={styles.replyBtn}
+                    type="button"
+                    aria-label={`Reply to ticket ${ticket.id}`}
                   >
-                    <FaReply /> Reply
+                    <FaReply aria-hidden="true" /> Reply
                   </button>
                   {ticket.status !== 'resolved' && (
                     <button
                       onClick={() => handleCloseTicket(ticket)}
                       className={styles.closeBtn}
+                      type="button"
+                      aria-label={`Close ticket ${ticket.id}`}
                     >
-                      <FaCheckCircle /> Close
+                      <FaCheckCircle aria-hidden="true" /> Close
                     </button>
                   )}
                 </div>
@@ -382,6 +422,8 @@ const AdminSupportManagement = () => {
             <button
               onClick={() => setActiveView('dashboard')}
               className={styles.viewAllBtn}
+              type="button"
+              aria-label={`View all ${tickets.length} support tickets`}
             >
               View All {tickets.length} Tickets
             </button>
@@ -395,8 +437,12 @@ const AdminSupportManagement = () => {
     <div className={styles.agentsView}>
       <div className={styles.header}>
         <h2>Agent Management</h2>
-        <button className={styles.addAgentBtn}>
-          <FaUserPlus /> Add Agent
+        <button
+          className={styles.addAgentBtn}
+          type="button"
+          aria-label="Add new support agent"
+        >
+          <FaUserPlus aria-hidden="true" /> Add Agent
         </button>
       </div>
 
@@ -452,14 +498,26 @@ const AdminSupportManagement = () => {
             </div>
 
             <div className={styles.agentActions}>
-              <button className={styles.viewBtn}>
-                <FaEye /> View Details
+              <button
+                className={styles.viewBtn}
+                type="button"
+                aria-label={`View details for agent ${agent.name}`}
+              >
+                <FaEye aria-hidden="true" /> View Details
               </button>
-              <button className={styles.messageBtn}>
-                <FaReply /> Message
+              <button
+                className={styles.messageBtn}
+                type="button"
+                aria-label={`Send message to ${agent.name}`}
+              >
+                <FaReply aria-hidden="true" /> Message
               </button>
-              <button className={styles.editBtn}>
-                <FaCog /> Edit
+              <button
+                className={styles.editBtn}
+                type="button"
+                aria-label={`Edit agent ${agent.name}`}
+              >
+                <FaCog aria-hidden="true" /> Edit
               </button>
             </div>
           </motion.div>
@@ -473,8 +531,9 @@ const AdminSupportManagement = () => {
       <div className={styles.header}>
         <h2>Support Analytics</h2>
         <div className={styles.dateFilter}>
-          <FaCalendarAlt />
-          <select>
+          <FaCalendarAlt aria-hidden="true" />
+          <label htmlFor="analytics-date-range" className="sr-only">Select date range</label>
+          <select id="analytics-date-range" aria-label="Select date range for analytics">
             <option>Last 7 days</option>
             <option>Last 30 days</option>
             <option>Last 3 months</option>
@@ -487,7 +546,7 @@ const AdminSupportManagement = () => {
         <div className={styles.chartCard}>
           <h3>Ticket Volume Trend</h3>
           <div className={styles.chartPlaceholder}>
-            <FaTrendingUp className={styles.chartIcon} />
+            <MdShowChart className={styles.chartIcon} />
             <p>Interactive chart showing ticket volume over time</p>
           </div>
         </div>
@@ -573,6 +632,8 @@ const AdminSupportManagement = () => {
         <button
           onClick={markAllNotificationsRead}
           className={styles.markReadBtn}
+          type="button"
+          aria-label="Mark all notifications as read"
         >
           Mark All Read
         </button>
@@ -715,19 +776,23 @@ const AdminSupportManagement = () => {
           <h2>Support Admin</h2>
         </div>
 
-        <nav className={styles.sidebarNav}>
+        <nav className={styles.sidebarNav} aria-label="Support admin navigation">
           {sidebarItems.map((item) => {
             const Icon = item.icon;
+            const isActive = activeView === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveView(item.id)}
-                className={`${styles.navItem} ${activeView === item.id ? styles.active : ''}`}
+                className={`${styles.navItem} ${isActive ? styles.active : ''}`}
+                type="button"
+                aria-label={item.label}
+                aria-current={isActive ? 'page' : undefined}
               >
-                <Icon className={styles.navIcon} />
+                <Icon className={styles.navIcon} aria-hidden="true" />
                 <span>{item.label}</span>
                 {item.id === 'notifications' && unreadNotifications > 0 && (
-                  <span className={styles.notificationBadge}>
+                  <span className={styles.notificationBadge} aria-label={`${unreadNotifications} unread notifications`}>
                     {unreadNotifications}
                   </span>
                 )}
@@ -737,8 +802,12 @@ const AdminSupportManagement = () => {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <button className={styles.logoutBtn}>
-            <FaSignOutAlt /> Logout
+          <button
+            className={styles.logoutBtn}
+            type="button"
+            aria-label="Logout from admin panel"
+          >
+            <FaSignOutAlt aria-hidden="true" /> Logout
           </button>
         </div>
       </div>
@@ -761,6 +830,9 @@ const AdminSupportManagement = () => {
             exit={{ opacity: 0 }}
             className={styles.modalOverlay}
             onClick={() => setShowReplyModal(false)}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="reply-modal-title"
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -770,12 +842,14 @@ const AdminSupportManagement = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className={styles.modalHeader}>
-                <h3>Reply to Ticket</h3>
+                <h3 id="reply-modal-title">Reply to Ticket</h3>
                 <button
                   onClick={() => setShowReplyModal(false)}
                   className={styles.closeModal}
+                  type="button"
+                  aria-label="Close dialog"
                 >
-                  <FaTimes />
+                  <FaTimes aria-hidden="true" />
                 </button>
               </div>
 
@@ -802,15 +876,18 @@ const AdminSupportManagement = () => {
               </div>
 
               <div className={styles.replyForm}>
-                <label className={styles.replyLabel}>
+                <label htmlFor="reply-message" className={styles.replyLabel}>
                   Your Reply
                 </label>
                 <textarea
+                  id="reply-message"
                   value={replyMessage}
                   onChange={(e) => setReplyMessage(e.target.value)}
                   placeholder="Type your response here..."
                   className={styles.replyTextarea}
                   rows={6}
+                  aria-label="Type your reply message"
+                  aria-required="true"
                 />
               </div>
 
@@ -818,6 +895,8 @@ const AdminSupportManagement = () => {
                 <button
                   onClick={() => setShowReplyModal(false)}
                   className={styles.cancelBtn}
+                  type="button"
+                  aria-label="Cancel and close dialog"
                 >
                   Cancel
                 </button>
@@ -825,8 +904,10 @@ const AdminSupportManagement = () => {
                   onClick={handleSendReply}
                   disabled={!replyMessage.trim()}
                   className={styles.sendBtn}
+                  type="button"
+                  aria-label="Send reply to customer"
                 >
-                  <FaPaperPlane /> Send Reply
+                  <FaPaperPlane aria-hidden="true" /> Send Reply
                 </button>
               </div>
             </motion.div>

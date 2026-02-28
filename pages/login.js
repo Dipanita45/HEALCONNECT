@@ -35,40 +35,36 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Sign in with Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const firebaseUser = userCredential.user;
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Fetch user profile from Firestore
-      const userDocRef = doc(db, "users", firebaseUser.uid);
-      const userDocSnap = await getDoc(userDocRef);
+      const data = await response.json();
 
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        const userRole = userData.role || 'patient';
-
-        // Update React Context
-        updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
-          uid: firebaseUser.uid,
-          email: firebaseUser.email,
-          ...userData,
-        });
-
-        // Navigate to the appropriate dashboard
-        router.push(`/${userRole}/dashboard`);
-      } else {
-        // User exists in Auth but not Firestore - edge case
-        setError("User profile not found. Please contact support.");
+      if (!response.ok) {
+        setError(data.message || "Invalid credentials. Please try again.");
+        return;
       }
+
+      const userData = data.user;
+      const userRole = userData.role || 'patient';
+
+      // Update React Context
+      updateUserState(setUser, setUserRole, setCurrentUser, userRole, {
+        uid: userData.id,
+        email: userData.email,
+        ...userData,
+      });
+
+      // Navigate to the appropriate dashboard
+      router.push(`/${userRole}/dashboard`);
     } catch (err) {
       console.error("Login error:", err);
-      if (err.code === 'auth/user-not-found' || err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-        setError("Invalid email or password. Please try again.");
-      } else if (err.code === 'auth/invalid-email') {
-        setError("Please enter a valid email address.");
-      } else {
-        setError("An error occurred during login. Please try again.");
-      }
+      setError("An error occurred during login. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -91,13 +87,12 @@ export default function LoginPage() {
 
   return (
     <div style={{
-      minHeight: "calc(100vh - 80px)",
+      minHeight: "100vh",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
       padding: "20px",
-      marginTop: "0px",
       overflow: "hidden",
       position: "relative",
     }}>
@@ -261,8 +256,15 @@ export default function LoginPage() {
                 background: loading ? "#718096" : (darkMode ? "#1565c0" : "#1976d2"),
                 color: "white", border: "none", borderRadius: "6px", cursor: loading ? "not-allowed" : "pointer",
                 fontSize: "15px", fontWeight: "600", marginBottom: "12px",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "8px"
               }}
             >
+              {loading && (
+                <svg className={styles.spinner} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "18px", height: "18px" }}>
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style={{ opacity: 0.75 }}></path>
+                </svg>
+              )}
               {loading ? "Logging in..." : "LOGIN"}
             </button>
 

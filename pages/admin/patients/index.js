@@ -3,7 +3,8 @@ import AuthCheck from "@components/Auth/AuthCheck";
 import PatientCard from "@components/PatientComponents/PatientCard";
 import FetchPatients from "@lib/fetchPatients";
 import { useRouter } from "next/router";
-import { FaAngleRight, FaSpinner, FaSearch } from 'react-icons/fa';
+import { FaAngleRight, FaSearch } from 'react-icons/fa';
+import Loader from "@components/Loader";
 
 export default function Patients(prose) {
   const router = useRouter();
@@ -11,20 +12,20 @@ export default function Patients(prose) {
 
   return (
     <AuthCheck>
-    <AdminSidebar>
+      <AdminSidebar>
         {/* Patients Route */}
         <div className=" flex flex-row justify-start items-center dark:text-gray3">
           <a>Patients</a>
           <FaAngleRight size={18} className=' pt-1' />
         </div>
 
-        {/* Patients List */} 
+        {/* Patients List */}
         <div>
           <div className="w-full overflow-hidden rounded-lg shadow-xs">
             <div className="w-full overflow-x-auto p-2 md:p-4">
-             <div className="flex flex-row flex-wrap w-full h-auto"></div>
-             <div className="w-full md:w-1/4 flex flex-col">
-              <h2 className="prose dark:text-gray1 text-gray6 font-bold">Search</h2>
+              <div className="flex flex-row flex-wrap w-full h-auto"></div>
+              <div className="w-full md:w-1/4 flex flex-col">
+                <h2 className="prose dark:text-gray1 text-gray6 font-bold">Search</h2>
                 <div className="relative flex items-center w-full h-10 rounded-lg focus-within:shadow-lg bg-white dark:bg-gray-700 overflow-hidden">
                   <div className="grid place-items-center h-full w-12 text-gray-300">
                     <FaSearch />
@@ -35,7 +36,7 @@ export default function Patients(prose) {
                     id="search"
                     placeholder="Search something.." />
                 </div>
-             </div>
+              </div>
             </div>
           </div>
         </div>
@@ -63,12 +64,12 @@ export default function Patients(prose) {
                   {(loading) && (
                     <tbody>
                       <tr>
-                      <td></td>
-                      <td></td>
-                      <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40}/></td>
-                    </tr>
+                        <td colSpan="5" className="py-20">
+                          <Loader show={true} size={40} />
+                        </td>
+                      </tr>
                     </tbody>
-                  )}  
+                  )}
 
                   {(patients.length === 0) && (
                     <tbody>
@@ -80,21 +81,21 @@ export default function Patients(prose) {
                     </tbody>
                   )}
 
-                    {(!loading) && (
+                  {(!loading) && (
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       {patients.map(patient => (
-                         <tr key={patient.id} onClick={() => router.push(`/admin/patients/${patient.id}`)} className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
-                        <PatientCard name={patient.firstName +' '+ patient.middleName +' '+ patient.lastName} number={patient.number} city={patient.city} uid={patient.id} aadhar={patient.aadhar}/>
+                        <tr key={patient.id} onClick={() => router.push(`/admin/patients/${patient.id}`)} className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
+                          <PatientCard name={patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName} number={patient.number} city={patient.city} uid={patient.id} aadhar={patient.aadhar} />
                         </tr>
-                        ))}
+                      ))}
                     </tbody>
-)}
+                  )}
                 </table>
               </div>
             </div>
           </div>
         </div>
-    </AdminSidebar>
+      </AdminSidebar>
     </AuthCheck>
   );
 }
