@@ -33,8 +33,9 @@ const SupportWidget = () => {
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
-  const chatContainerRef = useRef(null);
+const inputRef = useRef(null);
+const fileInputRef = useRef(null); // ADD THIS
+const chatContainerRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -414,6 +415,28 @@ const SupportWidget = () => {
     }, 1000 + Math.random() * 1000);
   };
 
+  const handleFileAttach = () => {
+  fileInputRef.current?.click();
+};
+
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const fileMessage = {
+    id: Date.now(),
+    type: 'user',
+    text: `📎 Attached file: ${file.name}`,
+    file: file,
+    timestamp: new Date()
+  };
+
+  setMessages(prev => [...prev, fileMessage]);
+
+  // Reset input so same file can be selected again
+  e.target.value = '';
+};
+
   const handleSuggestionClick = (suggestion) => {
     setInputValue(suggestion);
     sendMessage();
@@ -665,6 +688,11 @@ const SupportWidget = () => {
                         </div>
                       )}
                       <p>{message.text}</p>
+{message.file && (
+  <div className={styles.filePreview}>
+    📄 {message.file.name}
+  </div>
+)}
                       {message.suggestions && (
                         <div className={styles.suggestions} role="list" aria-label="Suggested actions">
                           {message.suggestions.map((suggestion, index) => (
@@ -732,9 +760,23 @@ const SupportWidget = () => {
             {/* Input Area */}
             <div className={styles.inputArea}>
               <div className={styles.inputContainer}>
-                <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
-                  <FaPaperclip />
-                </button>
+                <button
+  className={styles.attachBtn}
+  aria-label="Attach file"
+  tabIndex={0}
+  onClick={handleFileAttach}
+>
+  <FaPaperclip />
+</button>
+
+{/* Hidden File Input */}
+<input
+  type="file"
+  ref={fileInputRef}
+  style={{ display: 'none' }}
+  onChange={handleFileChange}
+  accept="image/*,.pdf,.doc,.docx,.txt"
+/>
                 <input
                   ref={inputRef}
                   type="text"
