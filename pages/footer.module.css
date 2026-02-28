@@ -1,12 +1,24 @@
 .footer {
   position: relative;
-  background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
+
+  /* CHANGE 1: Use a darker, distinct background instead of page gradient */
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 1) 0%,   /* dark slate */
+    rgba(2, 6, 23, 1) 100%    /* deeper dark */
+  );
+
+  /* CHANGE 2: Strong top divider for clear separation */
+  border-top: 2px solid rgba(37, 99, 235, 0.25);
+
+  /* CHANGE 3: Add subtle shadow to create section break */
+  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.25);
+
   color: rgb(var(--foreground-rgb));
-  padding: 3rem 0 1rem;
-  margin-top: 4rem;
+  padding: 4rem 0 1.5rem; /* slightly increased vertical spacing */
+  margin-top: 6rem; /* more gap from main content */
   overflow: hidden;
 }
-
 .backgroundElements {
   position: absolute;
   top: 0;
@@ -79,8 +91,8 @@
   grid-template-columns: 2fr 1fr 1fr 1.5fr;
   gap: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(100, 116, 139, 0.3);
-  opacity: 0;
+border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+padding-bottom: 2.5rem; /* adds breathing space */  opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.6s ease, transform 0.6s ease;
 }
@@ -155,17 +167,18 @@
 .missionText {
   font-size: 0.9rem;
   line-height: 1.6;
-  color: rgb(var(--foreground-muted-rgb));
+  color: rgba(226, 232, 240, 0.75); /* brighter for contrast */
   max-width: 280px;
 }
-
 .sectionTitle {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: rgb(var(--foreground-rgb));
+  font-weight: 700;
+
+  /* CHANGE: make titles bright and visible on dark footer */
+  color: #f1f5f9; /* slate-100 */
+
   margin-bottom: 1.2rem;
-  position: relative;
-  padding-bottom: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
 .sectionTitle::after {
@@ -192,17 +205,13 @@
 .footerLink {
   display: flex;
   align-items: center;
-  color: rgb(var(--foreground-muted-rgb));
+
+  /* CHANGE: higher contrast on dark background */
+  color: rgba(226, 232, 240, 0.85);
+
   text-decoration: none;
   font-size: 0.9rem;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  position: relative;
-  overflow: hidden;
-  padding: 0.4rem 0.8rem;
-  border-radius: 8px;
-  margin: 0 -0.8rem;
 }
-
 .footerLink::before {
   content: '';
   position: absolute;
@@ -275,13 +284,25 @@
   justify-content: center;
   width: 44px;
   height: 44px;
-  background: rgba(255, 255, 255, 0.08);
+
+  /* CHANGE: brighter background for visibility */
+  background: rgba(255, 255, 255, 0.12);
+
   border-radius: 50%;
-  color: rgb(var(--foreground-rgb));
+
+  /* CHANGE: force icon color to white */
+  color: #ffffff;
+
   text-decoration: none;
-  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.3s ease;
   overflow: hidden;
-  border: 2px solid transparent;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.socialLink svg {
+  color: #ffffff !important;   /* forces visibility */
+  fill: currentColor;
+  opacity: 0.95;
 }
 
 .socialLink::before {
@@ -312,11 +333,10 @@
 }
 
 .socialLink:hover {
-  transform: translateY(-8px) rotate(5deg);
-  box-shadow: 0 12px 24px rgba(102, 126, 234, 0.4);
-  color: white;
-  border-color: rgba(102, 126, 234, 0.3);
-  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-6px);
+  background: linear-gradient(135deg, #2563eb, #10b981);
+  color: #ffffff;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.4);
 }
 
 .socialLink:hover::before {
@@ -508,7 +528,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 1.5rem;
+  padding-top: 2rem;
+
+  /* NEW: visual separator line */
+  border-top: 1px solid rgba(148, 163, 184, 0.15);
+
   font-size: 0.8rem;
   color: rgb(var(--foreground-muted-rgb));
 }
