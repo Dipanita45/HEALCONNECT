@@ -208,6 +208,31 @@ For comprehensive information about the database and API infrastructure:
 
 ---
 
+## 🌍 Community & Contributors
+
+### 💖 Contributors  
+Thanks to these amazing people who have contributed to **HEALCONNECT** ✨  
+
+<div align="center">
+  <a href="https://github.com/Dipanita45/HEALCONNECT/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=Dipanita45/HEALCONNECT" />
+  </a>
+</div>
+
+<br/>
+
+### ⭐ Project Support
+
+<div align="center">
+
+[![Stars](https://img.shields.io/github/stars/Dipanita45/HEALCONNECT?style=social)](https://github.com/Dipanita45/HEALCONNECT/stargazers)
+&nbsp;&nbsp;
+[![Forks](https://img.shields.io/github/forks/Dipanita45/HEALCONNECT?style=social)](https://github.com/Dipanita45/HEALCONNECT/network/members)
+
+</div>
+
+---
+
 ## 🤝 Contributing
 Contributions are what make the open-source community an amazing place to learn and inspire. We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
 
