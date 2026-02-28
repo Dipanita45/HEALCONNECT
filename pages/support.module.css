@@ -1,5 +1,7 @@
 /* Support Page Styles */
 .supportPage {
+    padding-top: 90px; /* FIX: prevents content from hiding under fixed header */
+
   min-height: 100vh;
   background: #f8fafc;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
