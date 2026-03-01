@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FaAngleRight, FaSearch } from 'react-icons/fa';
 import Loader from "@components/Loader";
 import dynamic from 'next/dynamic';
+import Skeleton from "@/components/ui/Skeleton";
 
 const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), { ssr: false });
 const DoctorSidebar = dynamic(() => import("@components/Sidebar/DoctorSidebar"), { ssr: false });
@@ -63,13 +64,17 @@ export default function Patients(prose) {
                       <th className="px-4 py-3">Edit</th>
                     </tr>
                   </thead>
-                  {(loading) && (
+                  {loading && (
                     <tbody>
-                      <tr>
-                        <td colSpan="5" className="py-20">
-                          <Loader show={true} size={40} />
-                        </td>
-                      </tr>
+                      {[...Array(5)].map((_, i) => (
+                        <tr key={i}>
+                          <td className="px-4 py-3"><Skeleton height={40} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                        </tr>
+                      ))}
                     </tbody>
                   )}
 
