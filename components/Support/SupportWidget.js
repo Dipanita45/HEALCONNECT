@@ -341,6 +341,11 @@ const chatContainerRef = useRef(null);
     };
   }, [currentTicket, isProcessing]);
 
+  const adjustTextareaHeight = (element) => {
+    element.style.height = 'auto';
+    element.style.height = element.scrollHeight + 'px';
+  };
+
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
 
@@ -787,34 +792,22 @@ const handleFileChange = (e) => {
             {/* Input Area */}
             <div className={styles.inputArea}>
               <div className={styles.inputContainer}>
-                <button
-  className={styles.attachBtn}
-  aria-label="Attach file"
-  tabIndex={0}
-  onClick={handleFileAttach}
->
-  <FaPaperclip />
-</button>
-
-{/* Hidden File Input */}
-<input
-  type="file"
-  ref={fileInputRef}
-  style={{ display: 'none' }}
-  onChange={handleFileChange}
-  accept="image/*,.pdf,.doc,.docx,.txt"
-/>
-                <input
+                <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
+                  <FaPaperclip />
+                </button>
+                <textarea
                   ref={inputRef}
-                  type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    adjustTextareaHeight(e.target);
+                  }}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type your message..."
                   className={styles.messageInput}
                   aria-label="Type your message"
                   aria-describedby="input-help"
-                  autoComplete="off"
+                  rows={1}
                 />
                 <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />

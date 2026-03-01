@@ -991,3 +991,20 @@
     flex-direction: column;
   }
 }
+
+.messageInput {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  font-size: 14px;
+  padding: 6px 8px;
+  resize: none;              /* prevents manual resize */
+  max-height: 120px;         /* limit growth */
+  overflow-y: auto;          /* scroll if too large */
+  line-height: 1.4;
+}
+
+.inputContainer {
+  align-items: flex-end;
+}
