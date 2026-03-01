@@ -1,18 +1,36 @@
 import PatientCard from "@components/PatientComponents/PatientCard";
 import { doc, getFirestore } from "firebase/firestore";
-import React, { useState } from "react";
+import React from "react";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { FaSpinner } from "react-icons/fa";
 import { PatientDetails, PatientMedicalHistory, PatientOtherHistory } from "@components/PatientComponents/PatientDetails";
+import Skeleton from "@/components/ui/Skeleton";
+import { useRouter } from "next/router";
 
 export default function ViewPatient({ patientID }) {
-  const loading = useState();
+  const router = useRouter();
   const profileRef = doc(getFirestore(), "patients", patientID);
-  const [profile] = useDocumentDataOnce(profileRef);
+  const [profile, loading, error] = useDocumentDataOnce(profileRef);
 
   return (
     <>
-      {profile && (
+      {loading && (
+        <div className="md:mx-8">
+          <div className="w-full flex flex-col md:flex-row gap-4 mb-8">
+            <div className="basis-2/3">
+              <Skeleton height={300} />
+            </div>
+            <div className="basis-1/3 flex flex-col gap-4">
+              <Skeleton height={140} />
+              <Skeleton height={140} />
+            </div>
+          </div>
+          <Skeleton height={40} width={200} className="mb-4" />
+          <Skeleton height={200} />
+        </div>
+      )}
+      {error && <div className="text-red-500 text-center py-10">Error loading patient data: {error.message}</div>}
+      {profile && !loading && (
         <>
           {/* Patient View */}
           <div className="text-gray-500  dark:text-gray-400">
@@ -46,48 +64,21 @@ export default function ViewPatient({ patientID }) {
                       <th className="px-4 py-3">Edit</th>
                     </tr>
                   </thead>
-                  {loading && (
-                    <tbody>
-                      <tr>
-                        <td></td>
-                        <td></td>
-                        <td>
-                          <FaSpinner
-                            className=" my-40 animate-spin text-blue-500"
-                            size={40}
-                          />
-                        </td>
+                  {/* Note: In a real scenario, reports would also have their own loading state */}
+                  <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                    {/* Assuming profile.reports exists or using a separate hook */}
+                    {profile.reports?.map((report) => (
+                      <tr
+                        key={report.id}
+                        onClick={() =>
+                          router.push(`/admin/patients/${profile.id}/report/${report.id}`)
+                        }
+                        className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer"
+                      >
+                        {/* Report listing UI would go here */}
                       </tr>
-                    </tbody>
-                  )}
-
-                  {!loading && (
-                    <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                      {patients.map((patient) => (
-                        <tr
-                          key={patient.id}
-                          onClick={() =>
-                            router.push(`/admin/patients/${patient.id}`)
-                          }
-                          className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer"
-                        >
-                          <PatientCard
-                            name={
-                              patient.firstName +
-                              " " +
-                              patient.middleName +
-                              " " +
-                              patient.lastName
-                            }
-                            number={patient.number}
-                            city={patient.city}
-                            uid={patient.id}
-                            aadhar={patient.aadhar}
-                          />
-                        </tr>
-                      ))}
-                    </tbody>
-                  )}
+                    ))}
+                  </tbody>
                 </table>
               </div>
             </div>

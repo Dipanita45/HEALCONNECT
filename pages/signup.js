@@ -5,6 +5,7 @@ import { UserContext } from "@lib/context";
 // import { hashPassword } from "@lib/authUtils"; // REMOVED
 import Link from "next/link";
 import styles from "./signup.module.css";
+import LoadingButton from "@/components/ui/LoadingButton";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -250,7 +251,8 @@ export default function SignupPage() {
       justifyContent: "center",
       alignItems: "center",
       background: darkMode ? "#0d1b2a" : "#f8f9fa",
-      padding: "20px",
+      /* ensure the form is pushed down beneath the fixed navbar (h-20 / 80px) */
+      padding: "100px 20px 20px",
       marginTop: "0px",
       overflow: "hidden",
       position: "relative",
@@ -970,35 +972,13 @@ export default function SignupPage() {
             )}
 
             {/* Signup Button */}
-            <button
+            <LoadingButton
               type="submit"
-              disabled={isSubmitting}
-              style={{
-                width: "100%",
-                padding: "12px",
-                background: isSubmitting ? "#a0aec0" : (darkMode ? "#1565c0" : "#1976d2"),
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                cursor: isSubmitting ? "not-allowed" : "pointer",
-                fontSize: "15px",
-                fontWeight: "600",
-                marginBottom: "16px",
-                opacity: isSubmitting ? 0.7 : 1,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "8px"
-              }}
+              loading={isSubmitting}
+              style={{ marginBottom: "16px" }}
             >
-              {isSubmitting && (
-                <svg className={styles.spinner} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "18px", height: "18px" }}>
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" style={{ opacity: 0.25 }}></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" style={{ opacity: 0.75 }}></path>
-                </svg>
-              )}
               {isSubmitting ? "Creating Account..." : "SIGN UP"}
-            </button>
+            </LoadingButton>
 
             {/* Login Link */}
             <div style={{
