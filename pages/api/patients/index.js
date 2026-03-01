@@ -1,6 +1,6 @@
 
 import Joi from 'joi';
-import { dbOperations, where, orderBy, limit } from '../../../lib/db/operations';
+import { dbOperations, where, orderBy } from '../../../lib/db/operations';
 import { Collections } from '../../../lib/db/schema';
 import { withErrorHandling, withMethods, withAuth, validate, rateLimit, compose } from '../../../lib/api/middleware';
 
@@ -54,10 +54,7 @@ async function getPatients(req, res) {
   }
   constraints.push(orderBy('createdAt', 'desc'));
 
-  // Implement limit in dbOperations if not already present, currently ignoring queryLimit in db call params
-  if (queryLimit) {
-    constraints.push(limit(Number(queryLimit)));
-  }
+  // TODO: Implement limit in dbOperations if not already present, currently ignoring queryLimit in db call params
 
   const result = await dbOperations.getAll(Collections.PATIENTS, constraints);
 
