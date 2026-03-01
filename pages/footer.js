@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
-import { 
-  FaGithubAlt, 
-  FaHeartbeat, 
-  FaRegHospital, 
+import {
+  FaGithubAlt,
+  FaHeartbeat,
+  FaRegHospital,
   FaHeart,
   FaInfoCircle,
   FaCog,
@@ -27,7 +27,7 @@ export default function Footer() {
 
   useEffect(() => {
     setIsVisible(true);
-    
+
     // Check if PWA can be installed
     const checkInstallPrompt = () => {
       const handleBeforeInstallPrompt = (e) => {
@@ -35,16 +35,16 @@ export default function Footer() {
         setDeferredPrompt(e);
         setShowInstallButton(true);
       };
-      
+
       window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
     };
-    
+
     checkInstallPrompt();
   }, []);
 
   const handleInstall = async () => {
     if (!deferredPrompt) return;
-    
+
     try {
       const result = await deferredPrompt.prompt();
       if (result.outcome === 'accepted') {
@@ -64,10 +64,10 @@ export default function Footer() {
         <div className={styles.circleElement}></div>
         <div className={styles.circleElement}></div>
       </div>
-      
+
       <div className={styles.container}>
         <div className={`${styles.content} ${isVisible ? styles.visible : ''}`}>
-          
+
           {/* Logo & Mission */}
           <div className={styles.section}>
             <div className={styles.logoSection}>
@@ -183,14 +183,14 @@ export default function Footer() {
             <p className={styles.feedbackText}>
               Have feedback or ideas? Reach out — we had love to hear from you!
             </p>
-            
+
             {/* Subscription form */}
             <div className={styles.subscription}>
               <p className={styles.subscriptionText}>Stay updated with our latest features</p>
               <form className={styles.subscriptionForm}>
-                <input 
-                  type="email" 
-                  placeholder="Your email address" 
+                <input
+                  type="email"
+                  placeholder="Your email address"
                   className={styles.subscriptionInput}
                 />
                 <button type="submit" className={styles.subscriptionButton} aria-label="Subscribe">

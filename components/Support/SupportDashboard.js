@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
+import {
   FaTicketAlt, FaClock, FaCheckCircle, FaExclamationTriangle,
   FaUser, FaRobot, FaFilter, FaSearch, FaDownload, FaEye,
   FaReply, FaArchive, FaTrash, FaPlus, FaChartLine, FaUsers,
@@ -117,7 +117,7 @@ const SupportDashboard = () => {
     ];
 
     setTickets(mockTickets);
-    
+
     // Calculate stats
     const ticketStats = {
       total: mockTickets.length,
@@ -131,7 +131,7 @@ const SupportDashboard = () => {
 
   const filteredTickets = tickets.filter(ticket => {
     const matchesFilter = filter === 'all' || ticket.status === filter;
-    const matchesSearch = 
+    const matchesSearch =
       (ticket.subject?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (ticket.user?.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
       (ticket.user?.email?.toLowerCase() || '').includes(searchTerm.toLowerCase());
@@ -160,7 +160,7 @@ const SupportDashboard = () => {
   const formatTimeAgo = (date) => {
     const now = new Date();
     const diffInHours = Math.floor((now - date) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return 'Just now';
     if (diffInHours < 24) return `${diffInHours}h ago`;
     if (diffInHours < 48) return 'Yesterday';
@@ -168,22 +168,22 @@ const SupportDashboard = () => {
   };
 
   const updateTicketStatus = (ticketId, newStatus) => {
-    setTickets(prev => prev.map(ticket => 
-      ticket.id === ticketId 
+    setTickets(prev => prev.map(ticket =>
+      ticket.id === ticketId
         ? { ...ticket, status: newStatus, updatedAt: new Date() }
         : ticket
     ));
   };
 
   const assignTicket = (ticketId, agentName) => {
-    setTickets(prev => prev.map(ticket => 
-      ticket.id === ticketId 
-        ? { 
-            ...ticket, 
-            assignedTo: { name: agentName, avatar: '👤' },
-            status: 'in_progress',
-            updatedAt: new Date()
-          }
+    setTickets(prev => prev.map(ticket =>
+      ticket.id === ticketId
+        ? {
+          ...ticket,
+          assignedTo: { name: agentName, avatar: '👤' },
+          status: 'in_progress',
+          updatedAt: new Date()
+        }
         : ticket
     ));
   };
@@ -298,7 +298,7 @@ const SupportDashboard = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className={styles.filters}>
           <button
             onClick={() => setFilter('all')}
@@ -331,7 +331,7 @@ const SupportDashboard = () => {
       <div className={styles.ticketsContainer}>
         <div className={styles.ticketsList}>
           <h2>Tickets ({filteredTickets.length})</h2>
-          
+
           {filteredTickets.length === 0 ? (
             <div className={styles.emptyState}>
               <FaTicketAlt className={styles.emptyIcon} />
@@ -365,9 +365,9 @@ const SupportDashboard = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   <h3 className={styles.ticketSubject}>{ticket.subject || 'No Subject'}</h3>
-                  
+
                   <div className={styles.ticketUser}>
                     <span className={styles.userAvatar}>{ticket.user?.avatar || '👤'}</span>
                     <div>
@@ -375,7 +375,7 @@ const SupportDashboard = () => {
                       <div className={styles.userEmail}>{ticket.user?.email || 'No Email'}</div>
                     </div>
                   </div>
-                  
+
                   <div className={styles.ticketFooter}>
                     <div className={styles.tags}>
                       {(ticket.tags || []).map((tag, index) => (
@@ -477,15 +477,15 @@ const SupportDashboard = () => {
                   <option value="in_progress">In Progress</option>
                   <option value="resolved">Resolved</option>
                 </select>
-                
+
                 <button className={styles.replyBtn}>
                   <FaReply /> Reply
                 </button>
-                
+
                 <button className={styles.archiveBtn}>
                   <FaArchive /> Archive
                 </button>
-                
+
                 <button className={styles.deleteBtn}>
                   <FaTrash /> Delete
                 </button>

@@ -51,12 +51,16 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate(0, 0) rotate(0deg);
   }
+
   33% {
     transform: translate(30px, -30px) rotate(60deg);
   }
+
   66% {
     transform: translate(-20px, 20px) rotate(-30deg);
   }
@@ -68,6 +72,7 @@
   padding: 2rem 1.5rem 4rem;
   position: relative;
   z-index: 1;
+  margin-top: 50px;
 }
 
 .header {
@@ -187,7 +192,7 @@
 .answerContent {
   display: flex;
   gap: 1rem;
-  padding: 0 1.5rem 1.5rem;
+  padding: 1rem 1.5rem 1.5rem;
   color: rgb(var(--foreground-muted-rgb));
   line-height: 1.6;
 }
@@ -217,6 +222,9 @@
 .helpContent {
   max-width: 500px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .helpIcon {
@@ -278,31 +286,31 @@
     background: linear-gradient(135deg, rgb(var(--background-start-rgb)) 0%, rgb(var(--background-end-rgb)) 100%);
     color: rgb(var(--foreground-rgb));
   }
-  
+
   .faqItem {
     background: rgba(var(--background-start-rgb), 0.9);
   }
-  
+
   .faqQuestion {
     color: rgb(var(--foreground-rgb));
   }
-  
+
   .faqQuestion:hover {
     background: rgba(var(--background-end-rgb), 0.1);
   }
-  
+
   .answerContent {
     color: rgb(var(--foreground-muted-rgb));
   }
-  
+
   .questionNumber {
     color: white;
   }
-  
+
   .answerIcon {
     color: white;
   }
-  
+
   .chevron {
     color: white;
   }
@@ -313,24 +321,24 @@
   .title {
     font-size: 2.25rem;
   }
-  
+
   .navbarSpacer {
     height: 70px;
   }
-  
+
   .content {
     padding: 1.5rem 1rem 3rem;
   }
-  
+
   .faqQuestion {
     padding: 1.25rem;
     font-size: 1rem;
   }
-  
+
   .answerContent {
     padding: 0 1.25rem 1.25rem;
   }
-  
+
   .helpSection {
     padding: 2rem 1.5rem;
   }
@@ -340,17 +348,17 @@
   .title {
     font-size: 2rem;
   }
-  
+
   .subtitle {
     font-size: 1.1rem;
   }
-  
+
   .questionText {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .navbarSpacer {
     height: 60px;
   }

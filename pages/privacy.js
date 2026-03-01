@@ -81,7 +81,7 @@ export default function Privacy() {
           }
         `}</style>
 
-        <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
+        <div className="container mx-auto px-6 py-16 mt-20 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
             initial="hidden"
@@ -109,7 +109,7 @@ export default function Privacy() {
             <div className="mx-auto w-24 h-1 mt-4 bg-gradient-to-r from-green-600 to-green-400 rounded-full"></div>
           </motion.header>
 
-          <div className="prose dark:prose-invert prose-lg max-w-4xl mx-auto space-y-12">
+          <div className="prose dark:prose-invert prose-lg max-w-5xl mx-auto space-y-12">
 
             {/* Information We Collect */}
             <motion.section
@@ -125,7 +125,7 @@ export default function Privacy() {
                   <FaDatabase className="text-2xl text-green-600 dark:text-green-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-5 mb-2">
                     Information We Collect
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Understanding what data we gather</p>
@@ -197,7 +197,7 @@ export default function Privacy() {
                   <FaUserShield className="text-2xl text-blue-600 dark:text-blue-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-5 mb-2">
                     How We Use Your Information
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Purpose and benefits of data usage</p>
@@ -294,7 +294,7 @@ export default function Privacy() {
                   <FaLock className="text-2xl text-red-600 dark:text-red-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-5 mb-2">
                     Data Protection & Security
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Industry-standard security measures</p>
@@ -404,7 +404,7 @@ export default function Privacy() {
                   <FaUserShield className="text-2xl text-purple-600 dark:text-purple-400" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                  <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mt-5 mb-2">
                     Your Privacy Rights
                   </h2>
                   <p className="text-sm text-gray-600 dark:text-gray-400">Control over your personal information</p>

@@ -6,6 +6,7 @@
   overflow: hidden;
   overflow-x: hidden;
   /* prevent horizontal scroll */
+  margin-top: 50px;
 }
 
 .container.dark {
@@ -165,7 +166,7 @@
 }
 
 .content {
-  max-width: 1200px;
+  max-width: 1300px;
   margin: 0 auto;
   padding: 0 1.5rem 3rem;
 }
@@ -249,7 +250,7 @@
   width: 100%;
   padding: 1rem 0;
   border: none;
-  border-radius:6px;
+  border-radius: 6px;
   border-bottom: 2px solid #f4f7f8;
   background: transparent;
   font-size: 1rem;
@@ -257,8 +258,8 @@
   color: #1e293b;
 }
 
-.formInput option{
-  color:black;
+.formInput option {
+  color: black;
 }
 
 .dark .formInput {
@@ -561,6 +562,7 @@
 /* ============== */
 
 @media (max-width: 768px) {
+  
   .container {
     padding: 1.5rem 1rem;
     min-height: auto;
@@ -615,6 +617,7 @@
 }
 
 @media (max-width: 480px) {
+
   .title {
     font-size: 2.1rem;
   }
@@ -628,14 +631,18 @@
 }
 
 .formInput option {
-  background-color: #f8fafc;   /* match light theme background */
-  color: #1e293b;              /* match light theme text */
-  padding: 0.75rem 1rem;       /* vertically center text like input */
-  text-align: left;            /* aligns text with input label */
+  background-color: #f8fafc;
+  /* match light theme background */
+  color: #1e293b;
+  /* match light theme text */
+  padding: 0.75rem 1rem;
+  /* vertically center text like input */
+  text-align: left;
+  /* aligns text with input label */
 }
 
 .dark .formInput option {
-  background-color: #1e293b;  
+  background-color: #1e293b;
   color: #f1f5f9;
   padding: 0.75rem 1rem;
   text-align: left;

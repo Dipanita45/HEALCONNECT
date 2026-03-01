@@ -48,18 +48,23 @@
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0) rotate(0deg);
     opacity: 0.1;
   }
+
   33% {
     transform: translateY(-30px) rotate(0deg);
     opacity: 0.5;
   }
+
   66% {
     transform: translateY(20px) rotate(180deg);
     opacity: 0.5;
   }
+
   100% {
     transform: translateY(0) rotate(360deg);
     opacity: 0.1;
@@ -135,9 +140,12 @@
 }
 
 @keyframes heartbeat {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.1);
   }
@@ -534,7 +542,7 @@
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
-  
+
   .logoSection {
     grid-column: 1 / -1;
     text-align: center;
@@ -547,17 +555,17 @@
     grid-template-columns: 1fr;
     text-align: center;
   }
-  
+
   .sectionTitle::after {
     left: 50%;
     transform: translateX(-50%);
   }
-  
+
   .bottomFooter {
     flex-direction: column;
     gap: 0.5rem;
   }
-  
+
   .socialLinks {
     justify-content: center;
   }

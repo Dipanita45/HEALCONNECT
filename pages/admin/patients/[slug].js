@@ -4,10 +4,10 @@ import React, { useState } from "react";
 import { FaAngleLeft, FaAngleRight, FaWindowClose } from "react-icons/fa";
 import dynamic from "next/dynamic";
 
-const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), {ssr: false});
-const ViewLivePatient = dynamic(() => import("@components/LiveMonitor/ViewLivePatient"), {ssr: false});
-const ViewPatient = dynamic(() => import("@components/PatientComponents/ViewPatient"), {ssr: false});
-const PatientStatus = dynamic(() => import("@components/PatientComponents/PatientStatus"), {ssr: false});
+const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), { ssr: false });
+const ViewLivePatient = dynamic(() => import("@components/LiveMonitor/ViewLivePatient"), { ssr: false });
+const ViewPatient = dynamic(() => import("@components/PatientComponents/ViewPatient"), { ssr: false });
+const PatientStatus = dynamic(() => import("@components/PatientComponents/PatientStatus"), { ssr: false });
 
 export default function Patient(props) {
   const router = useRouter();

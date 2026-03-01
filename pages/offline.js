@@ -23,7 +23,7 @@ export default function OfflineFallback() {
     }
 
     checkOfflineData()
-    
+
     const handleOnline = () => setIsOnline(true)
     const handleOffline = () => setIsOnline(false)
 
@@ -65,7 +65,7 @@ export default function OfflineFallback() {
               <FaHeartbeat className="text-blue-600 dark:text-blue-400" />
               <span>Available Offline Data</span>
             </h2>
-            
+
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{vitalsCount}</div>
@@ -114,7 +114,7 @@ export default function OfflineFallback() {
                 <span>Waiting for Connection</span>
               </div>
             )}
-            
+
             <button
               onClick={() => window.location.href = '/patient/dashboard'}
               className="w-full bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"

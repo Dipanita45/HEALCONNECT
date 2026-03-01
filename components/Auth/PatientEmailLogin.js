@@ -19,7 +19,7 @@ export default function PatientEmailLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       setError('Email and password are required');
       return;
@@ -31,10 +31,10 @@ export default function PatientEmailLogin() {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
+
       // Check if user exists in patients collection
       const patientDoc = await getDoc(doc(db, 'patients', user.uid));
-      
+
       if (!patientDoc.exists()) {
         setError('Patient account not found. Please contact admin.');
         await auth.signOut();
@@ -53,7 +53,7 @@ export default function PatientEmailLogin() {
 
   const handleSignUp = async (e) => {
     e.preventDefault();
-    
+
     if (!email || !password || !patientInfo.name || !patientInfo.phone) {
       setError('All fields are required for registration');
       return;
@@ -106,10 +106,10 @@ export default function PatientEmailLogin() {
       <h1 className="text-center font-extrabold text-gray6 dark:text-gray2 select-none text-2xl sm:text-4xl">
         Patient {isSignUp ? 'Registration' : 'Login'}
       </h1>
-      
+
       <p className="text-center text-gray-500 mb-4">
-        {isSignUp 
-          ? 'Create your patient account with email and password' 
+        {isSignUp
+          ? 'Create your patient account with email and password'
           : 'Login with your registered email and password'
         }
       </p>
@@ -126,7 +126,7 @@ export default function PatientEmailLogin() {
             <input
               type="text"
               value={patientInfo.name}
-              onChange={(e) => setPatientInfo({...patientInfo, name: e.target.value})}
+              onChange={(e) => setPatientInfo({ ...patientInfo, name: e.target.value })}
               placeholder="Full Name"
               className="input-field"
               required
@@ -134,7 +134,7 @@ export default function PatientEmailLogin() {
             <input
               type="tel"
               value={patientInfo.phone}
-              onChange={(e) => setPatientInfo({...patientInfo, phone: e.target.value})}
+              onChange={(e) => setPatientInfo({ ...patientInfo, phone: e.target.value })}
               placeholder="Phone Number"
               className="input-field"
               required
@@ -142,7 +142,7 @@ export default function PatientEmailLogin() {
             <input
               type="number"
               value={patientInfo.age}
-              onChange={(e) => setPatientInfo({...patientInfo, age: e.target.value})}
+              onChange={(e) => setPatientInfo({ ...patientInfo, age: e.target.value })}
               placeholder="Age"
               className="input-field"
               min="1"
@@ -197,8 +197,8 @@ export default function PatientEmailLogin() {
           }}
           className="text-blue-500 hover:text-blue-700 underline"
         >
-          {isSignUp 
-            ? 'Already have an account? Login here' 
+          {isSignUp
+            ? 'Already have an account? Login here'
             : "Don't have an account? Register here"
           }
         </button>
@@ -206,7 +206,7 @@ export default function PatientEmailLogin() {
 
       <div className="mt-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
         <p className="text-xs text-yellow-800 dark:text-yellow-200">
-          <strong>Note:</strong> This email-based authentication is an alternative to phone authentication 
+          <strong>Note:</strong> This email-based authentication is an alternative to phone authentication
           to avoid Firebase billing requirements. All features remain the same.
         </p>
       </div>

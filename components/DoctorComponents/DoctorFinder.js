@@ -1,8 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@lib/firebase';
+<<<<<<< HEAD
 import { getCurrentLocation, sortDoctorsByDistance } from '@lib/locationUtils';
 import { FaSearch, FaUserMd, FaMapMarkerAlt, FaSpinner, FaLocationArrow } from 'react-icons/fa';
+=======
+import {
+  getCurrentLocation,
+  sortDoctorsByDistance,
+  formatDistance
+} from '@lib/locationUtils';
+import { FaSearch, FaUserMd, FaMapMarkerAlt, FaPhone, FaEnvelope, FaSpinner, FaLocationArrow } from 'react-icons/fa';
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
 import { toast } from 'react-hot-toast';
 import DoctorCard from './DoctorCard';
 
@@ -68,9 +77,9 @@ export default function DoctorFinder() {
       setLoading(true);
       const q = query(
         collection(db, 'users'),
-        where('role', '!=', 'patient') 
+        where('role', '!=', 'patient')
       );
-      
+
       const querySnapshot = await getDocs(q);
       const doctorsList = [];
       const locations = new Set();
@@ -78,12 +87,12 @@ export default function DoctorFinder() {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.name && data.speciality) { 
+        if (data.name && data.speciality) {
           doctorsList.push({
             id: doc.id,
             ...data
           });
-          
+
           if (data.address) {
             const addressParts = data.address.split(',');
             const city = addressParts[addressParts.length - 1]?.trim();

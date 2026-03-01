@@ -13,7 +13,7 @@ export default function Loader({
   if (!show) return null;
 
   const baseWrapper = 'h-full w-full flex items-center justify-center object-center align-middle';
-  
+
   // Enhanced color maps with dark theme support
   const colorMap = {
     light: {
@@ -98,7 +98,7 @@ export default function Loader({
     <main className={baseWrapper}>
       <div className="relative">
         <Icon data-testid={iconTestId} className={commonClasses} size={size} />
-        
+
         {/* Enhanced visual effects for dark theme */}
         {darkMode && (
           <>
@@ -106,7 +106,7 @@ export default function Loader({
             <div data-testid="dark-gradient" className="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-indigo-500/10 rounded-full animate-spin" style={{ width: size * 2, height: size * 2, top: '50%', left: '50%', transform: 'translate(-50%, -50%)', animationDuration: '3s' }} />
           </>
         )}
-        
+
         {/* Light theme effects */}
         {!darkMode && (
           <div className="absolute inset-0 bg-gradient-to-r from-blue-100/50 to-purple-100/50 rounded-full animate-pulse blur-lg" style={{ width: size * 1.3, height: size * 1.3, top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }} />

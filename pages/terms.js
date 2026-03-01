@@ -81,7 +81,7 @@ export default function Terms() {
           }
         `}</style>
 
-        <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
+        <div className="container mx-auto px-6 py-16 mt-20 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
             initial="hidden"
@@ -183,7 +183,7 @@ export default function Terms() {
                       What We Offer
                     </h3>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2.5">
                     {[
                       "Real-time health monitoring",
                       "Doctor-patient communication",
@@ -215,7 +215,7 @@ export default function Terms() {
                   whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(34, 197, 94, 0.15)" }}
                   className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-green-300 dark:border-green-800 transition-all duration-300"
                 >
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center mb-8">
                     <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg mr-3">
                       <FaUserCheck className="text-xl text-green-600 dark:text-green-400" />
                     </div>
@@ -507,7 +507,7 @@ export default function Terms() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center mt-4">
+              <div className="flex items-center justify-center mt-8">
                 <FaShieldAlt className="mr-2 text-blue-600 dark:text-blue-200" />
                 <span className="text-sm text-gray-700 dark:text-blue-100">Confidential & Secure</span>
               </div>
