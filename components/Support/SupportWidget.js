@@ -8,6 +8,7 @@ import {
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
 import styles from './SupportWidget.module.css';
 import { useTheme } from '@/context/ThemeContext';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
@@ -43,6 +44,30 @@ const SupportWidget = () => {
 const inputRef = useRef(null);
 const fileInputRef = useRef(null); // ADD THIS
 const chatContainerRef = useRef(null);
+
+const { 
+  transcript, 
+  listening, 
+  resetTranscript, 
+  browserSupportsSpeechRecognition 
+} = useSpeechRecognition();
+
+
+useEffect(() => {
+  if (transcript) {
+    setInputValue(transcript);
+  }
+}, [transcript]);
+
+
+const handleVoiceInput = () => {
+  if (listening) {
+    SpeechRecognition.stopListening();
+  } else {
+    resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
+  }
+};
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -819,8 +844,13 @@ const handleFileChange = (e) => {
                 <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />
                 </button>
-                <button className={styles.voiceBtn} aria-label="Voice input" tabIndex={0}>
-                  <FaMicrophone />
+                <button 
+                onClick={handleVoiceInput}
+                className={`${styles.voiceBtn} ${listening ? styles.micActive : ''}`}
+                aria-label="Voice input"
+                type="button"
+                >
+                <FaMicrophone />
                 </button>
                 <button
                   onClick={sendMessage}
