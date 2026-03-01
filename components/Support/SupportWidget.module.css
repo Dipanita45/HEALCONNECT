@@ -469,6 +469,22 @@
   color: #475569;
 }
 
+ .voiceBtn{
+  outline: none;
+}
+.micActive {
+  color: #ef4444 !important;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 2px solid #ef4444 !important; 
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
 .messageInput {
   flex: 1;
   border: none;
