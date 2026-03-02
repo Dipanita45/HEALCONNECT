@@ -154,7 +154,7 @@ export default function HowItWorks() {
                 <FaRocket className="text-3xl text-blue-600 dark:text-blue-400" />
               </div>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold mb-2">
+            <h1 className="text-4xl sm:text-5xl font-bold mb-4">
               <Typewriter
                 words={["How It Works"]}
                 loop={1}
@@ -165,16 +165,20 @@ export default function HowItWorks() {
                 delaySpeed={1000}
               />
             </h1>
-            <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl max-w-3xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 text-lg sm:text-xl max-w-4xl mx-auto">
               Get started with HealConnect in 5 simple steps and take control of your health journey
             </p>
-            <div className="mx-auto w-24 h-1 mt-4 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" />
+            <div className="mx-auto w-24 h-1 mt-8 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" />
           </motion.header>
 
           {/* Steps Section */}
-          <div className="max-w-6xl mx-auto mb-16">
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 items-stretch">  
-              {steps.map((step) => (
+          <div className="max-w-7xl mx-auto mb-24 px-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">
+              How It Works
+            </h2>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 relative">
+              {steps.map((step, index) => (
                 <motion.div
                   key={step.title}
                   initial={{ opacity: 0, y: 30 }}
@@ -305,7 +309,7 @@ export default function HowItWorks() {
         "
                 >
                   {/* Animated Gradient Border */}
-                  <span className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></span>
+                  <span className="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-blue-200 via-purple-800 to-indigo-200 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></span>
 
                   {/* Card Content */}
                   <div className="relative z-10 flex flex-col items-center">

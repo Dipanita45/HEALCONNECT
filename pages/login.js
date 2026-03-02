@@ -51,8 +51,18 @@ export default function LoginPage() {
         return;
       }
 
+<<<<<<< HEAD
       const userData = data.user;
       const userRole = userData.role || 'patient';
+=======
+      // Success - store token and user data
+      if (data.token) {
+        localStorage.setItem('auth-token', data.token);
+      }
+
+      localStorage.setItem('userType', data.user.role);
+      localStorage.setItem('currentUser', JSON.stringify(data.user));
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
 
       // Update React Context
       updateUserState(setUser, setUserRole, setCurrentUser, userRole, {

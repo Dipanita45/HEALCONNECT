@@ -32,17 +32,23 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
   }, []);
 
   const handleSendEmail = () => {
-  const email = 'support@healconnect.com';
-  const subject = encodeURIComponent('HealConnect Support Request');
-  const body = encodeURIComponent(
-    'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
-  );
+    const email = 'support@healconnect.com';
+    const subject = encodeURIComponent('HealConnect Support Request');
+    const body = encodeURIComponent(
+      'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
+    );
 
-  const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
+    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
+<<<<<<< HEAD
   window.open(gmailUrl, '_blank');
 };
 //2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
+=======
+    window.open(gmailUrl, '_blank');
+  };
+
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
 
   const features = [
     {
@@ -270,9 +276,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <h3>AI Assistant</h3>
               <p>Instant answers to questions 24/7</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Available 24/7</span>
-                <span>✓ Instant responses</span>
-                <span>✓ Free to use</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Available 24/7</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Instant responses</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Free to use</span>
               </div>
               <button className={styles.channelBtn} 
               onClick={() => {
@@ -295,9 +301,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <h3>Support Tickets</h3>
               <p>Detailed assistance for complex issues</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Track progress</span>
-                <span>✓ Priority handling</span>
-                <span>✓ Email updates</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Track progress</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Priority handling</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Email updates</span>
               </div>
               <button className={styles.channelBtn} 
               onClick={() => {
@@ -322,9 +328,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <h3>Phone Support</h3>
               <p>Speak directly with our support team</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Personal assistance</span>
-                <span>✓ Complex issues</span>
-                <span>✓ Emergency support</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Personal assistance</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Complex issues</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Emergency support</span>
               </div>
               <button className={styles.channelBtn} onClick={() => window.open('tel:+18001234567')} >Call Now</button>
             </motion.div>
@@ -366,14 +372,18 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <h3>Email Support</h3>
               <p>Detailed written assistance</p>
               <div className={styles.channelFeatures}>
-                <span>✓ Detailed responses</span>
-                <span>✓ Documentation</span>
-                <span>✓ 24h response</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Detailed responses</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Documentation</span>
+                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ 24h response</span>
               </div>
               <button
                 className={styles.channelBtn}
                 onClick={handleSendEmail}
               >
+<<<<<<< HEAD
+=======
+                <FaEnvelope style={{ marginRight: '6px' }} />
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                 Send Email
               </button>
 

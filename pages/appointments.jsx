@@ -451,7 +451,7 @@ export default function Appointments() {
                 <motion.div
                   className={styles.titleUnderline}
                   initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
+                  animate={{ width: "50%" }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 ></motion.div>
                 <motion.p
@@ -571,12 +571,18 @@ export default function Appointments() {
                         value={formData.date}
                         onChange={handleChange}
                         required
+<<<<<<< HEAD
                         min={new Date().toISOString().split('T')[0]}
                         className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
                         style={{
                           paddingRight: "42px",
                           colorScheme: "light"
                         }}
+=======
+                        min={new Date().toISOString().split("T")[0]}
+                        className={`${styles.formInput} ${formErrors.date ? styles.error : ""}`}
+
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                       />
 
 

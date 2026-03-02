@@ -17,7 +17,7 @@ export default function Hero({ scrollToSection }) {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white leading-[1.1] tracking-tight font-poppins"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white leading-[1.1] tracking-normal font-poppins"
                     >
                         <span className="block">Your Health</span>
                         <span className="block whitespace-nowrap">Monitored Anywhere</span>

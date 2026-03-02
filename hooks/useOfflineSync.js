@@ -10,7 +10,7 @@ export function useOfflineSync(patientId) {
 
   useEffect(() => {
     setIsOnline(navigator.onLine)
-    
+
     let isMounted = true
 
     const handleOnline = () => {
@@ -20,7 +20,7 @@ export function useOfflineSync(patientId) {
         syncData()
       }
     }
-    
+
     const handleOffline = () => {
       if (isMounted) {
         setIsOnline(false)
@@ -34,7 +34,7 @@ export function useOfflineSync(patientId) {
       try {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 3000)
-        
+
         await fetch(window.location.origin + '/manifest.json', {
           method: 'HEAD',
           mode: 'no-cors',
@@ -80,8 +80,8 @@ export function useOfflineSync(patientId) {
   const updateUnsyncedCount = useCallback(async () => {
     try {
       const unsynced = await offlineManager.getUnsyncedData()
-      const total = unsynced.vitals.length + unsynced.contacts.length + 
-                   unsynced.records.length + unsynced.medications.length
+      const total = unsynced.vitals.length + unsynced.contacts.length +
+        unsynced.records.length + unsynced.medications.length
       setUnsyncedCount(total)
     } catch (error) {
       console.error('Failed to update unsynced count:', error)
@@ -93,9 +93,9 @@ export function useOfflineSync(patientId) {
 
     try {
       setSyncStatus('syncing')
-      
+
       const unsynced = await offlineManager.getUnsyncedData()
-      
+
       // Sync vitals
       for (const vital of unsynced.vitals) {
         try {
@@ -106,7 +106,7 @@ export function useOfflineSync(patientId) {
           console.error('Failed to sync vital:', error)
         }
       }
-      
+
       // Sync emergency contacts
       for (const contact of unsynced.contacts) {
         try {
@@ -117,7 +117,7 @@ export function useOfflineSync(patientId) {
           console.error('Failed to sync contact:', error)
         }
       }
-      
+
       // Sync medical records
       for (const record of unsynced.records) {
         try {
@@ -128,7 +128,7 @@ export function useOfflineSync(patientId) {
           console.error('Failed to sync record:', error)
         }
       }
-      
+
       // Sync medications
       for (const medication of unsynced.medications) {
         try {
@@ -139,14 +139,14 @@ export function useOfflineSync(patientId) {
           console.error('Failed to sync medication:', error)
         }
       }
-      
+
       setSyncStatus('synced')
       setLastSyncTime(new Date())
       await updateUnsyncedCount()
-      
+
       // Reset to online status after successful sync
       setTimeout(() => setSyncStatus('online'), 2000)
-      
+
     } catch (error) {
       console.error('Sync failed:', error)
       setSyncStatus('error')
