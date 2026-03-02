@@ -833,4 +833,26 @@ select.formInput {
   .navbarSpacer {
     height: 60px;
   }
+
+  .doctorsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .doctorCard {
+    margin: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .content {
+    padding: 0 0.75rem 1.5rem;
+  }
+
+  .bookingSection {
+    padding: 1rem;
+  }
 }

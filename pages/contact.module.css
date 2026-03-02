@@ -491,6 +491,20 @@
   }
   
   .navbarSpacer {
-    height: 60px; /* Adjust for smaller mobile navbar height */
+    height: 60px;
+  }
+}
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .container {
+    padding: 1.25rem 0.75rem;
+  }
+
+  .contactCard, .formCard, .infoCard {
+    padding: 1.25rem;
   }
 }

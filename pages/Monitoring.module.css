@@ -577,3 +577,17 @@
     font-size: 2rem;
   }
 }
+
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .content {
+    padding: 0 0.75rem 1.5rem;
+  }
+
+  .liveDataValue {
+    font-size: 1.75rem;
+  }
+}

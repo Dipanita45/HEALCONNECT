@@ -118,3 +118,24 @@
     transform: rotate(360deg);
   }
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .loginContainer {
+    padding: 10px 12px;
+    align-items: flex-start;
+    padding-top: 80px;
+  }
+
+  .loginContent {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .loginContainer {
+    padding: 10px 8px;
+    padding-top: 80px;
+  }
+}

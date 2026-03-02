@@ -122,3 +122,22 @@
     transform: rotate(360deg);
   }
 }
+
+/* Responsive */
+@media (max-width: 480px) {
+  .signupContainer {
+    padding: 80px 12px 20px;
+    align-items: flex-start;
+  }
+
+  .signupContent {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 360px) {
+  .signupContainer {
+    padding: 80px 8px 20px;
+  }
+}
