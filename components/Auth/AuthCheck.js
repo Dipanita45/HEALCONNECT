@@ -15,6 +15,6 @@ export default function AuthCheck({ children } = {}) {
   }, [router]);
 
   if (!allowed) return null; // avoids rendering until check is done
-  
+
   return <>{children}</>;
 }

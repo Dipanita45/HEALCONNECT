@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { auth } from "../lib/firebase";
 import styles from './Appointments.module.css';
+import LoadingButton from "@/components/ui/LoadingButton";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -450,7 +451,7 @@ export default function Appointments() {
                 <motion.div
                   className={styles.titleUnderline}
                   initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
+                  animate={{ width: "50%" }}
                   transition={{ duration: 0.8, delay: 0.3 }}
                 ></motion.div>
                 <motion.p
@@ -570,12 +571,18 @@ export default function Appointments() {
                         value={formData.date}
                         onChange={handleChange}
                         required
+<<<<<<< HEAD
                         min={new Date().toISOString().split('T')[0]}
                         className={`${styles.formInput} ${formErrors.date ? styles.error : ''}`}
                         style={{
                           paddingRight: "42px",
                           colorScheme: "light"
                         }}
+=======
+                        min={new Date().toISOString().split("T")[0]}
+                        className={`${styles.formInput} ${formErrors.date ? styles.error : ""}`}
+
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                       />
 
 
@@ -656,17 +663,13 @@ export default function Appointments() {
                     </div>
                   </motion.div>
 
-                  <motion.button
+                  <LoadingButton
                     type="submit"
+                    loading={isSubmitting}
+                    disabled={!selectedDoctor.available}
                     className={styles.submitButton}
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    disabled={!selectedDoctor.available || isSubmitting}
-                    variants={formItemVariants}
                   >
-                    {isSubmitting ? (
-                      <div className={styles.spinner}></div>
-                    ) : (
+                    {!isSubmitting && (
                       <>
                         Confirm Appointment
                         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -675,7 +678,8 @@ export default function Appointments() {
                         </svg>
                       </>
                     )}
-                  </motion.button>
+                    {isSubmitting && "Booking..."}
+                  </LoadingButton>
                 </motion.form>
 
                 <motion.div

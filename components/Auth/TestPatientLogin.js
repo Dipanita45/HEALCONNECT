@@ -13,7 +13,7 @@ export default function TestPatientLogin() {
 
   const testLogin = async (e) => {
     e.preventDefault();
-    
+
     if (!/^\d{10}$/.test(phoneNumber)) {
       setError('Please enter a valid 10-digit phone number');
       toast.error('Please enter a valid 10-digit phone number');
@@ -26,7 +26,7 @@ export default function TestPatientLogin() {
     try {
       // Check if patient exists in database
       const patientDoc = await getDoc(doc(db, 'patients', `+91${phoneNumber}`));
-      
+
       if (!patientDoc.exists()) {
         setError('Patient not found. Please create a test account first.');
         toast.error('Patient not found. Please create a test account first.');
@@ -45,7 +45,7 @@ export default function TestPatientLogin() {
       });
 
       toast.success('🎉 Test login successful! Redirecting to dashboard...');
-      
+
       // Store patient info in localStorage for role checking
       localStorage.setItem('userRole', 'patient');
       localStorage.setItem('patientPhone', `+91${phoneNumber}`);
@@ -69,14 +69,14 @@ export default function TestPatientLogin() {
       <h1 className="text-center font-extrabold text-gray6 dark:text-gray2 select-none text-2xl sm:text-4xl">
         🧪 Test Patient Login
       </h1>
-      
+
       <p className="text-center text-gray-500 mb-4">
         Bypass Firebase billing requirements for testing purposes
       </p>
 
       <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-md">
         <p className="text-sm text-blue-800 dark:text-blue-200">
-          <strong>🔧 Test Mode:</strong> This bypasses Firebase phone authentication billing requirements. 
+          <strong>🔧 Test Mode:</strong> This bypasses Firebase phone authentication billing requirements.
           Create a test account first using the test setup page or script.
         </p>
       </div>
@@ -123,17 +123,17 @@ export default function TestPatientLogin() {
         </button>
       </form>
 
-   <div className="mt-4 space-y-2">
-  <div className="text-center">
-    <Link
-      href="/test-setup"
-      className="text-blue-500 hover:text-blue-700 underline text-sm"
-    >
-      📝 Create Test Account First
-    </Link>
-  </div>
-  
-  <div className="text-center">
+      <div className="mt-4 space-y-2">
+        <div className="text-center">
+          <Link
+            href="/test-setup"
+            className="text-blue-500 hover:text-blue-700 underline text-sm"
+          >
+            📝 Create Test Account First
+          </Link>
+        </div>
+
+        <div className="text-center">
           <button
             type="button"
             onClick={() => window.location.href = '/login'}

@@ -259,7 +259,7 @@ export default function Contact() {
           transition={{ duration: 0.8 }}
         >
           <div className="absolute inset-0 bg-black/20"></div>
-          <div className="relative container mx-auto px-6 py-20 mt-10">
+          <div className="relative container mx-auto px-6 py-20 mt-12">
             <motion.div
               initial="hidden"
               animate="visible"
@@ -458,7 +458,7 @@ export default function Contact() {
               className="lg:col-span-2"
             >
               <div className="bg-blue-100/70 dark:bg-gray-800 rounded-2xl shadow-xl p-8 border-2 border-blue-300/80 dark:border-gray-700">
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mb-3">
                   <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
                     Send Us a Message
                   </h2>
@@ -474,7 +474,7 @@ export default function Contact() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Category Selection */}
-                  <div>
+                  <div className="mb-10">
                     <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
                       What can we help you with?
                     </label>
@@ -492,25 +492,22 @@ export default function Contact() {
                                 category: category.value,
                               }))
                             }
-                            className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${
-                              formData.category === category.value
+                            className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${formData.category === category.value
                                 ? `border-${category.color}-500 bg-${category.color}-50 dark:bg-${category.color}-900/20`
                                 : "border-gray-400 dark:border-gray-600 hover:border-gray-500 dark:hover:border-gray-500"
-                            }`}
+                              }`}
                           >
                             <Icon
-                              className={`text-xl ${
-                                formData.category === category.value
+                              className={`text-xl ${formData.category === category.value
                                   ? `text-${category.color}-600 dark:text-${category.color}-400`
                                   : "text-gray-400 dark:text-gray-500"
-                              }`}
+                                }`}
                             />
                             <span
-                              className={`text-xs font-medium ${
-                                formData.category === category.value
+                              className={`text-xs font-medium ${formData.category === category.value
                                   ? `text-${category.color}-700 dark:text-${category.color}-300`
                                   : "text-gray-600 dark:text-gray-400"
-                              }`}
+                                }`}
                             >
                               {category.label}
                             </span>
@@ -532,11 +529,10 @@ export default function Contact() {
                         value={formData.name}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`w-full px-4 py-3 rounded-lg border-2 ${
-                          errors.name && touched.name
+                        className={`w-full px-4 py-3 rounded-lg border-2 ${errors.name && touched.name
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
-                        } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
+                          } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
                         placeholder="Dipanita"
                       />
                       {errors.name && touched.name && (
@@ -556,11 +552,10 @@ export default function Contact() {
                         value={formData.email}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        className={`w-full px-4 py-3 rounded-lg border-2 ${
-                          errors.email && touched.email
+                        className={`w-full px-4 py-3 rounded-lg border-2 ${errors.email && touched.email
                             ? "border-red-500 focus:ring-red-500"
                             : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
-                        } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
+                          } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
                         placeholder="dipanita@example.com"
                       />
                       {errors.email && touched.email && (
@@ -582,11 +577,10 @@ export default function Contact() {
                       value={formData.subject}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      className={`w-full px-4 py-3 rounded-lg border-2 ${
-                        errors.subject && touched.subject
+                      className={`w-full px-4 py-3 rounded-lg border-2 ${errors.subject && touched.subject
                           ? "border-red-500 focus:ring-red-500"
                           : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
-                      } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
+                        } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
                       placeholder="How can we help you?"
                     />
                     {errors.subject && touched.subject && (
@@ -624,11 +618,10 @@ export default function Contact() {
                               priority: priority.value,
                             }))
                           }
-                          className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all duration-200 ${
-                            formData.priority === priority.value
+                          className={`px-4 py-2 rounded-lg border-2 text-sm font-medium transition-all duration-200 ${formData.priority === priority.value
                               ? getPriorityColor(priority.value)
                               : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-                          }`}
+                            }`}
                         >
                           {priority.label}
                         </button>
@@ -647,11 +640,10 @@ export default function Contact() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       rows={6}
-                      className={`w-full px-4 py-3 rounded-lg border-2 resize-none ${
-                        errors.message && touched.message
+                      className={`w-full px-4 py-3 rounded-lg border-2 resize-none ${errors.message && touched.message
                           ? "border-red-500 focus:ring-red-500"
                           : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
-                      } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
+                        } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
                       placeholder="Please describe your issue or question in detail..."
                     />
                     {errors.message && touched.message && (
@@ -783,9 +775,8 @@ export default function Contact() {
                           {faq.question}
                         </span>
                         <FaArrowRight
-                          className={`text-gray-400 transition-transform duration-200 ${
-                            selectedFAQ === faq.id ? "rotate-90" : ""
-                          }`}
+                          className={`text-gray-400 transition-transform duration-200 ${selectedFAQ === faq.id ? "rotate-90" : ""
+                            }`}
                         />
                       </button>
 
@@ -798,7 +789,7 @@ export default function Contact() {
                             transition={{ duration: 0.2 }}
                             className="overflow-hidden"
                           >
-                            <div className="px-4 pb-3 text-sm text-gray-600 dark:text-gray-400">
+                            <div className="px-4 pb-3 pt-3 text-sm text-gray-600 dark:text-gray-400">
                               {faq.answer}
                             </div>
                           </motion.div>

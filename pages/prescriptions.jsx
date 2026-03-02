@@ -45,7 +45,7 @@ export default function Prescriptions() {
     startDate: '',
     notes: ''
   });
-  
+
   const [prescriptions, setPrescriptions] = useState([]);
   const [activeTab, setActiveTab] = useState('current');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -324,8 +324,8 @@ export default function Prescriptions() {
                     <motion.div
                       key={prescription.id}
                       className={`${styles.prescriptionCard} ${prescription.status === 'completed'
-                          ? styles.completed
-                          : ''
+                        ? styles.completed
+                        : ''
                         }`}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -653,7 +653,7 @@ export default function Prescriptions() {
                         <span key={index} className={styles.reminderBadge}>
                           {time}
                         </span>
-                    ))}
+                      ))}
                   </div>
                 </div>
               )}

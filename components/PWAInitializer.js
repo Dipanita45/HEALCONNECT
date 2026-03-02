@@ -17,7 +17,7 @@ export default function PWAInitializer() {
   const checkPwaSupport = () => {
     const supported = 'serviceWorker' in navigator && 'PushManager' in window
     setPwaSupported(supported)
-    
+
     if (!supported) {
       console.warn('PWA not supported in this browser')
     }
@@ -26,9 +26,9 @@ export default function PWAInitializer() {
   const checkInstallationStatus = () => {
     // Check if app is running in standalone mode
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                          window.navigator.standalone ||
-                          document.referrer.includes('android-app://')
-    
+      window.navigator.standalone ||
+      document.referrer.includes('android-app://')
+
     setIsInstalled(isStandalone)
   }
 
@@ -37,7 +37,7 @@ export default function PWAInitializer() {
       try {
         // Let next-pwa handle service worker registration
         console.log('PWA: Service worker will be handled by next-pwa')
-        
+
         // Listen for service worker updates
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           console.log('PWA: Service worker controller changed')
@@ -46,7 +46,7 @@ export default function PWAInitializer() {
         // Handle push notifications when service worker is ready
         navigator.serviceWorker.addEventListener('message', (event) => {
           console.log('PWA: Message from service worker', event.data)
-          
+
           if (event.data && event.data.type === 'UPDATE_AVAILABLE') {
             showUpdateNotification()
           }
@@ -83,7 +83,7 @@ export default function PWAInitializer() {
     try {
       const result = await installPrompt.prompt()
       console.log('Install result:', result)
-      
+
       if (result.outcome === 'accepted') {
         setIsInstalled(true)
         setInstallPrompt(null)
@@ -161,9 +161,8 @@ export default function PWAInitializer() {
       {/* PWA Status Indicator */}
       <div className="fixed top-4 left-4 z-40">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2 flex items-center space-x-2 border border-gray-200 dark:border-gray-600">
-          <div className={`w-2 h-2 rounded-full ${
-            pwaSupported ? 'bg-green-500' : 'bg-yellow-500'
-          }`} />
+          <div className={`w-2 h-2 rounded-full ${pwaSupported ? 'bg-green-500' : 'bg-yellow-500'
+            }`} />
           <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
             {pwaSupported ? 'PWA Ready' : 'Limited PWA'}
           </span>
