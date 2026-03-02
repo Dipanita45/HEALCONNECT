@@ -129,7 +129,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
         {/* Logo/Brand */}
-        <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
+        <div className="flex-shrink-0 flex items-center lg:pr-10 xl:pr-16">
           <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
             <div className={styles.logoIcon}>
               <div className={styles.crossSymbol}>
@@ -205,7 +205,7 @@ export default function Navbar() {
 
           <Link
             href="/contact"
-            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
+            className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
@@ -213,7 +213,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <ThemeToggle />
           {user || currentUser ? (
             <div className="hidden lg:flex items-center gap-2">
@@ -228,29 +228,27 @@ export default function Navbar() {
               <button onClick={handleLoginRedirect} className="px-4 py-2 bg-blue-600 text-white rounded-md">Login</button>
             </div>
           )}
-          <button onClick={toggleMenu} className="lg:hidden p-2 rounded-md border border-gray-200">
-            {isMenuOpen ? 'Close' : 'Menu'}
+          {/* Hamburger button - mobile only */}
+          <button
+            onClick={toggleMenu}
+            className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md"
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+          >
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0 scale-x-0' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
           </button>
         </div>
-      </div>
-
-      {/* Removed duplicate mobile menu implementation to avoid syntax errors and double rendering */}
-
-      {/* Mobile Menu Button + Theme Toggle */}
-      <div className="lg:hidden flex items-center gap-2">
-        <ThemeToggle />
-        <button
-          className="flex flex-col gap-1.5"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-        </button>
       </div>
 
       {/* Mobile Menu */}
