@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { useTheme } from "@/context/ThemeContext";
-import styles from "../signup.module.css";
+import styles from "../login.module.css";
 
 export default function OnboardingPage() {
     const { user, isLoaded } = useUser();
@@ -21,9 +21,21 @@ export default function OnboardingPage() {
             router.push("/signup");
         }
 
-        // If they already have a role set in metadata, default the UI to it
+        // If they already have a role set in metadata, redirect them to their dashboard
         if (isLoaded && user && user.publicMetadata?.role) {
-            setRole(user.publicMetadata.role);
+            const userRole = user.publicMetadata.role;
+
+            // Sync legacy state for background consistency
+            if (typeof window !== "undefined") {
+                localStorage.setItem("userType", userRole);
+                localStorage.setItem("userId", user.id);
+                localStorage.setItem(
+                    "username",
+                    user.username || user.primaryEmailAddress?.emailAddress?.split("@")[0] || "User"
+                );
+            }
+
+            router.replace(`/${userRole}`);
         }
     }, [isLoaded, user, router]);
 
@@ -64,13 +76,28 @@ export default function OnboardingPage() {
                 return;
             }
 
-            // Force clerk to reload the token so publicMetadata is available immediately
-            await user.reload();
+            // Sync to localStorage for legacy components to work immediately after redirect
+            if (typeof window !== "undefined") {
+                localStorage.setItem("userType", selectedRole);
+                localStorage.setItem("userId", user.id);
+                localStorage.setItem(
+                    "username",
+                    user.username || user.primaryEmailAddress?.emailAddress?.split("@")[0] || "User"
+                );
+            }
 
-            router.push(`/${selectedRole}/dashboard`);
+            // Force clerk to reload the token so publicMetadata is available immediately
+            try {
+                await user.reload();
+            } catch (reloadErr) {
+                console.error("User reload failed:", reloadErr);
+                // Even if reload fails, we can try to redirect if the metadata was likely saved
+            }
+
+            router.replace(`/${selectedRole}`);
         } catch (err) {
             console.error("Onboarding error:", err);
-            setError("An error occurred saving your profile.");
+            setError("An error occurred saving your profile. Please try again.");
             setIsSubmitting(false);
         }
     };

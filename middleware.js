@@ -24,10 +24,11 @@ export default clerkMiddleware(async (auth, req) => {
 
     // Check if user has completed onboarding by checking publicMetadata
     const { sessionClaims } = await auth();
-    const isRoleOnboarded = sessionClaims?.metadata?.onboardingComplete === true;
+    const metadata = sessionClaims?.metadata || {};
+    const isRoleOnboarded = metadata.onboardingComplete === true || !!metadata.role;
 
     // If they haven't but are trying to access protected dashboards, redirect them
-    if (!isRoleOnboarded && req.nextUrl.pathname !== '/onboarding') {
+    if (!isRoleOnboarded && !req.nextUrl.pathname.startsWith('/onboarding')) {
       const url = new URL('/onboarding', req.url);
       return NextResponse.redirect(url);
     }

@@ -178,7 +178,7 @@ export default function PWAInstallPrompt() {
         <div className="fixed bottom-4 left-4 right-4 z-40">
           <div className="bg-orange-600 text-white rounded-lg shadow-lg p-3 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <FaWifiSlash className="text-lg" />
+              <MdWifiOff className="text-lg" />
               <div>
                 <p className="font-semibold text-sm">Offline Mode Activated</p>
                 <p className="text-xs opacity-90">Patient vitals and emergency contacts available</p>
