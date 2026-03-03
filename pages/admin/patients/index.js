@@ -64,9 +64,15 @@ export default function Patients(prose) {
                   {(loading) && (
                     <tbody>
                       <tr>
+<<<<<<< HEAD
                         <td colSpan="5" className="py-20">
                           <Loader show={true} size={40} />
                         </td>
+=======
+                        <td></td>
+                        <td></td>
+                        <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40} /></td>
+>>>>>>> 706198a (Reviewed all files + formatted files where needed)
                       </tr>
                     </tbody>
                   )}

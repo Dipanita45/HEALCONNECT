@@ -171,7 +171,7 @@ export default function About() {
             variants={fadeInUp}
           >
             <motion.div
-              className="flex justify-center mb-6"
+              className="flex justify-center mb-6 mt-24"
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -372,7 +372,7 @@ export default function About() {
                     scale: 1.05,
                     y: -5
                   }}
-                  className="text-center"
+                  className="text-center border-2 border-gray-200 dark:border-gray-700 p-6 rounded-xl bg-white dark:bg-gray-800 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-2xl"
                 >
                   <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                     {item.icon}

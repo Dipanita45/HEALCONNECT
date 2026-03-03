@@ -28,8 +28,8 @@ export default function AlertsPage() {
                             <button
                                 onClick={() => setViewMode('my')}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'my'
-                                        ? 'bg-blue-500 text-white'
-                                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                    ? 'bg-blue-500 text-white'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                     }`}
                             >
                                 My Alerts
@@ -37,8 +37,8 @@ export default function AlertsPage() {
                             <button
                                 onClick={() => setViewMode('unassigned')}
                                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${viewMode === 'unassigned'
-                                        ? 'bg-red-500 text-white'
-                                        : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                                    ? 'bg-red-500 text-white'
+                                    : 'text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
                                     }`}
                             >
                                 Unassigned Alerts

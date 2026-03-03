@@ -203,6 +203,25 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Removed duplicate mobile menu implementation to avoid syntax errors and double rendering */}
+
+      {/* Mobile Menu Button + Theme Toggle */}
+      <div className="lg:hidden flex items-center gap-2">
+        <ThemeToggle />
+        <button
+          className="flex flex-col gap-1.5"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-label="Toggle menu"
+        >
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
+            style={{ background: 'var(--hamburger-color, white)' }}></span>
+        </button>
+      </div>
+
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
@@ -228,13 +247,13 @@ export default function Navbar() {
               <>
                 <button
                   onClick={handleDashboardRedirect}
-                  className="w-full py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-green-600 text-white rounded-md`}
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={handleLogout}
-                  className="w-full py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger} w-full py-2 bg-red-600 text-white rounded-md`}
                 >
                   Logout
                 </button>
@@ -242,7 +261,7 @@ export default function Navbar() {
             ) : isLoaded && !clerkUser ? (
               <button
                 onClick={handleLoginRedirect}
-                className="w-full py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-blue-600 text-white rounded-md`}
               >
                 Login
               </button>
@@ -251,5 +270,5 @@ export default function Navbar() {
         </div>
       )}
     </nav>
-  )
+  );
 }

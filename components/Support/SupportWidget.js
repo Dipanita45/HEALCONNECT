@@ -8,6 +8,7 @@ import {
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
 import styles from './SupportWidget.module.css';
 import { useTheme } from '@/context/ThemeContext';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
@@ -40,8 +41,33 @@ const SupportWidget = () => {
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
-  const chatContainerRef = useRef(null);
+const inputRef = useRef(null);
+const fileInputRef = useRef(null); // ADD THIS
+const chatContainerRef = useRef(null);
+
+const { 
+  transcript, 
+  listening, 
+  resetTranscript, 
+  browserSupportsSpeechRecognition 
+} = useSpeechRecognition();
+
+
+useEffect(() => {
+  if (transcript) {
+    setInputValue(transcript);
+  }
+}, [transcript]);
+
+
+const handleVoiceInput = () => {
+  if (listening) {
+    SpeechRecognition.stopListening();
+  } else {
+    resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
+  }
+};
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -340,6 +366,11 @@ const SupportWidget = () => {
     };
   }, [currentTicket, isProcessing]);
 
+  const adjustTextareaHeight = (element) => {
+    element.style.height = 'auto';
+    element.style.height = element.scrollHeight + 'px';
+  };
+
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
 
@@ -422,6 +453,28 @@ const SupportWidget = () => {
       setIsTyping(false);
     }, 1000 + Math.random() * 1000);
   };
+
+  const handleFileAttach = () => {
+  fileInputRef.current?.click();
+};
+
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const fileMessage = {
+    id: Date.now(),
+    type: 'user',
+    text: `📎 Attached file: ${file.name}`,
+    file: file,
+    timestamp: new Date()
+  };
+
+  setMessages(prev => [...prev, fileMessage]);
+
+  // Reset input so same file can be selected again
+  e.target.value = '';
+};
 
   const handleSuggestionClick = (suggestion) => {
     setInputValue(suggestion);
@@ -692,6 +745,11 @@ const SupportWidget = () => {
                         </div>
                       )}
                       <p>{message.text}</p>
+{message.file && (
+  <div className={styles.filePreview}>
+    📄 {message.file.name}
+  </div>
+)}
                       {message.suggestions && (
                         <div className={styles.suggestions} role="list" aria-label="Suggested actions">
                           {message.suggestions.map((suggestion, index) => (
@@ -762,23 +820,30 @@ const SupportWidget = () => {
                 <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
                   <FaPaperclip />
                 </button>
-                <input
+                <textarea
                   ref={inputRef}
-                  type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    adjustTextareaHeight(e.target);
+                  }}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type your message..."
                   className={styles.messageInput}
                   aria-label="Type your message"
                   aria-describedby="input-help"
-                  autoComplete="off"
+                  rows={1}
                 />
                 <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />
                 </button>
-                <button className={styles.voiceBtn} aria-label="Voice input" tabIndex={0}>
-                  <FaMicrophone />
+                <button 
+                onClick={handleVoiceInput}
+                className={`${styles.voiceBtn} ${listening ? styles.micActive : ''}`}
+                aria-label="Voice input"
+                type="button"
+                >
+                <FaMicrophone />
                 </button>
                 <button
                   onClick={sendMessage}

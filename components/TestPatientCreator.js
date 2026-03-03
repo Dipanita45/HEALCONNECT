@@ -10,7 +10,7 @@ export default function TestPatientCreator() {
 
   const addTestPatient = async (e) => {
     e.preventDefault();
-    
+
     if (!phoneNumber || !name) {
       toast.error('Phone number and name are required!');
       return;
@@ -32,27 +32,27 @@ export default function TestPatientCreator() {
       dob: "1990-01-01T00:00:00.000Z",
       gender: "male",
       married: "no",
-      
+
       // Contact Information
       number: `+91${phoneNumber}`,
       email: `test${phoneNumber}@example.com`,
-      
+
       // Address Information
       address: "Test Address for Demo",
       city: "Mumbai",
       state: "Maharashtra",
       pin: "400001",
-      
+
       // Health Information
       height: "170",
       weight: "70",
       bloodGroup: "O+",
-      
+
       // System Information
       role: "patient",
       createdAt: new Date(),
       updatedAt: new Date(),
-      
+
       // Test flag
       isTestAccount: true
     };
@@ -79,7 +79,7 @@ export default function TestPatientCreator() {
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
         Add a test patient account to login and test the system features.
       </p>
-      
+
       <form onSubmit={addTestPatient} className="space-y-4">
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -94,7 +94,7 @@ export default function TestPatientCreator() {
             required
           />
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Phone Number (10 digits)
@@ -115,23 +115,22 @@ export default function TestPatientCreator() {
             />
           </div>
         </div>
-        
+
         <button
           type="submit"
           disabled={isAdding}
-          className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-            isAdding 
-              ? 'bg-gray-400 cursor-not-allowed' 
-              : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
-          }`}
+          className={`w-full py-2 px-4 rounded-md text-white font-medium ${isAdding
+            ? 'bg-gray-400 cursor-not-allowed'
+            : 'bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500'
+            }`}
         >
           {isAdding ? 'Creating Account...' : 'Create Test Patient'}
         </button>
       </form>
-      
+
       <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-md">
         <p className="text-sm text-yellow-800 dark:text-yellow-200">
-          <strong>⚠️ Note:</strong> This creates a test account for development purposes only. 
+          <strong>⚠️ Note:</strong> This creates a test account for development purposes only.
           After creation, you can login using the phone number with any 6-digit OTP in Firebase test mode.
         </p>
       </div>

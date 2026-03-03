@@ -2,6 +2,7 @@ import Head from "next/head";
 import { motion } from "framer-motion";
 import { FaFileContract, FaGavel, FaBalanceScale, FaExclamationTriangle, FaHeartbeat, FaShieldAlt, FaUserCheck, FaClock, FaInfoCircle, FaLock, FaServer, FaChartLine, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaBell, FaQuestionCircle, FaComments } from "react-icons/fa";
 import { Typewriter } from "react-simple-typewriter";
+import { useTheme } from '@/context/ThemeContext';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -16,6 +17,7 @@ const fadeInUp = {
 };
 
 export default function Terms() {
+  const { setSupportWidgetOpen } = useTheme();
   return (
     <>
       <Head>
@@ -81,7 +83,7 @@ export default function Terms() {
           }
         `}</style>
 
-        <div className="container mx-auto px-6 py-16 relative" style={{ zIndex: 1 }}>
+        <div className="container mx-auto px-6 py-16 mt-20 relative" style={{ zIndex: 1 }}>
           <motion.header
             className="text-center mb-12"
             initial="hidden"
@@ -183,7 +185,7 @@ export default function Terms() {
                       What We Offer
                     </h3>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2.5">
                     {[
                       "Real-time health monitoring",
                       "Doctor-patient communication",
@@ -215,7 +217,7 @@ export default function Terms() {
                   whileHover={{ scale: 1.02, boxShadow: "0 8px 30px rgba(34, 197, 94, 0.15)" }}
                   className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg border-2 border-green-300 dark:border-green-800 transition-all duration-300"
                 >
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-center mb-8">
                     <div className="bg-green-100 dark:bg-green-900 p-2 rounded-lg mr-3">
                       <FaUserCheck className="text-xl text-green-600 dark:text-green-400" />
                     </div>
@@ -487,8 +489,11 @@ export default function Terms() {
                   <FaComments className="text-3xl mb-3 mx-auto text-blue-600 dark:text-blue-200" />
                   <h4 className="font-bold text-lg mb-2 text-gray-900 dark:text-white">Live Chat</h4>
                   <p className="text-gray-700 dark:text-blue-100 mb-2">Instant help available</p>
-                  <button className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600">
-                    Start Chat
+                  <button 
+                  onClick={() => setSupportWidgetOpen(true)}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors dark:bg-blue-500 dark:hover:bg-blue-600"
+                  >
+                  Start Chat
                   </button>
                 </motion.div>
               </div>
@@ -507,7 +512,7 @@ export default function Terms() {
                 </div>
               </div>
 
-              <div className="flex items-center justify-center mt-4">
+              <div className="flex items-center justify-center mt-8">
                 <FaShieldAlt className="mr-2 text-blue-600 dark:text-blue-200" />
                 <span className="text-sm text-gray-700 dark:text-blue-100">Confidential & Secure</span>
               </div>

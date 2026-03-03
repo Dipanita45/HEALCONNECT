@@ -11,6 +11,7 @@ const AlertNotifications = dynamic(() => import("@components/DoctorComponents/Al
 // FetchPatients can stay, but we will override its behavior for offline caching
 import FetchPatients from "../../lib/fetchPatients";
 import { useMultiPatientMonitor } from "../../lib/useAlertMonitor";
+import Skeleton from "@/components/ui/Skeleton";
 
 export default function DoctorDashboard() {
   const router = useRouter();
@@ -151,52 +152,48 @@ export default function DoctorDashboard() {
         <div className="mt-4 md:px-4">
           <div className="w-full overflow-hidden rounded-lg shadow-xs bg-white dark:bg-gray-800">
             <div className="w-full overflow-x-auto py-4 md:px-4">
-              {loading && <p>Loading patients...</p>}
-              {error && <p className="text-red-500">{error}</p>}
-              {!loading && !error && (
-                <table className="w-full">
-                  <thead>
-                    <tr className="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
-                      <th className="px-4 py-3">Patient</th>
-                      <th className="px-4 py-3">ID</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3">Date</th>
+              {loading && (
+                <>
+                  {[...Array(5)].map((_, i) => (
+                    <tr key={i}>
+                      <td className="px-4 py-3"><Skeleton height={40} /></td>
+                      <td className="px-4 py-3"><Skeleton height={20} /></td>
+                      <td className="px-4 py-3"><Skeleton height={20} width={80} /></td>
+                      <td className="px-4 py-3"><Skeleton height={20} /></td>
                     </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
-                    {patients.map((p, idx) => (
-                      <tr
-                        key={idx}
-                        className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400"
-                      >
-                        <td className="px-4 py-3">
-                          <div className="flex items-center text-sm">
-                            <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
-                              <Image
-                                className="object-cover w-full h-full rounded-full"
-                                src="/hacker.png"
-                                alt={p.name}
-                                loading="lazy"
-                                width={512}
-                                height={512}
-                              />
-                            </div>
-                            <div>
-                              <p className="font-semibold">{p.name}</p>
-                              <p className="text-xs text-gray-600 dark:text-gray-400">{p.doctor}</p>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-4 py-3 text-sm">{p.id}</td>
-                        <td className="px-4 py-3 text-xs">
-                          <span className={getStatusClasses(p.status)}>{p.status}</span>
-                        </td>
-                        <td className="px-4 py-3 text-sm">{p.date}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                  ))}
+                </>
               )}
+              {!loading && patients.map((p, idx) => (
+                <tr
+                  key={idx}
+                  className="bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400"
+                >
+                  <td className="px-4 py-3">
+                    <div className="flex items-center text-sm">
+                      <div className="relative hidden w-8 h-8 mr-3 rounded-full md:block">
+                        <Image
+                          className="object-cover w-full h-full rounded-full"
+                          src="/hacker.png"
+                          alt={p.name}
+                          loading="lazy"
+                          width={512}
+                          height={512}
+                        />
+                      </div>
+                      <div>
+                        <p className="font-semibold">{p.name}</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400">{p.doctor}</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-3 text-sm">{p.id}</td>
+                  <td className="px-4 py-3 text-xs">
+                    <span className={getStatusClasses(p.status)}>{p.status}</span>
+                  </td>
+                  <td className="px-4 py-3 text-sm">{p.date}</td>
+                </tr>
+              ))}
             </div>
           </div>
         </div>
