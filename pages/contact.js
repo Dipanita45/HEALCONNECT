@@ -59,6 +59,15 @@ export default function Contact() {
   const [selectedFAQ, setSelectedFAQ] = useState(null);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+  // OTP Verification State
+  const [otp, setOtp] = useState("");
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isVerified, setIsVerified] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(0);
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpError, setOtpError] = useState("");
+
   const categories = [
     {
       value: "general",
@@ -185,12 +194,96 @@ export default function Contact() {
       [name]: true,
     }));
   };
+
+  useEffect(() => {
+    let interval;
+    if (otpTimer > 0) {
+      interval = setInterval(() => {
+        setOtpTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpTimer]);
+
+  const handleSendOtp = async () => {
+    if (!formData.email || errors.email) {
+      setErrors(prev => ({ ...prev, email: "Please enter a valid email first" }));
+      return;
+    }
+
+    setIsSendingOtp(true);
+    setOtpError("");
+
+    try {
+      const res = await fetch("/api/contact/send-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setIsOtpSent(true);
+        setOtpTimer(60); // 1 minute cooldown
+        setSubmitStatus({
+          type: "success",
+          message: data.simulated
+            ? `Simulated OTP sent to ${formData.email}. Check console for the code.`
+            : `OTP sent to ${formData.email}. Please check your inbox.`
+        });
+      } else {
+        throw new Error(data.message || "Failed to send OTP");
+      }
+    } catch (err) {
+      setOtpError(err.message);
+      setSubmitStatus({ type: "error", message: err.message });
+    } finally {
+      setIsSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    if (!otp || otp.length !== 6) {
+      setOtpError("Please enter a valid 6-digit OTP");
+      return;
+    }
+
+    setIsVerifyingOtp(true);
+    setOtpError("");
+
+    try {
+      const res = await fetch("/api/contact/verify-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: formData.email, otp }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setIsVerified(true);
+        setSubmitStatus({ type: "success", message: "Email verified successfully!" });
+      } else {
+        throw new Error(data.message || "Invalid OTP");
+      }
+    } catch (err) {
+      setOtpError(err.message);
+    } finally {
+      setIsVerifyingOtp(false);
+    }
+  };
   const form_id = process.env.NEXT_PUBLIC_FORM_ID;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validateForm()) {
+      return;
+    }
+
+    if (!isVerified) {
+      setSubmitStatus({ type: "error", message: "Please verify your email with OTP first" });
       return;
     }
 
@@ -557,26 +650,77 @@ export default function Contact() {
                       <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
                         Email Address <span className="text-red-500">*</span>
                       </label>
-                      <div className="relative">
-                        <input
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          disabled={isSubmitting}
-                          className={`w-full px-4 py-3 rounded-lg border-2 ${errors.email && touched.email
-                            ? "border-red-500 focus:ring-red-500"
-                            : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
-                            } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200`}
-                          placeholder="dipanita@example.com"
-                        />
+                      <div className="flex gap-2">
+                        <div className="relative flex-1">
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            disabled={isSubmitting || isVerified}
+                            className={`w-full px-4 py-3 rounded-lg border-2 ${errors.email && touched.email
+                              ? "border-red-500 focus:ring-red-500"
+                              : "border-gray-400 dark:border-gray-600 focus:ring-blue-500"
+                              } bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/30 transition-all duration-200 ${isVerified ? "border-green-500 pr-10" : ""}`}
+                            placeholder="dipanita@example.com"
+                          />
+                          {isVerified && (
+                            <FaCheckCircle className="absolute right-3 top-1/2 -translate-y-1/2 text-green-500 text-xl" />
+                          )}
+                        </div>
+                        {!isVerified && (
+                          <button
+                            type="button"
+                            onClick={handleSendOtp}
+                            disabled={isSendingOtp || otpTimer > 0 || !formData.email || errors.email}
+                            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
+                          >
+                            {isSendingOtp ? "Sending..." : otpTimer > 0 ? `Resend (${otpTimer}s)` : isOtpSent ? "Resend OTP" : "Verify Email"}
+                          </button>
+                        )}
                       </div>
 
                       {errors.email && touched.email && (
                         <p className="mt-1 text-sm text-red-500">
                           {errors.email}
                         </p>
+                      )}
+
+                      {/* OTP Input Field */}
+                      {isOtpSent && !isVerified && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800"
+                        >
+                          <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                            Enter 6-digit OTP
+                          </label>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              maxLength={6}
+                              value={otp}
+                              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                              className="flex-1 px-4 py-2 rounded-lg border-2 border-gray-400 dark:border-gray-600 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center text-lg font-bold tracking-widest"
+                              placeholder="000000"
+                            />
+                            <button
+                              type="button"
+                              onClick={handleVerifyOtp}
+                              disabled={isVerifyingOtp || otp.length !== 6}
+                              className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+                            >
+                              {isVerifyingOtp ? "Verifying..." : "Verify"}
+                            </button>
+                          </div>
+                          {otpError && (
+                            <p className="mt-2 text-xs text-red-500 font-medium">
+                              {otpError}
+                            </p>
+                          )}
+                        </motion.div>
                       )}
                     </div>
                   </div>
@@ -682,7 +826,7 @@ export default function Contact() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !isVerified}
                     className="w-full bg-gradient-to-r from-blue-600 to-green-600 hover:from-blue-700 hover:to-green-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold py-4 px-6 rounded-lg transition-all duration-200 flex items-center justify-center space-x-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-visible:ring-4 focus-visible:ring-green-400/40"
                   >
                     {isSubmitting ? (
