@@ -18,8 +18,8 @@ const Support = () => {
     activeAgents: 0
   });
 
-  
-const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
+
+  const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
 
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
@@ -40,15 +40,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
 
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
-<<<<<<< HEAD
-  window.open(gmailUrl, '_blank');
-};
-//2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
-=======
     window.open(gmailUrl, '_blank');
   };
 
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
 
   const features = [
     {
@@ -70,7 +64,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
       title: '24/7 Availability',
       description: 'Round-the-clock support for urgent medical and technical issues.',
       color: '#ef4444',
-      image: '/support_images/support_images/best-support-ticket-system.png'   
+      image: '/support_images/support_images/best-support-ticket-system.png'
     }
   ];
 
@@ -270,7 +264,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <div className={styles.channelIcon}>
                 <FaRobot className={styles.aiIcon} />
               </div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+              <div className={styles.badgeNew} style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
                 AI Assistant
               </div>
               <h3>AI Assistant</h3>
@@ -280,11 +274,11 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
                 <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Instant responses</span>
                 <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Free to use</span>
               </div>
-              <button className={styles.channelBtn} 
-              onClick={() => {
-              setIsMinimized(false);
-              setSupportWidgetOpen(true);
-              }}>Start Chat</button>
+              <button className={styles.channelBtn}
+                onClick={() => {
+                  setIsMinimized(false);
+                  setSupportWidgetOpen(true);
+                }}>Start Chat</button>
             </motion.div>
 
             <motion.div
@@ -295,7 +289,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               className={styles.channelCard}
             >
               <div className={styles.channelIcon}><FaTicketAlt style={{ fontSize: '48px', color: '#22c55e' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)'}}>
+              <div className={styles.badgeNew} style={{ background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)' }}>
                 Support Tickets
               </div>
               <h3>Support Tickets</h3>
@@ -305,12 +299,12 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
                 <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Priority handling</span>
                 <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Email updates</span>
               </div>
-              <button className={styles.channelBtn} 
-              onClick={() => {
-              setSupportWidgetOpen(true);
-              setIsMinimized(true);
-              setShowTicketModal(true);
-              }}
+              <button className={styles.channelBtn}
+                onClick={() => {
+                  setSupportWidgetOpen(true);
+                  setIsMinimized(true);
+                  setShowTicketModal(true);
+                }}
               >Create Ticket</button>
             </motion.div>
 
@@ -322,7 +316,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               className={styles.channelCard}
             >
               <div className={styles.channelIcon}><FaPhone style={{ fontSize: '48px', color: '#f59e0b' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)'}}>
+              <div className={styles.badgeNew} style={{ background: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)' }}>
                 Phone Support
               </div>
               <h3>Phone Support</h3>
@@ -345,7 +339,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <div className={styles.channelIcon}>
                 <FaUsers className={styles.liveIcon} />
               </div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'}}>
+              <div className={styles.badgeNew} style={{ background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)' }}>
                 Live Agent Support
               </div>
               <h3>Live Agent Support</h3>
@@ -366,7 +360,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               className={styles.channelCard}
             >
               <div className={styles.channelIcon}><FaEnvelope style={{ fontSize: '48px', color: '#ef4444' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)'}}>
+              <div className={styles.badgeNew} style={{ background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)' }}>
                 Email Support
               </div>
               <h3>Email Support</h3>
@@ -380,10 +374,7 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
                 className={styles.channelBtn}
                 onClick={handleSendEmail}
               >
-<<<<<<< HEAD
-=======
                 <FaEnvelope style={{ marginRight: '6px' }} />
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
                 Send Email
               </button>
 

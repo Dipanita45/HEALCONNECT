@@ -1,6 +1,7 @@
 /* Support Page Styles */
 .supportPage {
-    padding-top: 90px; /* FIX: prevents content from hiding under fixed header */
+  padding-top: 90px;
+  /* FIX: prevents content from hiding under fixed header */
 
   min-height: 100vh;
   background: #f8fafc;
@@ -9,9 +10,12 @@
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.8;
   }
@@ -22,6 +26,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -398,24 +403,24 @@
 }
 
 /* First row (3 cards) */
-.channelsGrid > :nth-child(1) {
+.channelsGrid> :nth-child(1) {
   grid-column: 1 / span 2;
 }
 
-.channelsGrid > :nth-child(2) {
+.channelsGrid> :nth-child(2) {
   grid-column: 3 / span 2;
 }
 
-.channelsGrid > :nth-child(3) {
+.channelsGrid> :nth-child(3) {
   grid-column: 5 / span 2;
 }
 
 /* Second row (centered 2 cards) */
-.channelsGrid > :nth-child(4) {
+.channelsGrid> :nth-child(4) {
   grid-column: 2 / span 2;
 }
 
-.channelsGrid > :nth-child(5) {
+.channelsGrid> :nth-child(5) {
   grid-column: 4 / span 2;
 }
 
@@ -667,39 +672,34 @@
   .sectionHeader p {
     font-size: 16px;
   }
-<<<<<<< HEAD
-  
+
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-=======
-
-  .featuresGrid,
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
   .channelsGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
   }
 
   /* Tablet layout (2 columns) */
-  .channelsGrid > :nth-child(1) {
+  .channelsGrid> :nth-child(1) {
     grid-column: 1 / span 2;
   }
 
-  .channelsGrid > :nth-child(2) {
+  .channelsGrid> :nth-child(2) {
     grid-column: 3 / span 2;
   }
 
-  .channelsGrid > :nth-child(3) {
+  .channelsGrid> :nth-child(3) {
     grid-column: 1 / span 2;
   }
 
-  .channelsGrid > :nth-child(4) {
+  .channelsGrid> :nth-child(4) {
     grid-column: 3 / span 2;
   }
 
-  .channelsGrid > :nth-child(5) {
+  .channelsGrid> :nth-child(5) {
     grid-column: 2 / span 2;
   }
 
@@ -748,11 +748,11 @@
   }
 
   /* Mobile: single column */
-  .channelsGrid > :nth-child(1),
-  .channelsGrid > :nth-child(2),
-  .channelsGrid > :nth-child(3),
-  .channelsGrid > :nth-child(4),
-  .channelsGrid > :nth-child(5) {
+  .channelsGrid> :nth-child(1),
+  .channelsGrid> :nth-child(2),
+  .channelsGrid> :nth-child(3),
+  .channelsGrid> :nth-child(4),
+  .channelsGrid> :nth-child(5) {
     grid-column: auto;
   }
 

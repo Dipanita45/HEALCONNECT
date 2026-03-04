@@ -66,11 +66,6 @@ export default function Patients(prose) {
                   </thead>
                   {loading && (
                     <tbody>
-                        <td></td>
-                        <td></td>
-                        <td><FaSpinner className=' my-40 animate-spin text-blue-500' size={40} /></td>
-                      </tr>
-=======
                       {[...Array(5)].map((_, i) => (
                         <tr key={i}>
                           <td className="px-4 py-3"><Skeleton height={40} /></td>

@@ -17,7 +17,7 @@ import {
   FaArrowRight,
   FaTimes,
 } from "react-icons/fa";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 
 const fadeInUp = {
@@ -61,7 +61,51 @@ export default function Contact() {
 
   // OTP Verification State
   const [otp, setOtp] = useState("");
+  const [otpDigits, setOtpDigits] = useState(["", "", "", "", "", ""]);
+  const otpInputRefs = useRef([]);
   const [isOtpSent, setIsOtpSent] = useState(false);
+
+  useEffect(() => {
+    setOtp(otpDigits.join(""));
+  }, [otpDigits]);
+
+  const handleOtpChange = (index, e) => {
+    const value = e.target.value;
+    if (value && !/^\d+$/.test(value)) return;
+
+    const newOtpDigits = [...otpDigits];
+    // Take the last character entered
+    newOtpDigits[index] = value.substring(value.length - 1);
+    setOtpDigits(newOtpDigits);
+
+    // Focus next input if a digit was entered
+    if (value && index < 5) {
+      otpInputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpKeyDown = (index, e) => {
+    // Focus previous input on backspace if current is empty
+    if (e.key === "Backspace" && !otpDigits[index] && index > 0) {
+      otpInputRefs.current[index - 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pastedData) return;
+
+    const newOtpDigits = [...otpDigits];
+    for (let i = 0; i < pastedData.length; i++) {
+      newOtpDigits[i] = pastedData[i];
+    }
+    setOtpDigits(newOtpDigits);
+
+    // Focus the next empty input or the last input
+    const focusIndex = Math.min(pastedData.length, 5);
+    otpInputRefs.current[focusIndex]?.focus();
+  };
   const [isVerified, setIsVerified] = useState(false);
   const [otpTimer, setOtpTimer] = useState(0);
   const [isSendingOtp, setIsSendingOtp] = useState(false);
@@ -689,35 +733,57 @@ export default function Contact() {
                       {/* OTP Input Field */}
                       {isOtpSent && !isVerified && (
                         <motion.div
-                          initial={{ opacity: 0, y: -10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-2 border-blue-200 dark:border-blue-800"
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                          className="mt-4 p-5 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border-2 border-blue-200 dark:border-blue-800 shadow-sm"
                         >
-                          <label className="block text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
-                            Enter 6-digit OTP
-                          </label>
-                          <div className="flex gap-2">
-                            <input
-                              type="text"
-                              maxLength={6}
-                              value={otp}
-                              onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                              className="flex-1 px-4 py-2 rounded-lg border-2 border-gray-400 dark:border-gray-600 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-center text-lg font-bold tracking-widest"
-                              placeholder="000000"
-                            />
+                          <div className="flex justify-between items-center mb-4">
+                            <label className="block text-sm font-bold text-gray-900 dark:text-gray-100">
+                              Enter Verification Code
+                            </label>
+                            <span className="text-xs font-medium px-2 py-1 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 rounded-md">
+                              6 Digits
+                            </span>
+                          </div>
+
+                          <div className="flex flex-col sm:flex-row gap-4 sm:items-center">
+                            <div className="flex justify-between w-full sm:w-auto flex-1 gap-1 sm:gap-2">
+                              {otpDigits.map((digit, index) => (
+                                <input
+                                  key={index}
+                                  ref={(el) => (otpInputRefs.current[index] = el)}
+                                  type="text"
+                                  inputMode="numeric"
+                                  maxLength={2}
+                                  value={digit}
+                                  onChange={(e) => handleOtpChange(index, e)}
+                                  onKeyDown={(e) => handleOtpKeyDown(index, e)}
+                                  onPaste={handleOtpPaste}
+                                  className="w-10 h-12 sm:w-12 sm:h-14 rounded-lg border-2 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-center text-xl sm:text-2xl font-bold transition-all duration-200 shadow-sm"
+                                  placeholder="·"
+                                />
+                              ))}
+                            </div>
+
                             <button
                               type="button"
                               onClick={handleVerifyOtp}
                               disabled={isVerifyingOtp || otp.length !== 6}
-                              className="px-6 py-2 bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-medium rounded-lg transition-colors"
+                              className="w-full sm:w-auto px-6 py-3 sm:py-0 sm:h-14 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold rounded-lg transition-all shadow-md hover:shadow-lg focus:ring-4 focus:ring-green-500/30 whitespace-nowrap"
                             >
-                              {isVerifyingOtp ? "Verifying..." : "Verify"}
+                              {isVerifyingOtp ? "Verifying..." : "Verify Code"}
                             </button>
                           </div>
+
                           {otpError && (
-                            <p className="mt-2 text-xs text-red-500 font-medium">
-                              {otpError}
-                            </p>
+                            <motion.p
+                              initial={{ opacity: 0, y: -5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="mt-3 text-sm text-red-500 font-medium flex items-center gap-1"
+                            >
+                              <FaExclamationTriangle className="text-xs" /> {otpError}
+                            </motion.p>
                           )}
                         </motion.div>
                       )}
