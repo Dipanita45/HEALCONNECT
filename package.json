@@ -45,6 +45,7 @@
     "react-icons": "^4.8.0",
     "react-router-dom": "^7.7.1",
     "react-simple-typewriter": "^5.0.1",
+    "react-speech-recognition": "^4.0.1",
     "sass": "^1.89.2",
     "typewriter-effect": "^2.22.0"
   },

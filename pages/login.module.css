@@ -24,7 +24,11 @@
 .circleElement {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.15) 0%,
+    rgba(16, 185, 129, 0.15) 100%
+  );
   animation: float 20s infinite ease-in-out;
 }
 
@@ -69,7 +73,6 @@
 }
 
 @keyframes float {
-
   0%,
   100% {
     transform: translate(0, 0) rotate(0deg);
@@ -89,7 +92,11 @@
   z-index: 1;
   width: 100%;
   max-width: 380px;
-  background: linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(191, 219, 254, 0.8) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(219, 234, 254, 0.8) 0%,
+    rgba(191, 219, 254, 0.8) 100%
+  );
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
@@ -102,27 +109,14 @@
 }
 
 .dark .circleElement {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(37, 99, 235, 0.08) 0%,
+    rgba(16, 185, 129, 0.08) 100%
+  );
 }
 
 .dark .loginContent {
   background: #1b263b;
   border: 1px solid #2d3748;
-<<<<<<< HEAD
 }
-
-.spinner {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-=======
-}
->>>>>>> 706198a (Reviewed all files + formatted files where needed)

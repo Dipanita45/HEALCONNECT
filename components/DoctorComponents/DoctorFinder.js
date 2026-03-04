@@ -1,28 +1,31 @@
-import { useState, useEffect, useCallback } from 'react';
-import { collection, query, where, getDocs } from 'firebase/firestore';
-import { db } from '@lib/firebase';
-<<<<<<< HEAD
-import { getCurrentLocation, sortDoctorsByDistance } from '@lib/locationUtils';
-import { FaSearch, FaUserMd, FaMapMarkerAlt, FaSpinner, FaLocationArrow } from 'react-icons/fa';
-=======
+import { useState, useEffect, useCallback } from "react";
+import { collection, query, where, getDocs } from "firebase/firestore";
+import { db } from "@lib/firebase";
 import {
   getCurrentLocation,
   sortDoctorsByDistance,
-  formatDistance
-} from '@lib/locationUtils';
-import { FaSearch, FaUserMd, FaMapMarkerAlt, FaPhone, FaEnvelope, FaSpinner, FaLocationArrow } from 'react-icons/fa';
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
-import { toast } from 'react-hot-toast';
-import DoctorCard from './DoctorCard';
+  formatDistance,
+} from "@lib/locationUtils";
+import {
+  FaSearch,
+  FaUserMd,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+  FaSpinner,
+  FaLocationArrow,
+} from "react-icons/fa";
+import { toast } from "react-hot-toast";
+import DoctorCard from "./DoctorCard";
 
 export default function DoctorFinder() {
   const [doctors, setDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [locationLoading, setLocationLoading] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState('');
-  const [specialityFilter, setSpecialityFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [specialityFilter, setSpecialityFilter] = useState("");
   const [availableLocations, setAvailableLocations] = useState([]);
   const [availableSpecialities, setAvailableSpecialities] = useState([]);
   const [userLocation, setUserLocation] = useState(null);
@@ -37,21 +40,26 @@ export default function DoctorFinder() {
     let filtered = doctors;
 
     if (searchTerm) {
-      filtered = filtered.filter(doctor =>
-        doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          doctor.speciality.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     if (locationFilter) {
-      filtered = filtered.filter(doctor =>
-        doctor.address && doctor.address.toLowerCase().includes(locationFilter.toLowerCase())
+      filtered = filtered.filter(
+        (doctor) =>
+          doctor.address &&
+          doctor.address.toLowerCase().includes(locationFilter.toLowerCase()),
       );
     }
 
     if (specialityFilter) {
-      filtered = filtered.filter(doctor =>
-        doctor.speciality.toLowerCase().includes(specialityFilter.toLowerCase())
+      filtered = filtered.filter((doctor) =>
+        doctor.speciality
+          .toLowerCase()
+          .includes(specialityFilter.toLowerCase()),
       );
     }
 
@@ -59,13 +67,20 @@ export default function DoctorFinder() {
       try {
         filtered = await sortDoctorsByDistance(filtered, userLocation);
       } catch (error) {
-        console.error('Error sorting by distance:', error);
-        toast.error('Could not sort by distance');
+        console.error("Error sorting by distance:", error);
+        toast.error("Could not sort by distance");
       }
     }
 
     setFilteredDoctors(filtered);
-  }, [searchTerm, locationFilter, specialityFilter, doctors, sortByDistance, userLocation]);
+  }, [
+    searchTerm,
+    locationFilter,
+    specialityFilter,
+    doctors,
+    sortByDistance,
+    userLocation,
+  ]);
 
   useEffect(() => {
     filterDoctors();
@@ -75,10 +90,7 @@ export default function DoctorFinder() {
   const fetchDoctors = async () => {
     try {
       setLoading(true);
-      const q = query(
-        collection(db, 'users'),
-        where('role', '!=', 'patient')
-      );
+      const q = query(collection(db, "users"), where("role", "!=", "patient"));
 
       const querySnapshot = await getDocs(q);
       const doctorsList = [];
@@ -90,11 +102,11 @@ export default function DoctorFinder() {
         if (data.name && data.speciality) {
           doctorsList.push({
             id: doc.id,
-            ...data
+            ...data,
           });
 
           if (data.address) {
-            const addressParts = data.address.split(',');
+            const addressParts = data.address.split(",");
             const city = addressParts[addressParts.length - 1]?.trim();
             if (city) locations.add(city);
           }
@@ -110,8 +122,8 @@ export default function DoctorFinder() {
       setAvailableSpecialities(Array.from(specialities).sort());
       setLoading(false);
     } catch (error) {
-      console.error('Error fetching doctors:', error);
-      toast.error('Failed to load doctors');
+      console.error("Error fetching doctors:", error);
+      toast.error("Failed to load doctors");
       setLoading(false);
     }
   };
@@ -122,19 +134,21 @@ export default function DoctorFinder() {
       const location = await getCurrentLocation();
       setUserLocation(location);
       setSortByDistance(true);
-      toast.success('Location found! Sorting doctors by distance.');
+      toast.success("Location found! Sorting doctors by distance.");
     } catch (error) {
-      console.error('Error getting location:', error);
-      toast.error('Could not get your location. Please check your browser settings.');
+      console.error("Error getting location:", error);
+      toast.error(
+        "Could not get your location. Please check your browser settings.",
+      );
     } finally {
       setLocationLoading(false);
     }
   };
 
   const clearFilters = () => {
-    setSearchTerm('');
-    setLocationFilter('');
-    setSpecialityFilter('');
+    setSearchTerm("");
+    setLocationFilter("");
+    setSpecialityFilter("");
     setSortByDistance(false);
   };
 
@@ -179,7 +193,9 @@ export default function DoctorFinder() {
             >
               <option value="">All Locations</option>
               {availableLocations.map((loc) => (
-                <option key={loc} value={loc}>{loc}</option>
+                <option key={loc} value={loc}>
+                  {loc}
+                </option>
               ))}
             </select>
           </div>
@@ -194,7 +210,9 @@ export default function DoctorFinder() {
             >
               <option value="">All Specialities</option>
               {availableSpecialities.map((spec) => (
-                <option key={spec} value={spec}>{spec}</option>
+                <option key={spec} value={spec}>
+                  {spec}
+                </option>
               ))}
             </select>
           </div>
@@ -227,8 +245,9 @@ export default function DoctorFinder() {
         {/* Results Count and Sort Info */}
         <div className="mb-4 flex justify-between items-center">
           <p className="text-gray-600 dark:text-gray-400">
-            Found {filteredDoctors.length} doctor{filteredDoctors.length !== 1 ? 's' : ''}
-            {sortByDistance && userLocation && ' (sorted by distance)'}
+            Found {filteredDoctors.length} doctor
+            {filteredDoctors.length !== 1 ? "s" : ""}
+            {sortByDistance && userLocation && " (sorted by distance)"}
           </p>
           {sortByDistance && userLocation && (
             <p className="text-sm text-blue-600 dark:text-blue-400">
@@ -250,8 +269,12 @@ export default function DoctorFinder() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredDoctors.map(doctor => (
-              <DoctorCard key={doctor.id} doctor={doctor} showDistance={sortByDistance} />
+            {filteredDoctors.map((doctor) => (
+              <DoctorCard
+                key={doctor.id}
+                doctor={doctor}
+                showDistance={sortByDistance}
+              />
             ))}
           </div>
         )}

@@ -1,107 +1,115 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import {
-  FaHeadset, FaTicketAlt, FaChartLine, FaUsers, FaClock, FaCheckCircle,
-  FaRobot, FaPhone, FaEnvelope, FaComments
-} from 'react-icons/fa';
-import SupportWidget from '../components/Support/SupportWidget';
-import SupportDashboard from '../components/Support/SupportDashboard';
-import styles from './support.module.css';
-import { useTheme } from '@/context/ThemeContext';
+  FaHeadset,
+  FaTicketAlt,
+  FaChartLine,
+  FaUsers,
+  FaClock,
+  FaCheckCircle,
+  FaRobot,
+  FaPhone,
+  FaEnvelope,
+  FaComments,
+} from "react-icons/fa";
+import SupportWidget from "../components/Support/SupportWidget";
+import SupportDashboard from "../components/Support/SupportDashboard";
+import styles from "./support.module.css";
+import { useTheme } from "@/context/ThemeContext";
 
 const Support = () => {
-  const [view, setView] = useState('landing');
+  const [view, setView] = useState("landing");
   const [stats, setStats] = useState({
     totalTickets: 0,
-    avgResponseTime: '2.5 hours',
-    satisfactionRate: '94%',
-    activeAgents: 0
+    avgResponseTime: "2.5 hours",
+    satisfactionRate: "94%",
+    activeAgents: 0,
   });
 
-  
-const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
+  const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } =
+    useTheme();
 
   useEffect(() => {
     // Mock stats - in production, fetch from your backend
     setStats({
       totalTickets: 1247,
-      avgResponseTime: '2.5 hours',
-      satisfactionRate: '94%',
-      activeAgents: 8
+      avgResponseTime: "2.5 hours",
+      satisfactionRate: "94%",
+      activeAgents: 8,
     });
   }, []);
 
   const handleSendEmail = () => {
-    const email = 'support@healconnect.com';
-    const subject = encodeURIComponent('HealConnect Support Request');
+    const email = "support@healconnect.com";
+    const subject = encodeURIComponent("HealConnect Support Request");
     const body = encodeURIComponent(
-      'Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n'
+      "Hi HealConnect Support Team,\n\nI need help with the following issue:\n\n",
     );
 
     const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${email}&su=${subject}&body=${body}`;
 
-<<<<<<< HEAD
-  window.open(gmailUrl, '_blank');
-};
-//2//'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop'
-=======
-    window.open(gmailUrl, '_blank');
+    window.open(gmailUrl, "_blank");
   };
-
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
 
   const features = [
     {
       icon: FaRobot,
-      title: 'AI-Powered Support',
-      description: 'Get instant answers to common questions with our intelligent AI assistant.',
-      color: '#667eea',
-      image: '/support_images/support_images/istockphoto.webp'
+      title: "AI-Powered Support",
+      description:
+        "Get instant answers to common questions with our intelligent AI assistant.",
+      color: "#667eea",
+      image: "/support_images/support_images/istockphoto.webp",
     },
     {
       icon: FaTicketAlt,
-      title: 'Ticket Management',
-      description: 'Track and manage support tickets with priority levels and status updates.',
-      color: '#22c55e',
-      image: '/support_images/support_images/images.jpg'
+      title: "Ticket Management",
+      description:
+        "Track and manage support tickets with priority levels and status updates.",
+      color: "#22c55e",
+      image: "/support_images/support_images/images.jpg",
     },
     {
       icon: FaClock,
-      title: '24/7 Availability',
-      description: 'Round-the-clock support for urgent medical and technical issues.',
-      color: '#ef4444',
-      image: '/support_images/support_images/best-support-ticket-system.png'   
-    }
+      title: "24/7 Availability",
+      description:
+        "Round-the-clock support for urgent medical and technical issues.",
+      color: "#ef4444",
+      image: "/support_images/support_images/best-support-ticket-system.png",
+    },
   ];
 
   const howItWorks = [
     {
       step: 1,
-      title: 'Start Chat',
-      description: 'Click the support widget to start a conversation with our AI assistant.',
-      icon: '💬'
+      title: "Start Chat",
+      description:
+        "Click the support widget to start a conversation with our AI assistant.",
+      icon: "💬",
     },
     {
       step: 2,
-      title: 'Get Help',
-      description: 'AI provides instant answers or suggests relevant solutions.',
-      icon: '🤖'
+      title: "Get Help",
+      description:
+        "AI provides instant answers or suggests relevant solutions.",
+      icon: "🤖",
     },
     {
       step: 3,
-      title: 'Escalate if Needed',
-      description: 'If your issue isn\'t resolved, create a support ticket for human assistance.',
-      icon: '🎫'
+      title: "Escalate if Needed",
+      description:
+        "If your issue isn't resolved, create a support ticket for human assistance.",
+      icon: "🎫",
     },
     {
       step: 4,
-      title: 'Track Progress',
-      description: 'Monitor your ticket status and get updates until resolution.',
-      icon: '📊'
-    }
+      title: "Track Progress",
+      description:
+        "Monitor your ticket status and get updates until resolution.",
+      icon: "📊",
+    },
   ];
 
-  if (view === 'dashboard') {
+  if (view === "dashboard") {
     return <SupportDashboard />;
   }
 
@@ -118,23 +126,25 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
           >
             <h1>HealConnect Support Center</h1>
             <p>
-              Get help when you need it most. Our AI-powered support system provides instant answers
-              and connects you with human experts for complex issues.
+              Get help when you need it most. Our AI-powered support system
+              provides instant answers and connects you with human experts for
+              complex issues.
             </p>
             <div className={styles.heroActions}>
               <button
-                onClick={() => setView('dashboard')}
+                onClick={() => setView("dashboard")}
                 className={styles.dashboardBtn}
               >
                 <FaChartLine /> Support Dashboard
               </button>
               <button
                 onClick={(e) => {
-                  e.preventDefault()
-                  setIsMinimized(false)
-                  setSupportWidgetOpen(true)
+                  e.preventDefault();
+                  setIsMinimized(false);
+                  setSupportWidgetOpen(true);
                 }}
-                className={styles.chatBtn}>
+                className={styles.chatBtn}
+              >
                 <FaHeadset /> Start Live Chat
               </button>
             </div>
@@ -147,7 +157,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
             className={styles.heroStats}
           >
             <div className={styles.statCard}>
-              <div className={styles.statNumber}>{stats.totalTickets.toLocaleString()}</div>
+              <div className={styles.statNumber}>
+                {stats.totalTickets.toLocaleString()}
+              </div>
               <div className={styles.statLabel}>Tickets Resolved</div>
             </div>
             <div className={styles.statCard}>
@@ -177,7 +189,8 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
           >
             <h2>Why Choose Our Support System?</h2>
             <p>
-              Experience healthcare support that&apos;s fast, intelligent, and always available when you need it.
+              Experience healthcare support that&apos;s fast, intelligent, and
+              always available when you need it.
             </p>
           </motion.div>
 
@@ -216,7 +229,8 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
           >
             <h2>How It Works</h2>
             <p>
-              Get the help you need in four simple steps, from AI assistance to human expert support.
+              Get the help you need in four simple steps, from AI assistance to
+              human expert support.
             </p>
           </motion.div>
 
@@ -256,7 +270,8 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
           >
             <h2>Multiple Support Channels</h2>
             <p>
-              Choose the support method that works best for your needs and urgency level.
+              Choose the support method that works best for your needs and
+              urgency level.
             </p>
           </motion.div>
 
@@ -270,21 +285,37 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <div className={styles.channelIcon}>
                 <FaRobot className={styles.aiIcon} />
               </div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'}}>
+              <div
+                className={styles.badgeNew}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                }}
+              >
                 AI Assistant
               </div>
               <h3>AI Assistant</h3>
               <p>Instant answers to questions 24/7</p>
               <div className={styles.channelFeatures}>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Available 24/7</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Instant responses</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Free to use</span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Available 24/7
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Instant responses
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Free to use
+                </span>
               </div>
-              <button className={styles.channelBtn} 
-              onClick={() => {
-              setIsMinimized(false);
-              setSupportWidgetOpen(true);
-              }}>Start Chat</button>
+              <button
+                className={styles.channelBtn}
+                onClick={() => {
+                  setIsMinimized(false);
+                  setSupportWidgetOpen(true);
+                }}
+              >
+                Start Chat
+              </button>
             </motion.div>
 
             <motion.div
@@ -294,24 +325,41 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               transition={{ delay: 0.1 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}><FaTicketAlt style={{ fontSize: '48px', color: '#22c55e' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #16a34a 0%, #22c55e 100%)'}}>
+              <div className={styles.channelIcon}>
+                <FaTicketAlt style={{ fontSize: "48px", color: "#22c55e" }} />
+              </div>
+              <div
+                className={styles.badgeNew}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #16a34a 0%, #22c55e 100%)",
+                }}
+              >
                 Support Tickets
               </div>
               <h3>Support Tickets</h3>
               <p>Detailed assistance for complex issues</p>
               <div className={styles.channelFeatures}>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Track progress</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Priority handling</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Email updates</span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Track progress
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Priority handling
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Email updates
+                </span>
               </div>
-              <button className={styles.channelBtn} 
-              onClick={() => {
-              setSupportWidgetOpen(true);
-              setIsMinimized(true);
-              setShowTicketModal(true);
-              }}
-              >Create Ticket</button>
+              <button
+                className={styles.channelBtn}
+                onClick={() => {
+                  setSupportWidgetOpen(true);
+                  setIsMinimized(true);
+                  setShowTicketModal(true);
+                }}
+              >
+                Create Ticket
+              </button>
             </motion.div>
 
             <motion.div
@@ -321,18 +369,37 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               transition={{ delay: 0.2 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}><FaPhone style={{ fontSize: '48px', color: '#f59e0b' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)'}}>
+              <div className={styles.channelIcon}>
+                <FaPhone style={{ fontSize: "48px", color: "#f59e0b" }} />
+              </div>
+              <div
+                className={styles.badgeNew}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #d97706 0%, #f59e0b 100%)",
+                }}
+              >
                 Phone Support
               </div>
               <h3>Phone Support</h3>
               <p>Speak directly with our support team</p>
               <div className={styles.channelFeatures}>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Personal assistance</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Complex issues</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Emergency support</span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Personal assistance
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Complex issues
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Emergency support
+                </span>
               </div>
-              <button className={styles.channelBtn} onClick={() => window.open('tel:+18001234567')} >Call Now</button>
+              <button
+                className={styles.channelBtn}
+                onClick={() => window.open("tel:+18001234567")}
+              >
+                Call Now
+              </button>
             </motion.div>
 
             <motion.div
@@ -345,7 +412,13 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               <div className={styles.channelIcon}>
                 <FaUsers className={styles.liveIcon} />
               </div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #0284c7 0%, #0369a1 100%)'}}>
+              <div
+                className={styles.badgeNew}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #0284c7 0%, #0369a1 100%)",
+                }}
+              >
                 Live Agent Support
               </div>
               <h3>Live Agent Support</h3>
@@ -355,7 +428,9 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
                 <span>✓ Expert guidance</span>
                 <span>✓ Videos & screen sharing</span>
               </div>
-              <button className={`${styles.channelBtn} ${styles.liveAgentBtn}`}>Connect Now</button>
+              <button className={`${styles.channelBtn} ${styles.liveAgentBtn}`}>
+                Connect Now
+              </button>
             </motion.div>
 
             <motion.div
@@ -365,28 +440,35 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
               transition={{ delay: 0.4 }}
               className={styles.channelCard}
             >
-              <div className={styles.channelIcon}><FaEnvelope style={{ fontSize: '48px', color: '#ef4444' }} /></div>
-              <div className={styles.badgeNew} style={{background: 'linear-gradient(135deg, #dc2626 0%, #ef4444 100%)'}}>
+              <div className={styles.channelIcon}>
+                <FaEnvelope style={{ fontSize: "48px", color: "#ef4444" }} />
+              </div>
+              <div
+                className={styles.badgeNew}
+                style={{
+                  background:
+                    "linear-gradient(135deg, #dc2626 0%, #ef4444 100%)",
+                }}
+              >
                 Email Support
               </div>
               <h3>Email Support</h3>
               <p>Detailed written assistance</p>
               <div className={styles.channelFeatures}>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Detailed responses</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ Documentation</span>
-                <span className='border-2 border-white/30 py-2 px-4 rounded-xl'>✓ 24h response</span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Detailed responses
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ Documentation
+                </span>
+                <span className="border-2 border-white/30 py-2 px-4 rounded-xl">
+                  ✓ 24h response
+                </span>
               </div>
-              <button
-                className={styles.channelBtn}
-                onClick={handleSendEmail}
-              >
-<<<<<<< HEAD
-=======
-                <FaEnvelope style={{ marginRight: '6px' }} />
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
+              <button className={styles.channelBtn} onClick={handleSendEmail}>
+                <FaEnvelope style={{ marginRight: "6px" }} />
                 Send Email
               </button>
-
             </motion.div>
           </div>
         </div>
@@ -404,12 +486,11 @@ const { setIsMinimized, setSupportWidgetOpen, setShowTicketModal } = useTheme();
             <div className={styles.emergencyIcon}>🚨</div>
             <h2>Medical Emergency?</h2>
             <p>
-              For life-threatening emergencies, call 911 immediately or visit the nearest emergency room.
-              Our support system is not designed for medical emergencies.
+              For life-threatening emergencies, call 911 immediately or visit
+              the nearest emergency room. Our support system is not designed for
+              medical emergencies.
             </p>
-            <button className={styles.emergencyBtn}>
-              Call 911 Now
-            </button>
+            <button className={styles.emergencyBtn}>Call 911 Now</button>
           </motion.div>
         </div>
       </section>

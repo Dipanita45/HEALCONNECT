@@ -1,15 +1,17 @@
 /* Support Page Styles */
 .supportPage {
-    padding-top: 90px; /* FIX: prevents content from hiding under fixed header */
+  padding-top: 90px; /* FIX: prevents content from hiding under fixed header */
 
   min-height: 100vh;
   background: #f8fafc;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -44,7 +46,7 @@
 }
 
 .hero::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -198,13 +200,17 @@
 }
 
 .featureCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(34, 197, 94, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.05) 0%,
+    rgba(34, 197, 94, 0.05) 100%
+  );
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
@@ -212,7 +218,9 @@
 
 .featureCard:hover {
   transform: translateY(-12px) scale(1.02);
-  box-shadow: 0 20px 60px rgba(102, 126, 234, 0.25), 0 0 40px rgba(102, 126, 234, 0.1);
+  box-shadow:
+    0 20px 60px rgba(102, 126, 234, 0.25),
+    0 0 40px rgba(102, 126, 234, 0.1);
 }
 
 .featureCard:hover::before {
@@ -298,10 +306,11 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 
   /* animation prep */
-  transition: transform 0.35s ease, box-shadow 0.35s ease;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
   transform: translateY(0);
 }
-
 
 .step:hover {
   transform: translateY(-8px);
@@ -325,7 +334,6 @@
   transition: transform 0.4s ease;
 }
 
-
 .stepNumber {
   position: absolute;
   top: -16px;
@@ -348,7 +356,6 @@
 .step:hover .stepNumber {
   transform: translateX(-50%) scale(1.1);
 }
-
 
 .step h3 {
   margin: 0 0 12px 0;
@@ -374,7 +381,7 @@
 }
 
 .stepConnector::after {
-  content: '';
+  content: "";
   position: absolute;
   right: 0;
   top: -4px;
@@ -433,13 +440,17 @@
 }
 
 .channelCard::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1),
+    rgba(118, 75, 162, 0.1)
+  );
   transition: left 0.4s ease;
   border-radius: 16px;
   z-index: 0;
@@ -452,7 +463,9 @@
 .channelCard:hover {
   transform: translateY(-8px);
   border-color: #0284c7;
-  box-shadow: 0 20px 50px rgba(2, 132, 199, 0.25), 0 0 50px rgba(2, 132, 199, 0.15);
+  box-shadow:
+    0 20px 50px rgba(2, 132, 199, 0.25),
+    0 0 50px rgba(2, 132, 199, 0.15);
 }
 
 .liveAgentCard {
@@ -462,7 +475,9 @@
 
 .liveAgentCard:hover {
   border-color: #0284c7;
-  box-shadow: 0 20px 50px rgba(2, 132, 199, 0.25), 0 0 50px rgba(2, 132, 199, 0.15);
+  box-shadow:
+    0 20px 50px rgba(2, 132, 199, 0.25),
+    0 0 50px rgba(2, 132, 199, 0.15);
 }
 
 .channelIcon {
@@ -534,7 +549,7 @@
 }
 
 .channelBtn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -543,7 +558,9 @@
   background: rgba(255, 255, 255, 0.3);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
+  transition:
+    width 0.6s,
+    height 0.6s;
   z-index: -1;
 }
 
@@ -667,16 +684,10 @@
   .sectionHeader p {
     font-size: 16px;
   }
-<<<<<<< HEAD
-  
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-=======
-
-  .featuresGrid,
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
   .channelsGrid {
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
@@ -811,12 +822,16 @@
 
 :global(.dark) .channelCard:hover {
   border-color: #38bdf8;
-  box-shadow: 0 20px 50px rgba(56, 189, 248, 0.25), 0 0 50px rgba(56, 189, 248, 0.15);
+  box-shadow:
+    0 20px 50px rgba(56, 189, 248, 0.25),
+    0 0 50px rgba(56, 189, 248, 0.15);
 }
 
 :global(.dark) .liveAgentCard:hover {
   border-color: #38bdf8;
-  box-shadow: 0 20px 50px rgba(56, 189, 248, 0.25), 0 0 50px rgba(56, 189, 248, 0.15);
+  box-shadow:
+    0 20px 50px rgba(56, 189, 248, 0.25),
+    0 0 50px rgba(56, 189, 248, 0.15);
 }
 
 :global(.dark) .channelBtn {
