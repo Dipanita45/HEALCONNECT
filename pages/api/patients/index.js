@@ -54,11 +54,9 @@ async function getPatients(req, res) {
   }
   constraints.push(orderBy('createdAt', 'desc'));
 
-  // Implement limit in dbOperations if not already present, currently ignoring queryLimit in db call params
   if (queryLimit) {
     constraints.push(limit(Number(queryLimit)));
   }
-
   const result = await dbOperations.getAll(Collections.PATIENTS, constraints);
 
   if (result.success) {
