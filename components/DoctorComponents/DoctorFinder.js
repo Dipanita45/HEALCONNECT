@@ -1,17 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@lib/firebase';
-<<<<<<< HEAD
 import { getCurrentLocation, sortDoctorsByDistance } from '@lib/locationUtils';
 import { FaSearch, FaUserMd, FaMapMarkerAlt, FaSpinner, FaLocationArrow } from 'react-icons/fa';
-=======
-import {
-  getCurrentLocation,
-  sortDoctorsByDistance,
-  formatDistance
-} from '@lib/locationUtils';
-import { FaSearch, FaUserMd, FaMapMarkerAlt, FaPhone, FaEnvelope, FaSpinner, FaLocationArrow } from 'react-icons/fa';
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
 import { toast } from 'react-hot-toast';
 import DoctorCard from './DoctorCard';
 

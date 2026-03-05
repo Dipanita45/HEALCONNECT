@@ -16,19 +16,8 @@ export default async function handler(req, res) {
     const emailQuery = query(usersRef, where("email", "==", email));
     const emailSnapshot = await getDocs(emailQuery);
 
-<<<<<<< HEAD
     if (emailSnapshot.empty) {
       return res.status(401).json({ message: "Invalid credentials" });
-=======
-    const userDoc = !usernameSnapshot.empty ? usernameSnapshot.docs[0] :
-      !emailSnapshot.empty ? emailSnapshot.docs[0] : null;
-
-    if (!userDoc) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid credentials'
-      });
->>>>>>> 706198a (Reviewed all files + formatted files where needed)
     }
 
     const userDoc = emailSnapshot.docs[0];
@@ -46,8 +35,8 @@ export default async function handler(req, res) {
 
     // Generate JWT
     const token = sign(
-      { userId, email: user.email, role: user.role, username: user.username, fullName: user.fullName }, 
-      process.env.JWT_SECRET || "default_development_secret_change_me", 
+      { userId, email: user.email, role: user.role, username: user.username, fullName: user.fullName },
+      process.env.JWT_SECRET || "default_development_secret_change_me",
       { expiresIn: "7d" }
     );
 
@@ -63,7 +52,7 @@ export default async function handler(req, res) {
       })
     );
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       message: "Logged in successfully",
       user: { id: userId, email: user.email, role: user.role, fullName: user.fullName, username: user.username, phone: user.phone || '' }
     });
