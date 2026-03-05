@@ -9,6 +9,8 @@ import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, update
 import styles from './SupportWidget.module.css';
 import { useTheme } from '@/context/ThemeContext';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useRouter } from 'next/router';
+import EmojiPicker from 'emoji-picker-react';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
@@ -20,7 +22,8 @@ const SupportWidget = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
-  
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+
   const [currentTicket, setCurrentTicket] = useState(null);
   const [ticketData, setTicketData] = useState({
     subject: '',
@@ -32,6 +35,7 @@ const SupportWidget = () => {
   // Track processed message IDs to prevent duplicates
   const [processedMessageIds, setProcessedMessageIds] = useState(new Set());
   const [isProcessing, setIsProcessing] = useState(false);
+  const [lastIntent, setLastIntent] = useState(null);
 
   // Initialize currentUser and userRole as null to avoid undefined errors
   const [currentUser, setCurrentUser] = useState(null);
@@ -41,33 +45,34 @@ const SupportWidget = () => {
   const [focusedMessageIndex, setFocusedMessageIndex] = useState(-1);
   const [isKeyboardUser, setIsKeyboardUser] = useState(false);
   const messagesEndRef = useRef(null);
-const inputRef = useRef(null);
-const fileInputRef = useRef(null); // ADD THIS
-const chatContainerRef = useRef(null);
+  const inputRef = useRef(null);
+  const fileInputRef = useRef(null); // ADD THIS
+  const chatContainerRef = useRef(null);
 
-const { 
-  transcript, 
-  listening, 
-  resetTranscript, 
-  browserSupportsSpeechRecognition 
-} = useSpeechRecognition();
-
-
-useEffect(() => {
-  if (transcript) {
-    setInputValue(transcript);
-  }
-}, [transcript]);
+  const router = useRouter();
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition
+  } = useSpeechRecognition();
 
 
-const handleVoiceInput = () => {
-  if (listening) {
-    SpeechRecognition.stopListening();
-  } else {
-    resetTranscript();
-    SpeechRecognition.startListening({ continuous: true });
-  }
-};
+  useEffect(() => {
+    if (transcript) {
+      setInputValue(transcript);
+    }
+  }, [transcript]);
+
+
+  const handleVoiceInput = () => {
+    if (listening) {
+      SpeechRecognition.stopListening();
+    } else {
+      resetTranscript();
+      SpeechRecognition.startListening({ continuous: true });
+    }
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -172,6 +177,21 @@ const handleVoiceInput = () => {
       document.removeEventListener('mousedown', handleMouseDown);
     };
   }, [isOpen, showTicketModal, messages, focusedMessageIndex]);
+
+  // Reset chat state on route change
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setIsOpen(false);
+      setIsMinimized(false);
+      setMessages([]);
+      setLastIntent(null);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 
   const navigateMessages = (direction) => {
     if (direction === 'up') {
@@ -373,63 +393,220 @@ const handleVoiceInput = () => {
 
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
+    const specialties = ['cardiologist', 'pediatrician', 'neurologist', 'general checkup', 'dentist', 'dermatologist', 'orthopedic', 'psychiatrist'];
 
-    // Common health-related queries
-    if (lowerMessage.includes('emergency') || lowerMessage.includes('urgent')) {
-      return {
-        text: "If this is a medical emergency, please call 911 immediately or go to the nearest emergency room. For non-urgent medical issues, I can help you connect with a healthcare provider or guide you to the right resources.",
-        suggestions: ['Find a doctor', 'Schedule appointment', 'Medical emergency'],
+    // Define comprehensive knowledge base and intent map
+    const intentMap = {
+      greeting: {
+        keywords: ['hi', 'hello', 'hey', 'greetings', 'morning', 'evening'],
+        variants: [
+          "Hello! I'm the HealConnect AI Assistant. How can I help you today?",
+          "Hi there! Welcome to HealConnect. What can I assist you with?",
+          "Greetings! I'm here to help you navigate our healthcare platform. What are you looking for?"
+        ],
+        suggestions: [
+          'Schedule Appointment',
+          'My Prescriptions',
+          'Health Stats'
+        ]
+      },
+      emergency: {
+        keywords: ['emergency', 'urgent', '911', 'critical', 'bleeding', 'unconscious', 'severe pain'],
+        variants: [
+          "If this is a medical emergency, please call 911 immediately or go to the nearest emergency room. Your safety is our priority.",
+          "EMERGENCY detected. Please stop using this chat and call emergency services or 911 right now.",
+          "For urgent medical crises, please do not wait for a chat response. Contact 911 or your local emergency department immediately."
+        ],
+        suggestions: [
+          { label: 'Emergency Contact', path: '/contact' },
+          'Emergency numbers'
+        ],
+        escalate: false
+      },
+      appointment_booking: {
+        keywords: ['book', 'schedule', 'new appointment', 'see a doctor', 'meet doctor', ...specialties],
+        variants: [
+          "I can help you schedule an appointment! You can book directly through our **Appointments** page or I can guide you. What specialty are you looking for?",
+          "Scheduling is easy! Would you like to see our list of **specialist doctors** or book a follow-up with your current provider?",
+          "Ready to book? You can choose a doctor and a time slot from the **Appointments** section."
+        ],
+        suggestions: [
+          'Cardiologist',
+          'Pediatrician',
+          'General Checkup',
+          { label: 'Go to Appointments', path: '/appointments' }
+        ],
+        escalate: false
+      },
+      appointment_status: {
+        keywords: ['my appointment', 'when is my', 'cancel appointment', 'reschedule', 'upcoming visit'],
+        variants: [
+          "You can view and manage all your upcoming visits in the **Appointments history** section.",
+          "To check your appointment status or reschedule, please head over to your **patient portal** dashboard.",
+          "Your upcoming appointments are listed in the history tab. Would you like me to take you there?"
+        ],
+        suggestions: [
+          { label: 'Go to Appointments', path: '/appointments' },
+          'Dashboard'
+        ],
+        escalate: false
+      },
+      prescription: {
+        keywords: ['prescription', 'medicine', 'refill', 'pills', 'dosage', 'medication', 'my meds'],
+        variants: [
+          "I can help with health records! You can view your current prescriptions and request refills in the **Prescriptions** tab.",
+          "Looking for your medications? Your **active prescriptions** and refill history are available in your medical profile.",
+          "For refills and dosage info, please check the **Medications** section of your dashboard."
+        ],
+        suggestions: [
+          { label: 'View Prescriptions', path: '/prescriptions' },
+          'Request Refill'
+        ],
+        escalate: false
+      },
+      monitoring: {
+        keywords: ['vitals', 'health stats', 'blood pressure', 'heart rate', 'monitoring', 'glucose', 'weight'],
+        variants: [
+          "You can track your vitals and health progress in the 'Monitoring' section. It shows real-time data from your connected devices.",
+          "Monitoring your health is important. You can view all your health statistics and trends on the Monitoring page.",
+          "Would you like to see your latest health stats? I can take you to the monitoring dashboard."
+        ],
+        suggestions: [
+          { label: 'View Health Stats', path: '/monitoring' },
+          'Health trends'
+        ]
+      },
+      profile: {
+        keywords: ['profile', 'my info', 'settings', 'account', 'personal details'],
+        variants: [
+          "You can update your personal information and account settings in your Profile page.",
+          "Need to change your details? Access your profile to update your contact info or medical history.",
+          "Your account settings and profile information are managed centrally in the Profile section."
+        ],
+        suggestions: [
+          { label: 'Go to Profile', path: '/profile' },
+          'Update info'
+        ]
+      },
+      about_company: {
+        keywords: ['about', 'healconnect', 'who are you', 'what is this', 'how it works', 'open source', 'legal', 'terms', 'privacy'],
+        variants: [
+          "HealConnect is a modern healthcare platform. You can learn more about our mission on the 'About' page or check our 'Open Source' contributions.",
+          "We offer various services including telemedicine and remote monitoring. Check out the 'How it Works' page for a deep dive.",
+          "You can find our terms of service and privacy policy in the legal section of our website."
+        ],
+        suggestions: [
+          'About Us',
+          { label: 'How it Works', path: '/how-it-works' },
+          'Open Source'
+        ]
+      },
+      contact: {
+        keywords: ['contact', 'support', 'help', 'assist', 'talk to human', 'phone', 'email', 'address', 'location'],
+        variants: [
+          "Need to get in touch? You can find our contact details on the 'Contact' page.",
+          "Our support team is available via phone or email. Check the contact section for more info.",
+          "If you'd like to visit us or send a direct message, please visit our contact page."
+        ],
+        suggestions: [
+          { label: 'Contact Page', path: '/contact' },
+          'Call support'
+        ]
+      },
+      faq: {
+        keywords: ['faq', 'questions', 'common issues', 'help me with', 'tutorial'],
+        variants: [
+          "Have questions? Our FAQ page covers everything from booking to billing.",
+          "You might find what you're looking for in our frequently asked questions section.",
+          "I recommend checking our FAQ for detailed answers to common patient questions."
+        ],
+        suggestions: [
+          'View FAQ',
+          { label: 'How it Works', path: '/how-it-works' }
+        ]
+      },
+      thanks: {
+        keywords: ['thanks', 'thank you', 'bye', 'goodbye', 'awesome', 'great', 'fixed'],
+        variants: [
+          "You're very welcome! Is there anything else I can help with?",
+          "Glad I could help! Have a great day with HealConnect.",
+          "Anytime! I'm here if you need further assistance."
+        ],
+        suggestions: [
+          'Goodbye',
+          { label: 'Back to Home', path: '/' }
+        ]
+      }
+    };
+
+    // Find matching intent
+    let matchedIntent = null;
+    for (const [intent, data] of Object.entries(intentMap)) {
+      if (data.keywords.some(kw => lowerMessage.includes(kw))) {
+        matchedIntent = intent;
+        break;
+      }
+    }
+
+    // Default intent if no match
+    if (!matchedIntent) {
+      const defaultResponse = {
+        text: "I'm here to help you with HealConnect! I can assist with appointments, prescriptions, monitoring, and general questions. For complex issues, I can connect you with our support team.",
+        suggestions: [
+          { label: 'Find a Doctor', path: '/appointments' },
+          { label: 'Schedule Appointment', path: '/appointments' },
+          { label: 'Technical support', path: '/contact' },
+          { label: 'Billing help', path: '/contact' }
+        ],
         needsEscalation: false
       };
+
+      if (lastIntent === 'default') {
+        defaultResponse.text = "I'm still learning, but I'm best at handling medical records, appointments, and vitals. Try asking 'When is my next appointment?' or 'Show my meds'.";
+      }
+
+      setLastIntent('default');
+      return defaultResponse;
     }
 
-    if (lowerMessage.includes('appointment') || lowerMessage.includes('schedule')) {
-      return {
-        text: "I can help you schedule an appointment! You can book appointments through our dashboard, or I can guide you through the process. What type of appointment do you need?",
-        suggestions: ['Book with existing doctor', 'Find new doctor', 'Urgent appointment'],
-        needsEscalation: false
-      };
+    const data = intentMap[matchedIntent];
+
+    // Context awareness & Response construction
+    let responseText;
+    let suggestions = data.suggestions;
+    const isSpecialty = specialties.some(s => lowerMessage.includes(s));
+
+    if (matchedIntent === 'appointment_booking' && isSpecialty) {
+      const specialtyName = specialties.find(s => lowerMessage.includes(s));
+      responseText = `Great, I'll help you find a ${specialtyName.charAt(0).toUpperCase() + specialtyName.slice(1)}! You can view their availability and book now. Should I take you to the booking page?`;
+      suggestions = [
+        { label: `Book ${specialtyName.charAt(0).toUpperCase() + specialtyName.slice(1)}`, path: '/appointments' },
+        { label: 'Browse All Specialists', path: '/appointments' }
+      ];
+    } else if (lastIntent === matchedIntent) {
+      const otherVariants = (data.variants || []).slice(1);
+      responseText = "As I mentioned, " + (otherVariants[Math.floor(Math.random() * otherVariants.length)] || (data.variants && data.variants[0]) || "I'm here to help.");
+    } else {
+      responseText = (data.variants && data.variants[0]) || "I'm here to help.";
     }
 
-    if (lowerMessage.includes('prescription') || lowerMessage.includes('medicine')) {
-      return {
-        text: "For prescription-related queries, I can help you view your current prescriptions, request refills, or connect you with a pharmacist. What specific help do you need with your medications?",
-        suggestions: ['View prescriptions', 'Request refill', 'Medication side effects'],
-        needsEscalation: false
-      };
-    }
+    setLastIntent(matchedIntent);
 
-    if (lowerMessage.includes('login') || lowerMessage.includes('password') || lowerMessage.includes('account')) {
-      return {
-        text: "I can help you with account issues! For password resets, click 'Forgot Password' on the login page. For other account problems, I can connect you with our support team.",
-        suggestions: ['Reset password', 'Account locked', 'Login issues'],
-        needsEscalation: true
-      };
-    }
-
-    if (lowerMessage.includes('billing') || lowerMessage.includes('payment') || lowerMessage.includes('insurance')) {
-      return {
-        text: "Billing and insurance questions often require personal account access. I'd recommend connecting with our billing team for accurate information about your specific situation.",
-        suggestions: ['Billing inquiry', 'Insurance question', 'Payment issue'],
-        needsEscalation: true
-      };
-    }
-
-    // Default response
     return {
-      text: "I'm here to help you with HealConnect! I can assist with appointments, prescriptions, finding doctors, and general questions. For complex issues, I can connect you with our support team.",
-      suggestions: ['Find a doctor', 'Schedule appointment', 'Technical support', 'Billing help'],
-      needsEscalation: false
+      text: responseText,
+      suggestions: suggestions,
+      needsEscalation: !!data.escalate
     };
   };
 
-  const sendMessage = async () => {
-    if (!inputValue.trim()) return;
+  const sendMessage = async (messageText) => {
+    const textToSend = messageText || inputValue;
+    if (!textToSend.trim()) return;
 
     const userMessage = {
       id: Date.now(),
       type: 'user',
-      text: inputValue,
+      text: textToSend,
       timestamp: new Date()
     };
 
@@ -439,7 +616,7 @@ const handleVoiceInput = () => {
 
     // Simulate AI processing time
     setTimeout(() => {
-      const aiResponse = generateAIResponse(inputValue);
+      const aiResponse = generateAIResponse(textToSend);
       const aiMessage = {
         id: Date.now() + 1,
         type: 'ai',
@@ -455,30 +632,91 @@ const handleVoiceInput = () => {
   };
 
   const handleFileAttach = () => {
-  fileInputRef.current?.click();
-};
-
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const fileMessage = {
-    id: Date.now(),
-    type: 'user',
-    text: `📎 Attached file: ${file.name}`,
-    file: file,
-    timestamp: new Date()
+    fileInputRef.current?.click();
   };
 
-  setMessages(prev => [...prev, fileMessage]);
 
-  // Reset input so same file can be selected again
-  e.target.value = '';
-};
+  const handleClearChat = () => {
+    if (confirm('Are you sure you want to clear the chat history?')) {
+      setMessages([]);
+      setLastIntent(null);
+    }
+  };
+
+  const handleDownloadTranscript = () => {
+    if (messages.length === 0) return;
+
+    let transcriptText = "HealConnect Support Chat Transcript\n";
+    transcriptText += "Date: " + new Date().toLocaleString() + "\n\n";
+
+    messages.forEach(msg => {
+      const sender = msg.type === 'user' ? 'You' : (msg.type === 'ai' ? 'AI Assistant' : 'System');
+      const time = new Date(msg.timestamp).toLocaleTimeString();
+      transcriptText += `[${time}] ${sender}: ${msg.text}\n`;
+    });
+
+    const blob = new Blob([transcriptText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `healconnect-chat-${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fileMessage = {
+      id: Date.now(),
+      type: 'user',
+      text: `Uploaded file: ${file.name}`,
+      file: file,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, fileMessage]);
+
+    // Reset input so same file can be selected again
+    e.target.value = '';
+  };
+
+  const renderMessageText = (text) => {
+    if (!text) return null;
+
+    // Simple parser for bold text and basic newlines
+    const paragraphs = text.split('\n').filter(p => p.trim() !== '');
+
+    return paragraphs.map((paragraph, pIndex) => {
+      // Parse bold **text**
+      const parts = paragraph.split(/(\*\*.*?\*\*)/g);
+
+      const renderParts = parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i}>{part.slice(2, -2)}</strong>;
+        }
+        return part;
+      });
+
+      return <p key={pIndex}>{renderParts}</p>;
+    });
+  };
 
   const handleSuggestionClick = (suggestion) => {
-    setInputValue(suggestion);
-    sendMessage();
+    if (typeof suggestion === 'object' && suggestion.path) {
+      const confirmNav = confirm(`Would you like to navigate to ${suggestion.label}?`);
+      if (confirmNav) {
+        setIsMinimized(true);
+        router.push(suggestion.path);
+      }
+    } else {
+      const label = typeof suggestion === 'object' ? suggestion.label : suggestion;
+      setInputValue(label);
+      sendMessage(label);
+    }
   };
 
   const createTicket = async () => {
@@ -638,260 +876,300 @@ const handleFileChange = (e) => {
   return (
     <>
       {!showTicketModal && (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className={`${styles.supportWidget} ${isMinimized ? styles.minimized : ''}`}
-        role="application"
-        aria-label="Support chat widget"
-        aria-live="polite"
-        ref={chatContainerRef}
-      >
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`${styles.supportWidget} ${isMinimized ? styles.minimized : ''}`}
+          role="application"
+          aria-label="Support chat widget"
+          aria-live="polite"
+          ref={chatContainerRef}
+        >
 
 
-        {!isMinimized && (
-          <>
-            {/* Header */}
-            <div className={styles.header}>
-              <div className={styles.headerLeft}>
-                <FaHeadset className={styles.headerIcon} aria-hidden="true" />
-                <div>
-                  <h3>HealConnect Support</h3>
-                  <span className={styles.status}>
-                    <span className={styles.onlineDot}></span>
-                    Online - AI Assistant
-                  </span>
-                </div>
-              </div>
-              <div className={styles.headerActions}>
-                <button
-                  onClick={() => setIsMinimized(!isMinimized)}
-                  className={styles.minimizeBtn}
-                  aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
-                  aria-expanded={!isMinimized}
-                >
-                  {isMinimized ? '□' : '−'}
-                </button>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className={styles.closeBtn}
-                  aria-label="Close support chat"
-                >
-                  <FaTimes />
-                </button>
-              </div>
-            </div>
-            {/* Messages Area */}
-            <div className={styles.messagesArea}>
-              {messages.length === 0 && (
-                <div className={styles.welcomeMessage}>
-                  <FaRobot className={styles.welcomeIcon} />
-                  <h4>Welcome to HealConnect Support!</h4>
-                  <p>I&apos;m your AI assistant. How can I help you today&lsquo;</p>
-                  <div className={styles.quickActions}>
-                    <button onClick={() => handleSuggestionClick('I need to schedule an appointment')}>
-                      📅 Schedule Appointment
-                    </button>
-                    <button onClick={() => handleSuggestionClick('I have a technical issue')}>
-                      🔧 Technical Support
-                    </button>
-                    <button onClick={() => handleSuggestionClick('I need help with my prescription')}>
-                      💊 Prescription Help
-                    </button>
+          {!isMinimized && (
+            <>
+              {/* Header */}
+              <div className={styles.header}>
+                <div className={styles.headerLeft}>
+                  <FaHeadset className={styles.headerIcon} aria-hidden="true" />
+                  <div>
+                    <h3>HealConnect Support</h3>
+                    <span className={styles.status}>
+                      <span className={styles.onlineDot}></span>
+                      Online - AI Assistant
+                    </span>
                   </div>
                 </div>
-              )}
-
-              {messages.map((message, index) => (
-                <motion.div
-                  key={message.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className={`${styles.message} ${styles[message.type]} ${focusedMessageIndex === index ? styles.focused : ''}`}
-                  data-message-index={index}
-                  tabIndex={isKeyboardUser ? 0 : -1}
-                  role="article"
-                  aria-label={`${message.type} message: ${message.text.substring(0, 50)}${message.text.length > 50 ? '...' : ''}`}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      inputRef.current?.focus();
-                      setFocusedMessageIndex(-1);
-                    }
-                  }}
-                  onFocus={() => setFocusedMessageIndex(index)}
-                  onBlur={() => setFocusedMessageIndex(-1)}
-                >
-                  <div className={styles.messageContent}>
-                    {message.type === 'ai' && (
-                      <FaRobot className={styles.avatar} aria-hidden="true" />
-                    )}
-                    {message.type === 'user' && (
-                      <FaUser className={styles.avatar} aria-hidden="true" />
-                    )}
-                    {message.type === 'agent' && (
-                      <div className={styles.agentAvatar} aria-hidden="true">
-                        {message.sender?.avatar || '👨‍⚕️'}
-                      </div>
-                    )}
-                    {message.type === 'system' && (
-                      <FaTicketAlt className={styles.avatar} aria-hidden="true" />
-                    )}
-                    <div className={styles.messageText}>
-                      {message.type === 'agent' && (
-                        <div className={styles.agentInfo}>
-                          <strong>{message.sender?.name || 'Support Agent'}</strong>
-                          <span className={styles.agentRole}>Support Agent</span>
-                        </div>
-                      )}
-                      <p>{message.text}</p>
-{message.file && (
-  <div className={styles.filePreview}>
-    📄 {message.file.name}
-  </div>
-)}
-                      {message.suggestions && (
-                        <div className={styles.suggestions} role="list" aria-label="Suggested actions">
-                          {message.suggestions.map((suggestion, index) => (
-                            <button
-                              key={index}
-                              onClick={() => handleSuggestionClick(suggestion)}
-                              className={styles.suggestionBtn}
-                              role="listitem"
-                              aria-label={`Suggestion: ${suggestion}`}
-                            >
-                              {suggestion}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                      {message.needsEscalation && (
-                        <button
-                          onClick={() => setShowTicketModal(true)}
-                          className={styles.escalateBtn}
-                          aria-label="Create support ticket"
-                        >
-                          <FaTicketAlt /> Create Support Ticket
-                        </button>
-                      )}
-                      {message.ticket && (
-                        <div className={styles.ticketInfo} role="region" aria-label="Ticket information">
-                          <div className={styles.ticketHeader}>
-                            <FaTicketAlt /> Ticket {message.ticket.id}
-                          </div>
-                          <div className={styles.ticketDetails}>
-                            <p><strong>Subject:</strong> {message.ticket.subject}</p>
-                            <p><strong>Priority:</strong> {message.ticket.priority}</p>
-                            <p><strong>Status:</strong>
-                              <span className={`${styles.status} ${styles[message.ticket.status]}`}>
-                                {message.ticket.status}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                <div className={styles.headerActions}>
+                  {messages.length > 0 && (
+                    <>
+                      <button
+                        onClick={handleDownloadTranscript}
+                        className={styles.headerBtn}
+                        aria-label="Download Transcript"
+                        title="Download Transcript"
+                      >
+                        ↓
+                      </button>
+                      <button
+                        onClick={handleClearChat}
+                        className={styles.headerBtn}
+                        aria-label="Clear Chat"
+                        title="Clear Chat"
+                      >
+                        🗑️
+                      </button>
+                    </>
+                  )}
+                  <button
+                    onClick={() => setIsMinimized(!isMinimized)}
+                    className={styles.minimizeBtn}
+                    aria-label={isMinimized ? "Expand chat" : "Minimize chat"}
+                    aria-expanded={!isMinimized}
+                  >
+                    {isMinimized ? '□' : '−'}
+                  </button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className={styles.closeBtn}
+                    aria-label="Close support chat"
+                  >
+                    <FaTimes />
+                  </button>
+                </div>
+              </div>
+              {/* Messages Area */}
+              <div className={styles.messagesArea}>
+                {messages.length === 0 && (
+                  <div className={styles.welcomeMessage}>
+                    <FaRobot className={styles.welcomeIcon} />
+                    <h4>Welcome to HealConnect Support!</h4>
+                    <p>I&apos;m your AI assistant. How can I help you today&lsquo;</p>
+                    <div className={styles.quickActions}>
+                      <button onClick={() => handleSuggestionClick({ label: 'Schedule Appointment', path: '/appointments' })}>
+                        📅 Schedule Appointment
+                      </button>
+                      <button onClick={() => handleSuggestionClick({ label: 'Technical support', path: '/contact' })}>
+                        🔧 Technical Support
+                      </button>
+                      <button onClick={() => handleSuggestionClick({ label: 'How it Works', path: '/how-it-works' })}>
+                        📖 How it Works
+                      </button>
                     </div>
                   </div>
-                  <span className={styles.timestamp} aria-label={`Message time: ${message.timestamp.toLocaleTimeString()}`}>
-                    {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                  </span>
-                </motion.div>
-              ))}
-
-              {isTyping && (
-                <div className={`${styles.message} ${styles.ai}`}>
-                  <div className={styles.messageContent}>
-                    <FaRobot className={styles.avatar} />
-                    <div className={styles.typingIndicator}>
-                      <span></span>
-                      <span></span>
-                      <span></span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              <div ref={messagesEndRef} />
-            </div>
-
-            {/* Input Area */}
-            <div className={styles.inputArea}>
-              <div className={styles.inputContainer}>
-                <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
-                  <FaPaperclip />
-                </button>
-                <textarea
-                  ref={inputRef}
-                  value={inputValue}
-                  onChange={(e) => {
-                    setInputValue(e.target.value);
-                    adjustTextareaHeight(e.target);
-                  }}
-                  onKeyDown={handleKeyPress}
-                  placeholder="Type your message..."
-                  className={styles.messageInput}
-                  aria-label="Type your message"
-                  aria-describedby="input-help"
-                  rows={1}
-                />
-                <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
-                  <FaSmile />
-                </button>
-                <button 
-                onClick={handleVoiceInput}
-                className={`${styles.voiceBtn} ${listening ? styles.micActive : ''}`}
-                aria-label="Voice input"
-                type="button"
-                >
-                <FaMicrophone />
-                </button>
-                <button
-                  onClick={sendMessage}
-                  disabled={!inputValue.trim()}
-                  className={styles.sendBtn}
-                  aria-label="Send message"
-                  aria-disabled={!inputValue.trim()}
-                  tabIndex={0}
-                >
-                  <FaPaperPlane />
-                </button>
-              </div>
-              <div id="input-help" className="sr-only">
-                Press Enter to send, Shift+Enter for new line
-              </div>
-              <div className={styles.inputActions}>
-                {currentTicket && currentTicket.status !== 'resolved' ? (
-                  <button
-                    onClick={handleCloseTicket}
-                    className={styles.closeTicketBtn}
-                    aria-label="Close current ticket"
-                    tabIndex={0}
-                  >
-                    <FaCheckCircle /> Close Ticket
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowTicketModal(true)}
-                    className={styles.createTicketBtn}
-                    aria-label="Create support ticket"
-                    tabIndex={0}
-                  >
-                    <FaTicketAlt /> Create Ticket
-                  </button>
                 )}
-                <button 
-                  onClick={() => window.open('tel:+1-800-HEALCONNECT')}
-                  className={styles.callBtn} 
-                  aria-label="Request phone call" 
-                  tabIndex={0}
-                >
-                  <FaPhone /> Request Call
-                </button>
+
+                {messages.map((message, index) => (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`${styles.message} ${styles[message.type]} ${focusedMessageIndex === index ? styles.focused : ''}`}
+                    data-message-index={index}
+                    tabIndex={isKeyboardUser ? 0 : -1}
+                    role="article"
+                    aria-label={`${message.type} message: ${message.text.substring(0, 50)}${message.text.length > 50 ? '...' : ''}`}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        inputRef.current?.focus();
+                        setFocusedMessageIndex(-1);
+                      }
+                    }}
+                    onFocus={() => setFocusedMessageIndex(index)}
+                    onBlur={() => setFocusedMessageIndex(-1)}
+                  >
+                    <div className={styles.messageContent}>
+                      {message.type === 'ai' && (
+                        <FaRobot className={styles.avatar} aria-hidden="true" />
+                      )}
+                      {message.type === 'user' && (
+                        <FaUser className={styles.avatar} aria-hidden="true" />
+                      )}
+                      {message.type === 'agent' && (
+                        <div className={styles.agentAvatar} aria-hidden="true">
+                          {message.sender?.avatar || '👨‍⚕️'}
+                        </div>
+                      )}
+                      {message.type === 'system' && (
+                        <FaTicketAlt className={styles.avatar} aria-hidden="true" />
+                      )}
+                      <div className={styles.messageText}>
+                        {message.type === 'agent' && (
+                          <div className={styles.agentInfo}>
+                            <strong>{message.sender?.name || 'Support Agent'}</strong>
+                            <span className={styles.agentRole}>Support Agent</span>
+                          </div>
+                        )}
+                        <div className={styles.parsedText}>
+                          {renderMessageText(message.text)}
+                        </div>
+                        {message.file && (
+                          <div className={styles.filePreview}>
+                            📄 {message.file.name}
+                          </div>
+                        )}
+                        {message.suggestions && (
+                          <div className={styles.suggestions} role="list" aria-label="Suggested actions">
+                            {message.suggestions.map((suggestion, index) => {
+                              const label = typeof suggestion === 'object' ? suggestion.label : suggestion;
+                              return (
+                                <button
+                                  key={index}
+                                  onClick={() => handleSuggestionClick(suggestion)}
+                                  className={styles.suggestionBtn}
+                                  role="listitem"
+                                  aria-label={`Suggestion: ${label}`}
+                                >
+                                  {label}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        )}
+                        {message.needsEscalation && (
+                          <button
+                            onClick={() => setShowTicketModal(true)}
+                            className={styles.escalateBtn}
+                            aria-label="Create support ticket"
+                          >
+                            <FaTicketAlt /> Create Support Ticket
+                          </button>
+                        )}
+                        {message.ticket && (
+                          <div className={styles.ticketInfo} role="region" aria-label="Ticket information">
+                            <div className={styles.ticketHeader}>
+                              <FaTicketAlt /> Ticket {message.ticket.id}
+                            </div>
+                            <div className={styles.ticketDetails}>
+                              <p><strong>Subject:</strong> {message.ticket.subject}</p>
+                              <p><strong>Priority:</strong> {message.ticket.priority}</p>
+                              <p><strong>Status:</strong>
+                                <span className={`${styles.status} ${styles[message.ticket.status]}`}>
+                                  {message.ticket.status}
+                                </span>
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <span className={styles.timestamp} aria-label={`Message time: ${message.timestamp.toLocaleTimeString()}`}>
+                      {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </span>
+                  </motion.div>
+                ))}
+
+                {isTyping && (
+                  <div className={`${styles.message} ${styles.ai}`}>
+                    <div className={styles.messageContent}>
+                      <FaRobot className={styles.avatar} />
+                      <div className={styles.typingIndicator}>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
               </div>
-            </div>
-          </>
-        )}
-      </motion.div>
+
+              {showEmojiPicker && (
+                <div className={styles.emojiPickerContainer}>
+                  <EmojiPicker
+                    onEmojiClick={(emojiData) => {
+                      setInputValue(prev => prev + emojiData.emoji);
+                      setShowEmojiPicker(false);
+                    }}
+                  />
+                </div>
+              )}
+              {/* Input Area */}
+              <div className={styles.inputArea}>
+                <div className={styles.inputContainer}>
+                  <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
+                    <FaPaperclip />
+                  </button>
+                  <textarea
+                    ref={inputRef}
+                    value={inputValue}
+                    onChange={(e) => {
+                      setInputValue(e.target.value);
+                      adjustTextareaHeight(e.target);
+                    }}
+                    onKeyDown={handleKeyPress}
+                    placeholder="Type your message..."
+                    className={styles.messageInput}
+                    aria-label="Type your message"
+                    aria-describedby="input-help"
+                    rows={1}
+                  />
+                  <button
+                    className={styles.emojiBtn}
+                    aria-label="Add emoji"
+                    tabIndex={0}
+                    onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+                  >
+                    <FaSmile />
+                  </button>
+                  <button
+                    onClick={handleVoiceInput}
+                    className={`${styles.voiceBtn} ${listening ? styles.micActive : ''}`}
+                    aria-label="Voice input"
+                    type="button"
+                  >
+                    <FaMicrophone />
+                  </button>
+                  <button
+                    onClick={sendMessage}
+                    disabled={!inputValue.trim()}
+                    className={styles.sendBtn}
+                    aria-label="Send message"
+                    aria-disabled={!inputValue.trim()}
+                    tabIndex={0}
+                  >
+                    <FaPaperPlane />
+                  </button>
+                </div>
+                <div id="input-help" className="sr-only">
+                  Press Enter to send, Shift+Enter for new line
+                </div>
+                <div className={styles.inputActions}>
+                  {currentTicket && currentTicket.status !== 'resolved' ? (
+                    <button
+                      onClick={handleCloseTicket}
+                      className={styles.closeTicketBtn}
+                      aria-label="Close current ticket"
+                      tabIndex={0}
+                    >
+                      <FaCheckCircle /> Close Ticket
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setShowTicketModal(true)}
+                      className={styles.createTicketBtn}
+                      aria-label="Create support ticket"
+                      tabIndex={0}
+                    >
+                      <FaTicketAlt /> Create Ticket
+                    </button>
+                  )}
+                  <button
+                    onClick={() => window.open('tel:+1-800-HEALCONNECT')}
+                    className={styles.callBtn}
+                    aria-label="Request phone call"
+                    tabIndex={0}
+                  >
+                    <FaPhone /> Request Call
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </motion.div>
       )}
 
       {/* Ticket Modal */}

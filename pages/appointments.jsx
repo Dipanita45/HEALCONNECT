@@ -4,10 +4,12 @@ import { onAuthStateChanged } from "firebase/auth";
 import { addDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { AnimatePresence, motion } from 'framer-motion';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 import { auth } from "../lib/firebase";
 import styles from './Appointments.module.css';
 import LoadingButton from "@/components/ui/LoadingButton";
+import { UserContext } from "@/lib/context";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },

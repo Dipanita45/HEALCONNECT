@@ -492,91 +492,37 @@
 }
 
 /* ================================
-   HAMBURGER MENU BUTTON
+   MOBILE MENU & HAMBURGER
    ================================ */
 
-.menuButton {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 40px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 8px;
-  z-index: 1002;
-  border-radius: 8px;
-  transition: background-color 0.2s ease;
-  gap: 5px;
-}
-
 @media (max-width: 1024px) {
-
-  .navLinks {
-
-    position: fixed;
-
-    top: 0;
-
-    right: -100%;
-
-    width: 280px;
-
-    height: 100vh;
-
-    background: #050a15;
-
+  .menuButton {
+    display: flex;
     flex-direction: column;
-
-    padding: 6rem 2rem;
-
-    gap: 1.5rem;
-
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-
-    z-index: 1001;
-
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-
-    align-items: flex-start;
-
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    z-index: 1002;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+    gap: 5px;
   }
 
-
-
-  :global(.light) .navLinks {
-
-    background: #F8FAFC;
-
-    box-shadow: -10px 0 30px rgba(15, 23, 42, 0.08);
-
+  .menuButton:hover {
+    background: rgba(255, 255, 255, 0.1);
   }
-
-
-
-  .navLinks.navOpen {
-
-    right: 0;
-
-  }
-
-
-
-
 
   :global(.light) .menuButton:hover {
     background: rgba(0, 0, 0, 0.05);
   }
 
-  .menuButton:focus {
-    outline: 2px solid #2563eb;
-    outline-offset: 2px;
-  }
-
   .hamburgerLine {
-    width: 22px;
+    width: 24px;
     height: 2px;
     background: #ffffff;
     border-radius: 2px;
@@ -588,7 +534,7 @@
     background: #1e293b;
   }
 
-  /* Hamburger animation to X */
+  /* Hamburger to X Animation */
   .menuOpen .hamburgerLine:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
   }
@@ -602,74 +548,45 @@
     transform: translateY(-7px) rotate(-45deg);
   }
 
-  /* Hide hamburger on desktop (1024px and above) */
-  @media (min-width: 1024px) {
-    .menuButton {
-      display: none;
-    }
-  }
-
-  /* ================================
-   MOBILE MENU OVERLAY
-   ================================ */
-
   .overlay {
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
     backdrop-filter: blur(4px);
     z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease;
+    cursor: pointer;
+    animation: fadeIn 0.3s ease forwards;
   }
 
-  :global(.light) .menuButton span {
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
 
-    background: #0F172A;
-
-  }
-
-
-
-  .menuButton.menuOpen span:nth-child(1) {
-
-    transform: translateY(8px) rotate(45deg);
-  }
-
-  /* Hide overlay on desktop */
-  @media (min-width: 1024px) {
-    .overlay {
-      display: none;
+    to {
+      opacity: 1;
     }
   }
-
-  /* ================================
-   MOBILE MENU PANEL
-   ================================ */
 
   .mobileMenu {
     position: fixed;
     top: 0;
     right: 0;
-    width: 280px;
+    width: 300px;
     max-width: 85vw;
     height: 100vh;
-    height: 100dvh;
     background: #0a0f1a;
     z-index: 1001;
     transform: translateX(100%);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    display: flex;
+    flex-direction: column;
   }
 
   :global(.light) .mobileMenu {
     background: #ffffff;
-    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1);
   }
 
   .mobileMenuOpen {
@@ -680,24 +597,14 @@
     display: flex;
     flex-direction: column;
     padding: 100px 24px 40px;
-    min-height: 100%;
+    height: 100%;
+    overflow-y: auto;
   }
-
-  /* Hide mobile menu on desktop */
-  @media (min-width: 1024px) {
-    .mobileMenu {
-      display: none;
-    }
-  }
-
-  /* ================================
-   MOBILE NAVIGATION LINKS
-   ================================ */
 
   .mobileNav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
   }
 
   .mobileNavLink {
@@ -708,22 +615,9 @@
     color: #cbd5e1;
     text-decoration: none;
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 1.05rem;
     border-radius: 12px;
     transition: all 0.2s ease;
-    opacity: 0;
-    transform: translateX(20px);
-  }
-
-  .mobileMenuOpen .mobileNavLink {
-    animation: slideInLink 0.3s ease forwards;
-  }
-
-  @keyframes slideInLink {
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
   }
 
   :global(.light) .mobileNavLink {
@@ -735,36 +629,18 @@
     color: #10b981;
   }
 
-  :global(.light) .mobileNavLink:hover {
-    background: rgba(37, 99, 235, 0.08);
-    color: #059669;
-  }
-
   .mobileNavLinkActive {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-  }
-
-  :global(.light) .mobileNavLinkActive {
     background: rgba(16, 185, 129, 0.1);
-    color: #059669;
+    color: #10b981;
+    font-weight: 600;
   }
-
-  .mobileNavLink .supportIcon {
-    font-size: 1.1rem;
-    color: #667eea;
-  }
-
-  /* ================================
-   MOBILE AUTH SECTION
-   ================================ */
 
   .mobileAuthSection {
+    margin-top: auto;
+    padding-top: 30px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: auto;
-    padding-top: 24px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -772,17 +648,16 @@
     border-top-color: rgba(0, 0, 0, 0.1);
   }
 
-
   .mobileAuthButton {
     width: 100%;
-    padding: 14px 20px;
+    padding: 14px;
     border: none;
     border-radius: 12px;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 1rem;
+    text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: center;
   }
 
   .mobileAuthButtonPrimary {
@@ -790,18 +665,24 @@
     color: #ffffff;
   }
 
-  .mobileAuthButtonPrimary:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-  }
-
   .mobileAuthButtonDanger {
     background: #dc2626;
     color: #ffffff;
   }
 
+  .mobileAuthButtonPrimary:hover,
   .mobileAuthButtonDanger:hover {
-    background: #b91c1c;
+    opacity: 0.9;
     transform: translateY(-1px);
+  }
+}
+
+/* Hide hamburger and mobile menu on desktop (1024px and above) */
+@media (min-width: 1024px) {
+
+  .menuButton,
+  .overlay,
+  .mobileMenu {
+    display: none;
   }
 }

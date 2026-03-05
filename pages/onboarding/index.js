@@ -89,12 +89,14 @@ export default function OnboardingPage() {
             // Force clerk to reload the token so publicMetadata is available immediately
             try {
                 await user.reload();
+                // Add a small artificial delay to ensure Clerk's internal state catch up
+                await new Promise(resolve => setTimeout(resolve, 500));
             } catch (reloadErr) {
                 console.error("User reload failed:", reloadErr);
-                // Even if reload fails, we can try to redirect if the metadata was likely saved
             }
 
-            router.replace(`/${selectedRole}`);
+            // Use window.location as a fallback to ensure absolute clean state if router fails
+            router.push(`/${selectedRole}`);
         } catch (err) {
             console.error("Onboarding error:", err);
             setError("An error occurred saving your profile. Please try again.");
