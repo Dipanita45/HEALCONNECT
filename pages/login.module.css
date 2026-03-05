@@ -108,7 +108,6 @@
 .dark .loginContent {
   background: #1b263b;
   border: 1px solid #2d3748;
-<<<<<<< HEAD
 }
 
 .spinner {
@@ -119,10 +118,8 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
-=======
-}
->>>>>>> 706198a (Reviewed all files + formatted files where needed)

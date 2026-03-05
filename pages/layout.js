@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useUserData } from "@lib/userInfo";
+import { useUser } from "@clerk/nextjs";
 
 export default function Layout({ children }) {
   const router = useRouter();
   const pathname = router.pathname;
-  const { userRole, isUserLoading } = useUserData(); // SECURITY: Use Firebase-verified role
+  const { user, isLoaded } = useUser();
   const [isOffline, setIsOffline] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -28,14 +28,14 @@ export default function Layout({ children }) {
   }, []);
 
   useEffect(() => {
-    if (!mounted || isUserLoading) return; // Wait for auth to load
+    if (!mounted || !isLoaded) return; // Wait for auth to load
 
-    // SECURITY: userRole comes from Firebase Auth + Firestore (verified in userInfo.js)
+    const userRole = user?.publicMetadata?.role || null;
+
+    // SECURITY: userRole comes from Clerk metadata
     const publicPages = [
       "/",
       "/login",
-      "/signup",
-      "/signup-test",
       "/faq",
       "/contact",
       "/about",
@@ -47,13 +47,17 @@ export default function Layout({ children }) {
       "/appointments",
       "/monitoring",
       "/prescriptions",
-      "/feedback"
+      "/feedback",
+      "/onboarding"
     ];
 
     const currentPath = pathname || "";
 
+    const isPublicPage = publicPages.includes(currentPath) ||
+      currentPath.startsWith("/login");
+
     // Redirect if not logged in and trying to access protected pages
-    if (!userRole && !publicPages.includes(currentPath)) {
+    if (!user && !isPublicPage) {
       router.replace("/login");
       return;
     }
@@ -61,45 +65,42 @@ export default function Layout({ children }) {
     // 🛡️ RBAC: Role-Based Access Control
     if (userRole) {
       // Protect Admin Routes
-      if (currentPath.startsWith("/admin") && userType !== "admin") {
-        if (userType === "doctor") router.replace("/doctor/dashboard");
-        else if (userType === "patient") router.replace("/patient/dashboard");
+      if (currentPath.startsWith("/admin") && userRole !== "admin") {
+        if (userRole === "doctor") router.replace("/doctor/dashboard");
+        else if (userRole === "patient") router.replace("/patient/dashboard");
         else router.replace("/login");
         return;
       }
 
       // Protect Doctor Routes
-      if (currentPath.startsWith("/doctor") && userType !== "doctor") {
-        if (userType === "patient") router.replace("/patient/dashboard");
-        else if (userType === "admin") router.replace("/admin/dashboard");
+      if (currentPath.startsWith("/doctor") && userRole !== "doctor") {
+        if (userRole === "patient") router.replace("/patient/dashboard");
+        else if (userRole === "admin") router.replace("/admin/dashboard");
         else router.replace("/login");
         return;
       }
 
       // Protect Patient Routes
-      if (currentPath.startsWith("/patient") && userType !== "patient") {
-        if (userType === "doctor") router.replace("/doctor/dashboard");
-        else if (userType === "admin") router.replace("/admin/dashboard");
+      if (currentPath.startsWith("/patient") && userRole !== "patient") {
+        if (userRole === "doctor") router.replace("/doctor/dashboard");
+        else if (userRole === "admin") router.replace("/admin/dashboard");
         else router.replace("/login");
         return;
       }
     }
 
-    // Redirect logged-in users from login page
-    if (userRole && currentPath === "/login") {
-      if (userRole === "doctor") router.replace("/doctor/dashboard");
-      if (userRole === "patient") router.replace("/patient/dashboard");
-      if (userRole === "admin") router.replace("/admin/dashboard");
+    // If fully logged in, but NO role yet, force them to onboarding (unless they are already on it)
+    if (user && !userRole && currentPath !== "/onboarding" && !currentPath.startsWith("/login")) {
+      router.replace("/onboarding");
       return;
     }
 
-    // Redirect from root if logged in
-    if (userRole && currentPath === "/") {
-      if (userRole === "doctor") router.replace("/doctor/dashboard");
-      if (userRole === "patient") router.replace("/patient/dashboard");
-      if (userRole === "admin") router.replace("/admin/dashboard");
+    // Redirect logged-in users from login page or root
+    if (userRole && (currentPath.startsWith("/login") || currentPath === "/")) {
+      router.replace(`/${userRole}/dashboard`);
+      return;
     }
-  }, [mounted, isUserLoading, userRole, router, pathname]);
+  }, [mounted, isLoaded, user, router, pathname]);
 
   if (!mounted) return null;
 

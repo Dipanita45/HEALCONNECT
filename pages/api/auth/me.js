@@ -1,23 +1,29 @@
-import { verify } from "jsonwebtoken";
+import { getAuth, clerkClient } from "@clerk/nextjs/server";
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   if (req.method !== "GET") {
     return res.status(405).json({ message: "Method not allowed" });
   }
 
-  const { token } = req.cookies;
-
-  if (!token) {
-    return res.status(401).json({ isAuthenticated: false });
-  }
-
   try {
-    const decoded = verify(token, process.env.JWT_SECRET || "default_development_secret_change_me");
+    const { userId, sessionClaims } = getAuth(req);
+
+    if (!userId) {
+      return res.status(401).json({ isAuthenticated: false });
+    }
+
+    // Try to quickly hit clerk api to get the full profile, or just use metadata
+    const userRole = sessionClaims?.metadata?.role || "patient";
+
     return res.status(200).json({
       isAuthenticated: true,
-      user: decoded
+      user: {
+        userId: userId,
+        role: userRole,
+      }
     });
   } catch (error) {
+    console.error("Error in /api/auth/me:", error);
     return res.status(401).json({ isAuthenticated: false });
   }
 }
