@@ -197,63 +197,53 @@ export default function Navbar() {
 
         <div className="flex items-center gap-4">
           <ThemeToggle />
-          <button onClick={toggleMenu} className="lg:hidden p-2 rounded-md border border-gray-200">
-            {isMenuOpen ? 'Close' : 'Menu'}
+          <button
+            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''} lg:hidden`}
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
+            <span className={styles.hamburgerLine}></span>
           </button>
         </div>
       </div>
 
-      {/* Removed duplicate mobile menu implementation to avoid syntax errors and double rendering */}
-
-      {/* Mobile Menu Button + Theme Toggle */}
-      <div className="lg:hidden flex items-center gap-2">
-        <ThemeToggle />
-        <button
-          className="flex flex-col gap-1.5"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-          <span className="w-6 h-0.5 bg-white transition-colors light-hamburger"
-            style={{ background: 'var(--hamburger-color, white)' }}></span>
-        </button>
-      </div>
-
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
-        <div className="lg:hidden px-6 py-6 space-y-4" style={{ background: 'var(--mobile-menu-bg, #0f172a)' }}>
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="block py-2 border-b transition-colors"
-              style={{
-                color: 'var(--mobile-menu-text, white)',
-                borderColor: 'var(--mobile-menu-border, #374151)'
-              }}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              {link.icon && <FaHeadset className={styles.supportIcon} />}
-              <span className={styles.linkText}>{link.label}</span>
-            </Link>
-          ))}
+        <div className={styles.overlay} onClick={closeMenu} />
+      )}
+
+      {/* Mobile Menu Panel */}
+      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.mobileMenuOpen : ''} lg:hidden`}>
+        <div className={styles.mobileMenuContent}>
+          <nav className={styles.mobileNav}>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${styles.mobileNavLink} ${router.pathname === link.href ? styles.mobileNavLinkActive : ''}`}
+                onClick={closeMenu}
+              >
+                {link.icon && <FaHeadset className={styles.supportIcon} />}
+                <span>{link.label}</span>
+              </Link>
+            ))}
+          </nav>
 
           {/* Mobile Auth Buttons */}
-          <div className="pt-4 space-y-3 border-t border-gray-700">
+          <div className={styles.mobileAuthSection}>
             {isLoaded && clerkUser ? (
               <>
                 <button
                   onClick={handleDashboardRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-green-600 text-white rounded-md`}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={handleLogout}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger} w-full py-2 bg-red-600 text-white rounded-md`}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
                 >
                   Logout
                 </button>
@@ -261,14 +251,14 @@ export default function Navbar() {
             ) : isLoaded && !clerkUser ? (
               <button
                 onClick={handleLoginRedirect}
-                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-blue-600 text-white rounded-md`}
+                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
               >
                 Login
               </button>
             ) : null}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 }
