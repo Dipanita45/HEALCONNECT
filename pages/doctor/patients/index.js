@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { FaAngleRight, FaSearch } from 'react-icons/fa';
 import Loader from "@components/Loader";
 import dynamic from 'next/dynamic';
+import Skeleton from "@/components/ui/Skeleton";
 
 const AuthCheck = dynamic(() => import("@components/Auth/AuthCheck"), { ssr: false });
 const DoctorSidebar = dynamic(() => import("@components/Sidebar/DoctorSidebar"), { ssr: false });
@@ -63,30 +64,24 @@ export default function Patients(prose) {
                       <th className="px-4 py-3">Edit</th>
                     </tr>
                   </thead>
-                  {(loading) && (
+                  {loading && (
                     <tbody>
-                      <tr>
-                        <td colSpan="5" className="py-20">
-                          <Loader show={true} size={40} />
-                        </td>
-                      </tr>
+                      {[...Array(5)].map((_, i) => (
+                        <tr key={i}>
+                          <td className="px-4 py-3"><Skeleton height={40} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                          <td className="px-4 py-3"><Skeleton height={20} /></td>
+                        </tr>
+                      ))}
                     </tbody>
                   )}
 
                   {(!loading) && (
                     <tbody className="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
                       {patients.map(patient => (
-                        <tr key={patient.id}
-                          onClick={() => router.push(`/doctor/patients/${patient.id}`)}
-                          tabIndex="0"
-                          role="link"
-                          onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              e.preventDefault();
-                              router.push(`/doctor/patients/${patient.id}`);
-                            }
-                          }}
-                          className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
+                        <tr key={patient.id} onClick={() => router.push(`/doctor/patients/${patient.id}`)} className=" w-full bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-900 text-gray-700 dark:text-gray-400 cursor-pointer">
                           <PatientCard name={patient.firstName + ' ' + patient.middleName + ' ' + patient.lastName} number={patient.number} city={patient.city} uid={patient.id} aadhar={patient.aadhar} />
                         </tr>
                       ))}

@@ -18,9 +18,9 @@ async function handler(req, res) {
 
 async function getDevices(req, res) {
   const { patientId, status, active } = req.query;
-  
+
   const constraints = [];
-  
+
   if (patientId) {
     constraints.push(where('patientId', '==', patientId));
   }
@@ -30,11 +30,11 @@ async function getDevices(req, res) {
   if (active !== undefined) {
     constraints.push(where('active', '==', active === 'true'));
   }
-  
+
   constraints.push(orderBy('createdAt', 'desc'));
-  
+
   const result = await dbOperations.getAll(Collections.DEVICES, constraints);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, data: result.data });
   } else {
@@ -44,7 +44,7 @@ async function getDevices(req, res) {
 
 async function registerDevice(req, res) {
   const deviceData = req.body;
-  
+
   // Validate required fields
   if (!deviceData.deviceId || !deviceData.patientId) {
     return res.status(400).json({
@@ -59,7 +59,7 @@ async function registerDevice(req, res) {
   deviceData.lastSeen = new Date().toISOString();
 
   const result = await dbOperations.create(Collections.DEVICES, deviceData);
-  
+
   if (result.success) {
     res.status(201).json({ success: true, id: result.id });
   } else {

@@ -18,7 +18,7 @@ export default function PWAInstallPrompt() {
 
     // Check online status
     setIsOnline(navigator.onLine)
-    
+
     let isMounted = true
 
     const handleOnline = () => {
@@ -27,7 +27,7 @@ export default function PWAInstallPrompt() {
         setShowOfflineMessage(false)
       }
     }
-    
+
     const handleOffline = () => {
       if (isMounted) {
         setIsOnline(false)
@@ -44,14 +44,14 @@ export default function PWAInstallPrompt() {
       try {
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 3000)
-        
+
         await fetch(window.location.origin + '/manifest.json', {
           method: 'HEAD',
           mode: 'no-cors',
           cache: 'no-store',
           signal: controller.signal
         })
-        
+
         clearTimeout(timeoutId)
         if (isMounted) setIsOnline(true)
       } catch (error) {
@@ -96,7 +96,7 @@ export default function PWAInstallPrompt() {
       deferredPrompt.prompt()
       const { outcome } = await deferredPrompt.userChoice
       console.log(`User response to install prompt: ${outcome}`)
-      
+
       if (outcome === 'accepted') {
         setIsInstalled(true)
         setShowInstallPrompt(false)
@@ -178,7 +178,7 @@ export default function PWAInstallPrompt() {
         <div className="fixed bottom-4 left-4 right-4 z-40">
           <div className="bg-orange-600 text-white rounded-lg shadow-lg p-3 flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <FaWifiSlash className="text-lg" />
+              <MdWifiOff className="text-lg" />
               <div>
                 <p className="font-semibold text-sm">Offline Mode Activated</p>
                 <p className="text-xs opacity-90">Patient vitals and emergency contacts available</p>

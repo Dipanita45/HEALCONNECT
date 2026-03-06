@@ -7,18 +7,18 @@ import UpdateProfile from './UpdateProfile';
 import Image from 'next/image';
 
 export default function ProfileView() {
-    const { userRole, currentUser, isUserLoading } = useContext(UserContext);
-    const [update, setUpadate] = useState(false);
-    console.log(update)
-    const Update = () => {
-      setUpadate(true)
-    }
-    return (
-      <>
-        <Loader show={isUserLoading} />
-        {(!isUserLoading) && (
-          <main className="h-auto w-full bg-gray-100 dark:bg-gray-900">
-            {(!update) && (
+  const { userRole, currentUser, isUserLoading } = useContext(UserContext);
+  const [update, setUpadate] = useState(false);
+  console.log(update)
+  const Update = () => {
+    setUpadate(true)
+  }
+  return (
+    <>
+      <Loader show={isUserLoading} />
+      {(!isUserLoading) && (
+        <main className="h-auto w-full bg-gray-100 dark:bg-gray-900">
+          {(!update) && (
             <div className="container p-8">
               <header className="mx-auto text-center mb-8 mt-6 prose dark:prose-invert md:prose-base lg:prose-lg sm:prose-sm">
                 <h1 className=" text-gray6 dark:text-gray1">Profile</h1>
@@ -52,19 +52,19 @@ export default function ProfileView() {
                         <p>
                           Account Email: <span>{currentUser !== '' ? 'Email Not Mentioned!' : currentUser?.email}</span>
                         </p>
-  
+
                         <p>Go to Dashboard</p>
-                        { userRole === 'patient' ? <Link href="/patient" className="btn btn-green btn-glow font-bold text-gray7">Your Dashboard!</Link> : null}
+                        {userRole === 'patient' ? <Link href="/patient" className="btn btn-green btn-glow font-bold text-gray7">Your Dashboard!</Link> : null}
 
-                        { userRole === 'admin' ? <Link href="/admin" className="btn btn-green btn-glow font-bold text-gray7">Your Dashboard!</Link> : null }
-                        
-                        { userRole === 'doctor' ? <Link href="/doctor" className="btn btn-green btn-glow text-gray7">Your Dashboard!</Link> : null }
+                        {userRole === 'admin' ? <Link href="/admin" className="btn btn-green btn-glow font-bold text-gray7">Your Dashboard!</Link> : null}
 
-                        { userRole != 'patient' && userRole != 'admin' && userRole != 'doctor' ? (<div>No User Found!</div>) : null}
+                        {userRole === 'doctor' ? <Link href="/doctor" className="btn btn-green btn-glow text-gray7">Your Dashboard!</Link> : null}
+
+                        {userRole != 'patient' && userRole != 'admin' && userRole != 'doctor' ? (<div>No User Found!</div>) : null}
 
                         <a className="px-4">Or</a>
                         <button className="btn btn-red btn-glow text-gray7" onClick={() => auth.signOut()}>Sign Out</button>
-                        
+
                       </article>
                     </div>
                   </div>
@@ -83,34 +83,34 @@ export default function ProfileView() {
                     </div>
                   </div>
                 </div>
-  
+
                 <article className=" pt-20 mx-auto prose dark:prose-invert md:prose-base lg:prose-lg sm:prose-sm">
                   <h1 className=" text-gray6 dark:text-gray1 text-center">FAQ</h1>
-  
+
                   <div className="mx-auto w-24 h-1 my-12 bg-gradient-to-r from-purple-600 to-purple-400 rounded-full"></div>
-  
+
                   <h3 className="font-sans font-bold">How To View and Add Patients?</h3>
-  
+
                   <p>You need to go to your Dashboard apperd on profile. If not, you can access with the <span>/doctor</span> command in Discord</p>
-  
+
                   <h3 className="font-sans font-bold">Can I customize my account details?</h3>
-  
+
                   <p>Yes, you can modify your name and address by clicking the <span>update account</span> button above. Once updated, it should be reflected on all profile page.</p>
-  
+
                   <h3 className="font-sans font-bold">How do I delete my patient?</h3>
-  
+
                   <p>Click the <span>patients</span> button option in your dashboard. Then you can find the patient by using there name or patient ID.</p>
                 </article>
               </div>
             </div>
-            )} 
-            {(update) && (
-              <UpdateProfile />
-            )}
-            <Footer />
-          </main>
-        )}
-      </>
-    );
-  }
+          )}
+          {(update) && (
+            <UpdateProfile />
+          )}
+          <Footer />
+        </main>
+      )}
+    </>
+  );
+}
 

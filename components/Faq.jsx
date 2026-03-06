@@ -50,7 +50,7 @@ export default function FAQ() {
           Frequently Asked Questions
         </h2>
         <p className="text-slate-600 text-lg max-w-2xl mx-auto">
-        Everything you need to know about HealConnect&apos;s remote health monitoring solution
+          Everything you need to know about HealConnect&apos;s remote health monitoring solution
         </p>
       </div>
 
@@ -58,9 +58,8 @@ export default function FAQ() {
         {faqData.map((item, index) => (
           <div
             key={index}
-            className={`group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden ${
-              activeIndex === index ? 'shadow-xl ring-2 ring-blue-500/20' : ''
-            }`}
+            className={`group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden ${activeIndex === index ? 'shadow-xl ring-2 ring-blue-500/20' : ''
+              }`}
           >
             <div
               onClick={() => toggleFAQ(index)}
@@ -69,25 +68,23 @@ export default function FAQ() {
               <h3 className="font-semibold text-slate-900 text-lg pr-8 group-hover:text-blue-900 transition-colors">
                 {item.question}
               </h3>
-              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${
-                activeIndex === index 
-                  ? 'bg-blue-600 text-white rotate-180' 
+              <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${activeIndex === index
+                  ? 'bg-blue-600 text-white rotate-180'
                   : 'bg-slate-100 text-slate-600 group-hover:bg-blue-100 group-hover:text-blue-600'
-              }`}>
-                <svg 
-                  className="w-4 h-4 transition-transform duration-300" 
-                  fill="none" 
-                  viewBox="0 0 24 24" 
+                }`}>
+                <svg
+                  className="w-4 h-4 transition-transform duration-300"
+                  fill="none"
+                  viewBox="0 0 24 24"
                   stroke="currentColor"
                 >
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
-            
-            <div className={`transition-all duration-300 ease-in-out ${
-              activeIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-            } overflow-hidden`}>
+
+            <div className={`transition-all duration-300 ease-in-out ${activeIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+              } overflow-hidden`}>
               <div className="px-6 pb-6 pt-0">
                 <div className="h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-6"></div>
                 <p className="text-slate-700 leading-relaxed text-base">

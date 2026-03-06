@@ -1,6 +1,7 @@
 /* Support Page Styles */
 .supportPage {
-    padding-top: 90px; /* FIX: prevents content from hiding under fixed header */
+  padding-top: 90px;
+  /* FIX: prevents content from hiding under fixed header */
 
   min-height: 100vh;
   background: #f8fafc;
@@ -9,9 +10,12 @@
 
 /* Animations */
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.8;
   }
@@ -22,6 +26,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -56,7 +61,7 @@
 
 .heroContent {
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 50px auto 0;
   padding: 0 24px;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -86,7 +91,8 @@
   flex-wrap: wrap;
 }
 
-.dashboardBtn, .chatBtn {
+.dashboardBtn,
+.chatBtn {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -397,31 +403,31 @@
 }
 
 /* First row (3 cards) */
-.channelsGrid > :nth-child(1) {
+.channelsGrid> :nth-child(1) {
   grid-column: 1 / span 2;
 }
 
-.channelsGrid > :nth-child(2) {
+.channelsGrid> :nth-child(2) {
   grid-column: 3 / span 2;
 }
 
-.channelsGrid > :nth-child(3) {
+.channelsGrid> :nth-child(3) {
   grid-column: 5 / span 2;
 }
 
 /* Second row (centered 2 cards) */
-.channelsGrid > :nth-child(4) {
+.channelsGrid> :nth-child(4) {
   grid-column: 2 / span 2;
 }
 
-.channelsGrid > :nth-child(5) {
+.channelsGrid> :nth-child(5) {
   grid-column: 4 / span 2;
 }
 
 .channelCard {
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-radius: 16px;
-  padding: 32px 32px 32px 32px;
+  padding: 25px 30px;
   text-align: center;
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   border: 2px solid transparent;
@@ -466,47 +472,7 @@
 
 .channelIcon {
   font-size: 48px;
-  margin: 0 auto 20px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.aiIcon {
-  font-size: 48px;
-  color: #667eea;
-}
-
-.liveIcon {
-  font-size: 48px;
-  color: #0284c7;
-}
-
-.channelCard:hover .channelIcon {
-  transform: scale(1.15) rotate(5deg);
-}
-
-.badgeNew {
-  display: block;
-  width: calc(100% - 32px);
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: -16px;
-  margin-bottom: 20px;
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
-  color: white;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.35);
-  animation: pulse 2s ease-in-out infinite;
-  position: relative;
-  z-index: 1;
-  text-align: center;
+  margin-bottom: 10px;
 }
 
 .channelCard h3 {
@@ -668,44 +634,45 @@
   .container {
     padding: 0 16px;
   }
-  
+
   .hero {
     padding: 60px 0 40px;
   }
-  
+
   .heroContent {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .heroText h1 {
     font-size: 36px;
   }
-  
+
   .heroText p {
     font-size: 18px;
   }
-  
+
   .heroActions {
     flex-direction: column;
   }
-  
-  .dashboardBtn, .chatBtn {
+
+  .dashboardBtn,
+  .chatBtn {
     justify-content: center;
   }
-  
+
   .heroStats {
     grid-template-columns: 1fr;
   }
-  
+
   .sectionHeader h2 {
     font-size: 28px;
   }
-  
+
   .sectionHeader p {
     font-size: 16px;
   }
-  
+
   .featuresGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -716,34 +683,34 @@
   }
 
   /* Tablet layout (2 columns) */
-  .channelsGrid > :nth-child(1) {
+  .channelsGrid> :nth-child(1) {
     grid-column: 1 / span 2;
   }
 
-  .channelsGrid > :nth-child(2) {
+  .channelsGrid> :nth-child(2) {
     grid-column: 3 / span 2;
   }
 
-  .channelsGrid > :nth-child(3) {
+  .channelsGrid> :nth-child(3) {
     grid-column: 1 / span 2;
   }
 
-  .channelsGrid > :nth-child(4) {
+  .channelsGrid> :nth-child(4) {
     grid-column: 3 / span 2;
   }
 
-  .channelsGrid > :nth-child(5) {
+  .channelsGrid> :nth-child(5) {
     grid-column: 2 / span 2;
   }
-  
+
   .stepsContainer {
     grid-template-columns: 1fr;
   }
-  
+
   .stepConnector {
     display: none;
   }
-  
+
   .emergencyCard {
     padding: 32px 24px;
   }
@@ -753,19 +720,19 @@
   .heroText h1 {
     font-size: 28px;
   }
-  
+
   .heroText p {
     font-size: 16px;
   }
-  
+
   .statNumber {
     font-size: 24px;
   }
-  
+
   .sectionHeader h2 {
     font-size: 24px;
   }
-  
+
   .featureCard,
   .step {
     padding: 24px 20px;
@@ -781,11 +748,11 @@
   }
 
   /* Mobile: single column */
-  .channelsGrid > :nth-child(1),
-  .channelsGrid > :nth-child(2),
-  .channelsGrid > :nth-child(3),
-  .channelsGrid > :nth-child(4),
-  .channelsGrid > :nth-child(5) {
+  .channelsGrid> :nth-child(1),
+  .channelsGrid> :nth-child(2),
+  .channelsGrid> :nth-child(3),
+  .channelsGrid> :nth-child(4),
+  .channelsGrid> :nth-child(5) {
     grid-column: auto;
   }
 

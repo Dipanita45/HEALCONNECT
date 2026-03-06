@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect, useContext, useCallback } from 'react'
-import { UserContext } from '@lib/context'
+import { useState, useEffect, useCallback } from 'react'
+import { useUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/router'
 import { FaHeadset } from 'react-icons/fa'
 import styles from './navbar.module.css'
@@ -14,7 +14,8 @@ export default function Navbar() {
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
-  const { user, setUser, currentUser, setCurrentUser, userRole, setUserRole } = useContext(UserContext)
+  const { user: clerkUser, isLoaded } = useUser()
+  const { signOut } = useClerk()
   const router = useRouter()
 
   // Close menu on route change
@@ -69,29 +70,8 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     setIsLoggingOut(true)
-    // Clear localStorage
-    localStorage.removeItem('userType')
-    localStorage.removeItem('username')
-
-    // Call server-side logout to clear cookie
-    try {
-      await fetch('/api/auth/logout', { method: 'POST' });
-    } catch (e) {
-      console.error(e);
-    }
-
-    // Clear React state immediately for UI update
-    setUser(null)
-    setUserRole(null)
-    setCurrentUser(null)
-
-    // Clear any Firebase auth state if available
-    if (typeof window !== 'undefined' && window.firebaseAuth) {
-      window.firebaseAuth.signOut()
-    }
-
+    await signOut()
     setIsLoggingOut(false)
-    // Redirect to login
     router.push('/login')
     closeMenu()
   }
@@ -102,10 +82,12 @@ export default function Navbar() {
   }
 
   const handleDashboardRedirect = () => {
-    if (userRole) {
-      router.push(`/${userRole}/dashboard`)
-      closeMenu()
+    if (clerkUser?.publicMetadata?.role) {
+      router.push(`/${clerkUser.publicMetadata.role}/dashboard`)
+    } else {
+      router.push('/onboarding')
     }
+    closeMenu()
   }
 
   const navLinks = [
@@ -172,9 +154,9 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
-          {/* Auth buttons for small-to-medium screens (hidden on large to avoid duplicate) */}
-          <div className="hidden sm:flex lg:hidden items-center">
-            {user || currentUser ? (
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
+            {isLoaded && clerkUser ? (
               <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
                 <button
                   onClick={handleDashboardRedirect}
@@ -191,7 +173,7 @@ export default function Navbar() {
                   <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
                 </button>
               </div>
-            ) : (
+            ) : isLoaded && !clerkUser ? (
               <button
                 onClick={handleLoginRedirect}
                 className={styles.loginButton}
@@ -199,7 +181,7 @@ export default function Navbar() {
                 <span>Login</span>
                 <div className={styles.buttonPulse}></div>
               </button>
-            )}
+            ) : null}
           </div>
 
 
@@ -270,8 +252,9 @@ export default function Navbar() {
             </Link>
           ))}
 
-          <div className="pt-4 space-y-3">
-            {user || currentUser ? (
+          {/* Mobile Auth Buttons */}
+          <div className="pt-4 space-y-3 border-t border-gray-700">
+            {isLoaded && clerkUser ? (
               <>
                 <button
                   onClick={handleDashboardRedirect}
@@ -286,14 +269,14 @@ export default function Navbar() {
                   Logout
                 </button>
               </>
-            ) : (
+            ) : isLoaded && !clerkUser ? (
               <button
                 onClick={handleLoginRedirect}
                 className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary} w-full py-2 bg-blue-600 text-white rounded-md`}
               >
                 Login
               </button>
-            )}
+            ) : null}
           </div>
         </div>
       )}

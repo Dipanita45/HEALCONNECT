@@ -8,6 +8,7 @@ import {
 import { createSupportTicket, subscribeToTickets, unsubscribeFromTickets, updateTicketStatus, addTicketMessage } from '../../lib/ticketSync';
 import styles from './SupportWidget.module.css';
 import { useTheme } from '@/context/ThemeContext';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 
 // Local cache for tickets to avoid global dependency issues
 const localTicketCache = [];
@@ -43,6 +44,30 @@ const SupportWidget = () => {
 const inputRef = useRef(null);
 const fileInputRef = useRef(null); // ADD THIS
 const chatContainerRef = useRef(null);
+
+const { 
+  transcript, 
+  listening, 
+  resetTranscript, 
+  browserSupportsSpeechRecognition 
+} = useSpeechRecognition();
+
+
+useEffect(() => {
+  if (transcript) {
+    setInputValue(transcript);
+  }
+}, [transcript]);
+
+
+const handleVoiceInput = () => {
+  if (listening) {
+    SpeechRecognition.stopListening();
+  } else {
+    resetTranscript();
+    SpeechRecognition.startListening({ continuous: true });
+  }
+};
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -340,6 +365,11 @@ const chatContainerRef = useRef(null);
       setIsProcessing(false);
     };
   }, [currentTicket, isProcessing]);
+
+  const adjustTextareaHeight = (element) => {
+    element.style.height = 'auto';
+    element.style.height = element.scrollHeight + 'px';
+  };
 
   const generateAIResponse = (userMessage) => {
     const lowerMessage = userMessage.toLowerCase();
@@ -787,40 +817,33 @@ const handleFileChange = (e) => {
             {/* Input Area */}
             <div className={styles.inputArea}>
               <div className={styles.inputContainer}>
-                <button
-  className={styles.attachBtn}
-  aria-label="Attach file"
-  tabIndex={0}
-  onClick={handleFileAttach}
->
-  <FaPaperclip />
-</button>
-
-{/* Hidden File Input */}
-<input
-  type="file"
-  ref={fileInputRef}
-  style={{ display: 'none' }}
-  onChange={handleFileChange}
-  accept="image/*,.pdf,.doc,.docx,.txt"
-/>
-                <input
+                <button className={styles.attachBtn} aria-label="Attach file" tabIndex={0}>
+                  <FaPaperclip />
+                </button>
+                <textarea
                   ref={inputRef}
-                  type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  onKeyPress={handleKeyPress}
+                  onChange={(e) => {
+                    setInputValue(e.target.value);
+                    adjustTextareaHeight(e.target);
+                  }}
+                  onKeyDown={handleKeyPress}
                   placeholder="Type your message..."
                   className={styles.messageInput}
                   aria-label="Type your message"
                   aria-describedby="input-help"
-                  autoComplete="off"
+                  rows={1}
                 />
                 <button className={styles.emojiBtn} aria-label="Add emoji" tabIndex={0}>
                   <FaSmile />
                 </button>
-                <button className={styles.voiceBtn} aria-label="Voice input" tabIndex={0}>
-                  <FaMicrophone />
+                <button 
+                onClick={handleVoiceInput}
+                className={`${styles.voiceBtn} ${listening ? styles.micActive : ''}`}
+                aria-label="Voice input"
+                type="button"
+                >
+                <FaMicrophone />
                 </button>
                 <button
                   onClick={sendMessage}

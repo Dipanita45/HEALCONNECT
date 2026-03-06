@@ -1,56 +1,46 @@
-import { NextResponse } from 'next/server';
-import { jwtVerify } from 'jose';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export async function middleware(req) {
-  const token = req.cookies.get('token')?.value;
+const isProtectedRoute = createRouteMatcher([
+  '/patient(.*)',
+  '/doctor(.*)',
+  '/admin(.*)',
+  '/monitoring(.*)'
+]);
 
-  // Path matches
-  const path = req.nextUrl.pathname;
-  const isProtectedRoute = path.startsWith('/patient') || path.startsWith('/doctor') || path.startsWith('/admin') || path.startsWith('/monitoring');
+const isPublicRoute = createRouteMatcher([
+  '/api/auth/webhook/clerk'
+]);
 
-  if (isProtectedRoute) {
-    if (!token) {
-      return NextResponse.redirect(new URL('/login', req.url));
-    }
-
-    try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_development_secret_change_me");
-      const { payload } = await jwtVerify(token, secret);
-      
-      // Basic Role-Based Access Control
-      if (path.startsWith('/patient') && payload.role !== 'patient' && payload.role !== 'admin') {
-        return NextResponse.redirect(new URL(`/${payload.role}/dashboard`, req.url));
-      }
-      if (path.startsWith('/doctor') && payload.role !== 'doctor' && payload.role !== 'admin') {
-        return NextResponse.redirect(new URL(`/${payload.role}/dashboard`, req.url));
-      }
-      if (path.startsWith('/admin') && payload.role !== 'admin') {
-        return NextResponse.redirect(new URL(`/${payload.role}/dashboard`, req.url));
-      }
-
-      return NextResponse.next();
-    } catch (err) {
-      // Invalid or expired token
-      const response = NextResponse.redirect(new URL('/login', req.url));
-      response.cookies.delete('token');
-      return response;
-    }
+export default clerkMiddleware(async (auth, req) => {
+  // Ignore checking protected status on explicitly public routes
+  if (isPublicRoute(req)) {
+    return NextResponse.next();
   }
 
-  // Prevent logged-in users from seeing login/signup pages again
-  if ((path === '/login' || path === '/signup') && token) {
-    try {
-      const secret = new TextEncoder().encode(process.env.JWT_SECRET || "default_development_secret_change_me");
-      const { payload } = await jwtVerify(token, secret);
-      return NextResponse.redirect(new URL(`/${payload.role}/dashboard`, req.url));
-    } catch (err) {
-      return NextResponse.next();
+  if (isProtectedRoute(req)) {
+    // Requires users to be signed in for protected routes
+    await auth.protect();
+
+    // Check if user has completed onboarding by checking publicMetadata
+    const { sessionClaims } = await auth();
+    const metadata = sessionClaims?.metadata || {};
+    const isRoleOnboarded = metadata.onboardingComplete === true || !!metadata.role;
+
+    // If they haven't but are trying to access protected dashboards, redirect them
+    if (!isRoleOnboarded && !req.nextUrl.pathname.startsWith('/onboarding')) {
+      const url = new URL('/onboarding', req.url);
+      return NextResponse.redirect(url);
     }
   }
-
   return NextResponse.next();
-}
+});
 
 export const config = {
-  matcher: ['/patient/:path*', '/doctor/:path*', '/admin/:path*', '/monitoring/:path*', '/login', '/signup'],
+  matcher: [
+    // Skip Next.js internals and all static files, unless found in search params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes
+    '/(api|trpc)(.*)',
+  ],
 };

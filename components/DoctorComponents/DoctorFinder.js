@@ -68,9 +68,9 @@ export default function DoctorFinder() {
       setLoading(true);
       const q = query(
         collection(db, 'users'),
-        where('role', '!=', 'patient') 
+        where('role', '!=', 'patient')
       );
-      
+
       const querySnapshot = await getDocs(q);
       const doctorsList = [];
       const locations = new Set();
@@ -78,12 +78,12 @@ export default function DoctorFinder() {
 
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        if (data.name && data.speciality) { 
+        if (data.name && data.speciality) {
           doctorsList.push({
             id: doc.id,
             ...data
           });
-          
+
           if (data.address) {
             const addressParts = data.address.split(',');
             const city = addressParts[addressParts.length - 1]?.trim();

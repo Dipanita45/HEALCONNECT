@@ -35,8 +35,8 @@ export default async function handler(req, res) {
 
     // Generate JWT
     const token = sign(
-      { userId, email: user.email, role: user.role, username: user.username, fullName: user.fullName }, 
-      process.env.JWT_SECRET || "default_development_secret_change_me", 
+      { userId, email: user.email, role: user.role, username: user.username, fullName: user.fullName },
+      process.env.JWT_SECRET || "default_development_secret_change_me",
       { expiresIn: "7d" }
     );
 
@@ -52,7 +52,7 @@ export default async function handler(req, res) {
       })
     );
 
-    return res.status(200).json({ 
+    return res.status(200).json({
       message: "Logged in successfully",
       user: { id: userId, email: user.email, role: user.role, fullName: user.fullName, username: user.username, phone: user.phone || '' }
     });

@@ -21,7 +21,7 @@ async function handler(req, res) {
 
 async function getPatient(id, res) {
   const result = await dbOperations.getById(Collections.PATIENTS, id);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, data: result.data });
   } else {
@@ -31,7 +31,7 @@ async function getPatient(id, res) {
 
 async function updatePatient(id, data, res) {
   const result = await dbOperations.update(Collections.PATIENTS, id, data);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, message: 'Patient updated successfully' });
   } else {
@@ -41,7 +41,7 @@ async function updatePatient(id, data, res) {
 
 async function deletePatient(id, res) {
   const result = await dbOperations.delete(Collections.PATIENTS, id);
-  
+
   if (result.success) {
     res.status(200).json({ success: true, message: 'Patient deleted successfully' });
   } else {

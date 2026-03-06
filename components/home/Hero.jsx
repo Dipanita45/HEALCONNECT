@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Button from "@/components/ui/Button";
+import Link from 'next/link';
 
 export default function Hero({ scrollToSection }) {
     return (
@@ -17,7 +18,7 @@ export default function Hero({ scrollToSection }) {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.6 }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white leading-[1.1] tracking-tight font-poppins"
+                        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-slate-900 dark:text-white leading-[1.1] tracking-normal font-poppins"
                     >
                         <span className="block">Your Health</span>
                         <span className="block whitespace-nowrap">Monitored Anywhere</span>
@@ -38,12 +39,12 @@ export default function Hero({ scrollToSection }) {
                         transition={{ duration: 0.6, delay: 0.4 }}
                         className="flex flex-wrap gap-5 justify-center lg:justify-start"
                     >
-                        <button
-                            onClick={() => scrollToSection('problem')}
-                            className="px-9 py-4 bg-[#2563eb] text-white rounded-full font-inter font-medium text-lg hover:bg-blue-700 transition-all hover:shadow-[0_8px_25px_rgba(37,99,235,0.4)] active:scale-95"
+                        <Link
+                            href="/login"
+                            className="px-9 py-4 bg-[#2563eb] text-white rounded-full font-inter font-medium text-lg hover:bg-blue-700 transition-all hover:shadow-[0_8px_25px_rgba(37,99,235,0.4)] active:scale-95 text-center"
                         >
                             Get Started
-                        </button>
+                        </Link>
                         <button
                             onClick={() => scrollToSection('doctors')}
                             className="px-9 py-4 border-2 border-[#10b981] text-[#10b981] dark:text-white rounded-full font-inter font-medium text-lg hover:bg-[#10b981]/10 transition-all active:scale-95"

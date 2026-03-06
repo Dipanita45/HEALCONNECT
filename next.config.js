@@ -3,7 +3,7 @@ const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Enable PWA in all environments
+  disable: process.env.NODE_ENV === 'development', // Disable PWA in development
   runtimeCaching: [
     {
       // Cache Next.js static assets
