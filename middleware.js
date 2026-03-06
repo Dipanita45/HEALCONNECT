@@ -18,6 +18,8 @@ export default clerkMiddleware(async (auth, req) => {
     return NextResponse.next();
   }
 
+  const { pathname } = req.nextUrl;
+
   if (isProtectedRoute(req)) {
     // Requires users to be signed in for protected routes
     await auth.protect();
@@ -25,10 +27,12 @@ export default clerkMiddleware(async (auth, req) => {
     // Check if user has completed onboarding by checking publicMetadata
     const { sessionClaims } = await auth();
     const metadata = sessionClaims?.metadata || {};
-    const isRoleOnboarded = metadata.onboardingComplete === true || !!metadata.role;
+    const role = metadata.role || sessionClaims?.publicMetadata?.role;
+    const isRoleOnboarded = metadata.onboardingComplete === true || !!role;
 
     // If they haven't but are trying to access protected dashboards, redirect them
-    if (!isRoleOnboarded && !req.nextUrl.pathname.startsWith('/onboarding')) {
+    // Allow access to home '/' even if not onboarded to prevent loops and trapped state
+    if (!isRoleOnboarded && !pathname.startsWith('/onboarding') && pathname !== '/') {
       const url = new URL('/onboarding', req.url);
       return NextResponse.redirect(url);
     }
