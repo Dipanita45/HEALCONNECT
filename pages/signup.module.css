@@ -1,13 +1,12 @@
-/* Login Page Bubbles Overlay */
-.loginContainer {
+/* Signup Page Bubbles Overlay */
+.signupContainer {
   position: relative;
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   background: #f8f9fa;
-  padding: 10px 20px;
-  margin-top: 10px;
+  padding: 80px 20px 20px;
   overflow: hidden;
 }
 
@@ -84,20 +83,20 @@
   }
 }
 
-.loginContent {
+.signupContent {
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 380px;
+  max-width: 450px;
   background: linear-gradient(135deg, rgba(219, 234, 254, 0.8) 0%, rgba(191, 219, 254, 0.8) 100%);
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 /* Dark mode adjustments */
-.dark .loginContainer {
+.dark .signupContainer {
   background: #0d1b2a;
 }
 
@@ -105,7 +104,7 @@
   background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
 }
 
-.dark .loginContent {
+.dark .signupContent {
   background: #1b263b;
   border: 1px solid #2d3748;
 }
@@ -126,21 +125,19 @@
 
 /* Responsive */
 @media (max-width: 480px) {
-  .loginContainer {
-    padding: 10px 12px;
+  .signupContainer {
+    padding: 80px 12px 20px;
     align-items: flex-start;
-    padding-top: 80px;
   }
 
-  .loginContent {
+  .signupContent {
     max-width: 100%;
     border-radius: 8px;
   }
 }
 
 @media (max-width: 360px) {
-  .loginContainer {
-    padding: 10px 8px;
-    padding-top: 80px;
+  .signupContainer {
+    padding: 80px 8px 20px;
   }
 }

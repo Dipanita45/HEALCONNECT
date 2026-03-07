@@ -630,6 +630,21 @@
   }
 }
 
+@media (max-width: 360px) {
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .content {
+    padding: 0 0 1.5rem;
+  }
+
+  .formSection,
+  .listSection {
+    padding: 1rem 0.75rem;
+  }
+}
+
 .formInput option {
   background-color: #f8fafc;
   /* match light theme background */

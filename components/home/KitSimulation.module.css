@@ -709,3 +709,31 @@ html:not(.dark) .simulateSection {
         padding: 0.2rem 0.6rem;
     }
 }
+
+@media (max-width: 400px) {
+.deviceOuter {
+width: 140px;
+height: 190px;
+padding: 8px;
+}
+
+.doctorDevice {
+width: 120px;
+height: 160px;
+padding: 6px;
+}
+
+.mobileDevice {
+width: 60px;
+height: 110px;
+padding: 4px;
+}
+
+.receivingDevices {
+gap: 0.5rem;
+}
+
+.simulateButtons {
+grid-template-columns: 1fr;
+}
+}
