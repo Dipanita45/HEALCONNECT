@@ -122,7 +122,8 @@
 }
 
 .minimizeBtn,
-.closeBtn {
+.closeBtn,
+.headerBtn {
   background: rgba(255, 255, 255, 0.2);
   border: none;
   color: white;
@@ -134,10 +135,12 @@
   align-items: center;
   justify-content: center;
   transition: background 0.2s ease;
+  font-size: 14px;
 }
 
 .minimizeBtn:hover,
-.closeBtn:hover {
+.closeBtn:hover,
+.headerBtn:hover {
   background: rgba(255, 255, 255, 0.3);
 }
 
@@ -465,6 +468,16 @@
   }
 }
 
+/* Emoji Picker */
+.emojiPickerContainer {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  z-index: 1000;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+}
+
 /* Input Area */
 .inputArea {
   background: white;
@@ -505,20 +518,29 @@
   color: #475569;
 }
 
- .voiceBtn{
+.voiceBtn {
   outline: none;
 }
+
 .micActive {
   color: #ef4444 !important;
   background-color: rgba(239, 68, 68, 0.1);
-  border: 2px solid #ef4444 !important; 
+  border: 2px solid #ef4444 !important;
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .messageInput {
@@ -1067,9 +1089,12 @@
   outline: none;
   font-size: 14px;
   padding: 6px 8px;
-  resize: none;              /* prevents manual resize */
-  max-height: 120px;         /* limit growth */
-  overflow-y: auto;          /* scroll if too large */
+  resize: none;
+  /* prevents manual resize */
+  max-height: 120px;
+  /* limit growth */
+  overflow-y: auto;
+  /* scroll if too large */
   line-height: 1.4;
 }
 

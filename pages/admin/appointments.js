@@ -1,3 +1,5 @@
+
+import ErrorBoundary from "@components/ErrorBoundary";
 import React, { useEffect, useState, useMemo } from 'react'
 import AdminSidebar from '@components/Sidebar/AdminSidebar'
 import AuthCheck from '@components/Auth/AuthCheck'
@@ -64,6 +66,7 @@ export default function AdminAppointments() {
   ], [])
 
   return (
+    <ErrorBoundary>   
     <AuthCheck>
       <AdminSidebar>
         <div className="p-4">
@@ -150,7 +153,9 @@ export default function AdminAppointments() {
             </div>
           )}
         </div>
+         
       </AdminSidebar>
     </AuthCheck>
+    </ErrorBoundary>   
   )
 }
