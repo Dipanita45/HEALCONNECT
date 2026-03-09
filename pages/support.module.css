@@ -765,6 +765,24 @@
   }
 }
 
+@media (max-width: 360px) {
+  .heroText h1 {
+    font-size: 24px;
+  }
+
+  .heroText p {
+    font-size: 15px;
+  }
+
+  .container {
+    padding: 0 12px;
+  }
+
+  .featuresGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Dark Mode Support */
 :global(.dark) .supportPage {
   background: #0f172a;

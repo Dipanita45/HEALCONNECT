@@ -111,7 +111,7 @@ export default function Navbar() {
     >
       <div className="max-w-[1440px] mx-auto h-full flex items-center justify-between px-6 lg:px-12">
         {/* Logo/Brand */}
-        <div className="flex-shrink-0 flex items-center pr-10 xl:pr-16">
+        <div className="flex-shrink-0 flex items-center lg:pr-10 xl:pr-16">
           <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
             <div className={styles.logoIcon}>
               <div className={styles.crossSymbol}>
@@ -187,7 +187,7 @@ export default function Navbar() {
 
           <Link
             href="/contact"
-            className={`${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
+            className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
@@ -195,21 +195,45 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <ThemeToggle />
+          {user || currentUser ? (
+            <div className="hidden lg:flex items-center gap-2">
+              <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
+              <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
+                {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
+                {isLoggingOut ? 'Logging out...' : 'Logout'}
+              </button>
+            </div>
+          ) : (
+            <div className="hidden lg:flex">
+              <button onClick={handleLoginRedirect} className="px-4 py-2 bg-blue-600 text-white rounded-md">Login</button>
+            </div>
+          )}
+          {/* Hamburger button - mobile only */}
           <button
-            className={`${styles.menuButton} ${isMenuOpen ? styles.menuOpen : ''} lg:hidden`}
             onClick={toggleMenu}
+            className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md"
             aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
           >
-            <span className={styles.hamburgerLine}></span>
-            <span className={styles.hamburgerLine}></span>
-            <span className={styles.hamburgerLine}></span>
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'opacity-0 scale-x-0' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
+            <span
+              className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}
+              style={{ background: 'var(--hamburger-color, white)' }}
+            ></span>
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className={styles.overlay} onClick={closeMenu} />
       )}

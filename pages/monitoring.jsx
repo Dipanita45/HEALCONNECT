@@ -51,17 +51,30 @@ export default function Monitoring() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const heartRateInterval = useRef(null);
   const oxygenInterval = useRef(null);
+ useEffect(() => {
+    const fetchVitals = async () => {
+      try {
+        const res = await fetch('/api/vitals');
+        const json = await res.json();
+        if (json.success && json.data) {
+          const formatted = json.data.map(v => ({
+            date: v.timestamp ? new Date(v.timestamp).toLocaleString() : '',
+            temperature: v.temperature || '',
+            heartRate: v.heartRate || '',
+            bloodPressure: v.bloodPressure || '',
+            oxygen: v.oxygenSaturation || '',
+            glucose: v.glucose || '',
+          }));
+          setHistory(formatted);
+        }
+      } catch (err) {
+        console.error('Failed to fetch vitals:', err);
+      }
+    };
 
-  useEffect(() => {
-    // Load sample history data
-    setHistory([
-      { date: '2023-10-15 09:30', temperature: 36.6, heartRate: 72, bloodPressure: '120/80', oxygen: 98, glucose: 95 },
-      { date: '2023-10-14 14:15', temperature: 36.8, heartRate: 75, bloodPressure: '118/78', oxygen: 97, glucose: 102 },
-      { date: '2023-10-13 18:45', temperature: 37.1, heartRate: 78, bloodPressure: '122/82', oxygen: 96, glucose: 98 }
-    ]);
+    fetchVitals();
 
     return () => {
-      // Clean up intervals
       if (heartRateInterval.current) clearInterval(heartRateInterval.current);
       if (oxygenInterval.current) clearInterval(oxygenInterval.current);
     };
@@ -70,36 +83,43 @@ export default function Monitoring() {
   const handleChange = e => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = e => {
+const handleSubmit = async e => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      const newRecord = {
-        date: new Date().toLocaleString(),
-        ...data
+    try {
+      const payload = {
+        patientId: 'self',
+        deviceId: 'manual-entry',
+        heartRate: data.heartRate ? parseInt(data.heartRate) : undefined,
+        bloodPressure: data.bloodPressure || undefined,
+        temperature: data.temperature ? parseFloat(data.temperature) : undefined,
+        oxygenSaturation: data.oxygen ? parseFloat(data.oxygen) : undefined,
+        timestamp: new Date().toISOString(),
       };
 
-      setHistory([newRecord, ...history]);
-      setData({
-        temperature: '',
-        heartRate: '',
-        bloodPressure: '',
-        oxygen: '',
-        glucose: ''
+      const res = await fetch('/api/vitals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
 
-      setIsSubmitting(false);
+      const json = await res.json();
 
-      // Show success notification
-      const notification = document.getElementById('success-notification');
-      notification.style.display = 'block';
-      setTimeout(() => {
-        notification.style.display = 'none';
-      }, 3000);
-    }, 1500);
+      if (json.success) {
+        const newRecord = { date: new Date().toLocaleString(), ...data };
+        setHistory([newRecord, ...history]);
+        setData({ temperature: '', heartRate: '', bloodPressure: '', oxygen: '', glucose: '' });
+
+        const notification = document.getElementById('success-notification');
+        notification.style.display = 'block';
+        setTimeout(() => { notification.style.display = 'none'; }, 3000);
+      }
+    } catch (err) {
+      console.error('Failed to save vitals:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleMonitoring = () => {

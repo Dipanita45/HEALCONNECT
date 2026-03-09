@@ -1,3 +1,5 @@
+
+import ErrorBoundary from "@components/ErrorBoundary";
 import AuthCheck from "@components/Auth/AuthCheck";
 import PatientSidebar from "@components/Sidebar/PatientSidebar";
 import { UserContext } from "@lib/context";
@@ -106,6 +108,7 @@ export default function MyAppointments() {
   ];
 
   return (
+    <ErrorBoundary>
     <AuthCheck>
       <PatientSidebar>
         <div className="p-4 md:p-8">
@@ -235,5 +238,6 @@ export default function MyAppointments() {
         </div>
       </PatientSidebar>
     </AuthCheck>
+    </ErrorBoundary>
   );
 }
