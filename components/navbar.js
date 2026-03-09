@@ -197,7 +197,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          {user || currentUser ? (
+          {isLoaded && clerkUser ? (
             <div className="hidden lg:flex items-center gap-2">
               <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
               <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
@@ -205,11 +205,11 @@ export default function Navbar() {
                 {isLoggingOut ? 'Logging out...' : 'Logout'}
               </button>
             </div>
-          ) : (
+          ) : isLoaded && !clerkUser ? (
             <div className="hidden lg:flex">
               <button onClick={handleLoginRedirect} className="px-4 py-2 bg-blue-600 text-white rounded-md">Login</button>
             </div>
-          )}
+          ) : null}
           {/* Hamburger button - mobile only */}
           <button
             onClick={toggleMenu}
