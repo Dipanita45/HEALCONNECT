@@ -11,7 +11,8 @@ const AlertNotifications = dynamic(() => import("@components/DoctorComponents/Al
 // FetchPatients can stay, but we will override its behavior for offline caching
 import FetchPatients from "../../lib/fetchPatients";
 import { useMultiPatientMonitor } from "../../lib/useAlertMonitor";
-import Skeleton from "@/components/ui/Skeleton";
+import CardSkeleton from "@components/CardSkeleton";
+import TableSkeleton from "@components/TableSkeleton";
 
 export default function DoctorDashboard() {
   const router = useRouter();
@@ -133,18 +134,27 @@ export default function DoctorDashboard() {
         )}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-4 md:px-4 gap-4">
-          {summaryStats.map((stat, i) => (
-            <div
-              key={i}
-              className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group"
-            >
-              {stat.icon}
-              <div className="text-right">
-                <p className="text-2xl">{stat.value}</p>
-                <p>{stat.label}</p>
-              </div>
-            </div>
-          ))}
+          {loading ? (
+  <>
+    <CardSkeleton />
+    <CardSkeleton />
+    <CardSkeleton />
+    <CardSkeleton />
+  </>
+) : (
+  summaryStats.map((stat, i) => (
+    <div
+      key={i}
+      className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group"
+    >
+      {stat.icon}
+      <div className="text-right">
+        <p className="text-2xl">{stat.value}</p>
+        <p>{stat.label}</p>
+      </div>
+    </div>
+  ))
+)}
         </div>
 
         <h1 className="prose lg:prose-xl font-bold md:ml-4 dark:text-gray-100">All Clients</h1>
@@ -153,17 +163,12 @@ export default function DoctorDashboard() {
           <div className="w-full overflow-hidden rounded-lg shadow-xs bg-white dark:bg-gray-800">
             <div className="w-full overflow-x-auto py-4 md:px-4">
               {loading && (
-                <>
-                  {[...Array(5)].map((_, i) => (
-                    <tr key={i}>
-                      <td className="px-4 py-3"><Skeleton height={40} /></td>
-                      <td className="px-4 py-3"><Skeleton height={20} /></td>
-                      <td className="px-4 py-3"><Skeleton height={20} width={80} /></td>
-                      <td className="px-4 py-3"><Skeleton height={20} /></td>
-                    </tr>
-                  ))}
-                </>
-              )}
+            <tr>
+            <td colSpan="4" className="px-4 py-6">
+            <TableSkeleton rows={5} cols={4} />
+            </td>
+            </tr>
+            )}
               {!loading && patients.map((p, idx) => (
                 <tr
                   key={idx}

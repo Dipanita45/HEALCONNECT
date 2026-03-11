@@ -1,45 +1,74 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import AdminSidebar from "@components/Sidebar/AdminSidebar";
 import AuthCheck from "@components/Auth/AuthCheck";
 import { FaFileAlt, FaBell, FaUsers, FaAngleLeft, FaAngleRight, FaHeadset, FaTicketAlt, FaChartLine } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import CardSkeleton from "@components/CardSkeleton";
+import TableSkeleton from "@components/TableSkeleton";
+
 export default function Dashboard(props) {
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1200);
+
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <AuthCheck>
       <AdminSidebar>
         <h1 className="prose lg:prose-xl font-bold md:ml-4 dark:text-gray1">Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 py-4 md:px-4 gap-4 ">
-          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-            <FaUsers className='text-blue-500 dark:text-gray-100' size={36} />
-            <div className="text-right">
-              <p className="text-2xl">01</p>
-              <p>Total Patients</p>
-            </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-            <FaFileAlt className='stroke-current text-blue-500 dark:text-gray-100 ' size={36} />
-            <div className="text-right">
-              <p className="text-2xl">02</p>
-              <p>Total Reports</p>
-            </div>
-          </div>
-          <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
-            <FaBell className='stroke-current text-blue-500 dark:text-gray-100' size={36} />
-            <div className="text-right">
-              <p className="text-2xl">03</p>
-              <p>Appointments</p>
-            </div>
-          </div>
-          <Link href="/admin/support-management" className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-green-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-            <FaHeadset className='text-green-500 dark:text-gray-100' size={36} />
-            <div className="text-right">
-              <p className="text-2xl">24</p>
-              <p>Support Tickets</p>
-            </div>
-          </Link>
+
+  {loading ? (
+    <>
+      <CardSkeleton />
+      <CardSkeleton />
+      <CardSkeleton />
+      <CardSkeleton />
+    </>
+  ) : (
+    <>
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
+        <FaUsers className='text-blue-500 dark:text-gray-100' size={36} />
+        <div className="text-right">
+          <p className="text-2xl">01</p>
+          <p>Total Patients</p>
         </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
+        <FaFileAlt className='stroke-current text-blue-500 dark:text-gray-100 ' size={36} />
+        <div className="text-right">
+          <p className="text-2xl">02</p>
+          <p>Total Reports</p>
+        </div>
+      </div>
+
+      <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-blue-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group">
+        <FaBell className='stroke-current text-blue-500 dark:text-gray-100' size={36} />
+        <div className="text-right">
+          <p className="text-2xl">03</p>
+          <p>Appointments</p>
+        </div>
+      </div>
+
+      <Link href="/admin/support-management" className="bg-white dark:bg-gray-800 shadow-lg rounded-md flex items-center justify-between p-3 border-b-4 border-green-500 dark:border-gray-600 text-gray-700 dark:text-gray-200 font-medium group hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+        <FaHeadset className='text-green-500 dark:text-gray-100' size={36} />
+        <div className="text-right">
+          <p className="text-2xl">24</p>
+          <p>Support Tickets</p>
+        </div>
+      </Link>
+    </>
+  )}
+
+</div>
 
         {/* Support Management Quick Actions */}
         <div className="bg-white dark:bg-gray-800 shadow-lg rounded-md p-6 md:mx-4 mt-6">
