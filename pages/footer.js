@@ -111,6 +111,12 @@ export default function Footer() {
                   Contributors
                 </Link>
               </li>
+              <li>
+  <Link href="/faq" className={styles.footerLink}>
+    <FaRegHospital className={styles.linkIcon} />
+    FAQ
+  </Link>
+</li>
             </ul>
           </div>
 
@@ -150,19 +156,19 @@ export default function Footer() {
             <h4 className={styles.sectionTitle}>Connect With Us</h4>
             <div className={styles.socialLinks}>
               <a
-                href="https://github.com/Dipanita45/HEALCONNECT"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={styles.socialLink}
-                aria-label="GitHub"
-              >
-                <FaGithubAlt />
-                <span className={styles.socialTooltip}>Visit our GitHub</span>
-              </a>
+  href="https://github.com/Dipanita45/HEALCONNECT"
+  target="_blank"
+  rel="noopener noreferrer external"
+  className={styles.socialLink}
+  aria-label="GitHub"
+>
+  <FaGithubAlt />
+  <span className={styles.socialTooltip}>Visit our GitHub</span>
+</a>
               <a
-                href="https://discord.gg/WbvxB2F4G"
-                target="_blank"
-                rel="noopener noreferrer"
+  href="https://discord.gg/WbvxB2F4G"
+  target="_blank"
+  rel="noopener noreferrer external"
                 className={styles.socialLink}
                 aria-label="Discord"
               >
@@ -172,7 +178,7 @@ export default function Footer() {
               <a
                 href="https://www.linkedin.com/in/dipanita-mondal-6a9257306/"
                 target="_blank"
-                rel="noopener noreferrer"
+                rel="noopener noreferrer external"
                 className={styles.socialLink}
                 aria-label="LinkedIn"
               >
@@ -181,8 +187,14 @@ export default function Footer() {
               </a>
             </div>
             <p className={styles.feedbackText}>
-              Have feedback or ideas? Reach out — we had love to hear from you!
+              Have feedback or ideas? Reach out — we would love to hear from you!
             </p>
+            <p className={styles.contactEmail}>
+  <IoMdMail className={styles.linkIcon} />
+  <a href="mailto:support@healconnect.com" className={styles.footerLink}>
+    support@healconnect.com
+  </a>
+</p>
 
             {/* Subscription form */}
             <div className={styles.subscription}>
