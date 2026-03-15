@@ -9,12 +9,11 @@ import { MdWifiOff } from "react-icons/md";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import OfflineDashboard from "@/components/OfflineDashboard";
 import ProfileCompletionWidget from "@/components/Profile/ProfileCompletionWidget";
-
+import TableSkeleton from "@components/TableSkeleton";
 
 export default function Dashboard(params) {
-  const userContext = useContext(UserContext);
-  const { currentUser, userRole } = useContext;
-  const [showOfflineView, setShowOfflineView] = useState(false);
+    const { currentUser, userRole } = useContext(UserContext); 
+    const [showOfflineView, setShowOfflineView] = useState(false);
 
   const {
     syncStatus,
@@ -210,17 +209,12 @@ export default function Dashboard(params) {
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
-                      <td></td>
-                      <td></td>
-                      <td>
-                        <FaSpinner
-                          className=" my-40 animate-spin text-blue-600 dark:text-blue-400"
-                          size={40}
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
+<tr>
+<td colSpan="5" className="px-4 py-10">
+<TableSkeleton rows={5} cols={5} />
+</td>
+</tr>
+</tbody>
                 </table>
               </div>
             </div>
