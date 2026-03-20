@@ -42,13 +42,22 @@ async function getPatients(req, res) {
 
   const constraints = [];
 
-  // Security: If user is a doctor, force them to see only their patients?
-  // For now, if doctorId is provided, filter by it.
-  // Ideally, req.user.uid should be used if the user IS a doctor.
+  // Enforce RBAC
+  const user = req.user;
 
-  if (doctorId) {
-    constraints.push(where('doctorId', '==', doctorId));
+  if (user.role === 'doctor') {
+    // Force constraint to filter strictly by the doctor's uid
+    constraints.push(where('doctorId', '==', user.uid));
+  } else if (user.role === 'admin') {
+    // Admins can provide a filter
+    if (doctorId) {
+      constraints.push(where('doctorId', '==', doctorId));
+    }
+  } else {
+    // Reject unauthorized cross-access
+    return res.status(403).json({ success: false, message: 'Forbidden: Insufficient privileges to access patient records.' });
   }
+
   if (status) {
     constraints.push(where('status', '==', status));
   }
