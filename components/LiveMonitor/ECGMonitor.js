@@ -72,31 +72,34 @@ export default function ECGMonitor() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const newECGData = ecgData ? [...ecgData] : [];
       const pulse = data.pulse;
 
-      if (pulse >= -300 && pulse <= 300) {
-        newECGData.push({ x: Date.now(), y: 0 });
-      } else if (pulse > 600) {
-        const pulseArray = [
-          { x: Date.now(), y: 64 },
-          { x: Date.now() + 5, y: 168 },
-          // ... rest of your pulseArray ...
-          { x: Date.now() + 165, y: -40 },
-        ];
-        newECGData.push(...pulseArray);
-      } else {
-        return;
-      }
+      setECGData((prevData) => {
+        const newECGData = prevData ? [...prevData] : [];
 
-      if (newECGData.length > 1000) {
-        newECGData.shift();
-      }
-      setECGData(newECGData);
+        if (pulse >= -300 && pulse <= 300) {
+          newECGData.push({ x: Date.now(), y: 0 });
+        } else if (pulse > 600) {
+          const pulseArray = [
+            { x: Date.now(), y: 64 },
+            { x: Date.now() + 5, y: 168 },
+            // ... rest of your pulseArray ...
+            { x: Date.now() + 165, y: -40 },
+          ];
+          newECGData.push(...pulseArray);
+        } else {
+          return prevData;
+        }
+
+        if (newECGData.length > 1000) {
+          newECGData.shift();
+        }
+        return newECGData;
+      });
     }, 100);
 
     return () => clearInterval(interval);
-  }, [ecgData, data.pulse]);
+  }, [data.pulse]);
 
   return (
     <>
