@@ -48,11 +48,16 @@ async function getVitals(req, res) {
     constraints.push(where('deviceId', '==', deviceId));
   }
 
+  // Add date range filtering
+  if (startDate) {
+    constraints.push(where('timestamp', '>=', startDate));
+  }
+  if (endDate) {
+    constraints.push(where('timestamp', '<=', endDate));
+  }
+
   constraints.push(orderBy('timestamp', 'desc'));
   constraints.push(limit(parseInt(queryLimit)));
-
-  // Note: Date filtering usually requires range queries which might need composite indexes in Firestore
-  // Skipping implementation of date range for now to avoid index errors, but validation is in place.
 
   const result = await dbOperations.getAll(Collections.VITALS, constraints);
 
