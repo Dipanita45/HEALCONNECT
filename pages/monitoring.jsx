@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Monitoring.module.css';
-import { isVitalNormal, getVitalStatusMessage } from '../lib/thresholdDefaults';
+import { isVitalNormal, getVitalStatusMessage, parseBloodPressure } from '../lib/thresholdDefaults';
+import { UserContext } from '../lib/context';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -14,6 +15,7 @@ const fadeInUp = {
     }
   }
 };
+
 
 const staggerChildren = {
   visible: {
@@ -34,8 +36,10 @@ const pulseAnimation = {
     }
   }
 };
-
 export default function Monitoring() {
+  const { currentUser } = useContext(UserContext);
+  const thresholds = currentUser?.thresholds || null;
+
   const [data, setData] = useState({
     temperature: '',
     heartRate: '',
@@ -57,14 +61,21 @@ export default function Monitoring() {
         const res = await fetch('/api/vitals');
         const json = await res.json();
         if (json.success && json.data) {
-          const formatted = json.data.map(v => ({
-            date: v.timestamp ? new Date(v.timestamp).toLocaleString() : '',
-            temperature: v.temperature || '',
-            heartRate: v.heartRate || '',
-            bloodPressure: v.bloodPressure || '',
-            oxygen: v.oxygenSaturation || '',
-            glucose: v.glucose || '',
-          }));
+          const formatted = json.data.map(v => {
+            let bpDisplay = v.bloodPressure;
+            if (v.bloodPressure && typeof v.bloodPressure === 'object') {
+              bpDisplay = `${v.bloodPressure.systolic}/${v.bloodPressure.diastolic}`;
+            }
+            
+            return {
+              date: v.timestamp ? new Date(v.timestamp).toLocaleString() : '',
+              temperature: v.temperature || '',
+              heartRate: v.heartRate || '',
+              bloodPressure: bpDisplay || '',
+              oxygen: v.spO2 || v.oxygenSaturation || '',
+              glucose: v.glucose || '',
+            };
+          });
           setHistory(formatted);
         }
       } catch (err) {
@@ -88,13 +99,14 @@ const handleSubmit = async e => {
     setIsSubmitting(true);
 
     try {
+      const bp = parseBloodPressure(data.bloodPressure);
       const payload = {
         patientId: 'self',
         deviceId: 'manual-entry',
         heartRate: data.heartRate ? parseInt(data.heartRate) : undefined,
-        bloodPressure: data.bloodPressure || undefined,
+        bloodPressure: bp || undefined,
         temperature: data.temperature ? parseFloat(data.temperature) : undefined,
-        oxygenSaturation: data.oxygen ? parseFloat(data.oxygen) : undefined,
+        spO2: data.oxygen ? parseFloat(data.oxygen) : undefined,
         timestamp: new Date().toISOString(),
       };
 
@@ -149,7 +161,7 @@ const handleSubmit = async e => {
 
   const getStatusColor = (type, value) => {
     // Use the threshold system for accurate status colors
-    const result = isVitalNormal(type, value);
+    const result = isVitalNormal(type, value, thresholds);
 
     switch (result.severity) {
       case 'critical':
@@ -166,11 +178,18 @@ const handleSubmit = async e => {
   const getBloodPressureStatus = (bp) => {
     if (!bp) return { color: '#3b82f6', status: 'Normal' };
 
-    const [systolic, diastolic] = bp.split('/').map(Number);
+    const parsed = parseBloodPressure(bp);
+    if (!parsed) return { color: '#3b82f6', status: 'Normal' };
 
-    if (systolic >= 140 || diastolic >= 90) return { color: '#ef4444', status: 'High' };
-    if (systolic >= 130 || diastolic >= 85) return { color: '#f59e0b', status: 'Elevated' };
-    if (systolic <= 90 || diastolic <= 60) return { color: '#ef4444', status: 'Low' };
+    const systolicResult = isVitalNormal('bloodPressureSystolic', parsed.systolic, thresholds);
+    const diastolicResult = isVitalNormal('bloodPressureDiastolic', parsed.diastolic, thresholds);
+
+    if (systolicResult.severity === 'critical' || diastolicResult.severity === 'critical') {
+      return { color: '#ef4444', status: 'Critical' };
+    }
+    if (systolicResult.severity === 'warning' || diastolicResult.severity === 'warning') {
+      return { color: '#f59e0b', status: 'Warning' };
+    }
 
     return { color: '#10b981', status: 'Normal' };
   };
@@ -255,9 +274,7 @@ const handleSubmit = async e => {
                 </div>
                 <div className={styles.liveDataStatus}>
                   {isMonitoring ? (
-                    currentHeartRate < 60 ? 'Low' :
-                      currentHeartRate > 100 ? 'High' :
-                        currentHeartRate > 90 ? 'Elevated' : 'Normal'
+                    isVitalNormal('heartRate', currentHeartRate, thresholds).status.toUpperCase()
                   ) : 'Not monitoring'}
                 </div>
               </motion.div>
@@ -284,8 +301,7 @@ const handleSubmit = async e => {
                 </div>
                 <div className={styles.liveDataStatus}>
                   {isMonitoring ? (
-                    currentOxygen < 95 ? 'Low' :
-                      currentOxygen < 97 ? 'Normal' : 'Optimal'
+                    isVitalNormal('oxygen', currentOxygen, thresholds).status.toUpperCase()
                   ) : 'Not monitoring'}
                 </div>
               </motion.div>
@@ -330,8 +346,7 @@ const handleSubmit = async e => {
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('temperature', parseFloat(data.temperature)) }}
                     >
-                      {data.temperature < 36 ? 'Low' :
-                        data.temperature > 37.2 ? 'Elevated' : 'Normal'}
+                      {isVitalNormal('temperature', parseFloat(data.temperature), thresholds).status.toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -355,9 +370,7 @@ const handleSubmit = async e => {
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('heartRate', parseFloat(data.heartRate)) }}
                     >
-                      {data.heartRate < 60 ? 'Low' :
-                        data.heartRate > 100 ? 'High' :
-                          data.heartRate > 90 ? 'Elevated' : 'Normal'}
+                      {isVitalNormal('heartRate', parseFloat(data.heartRate), thresholds).status.toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -404,8 +417,7 @@ const handleSubmit = async e => {
                       className={styles.valueStatus}
                       style={{ color: getStatusColor('oxygen', parseFloat(data.oxygen)) }}
                     >
-                      {data.oxygen < 95 ? 'Low' :
-                        data.oxygen < 97 ? 'Normal' : 'Optimal'}
+                      {isVitalNormal('oxygen', parseFloat(data.oxygen), thresholds).status.toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -427,10 +439,9 @@ const handleSubmit = async e => {
                   {data.glucose && (
                     <div
                       className={styles.valueStatus}
-                      style={{ color: data.glucose < 70 || data.glucose > 140 ? '#ef4444' : '#10b981' }}
+                      style={{ color: getStatusColor('glucose', parseFloat(data.glucose)) }}
                     >
-                      {data.glucose < 70 ? 'Low' :
-                        data.glucose > 140 ? 'High' : 'Normal'}
+                      {isVitalNormal('glucose', parseFloat(data.glucose), thresholds).status.toUpperCase()}
                     </div>
                   )}
                 </div>
@@ -515,7 +526,7 @@ const handleSubmit = async e => {
                         {record.glucose && (
                           <div className={styles.historyItem}>
                             <span>Glucose:</span>
-                            <span style={{ color: record.glucose < 70 || record.glucose > 140 ? '#ef4444' : '#10b981' }}>
+                            <span style={{ color: getStatusColor('glucose', record.glucose) }}>
                               {record.glucose} mg/dL
                             </span>
                           </div>
