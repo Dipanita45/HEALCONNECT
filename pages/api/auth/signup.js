@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { db } from '../../../lib/firebase';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { withErrorHandling, withMethods, validate, rateLimit, compose } from '../../../lib/api/middleware';
+import { normalizePhoneNumber } from '../../../lib/phoneUtils';
 
 // Enhanced password validation schema
 const passwordSchema = Joi.string()
@@ -99,7 +100,7 @@ async function signupUser(req, res) {
       password: hashedPassword,
       role,
       fullName,
-      phone,
+      phone: normalizePhoneNumber(phone),
       age,
       gender,
       adminCode: role === 'admin' ? adminCode : undefined,

@@ -1,5 +1,6 @@
 import { db } from "../../../lib/firebase";
 import { doc, setDoc, query, collection, where, getDocs } from "firebase/firestore";
+import { normalizePhoneNumber } from "../../../lib/phoneUtils";
 import bcrypt from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import cookie from "cookie";
@@ -39,7 +40,7 @@ export default async function handler(req, res) {
       password: hashedPassword,
       role: role || 'patient',
       fullName,
-      phone,
+      phone: normalizePhoneNumber(phone),
       age: age || '',
       gender: gender || 'other',
       adminCode: role === "admin" ? adminCode : null,
