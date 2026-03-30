@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { FaSpinner } from 'react-icons/fa';
+import { db, auth } from '@/lib/firebase';
+import { doc, getDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
+import { RecaptchaVerifier, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 
 export default function PatientLoginPage() {
+  const COUNTRY_CODE = '+91';
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [verificationId, setVerificationId] = useState('');
@@ -18,12 +22,12 @@ export default function PatientLoginPage() {
         setIsLoading(true);
 
         //   Function if document name or ref is phoneNumber
-        const docRef = doc(db, 'patients', `+91${phoneNumber}`);
+        const docRef = doc(db, 'patients', `${COUNTRY_CODE}${phoneNumber}`);
         const docSnap = await getDoc(docRef);
 
         //   Function if phoneNumber is field in document
         const collectionRef = collection(db, 'patients');
-        const q = query(collectionRef, where('number', '==', `+91${phoneNumber}`));
+        const q = query(collectionRef, where('number', '==', `${COUNTRY_CODE}${phoneNumber}`));
         const snapshotQuery = await getDocs(q);
 
         // if (docSnap.exists()) {}
@@ -36,7 +40,7 @@ export default function PatientLoginPage() {
             auth,
           );
           const provider = new PhoneAuthProvider(auth);
-          const vId = await provider.verifyPhoneNumber(`+91${phoneNumber}`, applicationVerifier);
+          const vId = await provider.verifyPhoneNumber(`${COUNTRY_CODE}${phoneNumber}`, applicationVerifier);
           setVerificationId(vId);
           toast.success('OTP sent successfully');
           setShowOtpInput(true);
@@ -65,12 +69,12 @@ export default function PatientLoginPage() {
     } else {
       setIsLoading(true);
       const authCredential = PhoneAuthProvider.credential(verificationId, code);
-      const userCredential = await signInWithCredential(auth, authCredential);
+      const result = await signInWithCredential(auth, authCredential);
 
-      console.log(userCredential);
+      console.log(result);
       //   Update user UID in document
-      const userUID = userCredential.user.uid;
-      const ref = doc(db, 'patients', `+91${phoneNumber}`);
+      const userUID = result.user.uid;
+      const ref = doc(db, 'patients', `${COUNTRY_CODE}${phoneNumber}`);
       await updateDoc(ref, { uid: userUID });
     }
   };
