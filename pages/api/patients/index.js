@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { dbOperations, where, orderBy, limit } from '../../../lib/db/operations';
 import { Collections } from '../../../lib/db/schema';
 import { withErrorHandling, withMethods, withAuth, validate, rateLimit, compose } from '../../../lib/api/middleware';
+import { normalizePhoneNumber } from '../../../lib/phoneUtils';
 
 // Validation Schemas
 const createPatientSchema = Joi.object({
@@ -77,7 +78,10 @@ async function getPatients(req, res) {
 
 async function createPatient(req, res) {
   const patientData = req.body;
-  // Input already validated by middleware
+  // Normalize phone number if present
+  if (patientData.phone) {
+    patientData.phone = normalizePhoneNumber(patientData.phone);
+  }
 
   // Add metadata
   const dataToSave = {

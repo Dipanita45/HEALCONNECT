@@ -3,6 +3,7 @@ import Joi from 'joi';
 import { dbOperations, where, orderBy, limit } from '../../../lib/db/operations';
 import { Collections } from '../../../lib/db/schema';
 import { withErrorHandling, withMethods, withAuth, validate, rateLimit, compose } from '../../../lib/api/middleware';
+import { monitorAndAlert } from '../../../lib/alertSystem';
 
 // Validation Schemas
 const createVitalSchema = Joi.object({
@@ -82,6 +83,13 @@ async function createVital(req, res) {
   const result = await dbOperations.create(Collections.VITALS, dataToSave);
 
   if (result.success) {
+    // Trigger alert monitoring in the background
+    // We don't await it to avoid delaying the API response, 
+    // but the transaction in monitorAndAlert will ensure reliability.
+    monitorAndAlert(dataToSave.patientId, dataToSave).catch(err => {
+      console.error('Background alert monitoring failed:', err);
+    });
+
     res.status(201).json({ success: true, id: result.id });
   } else {
     throw new Error(result.error);
