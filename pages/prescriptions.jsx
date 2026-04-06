@@ -270,7 +270,7 @@ export default function Prescriptions() {
                 </AnimatePresence>
               </div>
 
-              <div className={styles.inputGroup}>
+              <div className={`${styles.inputGroup} ${styles.selectGroup}`}>
                 <select {...register('frequency')} className={styles.formSelect}>
                   <option value="">Select Frequency</option>
                   <option value="Once daily">Once daily</option>
@@ -279,7 +279,7 @@ export default function Prescriptions() {
                   <option value="Every 8 hours">Every 8 hours</option>
                   <option value="As needed">As needed</option>
                 </select>
-                <label className={styles.formLabel}>Frequency <span className={styles.blueDot}>*</span></label>
+                <label className={`${styles.formLabel} ${styles.selectLabel}`}>Frequency <span className={styles.blueDot}>*</span></label>
                 <div className={styles.formUnderline}></div>
                 <AnimatePresence>
                   {errors.frequency && (
