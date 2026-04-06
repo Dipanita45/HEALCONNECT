@@ -4,9 +4,9 @@ import { FaSpinner } from 'react-icons/fa';
 import { db, auth } from '@/lib/firebase';
 import { doc, getDoc, collection, query, where, getDocs, updateDoc } from 'firebase/firestore';
 import { RecaptchaVerifier, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
+import { normalizePhoneNumber } from '@/lib/phoneUtils';
 
 export default function PatientLoginPage() {
-  const COUNTRY_CODE = '+91';
   const [phoneNumber, setPhoneNumber] = useState('');
   const [code, setCode] = useState('');
   const [verificationId, setVerificationId] = useState('');
@@ -17,17 +17,22 @@ export default function PatientLoginPage() {
 
   const signInWithPhone = async (e) => {
     e.preventDefault()
-    if (/^\d{10}$/.test(phoneNumber)) {
+    
+    // Normalize user input
+    const normalizedPhone = normalizePhoneNumber(phoneNumber);
+    
+    // Minimum check: a valid E.164 number should be at least 10+ digits (including code)
+    if (normalizedPhone.length >= 10 && normalizedPhone.startsWith('+')) {
       try {
         setIsLoading(true);
 
         //   Function if document name or ref is phoneNumber
-        const docRef = doc(db, 'patients', `${COUNTRY_CODE}${phoneNumber}`);
+        const docRef = doc(db, 'patients', normalizedPhone);
         const docSnap = await getDoc(docRef);
 
         //   Function if phoneNumber is field in document
         const collectionRef = collection(db, 'patients');
-        const q = query(collectionRef, where('number', '==', `${COUNTRY_CODE}${phoneNumber}`));
+        const q = query(collectionRef, where('number', '==', normalizedPhone));
         const snapshotQuery = await getDocs(q);
 
         // if (docSnap.exists()) {}
@@ -40,7 +45,7 @@ export default function PatientLoginPage() {
             auth,
           );
           const provider = new PhoneAuthProvider(auth);
-          const vId = await provider.verifyPhoneNumber(`${COUNTRY_CODE}${phoneNumber}`, applicationVerifier);
+          const vId = await provider.verifyPhoneNumber(normalizedPhone, applicationVerifier);
           setVerificationId(vId);
           toast.success('OTP sent successfully');
           setShowOtpInput(true);
@@ -74,7 +79,8 @@ export default function PatientLoginPage() {
       console.log(result);
       //   Update user UID in document
       const userUID = result.user.uid;
-      const ref = doc(db, 'patients', `${COUNTRY_CODE}${phoneNumber}`);
+      const normalizedPhone = normalizePhoneNumber(phoneNumber);
+      const ref = doc(db, 'patients', normalizedPhone);
       await updateDoc(ref, { uid: userUID });
     }
   };

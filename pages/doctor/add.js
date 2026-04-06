@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { normalizePhoneNumber } from "@lib/phoneUtils";
 import { FaDotCircle, FaSpinner } from 'react-icons/fa';
 import dynamic from "next/dynamic";
 
@@ -38,10 +39,14 @@ export default function Add(props) {
       toast.error('All (*) fields are required!')
     } else {
       setLoading(true)
-      // Create patients document referance
+      // Create patients document reference
       const docRef = doc(collection(db, "patients"));
+      
+      // Normalize number
+      const normalizedNumber = normalizePhoneNumber(number);
+
       // Write data in to patients document
-      await setDoc(docRef, { aadhar: aadhar, pan: pan, firstName: first, middleName: middle, lastName: last, age: age, gender: gender, maritalStatus: marital, address: address, state: state, city: city, pin: pin, number: number, landline: landline, bloodGroup: blood, height: height, weight: weight }
+      await setDoc(docRef, { aadhar: aadhar, pan: pan, firstName: first, middleName: middle, lastName: last, age: age, gender: gender, maritalStatus: marital, address: address, state: state, city: city, pin: pin, number: normalizedNumber, landline: landline, bloodGroup: blood, height: height, weight: weight }
       ).then(() => setLoading(false))
         .catch((error) => toast.error(error.message))
         .finally(() => {
