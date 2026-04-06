@@ -9,21 +9,17 @@ const DoctorSidebar = dynamic(() => import("@components/Sidebar/DoctorSidebar"),
 const AlertNotifications = dynamic(() => import("@components/DoctorComponents/AlertNotifications"), { ssr: false });
 
 // FetchPatients can stay, but we will override its behavior for offline caching
-import useFetchPatients from "../../lib/fetchPatients";
-import useDashboardStats from "../../lib/hooks/useDashboardStats";
+import FetchPatients from "../../lib/fetchPatients";
 import { useMultiPatientMonitor } from "../../lib/useAlertMonitor";
 import CardSkeleton from "@components/CardSkeleton";
 import TableSkeleton from "@components/TableSkeleton";
 
 export default function DoctorDashboard() {
   const router = useRouter();
-  const { patients: fetchedPatients, loading: patientsLoading, error: patientsError } = useFetchPatients();
-  const { stats, loading: statsLoading, error: statsError } = useDashboardStats();
-  
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isOffline, setIsOffline] = useState(typeof window !== "undefined" ? !navigator.onLine : false);
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
   const [doctorInfo, setDoctorInfo] = useState({ id: null, name: null });
 
   // Enable real-time patient monitoring for alert generation
@@ -54,34 +50,47 @@ export default function DoctorDashboard() {
     }
   }, []);
 
-  // Handle loading and state sync from hooks
+  // Fetch patients with offline support
   useEffect(() => {
-    if (!patientsLoading) {
-      if (fetchedPatients.length > 0) {
-        setPatients(fetchedPatients);
-        localStorage.setItem("patientsData", JSON.stringify(fetchedPatients));
+    async function fetchPatients() {
+      if (navigator.onLine) {
+        try {
+          const { loading, error, patients } = await FetchPatients(); // make sure FetchPatients returns a promise
+          setLoading(loading);
+          setError(error);
+          setPatients(patients || []);
+          localStorage.setItem("patientsData", JSON.stringify(patients || []));
+        } catch (err) {
+          setError("Failed to fetch patients.");
+          const cached = localStorage.getItem("patientsData");
+          if (cached) setPatients(JSON.parse(cached));
+        } finally {
+          setLoading(false);
+        }
       } else {
-        // Fallback to cache if no online data returned
+        // Offline: read from cache
         const cached = localStorage.getItem("patientsData");
-        if (cached) setPatients(JSON.parse(cached));
+        if (cached) {
+          setPatients(JSON.parse(cached));
+          setLoading(false);
+        } else {
+          setError("No cached data available.");
+          setLoading(false);
+        }
       }
-      setLoading(false);
     }
-    if (patientsError) {
-      setError(patientsError);
-      const cached = localStorage.getItem("patientsData");
-      if (cached) setPatients(JSON.parse(cached));
-    }
-  }, [patientsLoading, fetchedPatients, patientsError]);
+
+    fetchPatients();
+  }, []);
 
   const summaryStats = [
     {
       icon: <FaUsers size={36} className="text-blue-500 dark:text-gray-100" />,
       label: "Total Patients",
-      value: loading ? "..." : (stats.patients || patients.length).toString(),
+      value: patients.length.toString(),
     },
-    { icon: <FaFileAlt size={36} className="text-blue-500 dark:text-gray-100" />, label: "Total Reports", value: statsLoading ? "..." : stats.reports.toString().padStart(2, '0') },
-    { icon: <FaBell size={36} className="text-blue-500 dark:text-gray-100" />, label: "Appointments", value: statsLoading ? "..." : stats.appointments.toString().padStart(2, '0') },
+    { icon: <FaFileAlt size={36} className="text-blue-500 dark:text-gray-100" />, label: "Total Reports", value: "02" },
+    { icon: <FaBell size={36} className="text-blue-500 dark:text-gray-100" />, label: "Appointments", value: "00" },
   ];
 
   const getStatusClasses = (status) => {

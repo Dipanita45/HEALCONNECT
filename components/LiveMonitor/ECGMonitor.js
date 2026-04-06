@@ -5,15 +5,13 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-export default function ECGMonitor({ deviceId }) {
+export default function ECGMonitor() {
   const [data, setData] = useState([]);
   const [deviceStatus, setDeviceStatus] = useState(false);
   const [ecgData, setECGData] = useState([{ x: Date.now(), y: 0 }]);
 
   useEffect(() => {
-    if (!deviceId) return;
-
-    const docRef = doc(db, "devices", deviceId);
+    const docRef = doc(db, "devices", "0001");
 
     // Get initial data
     getDoc(docRef)
@@ -38,7 +36,7 @@ export default function ECGMonitor({ deviceId }) {
       }
     });
     return () => unsubscribe();
-  }, [deviceId]);
+  }, []);
 
   const [options, setOptions] = useState({
     chart: {
