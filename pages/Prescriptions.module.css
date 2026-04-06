@@ -90,6 +90,7 @@
   position: sticky;
   top: 100px;
   z-index: 20;
+  isolation: isolate;
   overflow: visible;
 }
 
@@ -250,7 +251,7 @@
 
 .formSelect {
   position: relative;
-  z-index: 2;
+  z-index: 40;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -258,6 +259,15 @@
   border-radius: 12px 12px 0 0;
   padding: 1.5rem 2.5rem 0.6rem 0.85rem;
   cursor: pointer;
+}
+
+.formSelect option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.formSelect option[value=""] {
+  color: #94a3b8;
 }
 
 .formInput:focus,
