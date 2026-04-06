@@ -1,4 +1,4 @@
-import { checkPatientVitals } from '../../lib/alertSystem';
+import { checkPatientVitals, monitorAndAlert } from '../../lib/alertSystem';
 
 // Mock Firebase to avoid actual database calls
 jest.mock('../../lib/firebase', () => ({
@@ -13,8 +13,20 @@ jest.mock('firebase/firestore', () => ({
   getDocs: jest.fn(),
   orderBy: jest.fn(),
   limit: jest.fn(),
-  Timestamp: jest.fn(),
+  doc: jest.fn(),
+  runTransaction: jest.fn(),
+  Timestamp: {
+    now: jest.fn(),
+    fromDate: jest.fn(),
+  },
 }));
+
+const {
+  collection,
+  doc,
+  runTransaction,
+  Timestamp,
+} = require('firebase/firestore');
 
 describe('Alert System Integration', () => {
   beforeEach(() => {
@@ -143,5 +155,59 @@ describe('Alert System Integration', () => {
     expect(systolicAlert).toBeDefined();
     expect(systolicAlert.currentValue).toBe(160);
     expect(systolicAlert.severity).toBe('critical'); // 160 is above criticalMax of 140
+  });
+
+  test('uses a single transaction for multiple alerts in one monitoring cycle', async () => {
+    const nowValues = [
+      { toDate: () => new Date('2026-04-06T10:00:00Z') },
+      { toDate: () => new Date('2026-04-06T10:00:01Z') },
+    ];
+
+    Timestamp.now
+      .mockReturnValueOnce(nowValues[0])
+      .mockReturnValueOnce(nowValues[1]);
+
+    collection.mockImplementation((dbArg, name) => ({ dbArg, name }));
+    doc
+      .mockImplementationOnce((dbArg, name, id) => ({ path: `${name}/${id}` }))
+      .mockImplementationOnce(() => ({ id: 'alert-heart-rate' }))
+      .mockImplementationOnce(() => ({ id: 'alert-oxygen' }));
+
+    const transaction = {
+      get: jest.fn().mockResolvedValue({
+        exists: () => true,
+        data: () => ({ lastAlertTimestamps: {} }),
+      }),
+      set: jest.fn(),
+    };
+
+    runTransaction.mockImplementation(async (dbArg, callback) => callback(transaction));
+
+    const patientData = {
+      id: 'patient123',
+      name: 'Jane Smith',
+      doctorId: 'doctor456',
+      thresholds: {},
+      heartRate: 150,
+      oxygen: 85,
+    };
+
+    const result = await monitorAndAlert(patientData);
+
+    expect(runTransaction).toHaveBeenCalledTimes(1);
+    expect(transaction.get).toHaveBeenCalledTimes(1);
+    expect(transaction.set).toHaveBeenCalledTimes(3);
+    expect(transaction.set).toHaveBeenLastCalledWith(
+      { path: 'patients/patient123' },
+      {
+        lastAlertTimestamps: {
+          heartRate: nowValues[0],
+          oxygen: nowValues[1],
+        },
+      },
+      { merge: true }
+    );
+    expect(result.success).toBe(true);
+    expect(result.alertsCreated).toBe(2);
   });
 });
