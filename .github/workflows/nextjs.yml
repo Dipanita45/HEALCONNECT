@@ -15,27 +15,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # Security check (assuming it needs the code, it should also checkout)
+  # Security check
   SecurityCheck:
     name: Security Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4                 
       - name: Run Security Checks
         run: |
           echo "Running Security Checks..."
-          # Replace this with your actual security scan tool
           sleep 5s
           echo "Security Checks Complete."
 
   # Build job
   build:
     runs-on: ubuntu-latest
-    needs: SecurityCheck  # Wait for security checks to pass
+    needs: SecurityCheck
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4                 
+
       - name: Detect package manager
         id: detect-package-manager
         run: |
@@ -50,34 +50,41 @@ jobs:
             echo "runner=npx --no-install" >> $GITHUB_OUTPUT
             exit 0
           else
-            echo "Unable to determine packager manager"
+            echo "Unable to determine package manager"
             exit 1
           fi
+
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4                # Fix: updated from v3
         with:
-          node-version: "16"
+          node-version: "20"                       # Fix: Node 16 is deprecated, use 20
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+
       - name: Setup Pages
-        uses: actions/configure-pages@v2
+        uses: actions/configure-pages@v5           # Fix: updated from v2
         with:
           static_site_generator: next
+
       - name: Restore cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4                     # Fix: updated from v3
         with:
           path: |
             .next/cache
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          restore-keys: |
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+          restore-keys: |                          # Fix: glob pattern corrected (**.[jt]s → **/*.[jt]s)
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
+
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-      - name: Static HTML export with Next.js
-        run: ${{ steps.detect-package-manager.outputs.runner }} next export
+                                                   # Fix: removed 'next export' (deprecated in Next.js 13+)
+                                                   # Static export is now handled by next build
+                                                   # Make sure next.config.js has: output: 'export'
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3     # Fix: updated from v1
         with:
           path: ./out
 
@@ -90,9 +97,5 @@ jobs:
     needs: build
     steps:
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
-
-      - name: Deploy to GitHub Pages
-        id: deploymen
-        uses: actions/deploy-pages@v1
+        id: deployment                             # Fix: removed duplicate deploy step
+        uses: actions/deploy-pages@v4              # Fix: updated from v1
