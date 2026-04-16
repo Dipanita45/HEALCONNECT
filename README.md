@@ -219,7 +219,7 @@ Contributions are what make the open-source community an amazing place to learn 
 2. **Clone your forked repo**
 
    ```bash
-   git clone https://github.com/<your-username>/Foodie.git
+   git clone https://github.com/<your-username>/HEALCONNECT.git
    ```
 
 3. **Create a new branch**
