@@ -211,7 +211,51 @@ For comprehensive information about the database and API infrastructure:
 ## 🤝 Contributing
 Contributions are what make the open-source community an amazing place to learn and inspire. We welcome contributions from everyone! Please read our [Contributing Guidelines](contributing.md) to get started.
 
----
+---### 🪜 Steps to Contribute
+
+1. **Fork** this repository
+   Click the **Fork** button on the top right corner of this page.
+
+2. **Clone your forked repo**
+
+   ```bash
+   git clone https://github.com/<your-username>/HEALCONNECT.git
+   ```
+
+3. **Create a new branch**
+
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+4. **Make your changes**
+   Add your improvements or fix bugs.
+5. **Commit your changes**
+
+   ```bash
+   git add .
+   git commit -m "Added: new feature or improvement"
+   ```
+
+6. **Push to your branch**
+
+   ```bash
+   git push origin feature/your-feature-name
+   ```
+
+7. **Create a Pull Request**
+   Go to your fork on GitHub and click **“Compare & pull request”**.
+   🎉 That’s it! Wait for review and merge.
+
+📘 For more details, see the [CONTRIBUTING.md](./CONTRIBUTING.md) file.
+
+
+## 🏆 NSoC 2026 Project Selection
+
+We are excited to announce that this project has been officially selected for **Nexus Spring of Code 2026 (NSoC '26)**.
+
+As a **Project Kernel**, this project will be actively maintained and scaled during the program with support from contributors and the open-source community.
+
 
 ## 💬 Connect With Us
 

@@ -89,6 +89,9 @@
   box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
   position: sticky;
   top: 100px;
+  z-index: 20;
+  isolation: isolate;
+  overflow: visible;
 }
 
 .sectionHeader,
@@ -224,6 +227,12 @@
 .inputGroup {
   position: relative;
   margin-bottom: 2.25rem;
+  overflow: visible;
+  z-index: 1;
+}
+
+.selectGroup {
+  z-index: 30;
 }
 
 .formInput,
@@ -238,6 +247,27 @@
   font-size: 1.05rem;
   transition: all 0.3s ease;
   outline: none;
+}
+
+.formSelect {
+  position: relative;
+  z-index: 40;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: #1e293b;
+  border-radius: 12px 12px 0 0;
+  padding: 1.5rem 2.5rem 0.6rem 0.85rem;
+  cursor: pointer;
+}
+
+.formSelect option {
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.formSelect option[value=""] {
+  color: #94a3b8;
 }
 
 .formInput:focus,
@@ -257,6 +287,14 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.selectLabel {
+  top: -1.25rem;
+  left: 0.85rem;
+  font-size: 0.85rem;
+  color: #3b82f6;
+  z-index: 3;
 }
 
 .blueDot {
