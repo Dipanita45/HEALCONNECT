@@ -9,6 +9,7 @@ export default function PWAInstallPrompt() {
   const [isInstalled, setIsInstalled] = useState(false)
   const [isOnline, setIsOnline] = useState(true)
   const [showOfflineMessage, setShowOfflineMessage] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     // Check if app is already installed
@@ -75,7 +76,8 @@ export default function PWAInstallPrompt() {
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault()
       setDeferredPrompt(e)
-      setShowInstallPrompt(true)
+      // Delay showing the prompt so it doesn't interrupt the initial page load
+      setTimeout(() => setShowInstallPrompt(true), 3000)
     }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
@@ -108,7 +110,8 @@ export default function PWAInstallPrompt() {
   }
 
   const dismissInstallPrompt = () => {
-    setShowInstallPrompt(false)
+    setVisible(false)
+    setTimeout(() => setShowInstallPrompt(false), 300)
   }
 
   const dismissOfflineMessage = () => {
@@ -117,44 +120,60 @@ export default function PWAInstallPrompt() {
 
   if (isInstalled) return null
 
+  // Trigger entrance animation after mount
+  if (showInstallPrompt && !visible) {
+    requestAnimationFrame(() => setVisible(true))
+  }
+
   return (
     <>
-      {/* Install Prompt Banner */}
+      {/* Install Prompt — bottom-right floating card */}
       {showInstallPrompt && (
-        <div className="fixed top-20 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 animate-pulse">
-          <div className="bg-gradient-to-r from-blue-600 to-green-600 text-white rounded-lg shadow-2xl p-4 border border-white/20">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="bg-white/20 p-2 rounded-lg">
-                  <FaDownload className="text-xl" />
+        <div
+          style={{
+            transition: 'opacity 300ms ease, transform 300ms ease',
+            opacity: visible ? 1 : 0,
+            transform: visible ? 'translateX(0)' : 'translateX(-16px)',
+          }}
+          className="fixed bottom-6 left-6 z-50 w-96 max-w-[calc(100vw-3rem)]"
+        >
+          <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Accent bar */}
+            <div className="h-1.5 bg-gradient-to-r from-blue-500 to-green-500" />
+            <div className="p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-green-500 flex items-center justify-center">
+                    <FaDownload className="text-white text-base" />
+                  </div>
+                  <div>
+                    <p className="font-semibold text-base text-gray-900 dark:text-white leading-tight">Install HEALCONNECT</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5 leading-tight">Add to home screen for quick access</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-sm">Install HEALCONNECT</h3>
-                  <p className="text-xs opacity-90">Get instant access to your healthcare dashboard</p>
-                </div>
+                <button
+                  onClick={dismissInstallPrompt}
+                  className="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors p-1 rounded"
+                  aria-label="Dismiss install prompt"
+                >
+                  <FaTimes className="text-sm" />
+                </button>
               </div>
-              <button
-                onClick={dismissInstallPrompt}
-                className="text-white/80 hover:text-white transition-colors"
-                aria-label="Dismiss install prompt"
-              >
-                <FaTimes className="text-sm" />
-              </button>
-            </div>
-            <div className="mt-3 flex space-x-2">
-              <button
-                onClick={handleInstallClick}
-                className="flex-1 bg-white text-blue-600 px-4 py-2 rounded-md font-medium text-sm hover:bg-blue-50 transition-colors flex items-center justify-center space-x-2"
-              >
-                <FaDownload className="text-sm" />
-                <span>Install App</span>
-              </button>
-              <button
-                onClick={dismissInstallPrompt}
-                className="px-4 py-2 text-white/80 hover:text-white text-sm transition-colors"
-              >
-                Not Now
-              </button>
+              <div className="mt-4 flex gap-2">
+                <button
+                  onClick={handleInstallClick}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2.5 rounded-lg font-medium text-sm transition-all flex items-center justify-center gap-2"
+                >
+                  <FaDownload className="text-sm" />
+                  Install
+                </button>
+                <button
+                  onClick={dismissInstallPrompt}
+                  className="px-4 py-2.5 text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+                >
+                  Not now
+                </button>
+              </div>
             </div>
           </div>
         </div>
