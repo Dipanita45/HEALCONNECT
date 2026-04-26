@@ -8,6 +8,7 @@ import Joi from 'joi'
 import styles from './Prescriptions.module.css'
 import { FaPlus, FaHeadset, FaArrowUp, FaEdit, FaCheck, FaTrash, FaFileAlt } from 'react-icons/fa'
 import toast from 'react-hot-toast'
+import { useUser } from '@clerk/nextjs'
 
 const schema = Joi.object({
   medicine: Joi.string().min(3).required().messages({
@@ -39,6 +40,8 @@ export default function Prescriptions() {
   const [editingId, setEditingId] = useState(null)
   const [summaryById, setSummaryById] = useState({})
   const [loadingSummaryId, setLoadingSummaryId] = useState(null)
+  const { isLoaded, user } = useUser()
+  const isLoggedIn = isLoaded && !!user
 
   const {
     register,
@@ -141,101 +144,102 @@ export default function Prescriptions() {
       </div>
 
       <div className={styles.content}>
-        <div className={styles.prescriptionsGrid}>
-          {/* LEFT: LIST SECTION */}
-          <motion.section
-            className={styles.listSection}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <div className={styles.sectionHeader}>
-              <h2>Prescriptions</h2>
-              <div className={styles.tabs}>
-                {['all', 'current', 'completed'].map(tab => (
-                  <button
-                    key={tab}
-                    className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
-                    onClick={() => setActiveTab(tab)}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className={styles.prescriptionsList}>
-              <AnimatePresence mode="popLayout">
-                {filteredPrescriptions.length > 0 ? (
-                  filteredPrescriptions.map(p => (
-                    <motion.div
-                      key={p.id}
-                      className={styles.prescriptionCard}
-                      layout
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.4 }}
+        {isLoggedIn ? (
+          <div className={styles.prescriptionsGrid}>
+            {/* LEFT: LIST SECTION */}
+            <motion.section
+              className={styles.listSection}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className={styles.sectionHeader}>
+                <h2>Prescriptions</h2>
+                <div className={styles.tabs}>
+                  {['all', 'current', 'completed'].map(tab => (
+                    <button
+                      key={tab}
+                      className={`${styles.tab} ${activeTab === tab ? styles.activeTab : ''}`}
+                      onClick={() => setActiveTab(tab)}
                     >
-                      <div className={styles.prescriptionHeader}>
-                        <h3 className={styles.medicineName}>{p.medicine}</h3>
-                        <div className={styles.prescriptionActions}>
-                          {p.status === 'active' && (
-                            <>
-                              <button className={styles.actionButton} onClick={() => handleEdit(p)} title="Edit"><FaEdit /></button>
-                              <button className={styles.actionButton} onClick={() => handleMarkCompleted(p.id)} title="Complete"><FaCheck /></button>
-                            </>
-                          )}
-                          <button className={styles.actionButton} onClick={() => handleGenerateSummary(p)} disabled={loadingSummaryId === p.id} title="Summary">
-                            {loadingSummaryId === p.id ? '...' : <FaFileAlt />}
-                          </button>
-                          <button className={`${styles.actionButton} ${styles.deleteButton}`} onClick={() => handleDelete(p.id)} title="Delete"><FaTrash /></button>
+                      {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.prescriptionsList}>
+                <AnimatePresence mode="popLayout">
+                  {filteredPrescriptions.length > 0 ? (
+                    filteredPrescriptions.map(p => (
+                      <motion.div
+                        key={p.id}
+                        className={styles.prescriptionCard}
+                        layout
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <div className={styles.prescriptionHeader}>
+                          <h3 className={styles.medicineName}>{p.medicine}</h3>
+                          <div className={styles.prescriptionActions}>
+                            {p.status === 'active' && (
+                              <>
+                                <button className={styles.actionButton} onClick={() => handleEdit(p)} title="Edit"><FaEdit /></button>
+                                <button className={styles.actionButton} onClick={() => handleMarkCompleted(p.id)} title="Complete"><FaCheck /></button>
+                              </>
+                            )}
+                            <button className={styles.actionButton} onClick={() => handleGenerateSummary(p)} disabled={loadingSummaryId === p.id} title="Summary">
+                              {loadingSummaryId === p.id ? '...' : <FaFileAlt />}
+                            </button>
+                            <button className={`${styles.actionButton} ${styles.deleteButton}`} onClick={() => handleDelete(p.id)} title="Delete"><FaTrash /></button>
+                          </div>
                         </div>
-                      </div>
 
-                      <div className={styles.prescriptionDetails}>
-                        <div className={styles.detailItem}><span className={styles.detailLabel}>Dosage</span><span className={styles.detailValue}>{p.dosage}</span></div>
-                        <div className={styles.detailItem}><span className={styles.detailLabel}>Frequency</span><span className={styles.detailValue}>{p.frequency}</span></div>
-                        <div className={styles.detailItem}><span className={styles.detailLabel}>Duration</span><span className={styles.detailValue}>{p.duration} days</span></div>
-                        <div className={styles.detailItem}><span className={styles.detailLabel}>End Date</span><span className={styles.detailValue}>{p.endDate}</span></div>
-                      </div>
+                        <div className={styles.prescriptionDetails}>
+                          <div className={styles.detailItem}><span className={styles.detailLabel}>Dosage</span><span className={styles.detailValue}>{p.dosage}</span></div>
+                          <div className={styles.detailItem}><span className={styles.detailLabel}>Frequency</span><span className={styles.detailValue}>{p.frequency}</span></div>
+                          <div className={styles.detailItem}><span className={styles.detailLabel}>Duration</span><span className={styles.detailValue}>{p.duration} days</span></div>
+                          <div className={styles.detailItem}><span className={styles.detailLabel}>End Date</span><span className={styles.detailValue}>{p.endDate}</span></div>
+                        </div>
 
-                      {summaryById[p.id] && (
-                        <motion.div
-                          className="mt-4 p-4 bg-blue-500/10 rounded-xl text-sm border border-blue-500/20 text-blue-200"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                        >
-                          {summaryById[p.id]}
-                        </motion.div>
-                      )}
-                    </motion.div>
-                  ))
-                ) : (
-                  <div className={styles.emptyState}>
-                    <FaFileAlt />
-                    <p>Your prescriptions will appear here.</p>
-                  </div>
+                        {summaryById[p.id] && (
+                          <motion.div
+                            className="mt-4 p-4 bg-blue-500/10 rounded-xl text-sm border border-blue-500/20 text-blue-200"
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                          >
+                            {summaryById[p.id]}
+                          </motion.div>
+                        )}
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className={styles.emptyState}>
+                      <FaFileAlt />
+                      <p>Your prescriptions will appear here.</p>
+                    </div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.section>
+
+            {/* RIGHT: FORM SECTION */}
+            <motion.section
+              className={styles.formSection}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className={styles.formHeader}>
+                <h2 className={styles.formTitle}>{editingId ? 'Edit Dosage' : 'Add New Rx'}</h2>
+                {editingId && (
+                  <button className="text-xs font-bold text-red-500 hover:text-red-400 uppercase tracking-widest" onClick={() => { setEditingId(null); reset(); }}>Cancel</button>
                 )}
-              </AnimatePresence>
-            </div>
-          </motion.section>
+              </div>
 
-          {/* RIGHT: FORM SECTION */}
-          <motion.section
-            className={styles.formSection}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <div className={styles.formHeader}>
-              <h2 className={styles.formTitle}>{editingId ? 'Edit Dosage' : 'Add New Rx'}</h2>
-              {editingId && (
-                <button className="text-xs font-bold text-red-500 hover:text-red-400 uppercase tracking-widest" onClick={() => { setEditingId(null); reset(); }}>Cancel</button>
-              )}
-            </div>
-
-            <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+              <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
               <div className={styles.inputGroup}>
                 <input {...register('medicine')} className={styles.formInput} placeholder=" " />
                 <label className={styles.formLabel}>Medicine Name <span className={styles.blueDot}>*</span></label>
@@ -331,9 +335,57 @@ export default function Prescriptions() {
               >
                 {isSubmitting ? 'Processing...' : (editingId ? 'Save Changes' : 'Confirm Prescription')}
               </motion.button>
-            </form>
+              </form>
+            </motion.section>
+          </div>
+        ) : (
+          <motion.section
+            className={styles.infoSection}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className={styles.infoHeader}>
+              <h2>Prescription Management</h2>
+              <p>
+                Healconnect keeps prescriptions accurate, traceable, and easy to follow for both patients and doctors.
+              </p>
+            </div>
+
+            <div className={styles.infoGrid}>
+              <div className={styles.infoCard}>
+                <h3>How we handle prescriptions</h3>
+                <ul className={styles.infoList}>
+                  <li>Doctors create a prescription with dosage, frequency, duration, and start date.</li>
+                  <li>The system calculates the end date and tracks active vs completed courses.</li>
+                  <li>Patients see only their own prescriptions with clear, readable instructions.</li>
+                </ul>
+              </div>
+
+              <div className={styles.infoCard}>
+                <h3>Safety and clarity</h3>
+                <ul className={styles.infoList}>
+                  <li>Every update is time-stamped for audit and continuity of care.</li>
+                  <li>Summaries condense complex instructions into a single readable line.</li>
+                  <li>Medication notes highlight food, timing, or interaction guidance.</li>
+                </ul>
+              </div>
+
+              <div className={styles.infoCard}>
+                <h3>Access and privacy</h3>
+                <ul className={styles.infoList}>
+                  <li>Only signed-in users can view or manage prescriptions.</li>
+                  <li>Role-based access keeps patient data protected.</li>
+                  <li>Secure authentication guards medical records end to end.</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className={styles.infoFooter}>
+              <span className={styles.infoTag}>Sign in to view and manage prescriptions.</span>
+            </div>
           </motion.section>
-        </div>
+        )}
       </div>
 
       <div className={styles.statusBadge}><div className={styles.statusDot}></div>Online</div>

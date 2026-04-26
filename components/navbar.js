@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import ThemeToggle from './ThemeToggle'
 import { useState, useEffect, useCallback } from 'react'
 import { useUser, useClerk } from '@clerk/nextjs'
@@ -81,6 +82,11 @@ export default function Navbar() {
     closeMenu()
   }
 
+  const handleSignupRedirect = () => {
+    router.push('/signup')
+    closeMenu()
+  }
+
   const handleDashboardRedirect = () => {
     if (clerkUser?.publicMetadata?.role) {
       router.push(`/${clerkUser.publicMetadata.role}/dashboard`)
@@ -113,12 +119,24 @@ export default function Navbar() {
         {/* Logo/Brand */}
         <div className="flex-shrink-0 flex items-center lg:pr-10 xl:pr-16">
           <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
-            <div className={styles.logoIcon}>
-              <div className={styles.crossSymbol}>
-                <div className={styles.crossLine1}></div>
-                <div className={styles.crossLine2}></div>
-              </div>
-            </div>
+            <span className={styles.logoImageWrap}>
+              <Image
+                src="/logo_new.png"
+                alt="Healconnect logo"
+                width={32}
+                height={32}
+                className={`${styles.logoImage} ${styles.logoLight}`}
+                priority
+              />
+              <Image
+                src="/logo_black.png"
+                alt="Healconnect logo"
+                width={32}
+                height={32}
+                className={`${styles.logoImage} ${styles.logoDark}`}
+                priority
+              />
+            </span>
             <span className={styles.logoText}>HEALCONNECT</span>
           </Link>
         </div>
@@ -154,37 +172,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
-          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
-          <div className="hidden sm:flex items-center">
-            {isLoaded && clerkUser ? (
-              <div className="flex items-center gap-2 lg:gap-2 xl:gap-3">
-                <button
-                  onClick={handleDashboardRedirect}
-                  className={`${styles.loginButton} bg-green-600 hover:bg-green-700`}
-                >
-                  <span>Dashboard</span>
-                </button>
-                <button
-                  onClick={handleLogout}
-                  disabled={isLoggingOut}
-                  className={`${styles.loginButton} bg-red-600 hover:bg-red-700 disabled:opacity-50 flex items-center gap-2`}
-                >
-                  {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
-                  <span>{isLoggingOut ? 'Logging out...' : 'Logout'}</span>
-                </button>
-              </div>
-            ) : isLoaded && !clerkUser ? (
-              <button
-                onClick={handleLoginRedirect}
-                className={styles.loginButton}
-              >
-                <span>Login</span>
-                <div className={styles.buttonPulse}></div>
-              </button>
-            ) : null}
-          </div>
-
-
           <Link
             href="/contact"
             className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
@@ -206,8 +193,9 @@ export default function Navbar() {
               </button>
             </div>
           ) : isLoaded && !clerkUser ? (
-            <div className="hidden lg:flex">
-              <button onClick={handleLoginRedirect} className="px-4 py-2 bg-blue-600 text-white rounded-md">Login</button>
+            <div className="hidden lg:flex items-center gap-2">
+              <button onClick={handleLoginRedirect} className={styles.loginButton}>Login</button>
+              <button onClick={handleSignupRedirect} className={styles.signupButton}>Sign Up</button>
             </div>
           ) : null}
           {/* Hamburger button - mobile only */}
@@ -273,12 +261,20 @@ export default function Navbar() {
                 </button>
               </>
             ) : isLoaded && !clerkUser ? (
-              <button
-                onClick={handleLoginRedirect}
-                className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
-              >
-                Login
-              </button>
+              <>
+                <button
+                  onClick={handleLoginRedirect}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                >
+                  Login
+                </button>
+                <button
+                  onClick={handleSignupRedirect}
+                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
+                >
+                  Sign Up
+                </button>
+              </>
             ) : null}
           </div>
         </div>
