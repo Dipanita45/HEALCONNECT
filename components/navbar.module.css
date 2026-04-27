@@ -473,6 +473,74 @@
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
 }
 
+.signupButton {
+  padding: 0.35rem 0.8rem;
+
+  background: #10b981;
+
+  color: white;
+
+  border-radius: 50px;
+
+  text-decoration: none;
+
+  font-family: "Inter", sans-serif;
+
+  font-weight: 600;
+
+  font-size: 0.75rem;
+
+  transition: all 0.3s ease;
+
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+}
+
+@media (min-width: 420px) {
+  .signupButton {
+    padding: 0.5rem 1.25rem;
+
+    font-size: 0.85rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .signupButton {
+    padding: 0.6rem 1.8rem;
+
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .signupButton {
+    padding: 0.45rem 1rem;
+
+    font-size: 0.8rem;
+  }
+}
+
+.signupButton:hover {
+  background: #059669;
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+:global(.light) .signupButton {
+  background: #0f172a;
+
+  color: #f8fafc;
+
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.15);
+}
+
+:global(.light) .signupButton:hover {
+  background: #1e293b;
+
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.25);
+}
+
 :global(.light) .loginButton {
 
   background: #0F172A;
@@ -684,5 +752,49 @@
   .overlay,
   .mobileMenu {
     display: none;
+  }
+}
+
+.logoImageWrap {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  width: 38px;
+
+  height: 38px;
+}
+
+.logoImage {
+  width: 100%;
+
+  height: 100%;
+
+  object-fit: contain;
+}
+
+.logoLight {
+  display: none;
+}
+
+.logoDark {
+  display: block;
+}
+
+:global(.light) .logoLight {
+  display: block;
+}
+
+:global(.light) .logoDark {
+  display: none;
+}
+
+@media (max-width: 400px) {
+  .logoImageWrap {
+    width: 30px;
+
+    height: 30px;
   }
 }
