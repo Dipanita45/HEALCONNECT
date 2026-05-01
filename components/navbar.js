@@ -1,5 +1,6 @@
 'use client'
 import Link from 'next/link'
+import Image from 'next/image'
 import ThemeToggle from './ThemeToggle'
 import { useState, useEffect, useCallback, useRef } from 'react'
 import AuthActions from './AuthActions'
@@ -126,6 +127,11 @@ export default function Navbar() {
     closeMenu()
   }
 
+  const handleSignupRedirect = () => {
+    router.push('/signup')
+    closeMenu()
+  }
+
   const handleDashboardRedirect = () => {
     if (clerkUser?.publicMetadata?.role) {
       router.push(`/${clerkUser.publicMetadata.role}/dashboard`)
@@ -158,12 +164,24 @@ export default function Navbar() {
         {/* Logo/Brand */}
         <div className="flex-shrink-0 flex items-center lg:pr-10 xl:pr-16">
           <Link href="/" className={`${styles.logo} flex items-center gap-3`}>
-            <div className={styles.logoIcon}>
-              <div className={styles.crossSymbol}>
-                <div className={styles.crossLine1}></div>
-                <div className={styles.crossLine2}></div>
-              </div>
-            </div>
+            <span className={styles.logoImageWrap}>
+              <Image
+                src="/logo_new.png"
+                alt="Healconnect logo"
+                width={32}
+                height={32}
+                className={`${styles.logoImage} ${styles.logoLight}`}
+                priority
+              />
+              <Image
+                src="/logo_black.png"
+                alt="Healconnect logo"
+                width={32}
+                height={32}
+                className={`${styles.logoImage} ${styles.logoDark}`}
+                priority
+              />
+            </span>
             <span className={styles.logoText}>HEALCONNECT</span>
           </Link>
         </div>
