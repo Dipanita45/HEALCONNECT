@@ -216,20 +216,8 @@ export default function Navbar() {
           </Link>
         </div>
 
+        {/* ✅ FIXED: Removed duplicate AuthActions that was causing two Login buttons */}
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
-          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
-          <div className="hidden sm:flex items-center">
-            <AuthActions 
-              isLoaded={isLoaded}
-              user={clerkUser}
-              isLoggingOut={isLoggingOut}
-              handleDashboardRedirect={handleDashboardRedirect}
-              handleLogout={handleLogout}
-              handleLoginRedirect={handleLoginRedirect}
-            />
-          </div>
-
-
           <Link
             href="/contact"
             className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
@@ -242,6 +230,7 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
+          {/* ✅ Single AuthActions — the only Login button */}
           <div className="hidden lg:flex items-center gap-2">
             <AuthActions 
               isLoaded={isLoaded}
