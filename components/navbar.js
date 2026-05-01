@@ -2,7 +2,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import ThemeToggle from './ThemeToggle'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
+import AuthActions from './AuthActions'
 import { useUser, useClerk } from '@clerk/nextjs'
 import { useRouter } from 'next/router'
 import { FaHeadset } from 'react-icons/fa'
@@ -14,6 +15,7 @@ export default function Navbar() {
   const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const menuRef = useRef(null)
 
   const { user: clerkUser, isLoaded } = useUser()
   const { signOut } = useClerk()
@@ -37,6 +39,49 @@ export default function Navbar() {
       document.body.style.overflow = ''
     }
   }, [isMenuOpen])
+
+  // Focus trap logic
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const focusableElements = menuRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (!focusableElements || focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    const handleKeyDown = (e) => {
+      if (e.key !== 'Tab') return;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isMenuOpen]);
+
+  // aria-hidden logic for main content
+  useEffect(() => {
+    const mainContent = document.getElementById('main-content');
+    if (isMenuOpen) {
+      mainContent?.setAttribute('aria-hidden', 'true');
+    } else {
+      mainContent?.removeAttribute('aria-hidden');
+    }
+    return () => mainContent?.removeAttribute('aria-hidden');
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -172,6 +217,19 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
+            <AuthActions 
+              isLoaded={isLoaded}
+              user={clerkUser}
+              isLoggingOut={isLoggingOut}
+              handleDashboardRedirect={handleDashboardRedirect}
+              handleLogout={handleLogout}
+              handleLoginRedirect={handleLoginRedirect}
+            />
+          </div>
+
+
           <Link
             href="/contact"
             className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
@@ -184,26 +242,24 @@ export default function Navbar() {
 
         <div className="flex items-center gap-3">
           <ThemeToggle />
-          {isLoaded && clerkUser ? (
-            <div className="hidden lg:flex items-center gap-2">
-              <button onClick={handleDashboardRedirect} className="px-4 py-2 bg-green-600 text-white rounded-md">Dashboard</button>
-              <button onClick={handleLogout} disabled={isLoggingOut} className="px-4 py-2 bg-red-600 text-white rounded-md disabled:opacity-50 flex items-center gap-2">
-                {isLoggingOut && <div className={styles.spinner} style={{ width: '14px', height: '14px', border: '2px solid transparent', borderTop: '2px solid white', borderRadius: '50%' }}></div>}
-                {isLoggingOut ? 'Logging out...' : 'Logout'}
-              </button>
-            </div>
-          ) : isLoaded && !clerkUser ? (
-            <div className="hidden lg:flex items-center gap-2">
-              <button onClick={handleLoginRedirect} className={styles.loginButton}>Login</button>
-              <button onClick={handleSignupRedirect} className={styles.signupButton}>Sign Up</button>
-            </div>
-          ) : null}
+          <div className="hidden lg:flex items-center gap-2">
+            <AuthActions 
+              isLoaded={isLoaded}
+              user={clerkUser}
+              isLoggingOut={isLoggingOut}
+              handleDashboardRedirect={handleDashboardRedirect}
+              handleLogout={handleLogout}
+              handleLoginRedirect={handleLoginRedirect}
+            />
+          </div>
           {/* Hamburger button - mobile only */}
           <button
             onClick={toggleMenu}
             className="lg:hidden flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md"
-            aria-label="Toggle menu"
+            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
+            aria-haspopup="true"
           >
             <span
               className={`block w-6 h-0.5 transition-all duration-300 ${isMenuOpen ? 'rotate-45 translate-y-2' : ''}`}
@@ -227,9 +283,16 @@ export default function Navbar() {
       )}
 
       {/* Mobile Menu Panel */}
-      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.mobileMenuOpen : ''} lg:hidden`}>
+      <div 
+        id="mobile-menu"
+        ref={menuRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Mobile Navigation"
+        className={`${styles.mobileMenu} ${isMenuOpen ? styles.mobileMenuOpen : ''} lg:hidden`}
+      >
         <div className={styles.mobileMenuContent}>
-          <nav className={styles.mobileNav}>
+          <nav className={styles.mobileNav} aria-label="Mobile Links">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -244,39 +307,15 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Auth Buttons */}
-          <div className={styles.mobileAuthSection}>
-            {isLoaded && clerkUser ? (
-              <>
-                <button
-                  onClick={handleDashboardRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
-                >
-                  Dashboard
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonDanger}`}
-                >
-                  Logout
-                </button>
-              </>
-            ) : isLoaded && !clerkUser ? (
-              <>
-                <button
-                  onClick={handleLoginRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
-                >
-                  Login
-                </button>
-                <button
-                  onClick={handleSignupRedirect}
-                  className={`${styles.mobileAuthButton} ${styles.mobileAuthButtonPrimary}`}
-                >
-                  Sign Up
-                </button>
-              </>
-            ) : null}
-          </div>
+          <AuthActions 
+            isMobile
+            isLoaded={isLoaded}
+            user={clerkUser}
+            isLoggingOut={isLoggingOut}
+            handleDashboardRedirect={handleDashboardRedirect}
+            handleLogout={handleLogout}
+            handleLoginRedirect={handleLoginRedirect}
+          />
         </div>
       </div>
     </nav>

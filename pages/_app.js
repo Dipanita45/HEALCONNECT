@@ -59,12 +59,14 @@ function MyApp({ Component, pageProps }) {
           <PWAInitializer />
           <PWAInstallPrompt />
           <Navbar />
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-          <ScrollToTop />
-          <Footer />
-          <SupportWidget />
+          <div id="main-content">
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+            <ScrollToTop />
+            <Footer />
+            <SupportWidget />
+          </div>
         </UserContext.Provider>
       </ThemeProvider>
     </ClerkProvider>
