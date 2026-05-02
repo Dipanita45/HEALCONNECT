@@ -1,13 +1,7 @@
 #include "Network.h"
 #include "addons/TokenHelper.h"
 
-#define WIFI_SSID "ToXic"
-#define WIFI_PASSWORD "pASSwORD"
-
-#define API_KEY "AIzaSyDBKubwqUBiiOrapLr-_Rr_dA24Z_fw7yU"
-#define FIREBASE_PROJECT_ID "health-monitoring-system-7885c"
-#define USER_EMAIL "kumarpandule20@gmail.com"
-#define USER_PASSWORD "PassWord"
+#include "config.h"
 
 static Network *instance = NULL;
 

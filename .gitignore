@@ -36,6 +36,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Arduino Hardware Config
+HealthConnect_Kit_Arduino_Code/config.h
+
 # Firebase local config & emulator data
 .firebase/
 firebase-debug.log
