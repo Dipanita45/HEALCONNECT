@@ -110,3 +110,14 @@ npm run lint    # Check for ESLint warnings
 npm run build   # Compiles all Next.js static and server routes
 npm run start   # Runs the compiled bundle on port 3000
 ```
+
+---
+
+## 8. Hardware Setup (Arduino/ESP32)
+
+To configure the ESP32 firmware with your WiFi and Firebase credentials:
+
+1. Navigate to the `HealthConnect_Kit_Arduino_Code` directory.
+2. Copy `config.example.h` to a new file named `config.h`.
+3. Open `config.h` and replace the placeholder values with your actual WiFi and Firebase credentials.
+4. **Note:** `config.h` is ignored by git to prevent accidental leaking of credentials.
