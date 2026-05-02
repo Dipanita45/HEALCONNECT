@@ -11,7 +11,7 @@ import styles from './navbar.module.css'
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [visible, setVisible] = useState(true) // For Smart Navbar (Hide/Show)
+  const [visible, setVisible] = useState(true)
   const [prevScrollPos, setPrevScrollPos] = useState(0)
   const [isLoggingOut, setIsLoggingOut] = useState(false)
 
@@ -19,14 +19,12 @@ export default function Navbar() {
   const { signOut } = useClerk()
   const router = useRouter()
 
-  // Close menu on route change
   useEffect(() => {
     const handleRouteChange = () => setIsMenuOpen(false)
     router.events.on('routeChangeStart', handleRouteChange)
     return () => router.events.off('routeChangeStart', handleRouteChange)
   }, [router.events])
 
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     if (isMenuOpen) {
       document.body.style.overflow = 'hidden'
@@ -41,22 +39,15 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollPos = window.scrollY
-
-      // 1. Logic for background styling (Existing behavior)
       const isScrolled = currentScrollPos > 10
       setScrolled(isScrolled)
-
-      // 2. Logic for Smart Navbar (Hide on scroll down, Show on scroll up)
       if (currentScrollPos < 10) {
-        setVisible(true) // Always show at the top
+        setVisible(true)
       } else {
-        // Show if scrolling up, hide if scrolling down
         setVisible(prevScrollPos > currentScrollPos)
       }
-
       setPrevScrollPos(currentScrollPos)
     }
-
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [prevScrollPos])
@@ -141,7 +132,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Navigation Links - Centered with Active State Highlighting */}
+        {/* Navigation Links */}
         <div className={`hidden lg:flex items-center justify-center flex-grow gap-x-4 xl:gap-x-8 ${isMenuOpen ? styles.navOpen : ''}`}>
           <Link
             href="/"
@@ -194,6 +185,7 @@ export default function Navbar() {
             </div>
           ) : isLoaded && !clerkUser ? (
             <div className="hidden lg:flex items-center gap-2">
+              {/* Removed duplicate dark Login button - keeping only the blue Login button */}
               <button onClick={handleLoginRedirect} className={styles.loginButton}>Login</button>
               <button onClick={handleSignupRedirect} className={styles.signupButton}>Sign Up</button>
             </div>
@@ -221,7 +213,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       {isMenuOpen && (
         <div className={styles.overlay} onClick={closeMenu} />
       )}
