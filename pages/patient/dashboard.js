@@ -4,7 +4,7 @@ import { UserContext } from "@lib/context";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState, useEffect } from "react";
-import { FaEdit, FaSpinner, FaUserMd, FaSearch, FaSync, FaHeartbeat } from "react-icons/fa";
+import { FaEdit, FaSpinner, FaUserMd, FaSearch, FaSync, FaHeartbeat, FaRobot } from "react-icons/fa";
 import { MdWifiOff } from "react-icons/md";
 import { useOfflineSync } from "@/hooks/useOfflineSync";
 import OfflineDashboard from "@/components/OfflineDashboard";
@@ -153,7 +153,7 @@ export default function Dashboard(params) {
             <h1 className="prose lg:prose-lg font-bold md:ml-4 py-2 text-gray-900 dark:text-gray-100">
               Quick Access
             </h1>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Link href="/patient/find-doctors">
                 <div className="h-40 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
                   <div className="flex items-center">
@@ -185,6 +185,18 @@ export default function Dashboard(params) {
                     <div>
                       <h3 className="text-xl font-bold text-white">Notifications</h3>
                       <p className="text-purple-100">Check your notifications</p>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+
+              <Link href="/patient/ai-chat">
+                <div className="h-40 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg shadow-lg p-6 text-white cursor-pointer hover:shadow-xl transition-shadow">
+                  <div className="flex items-center">
+                    <FaRobot size={32} className="mr-4" />
+                    <div>
+                      <h3 className="text-xl font-bold text-white">AI Assistant</h3>
+                      <p className="text-indigo-100">Instant health guidance</p>
                     </div>
                   </div>
                 </div>

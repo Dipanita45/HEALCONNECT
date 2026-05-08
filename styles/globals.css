@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import './chat.css';
 
 /* ================================
    Base Color Variables (Light Mode)
