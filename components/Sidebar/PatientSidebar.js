@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { FaFileAlt, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft, FaUserMd } from 'react-icons/fa';
+import { FaFileAlt, FaBell, FaNotesMedical, FaHome, FaCog, FaList, FaArrowLeft, FaUserMd, FaRobot } from 'react-icons/fa';
 
 export default function PatientSidebar({ children }) {
   const router = useRouter();
@@ -37,7 +37,11 @@ export default function PatientSidebar({ children }) {
       title: 'Your Reports',
       icon: <FaFileAlt size={28} />,
     },
-  ];
+    {
+      href: '/patient/ai-chat',
+      title: 'AI Assistant',
+      icon: <FaRobot size={28} />,
+    },  ];
 
   return (
     <div className=" flex h-screen bg-gray-100 dark:bg-gray-900 pt-20">
