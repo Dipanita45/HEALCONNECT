@@ -59,17 +59,29 @@ export default function ChatBox() {
 
     // Simulate AI response delay
     setTimeout(() => {
-      const response = generateAIResponse(text);
-      const aiMessage = {
-        id: (Date.now() + 1).toString(),
-        text: response.text,
-        sender: 'ai',
-        timestamp: new Date().toISOString(),
-        isEmergency: response.isEmergency,
-        isTip: response.isTip
-      };
-      setMessages(prev => [...prev, aiMessage]);
-      setIsTyping(false);
+      try {
+        const response = generateAIResponse(text);
+        const aiMessage = {
+          id: (Date.now() + 1).toString(),
+          text: response.text,
+          sender: 'ai',
+          timestamp: new Date().toISOString(),
+          isEmergency: response.isEmergency,
+          isTip: response.isTip
+        };
+        setMessages(prev => [...prev, aiMessage]);
+      } catch (error) {
+        console.error("AI processing error:", error);
+        const errorMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "Sorry, I encountered an error processing your request.",
+          sender: 'ai',
+          timestamp: new Date().toISOString()
+        };
+        setMessages(prev => [...prev, errorMessage]);
+      } finally {
+        setIsTyping(false);
+      }
     }, 1000 + Math.random() * 1000);
   };
 
