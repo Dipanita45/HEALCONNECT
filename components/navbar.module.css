@@ -347,7 +347,7 @@
 }
 
 .navLink:hover {
-  color: white !important;
+  color: black !important;
 }
 
 .linkHoverEffect {
@@ -361,7 +361,7 @@
 
   height: 100%;
 
-  background: rgba(255, 255, 255, 0.15);
+  background: white;
 
   border-radius: 50px;
 
@@ -390,7 +390,7 @@
 }
 
 .active {
-  color: white !important;
+  color: black !important;
 }
 
 :global(.light) .active {
@@ -709,9 +709,9 @@
   }
 
   .mobileNavLink:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: white;
 
-  color: white !important;
+  color: black !important;
 
   backdrop-filter: blur(8px);
 }
@@ -723,9 +723,9 @@
 }
 
 .mobileNavLinkActive {
-  background: rgba(255, 255, 255, 0.15);
+  background: white;
 
-  color: white !important;
+  color: black !important;
 
   font-weight: 600;
 
