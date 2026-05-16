@@ -214,25 +214,9 @@ export default function Navbar() {
             <span className={styles.linkText}>Appointments</span>
             <div className={styles.linkHoverEffect}></div>
           </Link>
-        </div>
-
-        <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
-          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
-          <div className="hidden sm:flex items-center">
-            <AuthActions 
-              isLoaded={isLoaded}
-              user={clerkUser}
-              isLoggingOut={isLoggingOut}
-              handleDashboardRedirect={handleDashboardRedirect}
-              handleLogout={handleLogout}
-              handleLoginRedirect={handleLoginRedirect}
-            />
-          </div>
-
-
           <Link
             href="/contact"
-            className={`hidden sm:flex ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
+            className={`hidden  ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
             onClick={() => setIsMenuOpen(false)}
           >
             <span className={styles.linkText}>Contact</span>
@@ -240,10 +224,10 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <div className="flex items-center gap-3">
-          <ThemeToggle />
-          <div className="hidden lg:flex items-center gap-2">
-            <AuthActions 
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-3 xl:gap-6 ml-2 md:ml-4 lg:ml-3 xl:ml-6">
+          {/* Auth buttons - hidden on small screens, shown in mobile menu */}
+          <div className="hidden sm:flex items-center">
+            <AuthActions
               isLoaded={isLoaded}
               user={clerkUser}
               isLoggingOut={isLoggingOut}
@@ -252,6 +236,20 @@ export default function Navbar() {
               handleLoginRedirect={handleLoginRedirect}
             />
           </div>
+
+
+          {/* <Link
+            href="/contact"
+            className={`hidden  ${styles.navLink} ${router.pathname === '/contact' ? styles.active : ''}`}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <span className={styles.linkText}>Contact</span>
+            <div className={styles.linkHoverEffect}></div>
+          </Link> */}
+        </div>
+
+        <div className="flex items-center max-md:ml-4 gap-3">
+          <ThemeToggle />
           {/* Hamburger button - mobile only */}
           <button
             onClick={toggleMenu}
@@ -283,7 +281,7 @@ export default function Navbar() {
       )}
 
       {/* Mobile Menu Panel */}
-      <div 
+      <div
         id="mobile-menu"
         ref={menuRef}
         role="dialog"
@@ -307,7 +305,7 @@ export default function Navbar() {
           </nav>
 
           {/* Mobile Auth Buttons */}
-          <AuthActions 
+          <AuthActions
             isMobile
             isLoaded={isLoaded}
             user={clerkUser}
