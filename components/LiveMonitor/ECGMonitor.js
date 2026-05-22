@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getDoc, onSnapshot, doc } from "firebase/firestore";
 import { db } from "@lib/firebase";
 import dynamic from "next/dynamic";
@@ -46,11 +46,7 @@ export default function ECGMonitor({ deviceId }) {
       height: 450,
       type: "line",
       animations: {
-        enabled: true,
-        easing: "linear",
-        dynamicAnimation: {
-          speed: 1000,
-        },
+        enabled: false,
       },
       toolbar: {
         show: false,
@@ -72,35 +68,32 @@ export default function ECGMonitor({ deviceId }) {
     markers: { size: 0 },
   });
 
+  const workerRef = useRef(null);
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      const pulse = data.pulse;
+    workerRef.current = new Worker('/vitals-worker.js');
+    
+    workerRef.current.onmessage = (e) => {
+      if (e.data.type === 'BATCH_UPDATE') {
+        setECGData((prevData) => {
+          let newData = [...prevData, ...e.data.ecgData];
+          if (newData.length > 1000) {
+            newData = newData.slice(newData.length - 1000);
+          }
+          return newData;
+        });
+      }
+    };
 
-      setECGData((prevData) => {
-        const newECGData = prevData ? [...prevData] : [];
+    return () => {
+      if (workerRef.current) workerRef.current.terminate();
+    };
+  }, []);
 
-        if (pulse >= -300 && pulse <= 300) {
-          newECGData.push({ x: Date.now(), y: 0 });
-        } else if (pulse > 600) {
-          const pulseArray = [
-            { x: Date.now(), y: 64 },
-            { x: Date.now() + 5, y: 168 },
-            // ... rest of your pulseArray ...
-            { x: Date.now() + 165, y: -40 },
-          ];
-          newECGData.push(...pulseArray);
-        } else {
-          return prevData;
-        }
-
-        if (newECGData.length > 1000) {
-          newECGData.shift();
-        }
-        return newECGData;
-      });
-    }, 100);
-
-    return () => clearInterval(interval);
+  useEffect(() => {
+    if (workerRef.current) {
+      workerRef.current.postMessage({ type: 'UPDATE_PULSE', pulse: data.pulse || 0 });
+    }
   }, [data.pulse]);
 
   return (
