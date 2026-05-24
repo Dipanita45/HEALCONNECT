@@ -32,7 +32,7 @@ describe('Threshold Defaults Utilities', () => {
     test('handles oxygen saturation correctly', () => {
       const result = isVitalNormal('oxygen', 90);
       expect(result.status).toBe('critical');
-      expect(result.direction).toBe('high'); // Note: current logic considers this 'high' even though for oxygen, lower is worse
+      expect(result.direction).toBe('low'); // Correct clinical direction: 90% is dangerously low oxygen saturation
     });
 
     test('handles temperature correctly', () => {
