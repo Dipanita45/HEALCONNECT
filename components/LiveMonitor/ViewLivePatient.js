@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { doc } from "firebase/firestore";
 import { db } from "@lib/firebase";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import Loader from "@components/Loader";
 
 const ECGMonitor = dynamic(() => import("@components/LiveMonitor/ECGMonitor"), { ssr: false })
 
@@ -27,8 +28,9 @@ export default function ViewLivePatient({ pationtID, deviceId }) {
         <h1>Patient Info</h1>
         <div className=" px-4 py-2 my-2 flex flex-col md:flex-row overflow-hidden rounded-lg shadow-xs bg-white dark:bg-gray-800">
           {loading ? (
-            <div className=" flex items-center gap-2 p-4 text-gray-500">
-              <FaSpinner className="animate-spin" /> Loading patient info...
+            <div className="flex items-center gap-3 p-4 text-gray-500 dark:text-gray-400">
+              <Loader variant="stethoscope" size={24} />
+              <span className="font-medium animate-pulse">Loading patient profile...</span>
             </div>
           ) : error ? (
             <div className=" p-4 text-red-500">Error: {error.message}</div>

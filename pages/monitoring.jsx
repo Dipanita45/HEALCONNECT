@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Monitoring.module.css';
 import { isVitalNormal, getVitalStatusMessage, parseBloodPressure } from '../lib/thresholdDefaults';
 import { UserContext } from '../lib/context';
+import Loader from '@components/Loader';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40 },
@@ -49,6 +50,7 @@ export default function Monitoring() {
   });
 
   const [history, setHistory] = useState([]);
+  const [historyLoading, setHistoryLoading] = useState(true);
   const [isMonitoring, setIsMonitoring] = useState(false);
   const [currentHeartRate, setCurrentHeartRate] = useState(72);
   const [currentOxygen, setCurrentOxygen] = useState(98);
@@ -57,6 +59,7 @@ export default function Monitoring() {
   const oxygenInterval = useRef(null);
  useEffect(() => {
     const fetchVitals = async () => {
+      setHistoryLoading(true);
       try {
         const res = await fetch('/api/vitals');
         const json = await res.json();
@@ -80,6 +83,8 @@ export default function Monitoring() {
         }
       } catch (err) {
         console.error('Failed to fetch vitals:', err);
+      } finally {
+        setHistoryLoading(false);
       }
     };
 
@@ -486,7 +491,14 @@ const handleSubmit = async e => {
             </div>
 
             <AnimatePresence>
-              {history.length > 0 ? (
+              {historyLoading ? (
+                <div className="flex flex-col items-center justify-center p-12 text-center bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700">
+                  <Loader variant="heartbeat" size={50} />
+                  <p className="text-gray-500 dark:text-gray-400 mt-4 font-semibold animate-pulse">
+                    Retrieving vital history...
+                  </p>
+                </div>
+              ) : history.length > 0 ? (
                 <div className={styles.historyList}>
                   {history.map((record, index) => (
                     <motion.div

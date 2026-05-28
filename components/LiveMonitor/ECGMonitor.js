@@ -3,16 +3,19 @@ import { getDoc, onSnapshot, doc } from "firebase/firestore";
 import { db } from "@lib/firebase";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Loader from "@components/Loader";
 const ApexCharts = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 export default function ECGMonitor({ deviceId }) {
   const [data, setData] = useState([]);
   const [deviceStatus, setDeviceStatus] = useState(false);
   const [ecgData, setECGData] = useState([{ x: Date.now(), y: 0 }]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!deviceId) return;
 
+    setLoading(true);
     const docRef = doc(db, "devices", deviceId);
 
     // Get initial data
@@ -20,12 +23,16 @@ export default function ECGMonitor({ deviceId }) {
       .then((doc) => {
         if (doc.exists()) {
           setData({ ...doc.data() });
+          setDeviceStatus(doc.data().status);
         } else {
           console.log("No such document!");
         }
       })
       .catch((error) => {
         console.log("Error getting document:", error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
 
     // Get real-time updates
@@ -95,6 +102,17 @@ export default function ECGMonitor({ deviceId }) {
       workerRef.current.postMessage({ type: 'UPDATE_PULSE', pulse: data.pulse || 0 });
     }
   }, [data.pulse]);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12 bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700 min-h-[300px] mx-2 md:mx-8 my-2">
+        <Loader variant="heartbeat" size={60} />
+        <p className="text-gray-500 dark:text-gray-400 mt-4 font-semibold animate-pulse">
+          Connecting to medical device data stream...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <>

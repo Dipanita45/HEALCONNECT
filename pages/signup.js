@@ -1,8 +1,9 @@
 'use client'
 import React from 'react'
-import { SignUp } from '@clerk/nextjs'
+import { SignUp, ClerkLoading, ClerkLoaded } from '@clerk/nextjs'
 import { useTheme } from '@/context/ThemeContext'
 import styles from './signup.module.css'
+import Loader from '@/components/Loader'
 
 export default function SignupPage() {
   const { theme, toggleTheme } = useTheme()
@@ -41,28 +42,38 @@ export default function SignupPage() {
           {darkMode ? '☀️' : '🌙'}
         </button>
 
-        <div className={styles.signupContent}>
-          <SignUp
-            routing="hash"
-            fallbackRedirectUrl="/onboarding"
-            appearance={{
-              elements: {
-                rootBox: 'w-full',
-                card: darkMode ? 'bg-[#1b263b] text-white border border-[#2d3748] shadow-lg' : 'shadow-lg border border-gray-100',
-                headerTitle: darkMode ? 'text-white' : 'text-gray-900',
-                headerSubtitle: darkMode ? 'text-gray-300' : 'text-gray-500',
-                socialButtonsBlockButton: darkMode ? 'border-gray-600 hover:bg-gray-800 text-white' : '',
-                socialButtonsBlockButtonText: darkMode ? 'text-white' : 'text-gray-600',
-                socialButtonsBlockButtonArrow: darkMode ? 'text-white' : 'text-gray-600',
-                dividerLine: darkMode ? 'bg-gray-600' : 'bg-gray-200',
-                dividerText: darkMode ? 'text-gray-400' : 'text-gray-500',
-                formFieldLabel: darkMode ? 'text-gray-200' : 'text-gray-700',
-                formFieldInput: darkMode ? 'bg-[#2d3748] border-gray-600 text-white focus:border-blue-500' : 'focus:border-blue-500',
-                footerActionText: darkMode ? 'text-gray-300' : 'text-gray-600',
-                footerActionLink: 'text-blue-500 hover:text-blue-600'
-              }
-            }}
-          />
+        <div className={styles.signupContent} style={{ minWidth: '320px' }}>
+          <ClerkLoading>
+            <div className="p-8 rounded-2xl bg-white dark:bg-[#1b263b] shadow-xl border border-gray-100 dark:border-[#2d3748] flex flex-col items-center justify-center min-h-[350px]">
+              <Loader variant="heartbeat" size={50} darkMode={darkMode} />
+              <p className="text-gray-500 dark:text-gray-300 mt-4 font-medium animate-pulse text-center">
+                Preparing your profile...
+              </p>
+            </div>
+          </ClerkLoading>
+          <ClerkLoaded>
+            <SignUp
+              routing="hash"
+              fallbackRedirectUrl="/onboarding"
+              appearance={{
+                elements: {
+                  rootBox: 'w-full',
+                  card: darkMode ? 'bg-[#1b263b] text-white border border-[#2d3748] shadow-lg' : 'shadow-lg border border-gray-100',
+                  headerTitle: darkMode ? 'text-white' : 'text-gray-900',
+                  headerSubtitle: darkMode ? 'text-gray-300' : 'text-gray-500',
+                  socialButtonsBlockButton: darkMode ? 'border-gray-600 hover:bg-gray-800 text-white' : '',
+                  socialButtonsBlockButtonText: darkMode ? 'text-white' : 'text-gray-600',
+                  socialButtonsBlockButtonArrow: darkMode ? 'text-white' : 'text-gray-600',
+                  dividerLine: darkMode ? 'bg-gray-600' : 'bg-gray-200',
+                  dividerText: darkMode ? 'text-gray-400' : 'text-gray-500',
+                  formFieldLabel: darkMode ? 'text-gray-200' : 'text-gray-700',
+                  formFieldInput: darkMode ? 'bg-[#2d3748] border-gray-600 text-white focus:border-blue-500' : 'focus:border-blue-500',
+                  footerActionText: darkMode ? 'text-gray-300' : 'text-gray-600',
+                  footerActionLink: 'text-blue-500 hover:text-blue-600'
+                }
+              }}
+            />
+          </ClerkLoaded>
         </div>
       </div>
     </div>
