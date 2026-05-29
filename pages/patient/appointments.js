@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { queryAppointments, cancelAppointment, rescheduleAppointment } from "@/lib/appointmentsApi";
 import { AppointmentStatus } from "@/lib/db/schema";
 import { FaCalendarAlt, FaTimes, FaSpinner, FaCalendarCheck } from "react-icons/fa";
+import Loader from "@components/Loader";
 
 export default function MyAppointments() {
   const { currentUser } = useContext(UserContext);
@@ -118,7 +119,12 @@ export default function MyAppointments() {
           </div>
 
           {loading ? (
-            <div className="flex justify-center p-10"><FaSpinner className="animate-spin text-blue-500 text-4xl" /></div>
+            <div className="flex flex-col items-center justify-center p-12 text-center bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-100 dark:border-gray-700 min-h-[250px]">
+              <Loader variant="stethoscope" size={50} />
+              <p className="text-gray-500 dark:text-gray-400 mt-4 font-semibold animate-pulse">
+                Retrieving your scheduled appointments...
+              </p>
+            </div>
           ) : appointments.length === 0 ? (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
               <FaCalendarAlt className="mx-auto text-5xl text-gray-300 dark:text-gray-600 mb-4" />
