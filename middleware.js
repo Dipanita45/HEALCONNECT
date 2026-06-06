@@ -1,12 +1,11 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
-const isProtectedRoute = createRouteMatcher([
-  '/patient(.*)',
-  '/doctor(.*)',
-  '/admin(.*)',
-  '/monitoring(.*)'
-]);
+const isDoctorRoute = createRouteMatcher(['/doctor(.*)']);
+const isPatientRoute = createRouteMatcher(['/patient(.*)']);
+const isAdminRoute = createRouteMatcher(['/admin(.*)']);
+const isMonitoringRoute = createRouteMatcher(['/monitoring(.*)']);
+const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)']);
 
 const isPublicRoute = createRouteMatcher([
   '/api/auth/webhook/clerk'
@@ -20,23 +19,69 @@ export default clerkMiddleware(async (auth, req) => {
 
   const { pathname } = req.nextUrl;
 
-  if (isProtectedRoute(req)) {
-    // Requires users to be signed in for protected routes
-    await auth.protect();
+  // Bypass Edge RBAC processing for API routes to avoid performance overhead
+  if (pathname.startsWith('/api')) {
+    return NextResponse.next();
+  }
 
-    // Check if user has completed onboarding by checking publicMetadata
-    const { sessionClaims } = await auth();
+  const isProtected = isDoctorRoute(req) || 
+                      isPatientRoute(req) || 
+                      isAdminRoute(req) || 
+                      isMonitoringRoute(req) || 
+                      isOnboardingRoute(req);
+
+  const { userId, sessionClaims } = await auth();
+
+  // 1. Unauthenticated users attempting to access protected routes
+  if (isProtected && !userId) {
+    const url = new URL('/login', req.url);
+    return NextResponse.redirect(url);
+  }
+
+  // 2. Authenticated users checks
+  if (userId) {
     const metadata = sessionClaims?.metadata || {};
-    const role = metadata.role || sessionClaims?.publicMetadata?.role;
-    const isRoleOnboarded = metadata.onboardingComplete === true || !!role;
+    const publicMetadata = sessionClaims?.publicMetadata || {};
+    const role = metadata.role || publicMetadata.role;
 
-    // If they haven't but are trying to access protected dashboards, redirect them
-    // Allow access to home '/' even if not onboarded to prevent loops and trapped state
-    if (!isRoleOnboarded && !pathname.startsWith('/onboarding') && pathname !== '/') {
-      const url = new URL('/onboarding', req.url);
-      return NextResponse.redirect(url);
+    // A. Onboarding Flow Check:
+    // Force users without a role to /onboarding if they attempt any protected dashboard route
+    if (!role) {
+      if (!isOnboardingRoute(req) && isProtected) {
+        const url = new URL('/onboarding', req.url);
+        return NextResponse.redirect(url);
+      }
+    } else {
+      // B. Onboarding Page Bypass:
+      // Redirect already onboarded users to their respective dashboard
+      if (isOnboardingRoute(req)) {
+        const url = new URL(`/${role}`, req.url);
+        return NextResponse.redirect(url);
+      }
+
+      // C. Role Verification:
+      if (isDoctorRoute(req) && role !== 'doctor') {
+        const url = new URL('/unauthorized', req.url);
+        return NextResponse.redirect(url);
+      }
+
+      if (isPatientRoute(req) && role !== 'patient') {
+        const url = new URL('/unauthorized', req.url);
+        return NextResponse.redirect(url);
+      }
+
+      if (isAdminRoute(req) && role !== 'admin') {
+        const url = new URL('/unauthorized', req.url);
+        return NextResponse.redirect(url);
+      }
+
+      if (isMonitoringRoute(req) && role !== 'patient') {
+        const url = new URL('/unauthorized', req.url);
+        return NextResponse.redirect(url);
+      }
     }
   }
+
   return NextResponse.next();
 });
 
@@ -48,3 +93,4 @@ export const config = {
     '/(api|trpc)(.*)',
   ],
 };
+
