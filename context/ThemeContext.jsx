@@ -39,10 +39,6 @@ export function ThemeProvider({ children }) {
     setTheme(prev => prev === 'light' ? 'dark' : 'light')
   }
 
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return null
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, isMinimized, setIsMinimized, supportWidgetOpen, setSupportWidgetOpen, showTicketModal,
