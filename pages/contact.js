@@ -42,6 +42,34 @@ const staggerContainer = {
   },
 };
 
+const categoryStyles = {
+  blue: {
+    button: "border-blue-500 bg-blue-50 dark:bg-blue-900/20",
+    icon: "text-blue-600 dark:text-blue-400",
+    text: "text-blue-700 dark:text-blue-300",
+  },
+  orange: {
+    button: "border-orange-500 bg-orange-50 dark:bg-orange-900/20",
+    icon: "text-orange-600 dark:text-orange-400",
+    text: "text-orange-700 dark:text-orange-300",
+  },
+  green: {
+    button: "border-green-500 bg-green-50 dark:bg-green-900/20",
+    icon: "text-green-600 dark:text-green-400",
+    text: "text-green-700 dark:text-green-300",
+  },
+  red: {
+    button: "border-red-500 bg-red-50 dark:bg-red-900/20",
+    icon: "text-red-600 dark:text-red-400",
+    text: "text-red-700 dark:text-red-300",
+  },
+  purple: {
+    button: "border-purple-500 bg-purple-50 dark:bg-purple-900/20",
+    icon: "text-purple-600 dark:text-purple-400",
+    text: "text-purple-700 dark:text-purple-300",
+  },
+};
+
 export default function Contact() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -641,19 +669,19 @@ export default function Contact() {
                               }))
                             }
                             className={`p-3 rounded-lg border-2 transition-all duration-200 flex flex-col items-center gap-2 ${formData.category === category.value
-                              ? `border-${category.color}-500 bg-${category.color}-50 dark:bg-${category.color}-900/20`
+                              ? categoryStyles[category.color]?.button
                               : "border-gray-400 dark:border-gray-600 hover:border-gray-500 dark:hover:border-gray-500"
                               }`}
                           >
                             <Icon
                               className={`text-xl ${formData.category === category.value
-                                ? `text-${category.color}-600 dark:text-${category.color}-400`
+                                ? categoryStyles[category.color]?.icon
                                 : "text-gray-400 dark:text-gray-500"
                                 }`}
                             />
                             <span
                               className={`text-xs font-medium ${formData.category === category.value
-                                ? `text-${category.color}-700 dark:text-${category.color}-300`
+                                ? categoryStyles[category.color]?.text
                                 : "text-gray-600 dark:text-gray-400"
                                 }`}
                             >
