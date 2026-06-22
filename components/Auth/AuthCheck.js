@@ -1,21 +1,20 @@
 // components/Auth/AuthCheck.js
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useContext } from "react";
 import Loader from "@components/Loader";
+import { UserContext } from "@lib/context";
 
 export default function AuthCheck({ children } = {}) {
   const router = useRouter();
-  const [allowed, setAllowed] = useState(false);
+  const { userRole, isUserLoading } = useContext(UserContext);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const role = localStorage.getItem("userType");
-      if (!role) router.push("/login");
-      else setAllowed(true);
+    if (!isUserLoading && !userRole) {
+      router.push("/login");
     }
-  }, [router]);
+  }, [userRole, isUserLoading, router]);
 
-  if (!allowed) {
+  if (isUserLoading || !userRole) {
     return (
       <div className="flex h-screen w-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center p-8 text-center">

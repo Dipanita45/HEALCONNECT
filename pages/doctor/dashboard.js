@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 import { FaFileAlt, FaBell, FaUsers } from "react-icons/fa";
 import Image from "next/image";
@@ -14,9 +14,11 @@ import useDashboardStats from "../../lib/hooks/useDashboardStats";
 import { useMultiPatientMonitor } from "../../lib/useAlertMonitor";
 import CardSkeleton from "@components/CardSkeleton";
 import TableSkeleton from "@components/TableSkeleton";
+import { UserContext } from "@/lib/context";
 
 export default function DoctorDashboard() {
   const router = useRouter();
+  const { currentUser } = useContext(UserContext);
   const { patients: fetchedPatients, loading: patientsLoading, error: patientsError } = useFetchPatients();
   const { stats, loading: statsLoading, error: statsError } = useDashboardStats();
   
@@ -45,14 +47,12 @@ export default function DoctorDashboard() {
 
   // Get doctor info for alert system (after auth is verified by layout.js)
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      // SECURITY: Role is already verified by layout.js using Firebase Auth
-      // This only fetches doctor ID for the alert system
-      const doctorId = localStorage.getItem("userId") || localStorage.getItem("username");
-      const doctorName = localStorage.getItem("username") || "Doctor";
+    if (currentUser) {
+      const doctorId = currentUser.id || currentUser.username;
+      const doctorName = currentUser.fullName || currentUser.username || "Doctor";
       setDoctorInfo({ id: doctorId, name: doctorName });
     }
-  }, []);
+  }, [currentUser]);
 
   // Handle loading and state sync from hooks
   useEffect(() => {
