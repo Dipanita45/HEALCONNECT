@@ -1,21 +1,21 @@
 import AuthCheck from "@components/Auth/AuthCheck";
 import DoctorSidebar from "@components/Sidebar/DoctorSidebar";
 import AlertHistory from "@components/DoctorComponents/AlertHistory";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
+import { UserContext } from "@/lib/context";
 
 export default function AlertsPage() {
     const router = useRouter();
+    const { currentUser } = useContext(UserContext);
     const [doctorId, setDoctorId] = useState(null);
 
     useEffect(() => {
-        if (typeof window !== "undefined") {
-            // SECURITY: Role is already verified by layout.js using Firebase Auth
-            // This only fetches doctor ID for the alert system  
-            const id = localStorage.getItem("userId") || localStorage.getItem("username");
+        if (currentUser) {
+            const id = currentUser.id || currentUser.username;
             setDoctorId(id);
         }
-    }, []);
+    }, [currentUser]);
 
     const [viewMode, setViewMode] = useState('my'); // 'my' or 'unassigned'
 

@@ -217,7 +217,7 @@ const filterTimesByAvailability = (times, doctor, date) => {
 };
 
 export default function Appointments() {
-  const { user, currentUser } = useContext(UserContext);
+  const { user, currentUser, userRole } = useContext(UserContext);
   const router = useRouter();
 
   const [formData, setFormData] = useState({
@@ -284,7 +284,7 @@ export default function Appointments() {
 
   const handleDoctorSelect = (doctor) => {
     // Security check: must be logged in to book
-    if (!user && !localStorage.getItem('userType')) {
+    if (!currentUser && !userRole) {
       // Store intended doctor selection if possible, or just redirect
       const confirmLogin = window.confirm("You must be logged in to book an appointment. Proceed to login?");
       if (confirmLogin) {
